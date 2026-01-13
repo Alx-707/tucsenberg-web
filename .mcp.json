@@ -1,0 +1,8 @@
+{
+  "mcpServers": {
+    "web-dev": {
+      "type": "http",
+      "url": "http://localhost:8000/mcp/web-dev"
+    }
+  }
+}

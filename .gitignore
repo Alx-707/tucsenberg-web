@@ -1,0 +1,43 @@
+# Dependencies
+node_modules/
+.pnpm-store/
+
+# Build outputs
+.next/
+out/
+dist/
+build/
+
+# Environment
+.env
+.env.local
+.env.*.local
+
+# IDE & OS
+.DS_Store
+*.swp
+*.swo
+.idea/
+
+# Debug & logs
+npm-debug.log*
+pnpm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+
+# Test & coverage
+coverage/
+.nyc_output/
+playwright-report/
+test-results/
+
+# Cache
+.eslintcache
+.prettiercache
+*.tsbuildinfo
+
+# Lighthouse
+.lighthouseci/
+
+# Vercel
+.vercel/
