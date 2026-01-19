@@ -9,7 +9,7 @@
  */
 export interface BatchRequest {
   requests: Array<{
-    method: 'POST';
+    method: "POST";
     relative_url: string;
     body: string;
   }>;
@@ -20,7 +20,7 @@ export interface BatchRequest {
  * Business profile update request
  */
 export interface BusinessProfileUpdateRequest {
-  messaging_product: 'whatsapp';
+  messaging_product: "whatsapp";
   about?: string;
   address?: string;
   description?: string;

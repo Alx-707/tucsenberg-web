@@ -1,6 +1,6 @@
-import { cn } from '@/lib/utils';
-import { Badge } from '@/components/ui/badge';
-import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
+import { cn } from "@/lib/utils";
+import { Badge } from "@/components/ui/badge";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 
 export interface ProductSpecsProps {
   /** Key-value pairs of product specifications */
@@ -19,7 +19,7 @@ export interface ProductSpecsProps {
  */
 export function ProductSpecs({
   specs,
-  title = 'Specifications',
+  title = "Specifications",
   className,
 }: ProductSpecsProps) {
   const entries = Object.entries(specs);
@@ -29,19 +29,19 @@ export function ProductSpecs({
   }
 
   return (
-    <Card className={cn('overflow-hidden', className)}>
-      <CardHeader className='bg-muted/50'>
-        <CardTitle className='text-lg'>{title}</CardTitle>
+    <Card className={cn("overflow-hidden", className)}>
+      <CardHeader className="bg-muted/50">
+        <CardTitle className="text-lg">{title}</CardTitle>
       </CardHeader>
-      <CardContent className='p-0'>
-        <dl className='divide-y divide-border'>
+      <CardContent className="p-0">
+        <dl className="divide-y divide-border">
           {entries.map(([key, value]) => (
             <div
               key={key}
-              className='grid grid-cols-[1fr_2fr] gap-4 px-6 py-3 text-sm even:bg-muted/30'
+              className="grid grid-cols-[1fr_2fr] gap-4 px-6 py-3 text-sm even:bg-muted/30"
             >
-              <dt className='font-medium text-muted-foreground'>{key}</dt>
-              <dd className='text-foreground'>{value}</dd>
+              <dt className="font-medium text-muted-foreground">{key}</dt>
+              <dd className="text-foreground">{value}</dd>
             </div>
           ))}
         </dl>
@@ -67,7 +67,7 @@ export interface ProductCertificationsProps {
  */
 export function ProductCertifications({
   certifications,
-  title = 'Certifications',
+  title = "Certifications",
   className,
 }: ProductCertificationsProps) {
   if (certifications.length === 0) {
@@ -75,17 +75,13 @@ export function ProductCertifications({
   }
 
   return (
-    <div className={cn('space-y-3', className)}>
-      {title !== '' && (
-        <h3 className='text-sm font-medium text-muted-foreground'>{title}</h3>
+    <div className={cn("space-y-3", className)}>
+      {title !== "" && (
+        <h3 className="text-sm font-medium text-muted-foreground">{title}</h3>
       )}
-      <div className='flex flex-wrap gap-2'>
+      <div className="flex flex-wrap gap-2">
         {certifications.map((cert) => (
-          <Badge
-            key={cert}
-            variant='outline'
-            className='text-sm'
-          >
+          <Badge key={cert} variant="outline" className="text-sm">
             {cert}
           </Badge>
         ))}
@@ -120,11 +116,11 @@ export interface ProductTradeInfoProps {
 }
 
 const DEFAULT_TRADE_LABELS = {
-  moq: 'Minimum Order',
-  leadTime: 'Lead Time',
-  supplyCapacity: 'Supply Capacity',
-  packaging: 'Packaging',
-  portOfLoading: 'Port of Loading',
+  moq: "Minimum Order",
+  leadTime: "Lead Time",
+  supplyCapacity: "Supply Capacity",
+  packaging: "Packaging",
+  portOfLoading: "Port of Loading",
 };
 
 /**
@@ -140,7 +136,7 @@ export function ProductTradeInfo({
   packaging,
   portOfLoading,
   labels = DEFAULT_TRADE_LABELS,
-  title = 'Trade Information',
+  title = "Trade Information",
   className,
 }: ProductTradeInfoProps) {
   // nosemgrep: object-injection-sink-spread-operator
@@ -150,16 +146,16 @@ export function ProductTradeInfo({
   const mergedLabels = { ...DEFAULT_TRADE_LABELS, ...labels };
 
   const items = [
-    { key: 'moq', label: mergedLabels.moq, value: moq },
-    { key: 'leadTime', label: mergedLabels.leadTime, value: leadTime },
+    { key: "moq", label: mergedLabels.moq, value: moq },
+    { key: "leadTime", label: mergedLabels.leadTime, value: leadTime },
     {
-      key: 'supplyCapacity',
+      key: "supplyCapacity",
       label: mergedLabels.supplyCapacity,
       value: supplyCapacity,
     },
-    { key: 'packaging', label: mergedLabels.packaging, value: packaging },
+    { key: "packaging", label: mergedLabels.packaging, value: packaging },
     {
-      key: 'portOfLoading',
+      key: "portOfLoading",
       label: mergedLabels.portOfLoading,
       value: portOfLoading,
     },
@@ -170,21 +166,21 @@ export function ProductTradeInfo({
   }
 
   return (
-    <Card className={cn('overflow-hidden', className)}>
-      <CardHeader className='bg-muted/50'>
-        <CardTitle className='text-lg'>{title}</CardTitle>
+    <Card className={cn("overflow-hidden", className)}>
+      <CardHeader className="bg-muted/50">
+        <CardTitle className="text-lg">{title}</CardTitle>
       </CardHeader>
-      <CardContent className='p-0'>
-        <dl className='divide-y divide-border'>
+      <CardContent className="p-0">
+        <dl className="divide-y divide-border">
           {items.map((item) => (
             <div
               key={item.key}
-              className='grid grid-cols-[1fr_2fr] gap-4 px-6 py-3 text-sm even:bg-muted/30'
+              className="grid grid-cols-[1fr_2fr] gap-4 px-6 py-3 text-sm even:bg-muted/30"
             >
-              <dt className='font-medium text-muted-foreground'>
+              <dt className="font-medium text-muted-foreground">
                 {item.label}
               </dt>
-              <dd className='text-foreground'>{item.value}</dd>
+              <dd className="text-foreground">{item.value}</dd>
             </div>
           ))}
         </dl>

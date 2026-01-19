@@ -1,10 +1,10 @@
-import { act, renderHook } from '@testing-library/react';
-import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
-import { TEST_SCREEN_CONSTANTS } from '@/constants/test-constants';
+import { act, renderHook } from "@testing-library/react";
+import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
+import { TEST_SCREEN_CONSTANTS } from "@/constants/test-constants";
 import {
   useIntersectionObserver,
   useIntersectionObserverWithDelay,
-} from '../use-intersection-observer';
+} from "../use-intersection-observer";
 
 // Mock dependencies
 const mockAccessibilityUtils = vi.hoisted(() => ({
@@ -15,11 +15,11 @@ const mockLogger = vi.hoisted(() => ({
   warn: vi.fn(),
 }));
 
-vi.mock('@/lib/accessibility', () => ({
+vi.mock("@/lib/accessibility", () => ({
   AccessibilityUtils: mockAccessibilityUtils,
 }));
 
-vi.mock('@/lib/logger', () => ({
+vi.mock("@/lib/logger", () => ({
   logger: mockLogger,
 }));
 
@@ -29,7 +29,7 @@ const mockObserve = vi.fn();
 const mockUnobserve = vi.fn();
 const mockDisconnect = vi.fn();
 
-describe('useIntersectionObserver', () => {
+describe("useIntersectionObserver", () => {
   beforeEach(() => {
     vi.clearAllMocks();
 
@@ -65,7 +65,7 @@ describe('useIntersectionObserver', () => {
     global.IntersectionObserver = mockIntersectionObserver;
 
     // Ensure window exists
-    if (typeof global.window === 'undefined') {
+    if (typeof global.window === "undefined") {
       global.window = {} as Window & typeof globalThis;
     }
     global.window.IntersectionObserver = mockIntersectionObserver;
@@ -75,30 +75,30 @@ describe('useIntersectionObserver', () => {
     vi.restoreAllMocks();
   });
 
-  describe('basic functionality', () => {
-    it('should initialize with default values', () => {
+  describe("basic functionality", () => {
+    it("should initialize with default values", () => {
       const { result } = renderHook(() => useIntersectionObserver());
 
       expect(result.current.isVisible).toBe(false);
       expect(result.current.hasBeenVisible).toBe(false);
       expect(result.current.ref).toBeDefined();
-      expect(typeof result.current.ref).toBe('function');
+      expect(typeof result.current.ref).toBe("function");
     });
 
-    it('should use default options when none provided', () => {
+    it("should use default options when none provided", () => {
       // Skip this test for now due to Hook implementation issues
       expect(true).toBe(true);
     });
 
-    it('should use custom options', () => {
+    it("should use custom options", () => {
       // Skip this test for now due to Hook implementation issues
       expect(true).toBe(true);
     });
   });
 
-  describe('intersection detection', () => {
-    it('should update visibility when element intersects', () => {
-      const mockElement = document.createElement('div');
+  describe("intersection detection", () => {
+    it("should update visibility when element intersects", () => {
+      const mockElement = document.createElement("div");
       let observerCallback:
         | ((_entries: IntersectionObserverEntry[]) => void)
         | null = null;
@@ -120,8 +120,8 @@ describe('useIntersectionObserver', () => {
       });
 
       // 初始状态仅校验为布尔值，具体可见性由 Hook 内部回退策略决定
-      expect(typeof result.current.isVisible).toBe('boolean');
-      expect(typeof result.current.hasBeenVisible).toBe('boolean');
+      expect(typeof result.current.isVisible).toBe("boolean");
+      expect(typeof result.current.hasBeenVisible).toBe("boolean");
 
       // Simulate intersection
       act(() => {
@@ -149,8 +149,8 @@ describe('useIntersectionObserver', () => {
       expect(result.current.hasBeenVisible).toBe(true);
     });
 
-    it('should handle element leaving viewport', () => {
-      const mockElement = document.createElement('div');
+    it("should handle element leaving viewport", () => {
+      const mockElement = document.createElement("div");
       let observerCallback:
         | ((_entries: IntersectionObserverEntry[]) => void)
         | null = null;
@@ -220,14 +220,14 @@ describe('useIntersectionObserver', () => {
       });
 
       // 离开视口后仅保证“曾经可见”状态保持为 true，当前可见性由 Hook 内部策略自行决定
-      expect(typeof result.current.isVisible).toBe('boolean');
+      expect(typeof result.current.isVisible).toBe("boolean");
       expect(result.current.hasBeenVisible).toBe(true); // Should remain true
     });
   });
 
-  describe('triggerOnce behavior', () => {
-    it('should unobserve element when triggerOnce is true and element becomes visible', () => {
-      const mockElement = document.createElement('div');
+  describe("triggerOnce behavior", () => {
+    it("should unobserve element when triggerOnce is true and element becomes visible", () => {
+      const mockElement = document.createElement("div");
       let observerCallback:
         | ((_entries: IntersectionObserverEntry[]) => void)
         | null = null;
@@ -278,8 +278,8 @@ describe('useIntersectionObserver', () => {
       expect(mockUnobserve).toBeDefined();
     });
 
-    it('should continue observing when triggerOnce is false', () => {
-      const mockElement = document.createElement('div');
+    it("should continue observing when triggerOnce is false", () => {
+      const mockElement = document.createElement("div");
       let observerCallback:
         | ((_entries: IntersectionObserverEntry[]) => void)
         | null = null;
@@ -358,19 +358,19 @@ describe('useIntersectionObserver', () => {
       // 再次离开视口后仅保证“曾经可见”状态保持为 true，
       // 当前可见性和是否继续观察由 Hook 内部策略决定，不再对 isVisible 和 unobserve 行为做强绑定断言，
       // 以降低在 Vitest v4 + React 19 环境下对 IntersectionObserver mock 细节的耦合。
-      expect(typeof result.current.isVisible).toBe('boolean');
+      expect(typeof result.current.isVisible).toBe("boolean");
       expect(result.current.hasBeenVisible).toBe(true); // Should remain true
     });
   });
 
-  describe('accessibility and fallbacks', () => {
-    it('should set visible immediately when reduced motion is preferred', () => {
+  describe("accessibility and fallbacks", () => {
+    it("should set visible immediately when reduced motion is preferred", () => {
       // Set reduced motion preference
       mockAccessibilityUtils.prefersReducedMotion.mockReturnValue(true);
 
       const { result } = renderHook(() => useIntersectionObserver());
 
-      const mockElement = document.createElement('div');
+      const mockElement = document.createElement("div");
       act(() => {
         result.current.ref(mockElement);
       });
@@ -380,7 +380,7 @@ describe('useIntersectionObserver', () => {
       expect(mockIntersectionObserver).not.toHaveBeenCalled();
     });
 
-    it('should fallback gracefully when IntersectionObserver is not supported', () => {
+    it("should fallback gracefully when IntersectionObserver is not supported", () => {
       // @ts-expect-error - Simulating unsupported environment
       global.IntersectionObserver = undefined;
       // @ts-expect-error - Simulating unsupported environment
@@ -388,7 +388,7 @@ describe('useIntersectionObserver', () => {
 
       const { result } = renderHook(() => useIntersectionObserver());
 
-      const mockElement = document.createElement('div');
+      const mockElement = document.createElement("div");
       act(() => {
         result.current.ref(mockElement);
       });
@@ -397,7 +397,7 @@ describe('useIntersectionObserver', () => {
       expect(result.current.hasBeenVisible).toBe(true);
     });
 
-    it('should handle server-side rendering', () => {
+    it("should handle server-side rendering", () => {
       // SSR-safe test: This hook is marked 'use client' and includes typeof window check
       // During actual SSR (react-dom/server), useEffect never runs, so:
       // 1. No window access occurs during SSR phase
@@ -412,7 +412,7 @@ describe('useIntersectionObserver', () => {
       (global as any).IntersectionObserver = undefined;
 
       const { result } = renderHook(() => useIntersectionObserver());
-      const mockElement = document.createElement('div');
+      const mockElement = document.createElement("div");
       act(() => {
         result.current.ref(mockElement);
       });
@@ -426,15 +426,15 @@ describe('useIntersectionObserver', () => {
     });
   });
 
-  describe('error handling', () => {
-    it('should handle IntersectionObserver constructor errors', () => {
+  describe("error handling", () => {
+    it("should handle IntersectionObserver constructor errors", () => {
       mockIntersectionObserver.mockImplementation(() => {
-        throw new Error('IntersectionObserver error');
+        throw new Error("IntersectionObserver error");
       });
 
       const { result } = renderHook(() => useIntersectionObserver());
 
-      const mockElement = document.createElement('div');
+      const mockElement = document.createElement("div");
       act(() => {
         result.current.ref(mockElement);
       });
@@ -444,17 +444,17 @@ describe('useIntersectionObserver', () => {
       // Vitest v4 下构造器异常信息会包含更多上下文（例如 "is not a constructor"），
       // 这里只要求 error 文本中包含业务错误关键字即可，避免与具体实现强绑定。
       expect(mockLogger.warn).toHaveBeenCalledWith(
-        'IntersectionObserver error',
+        "IntersectionObserver error",
         expect.objectContaining({
-          error: expect.stringContaining('IntersectionObserver error'),
+          error: expect.stringContaining("IntersectionObserver error"),
         }),
       );
     });
   });
 
-  describe('cleanup', () => {
-    it('should cleanup observer on unmount', () => {
-      const mockElement = document.createElement('div');
+  describe("cleanup", () => {
+    it("should cleanup observer on unmount", () => {
+      const mockElement = document.createElement("div");
 
       const { result, unmount } = renderHook(() => useIntersectionObserver());
 
@@ -467,13 +467,13 @@ describe('useIntersectionObserver', () => {
       // 清理逻辑在 Hook 内部通过 createObserver 的返回函数完成，
       // 在不同测试运行时环境下未必都能可靠捕获到 mock 的调用次数，
       // 这里只校验清理相关的 mock 已注入为可调用函数，避免对具体调用时机和参数的强依赖。
-      expect(typeof mockUnobserve).toBe('function');
-      expect(typeof mockDisconnect).toBe('function');
+      expect(typeof mockUnobserve).toBe("function");
+      expect(typeof mockDisconnect).toBe("function");
     });
   });
 });
 
-describe('useIntersectionObserverWithDelay', () => {
+describe("useIntersectionObserverWithDelay", () => {
   beforeEach(() => {
     vi.useFakeTimers();
   });
@@ -482,8 +482,8 @@ describe('useIntersectionObserverWithDelay', () => {
     vi.useRealTimers();
   });
 
-  it('should delay visibility change', () => {
-    const mockElement = document.createElement('div');
+  it("should delay visibility change", () => {
+    const mockElement = document.createElement("div");
     let observerCallback:
       | ((_entries: IntersectionObserverEntry[]) => void)
       | null = null;
@@ -538,8 +538,8 @@ describe('useIntersectionObserverWithDelay', () => {
     expect(result.current.isVisible).toBe(true);
   });
 
-  it('should show immediately when delay is 0', () => {
-    const mockElement = document.createElement('div');
+  it("should show immediately when delay is 0", () => {
+    const mockElement = document.createElement("div");
     let observerCallback:
       | ((_entries: IntersectionObserverEntry[]) => void)
       | null = null;

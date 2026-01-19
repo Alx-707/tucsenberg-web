@@ -8,16 +8,16 @@
  *
  * Note: Scroll shadow effect is handled by the Header component
  */
-'use client';
+"use client";
 
-import { useCallback, useEffect, useRef, useState } from 'react';
-import { useTranslations } from 'next-intl';
+import { useCallback, useEffect, useRef, useState } from "react";
+import { useTranslations } from "next-intl";
 import {
   mainNavigation,
   NAVIGATION_ARIA,
   type NavigationItem,
-} from '@/lib/navigation';
-import { cn } from '@/lib/utils';
+} from "@/lib/navigation";
+import { cn } from "@/lib/utils";
 import {
   NavigationMenu,
   NavigationMenuContent,
@@ -25,26 +25,26 @@ import {
   NavigationMenuLink,
   NavigationMenuList,
   NavigationMenuTrigger,
-} from '@/components/ui/navigation-menu';
-import { Link } from '@/i18n/routing';
-import { DropdownContent } from './vercel-dropdown-content';
+} from "@/components/ui/navigation-menu";
+import { Link } from "@/i18n/routing";
+import { DropdownContent } from "./vercel-dropdown-content";
 
 // Type for static pathnames (excludes dynamic route patterns)
 type StaticPathname =
-  | '/'
-  | '/about'
-  | '/contact'
-  | '/blog'
-  | '/products'
-  | '/faq'
-  | '/privacy'
-  | '/terms';
+  | "/"
+  | "/about"
+  | "/contact"
+  | "/blog"
+  | "/products"
+  | "/faq"
+  | "/privacy"
+  | "/terms";
 
 interface VercelNavigationProps {
   className?: string;
 }
 
-const SECONDARY_NAV_KEYS = new Set(['about', 'privacy']);
+const SECONDARY_NAV_KEYS = new Set(["about", "privacy"]);
 
 // Hook for hover delay interaction
 function useHoverDelay() {
@@ -115,12 +115,12 @@ function renderDropdownItem({
     >
       <NavigationMenuTrigger
         className={cn(
-          'relative inline-flex items-center rounded-full px-3 py-2 text-sm font-medium tracking-[0.01em]',
-          'text-muted-foreground hover:text-foreground data-[state=open]:text-foreground',
-          'hover:bg-muted/40 data-[state=open]:bg-muted/60',
-          'dark:hover:bg-foreground/10 dark:data-[state=open]:bg-foreground/15',
-          'shadow-none',
-          'transition-colors duration-150 ease-out',
+          "relative inline-flex items-center rounded-full px-3 py-2 text-sm font-medium tracking-[0.01em]",
+          "text-muted-foreground hover:text-foreground data-[state=open]:text-foreground",
+          "hover:bg-muted/40 data-[state=open]:bg-muted/60",
+          "dark:hover:bg-foreground/10 dark:data-[state=open]:bg-foreground/15",
+          "shadow-none",
+          "transition-colors duration-150 ease-out",
         )}
         onClick={() => hoverState.handleClick(item.key)}
         aria-expanded={isOpen}
@@ -128,10 +128,7 @@ function renderDropdownItem({
         {t(item.translationKey)}
       </NavigationMenuTrigger>
       <NavigationMenuContent>
-        <DropdownContent
-          items={item.children || []}
-          t={t}
-        />
+        <DropdownContent items={item.children || []} t={t} />
       </NavigationMenuContent>
     </NavigationMenuItem>
   );
@@ -144,20 +141,17 @@ function renderLinkItem(
   className?: string,
 ) {
   return (
-    <NavigationMenuItem
-      key={item.key}
-      className={className}
-    >
+    <NavigationMenuItem key={item.key} className={className}>
       <NavigationMenuLink asChild>
         <Link
           href={item.href as StaticPathname}
           className={cn(
-            'relative inline-flex items-center rounded-full bg-transparent px-3 py-2 text-sm font-medium tracking-[0.01em]',
-            'text-muted-foreground hover:text-foreground',
-            'hover:bg-muted/40 data-[state=open]:bg-muted/60',
-            'dark:hover:bg-foreground/10 dark:data-[state=open]:bg-foreground/15',
-            'shadow-none',
-            'transition-colors duration-150 ease-out',
+            "relative inline-flex items-center rounded-full bg-transparent px-3 py-2 text-sm font-medium tracking-[0.01em]",
+            "text-muted-foreground hover:text-foreground",
+            "hover:bg-muted/40 data-[state=open]:bg-muted/60",
+            "dark:hover:bg-foreground/10 dark:data-[state=open]:bg-foreground/15",
+            "shadow-none",
+            "transition-colors duration-150 ease-out",
           )}
         >
           {t(item.translationKey)}
@@ -181,16 +175,16 @@ export function VercelNavigation({ className }: VercelNavigationProps) {
   const moreItem: NavigationItem | null =
     secondaryNavigation.length > 0
       ? {
-          key: 'more',
-          href: '/',
-          translationKey: 'navigation.more',
+          key: "more",
+          href: "/",
+          translationKey: "navigation.more",
           children: secondaryNavigation,
         }
       : null;
 
   return (
     <nav
-      className={cn('header-desktop-only', className)}
+      className={cn("header-desktop-only", className)}
       aria-label={NAVIGATION_ARIA.mainNav}
     >
       <NavigationMenu>
@@ -207,7 +201,7 @@ export function VercelNavigation({ className }: VercelNavigationProps) {
           })}
 
           {secondaryNavigation.map((item) =>
-            renderLinkItem(item, t, 'header-nav-secondary-only'),
+            renderLinkItem(item, t, "header-nav-secondary-only"),
           )}
 
           {moreItem
@@ -215,7 +209,7 @@ export function VercelNavigation({ className }: VercelNavigationProps) {
                 item: moreItem,
                 t,
                 hoverState,
-                className: 'header-nav-more-only',
+                className: "header-nav-more-only",
               })
             : null}
         </NavigationMenuList>

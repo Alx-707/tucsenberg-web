@@ -1,26 +1,26 @@
-import { generateLocaleMetadata } from '@/app/[locale]/layout-metadata';
-import { generatePageStructuredData } from '@/app/[locale]/layout-structured-data';
-import '@/app/globals.css';
-import { Suspense, type ReactNode } from 'react';
-import { notFound } from 'next/navigation';
-import { NextIntlClientProvider } from 'next-intl';
-import { getTranslations, setRequestLocale } from 'next-intl/server';
-import { loadCompleteMessages } from '@/lib/load-messages';
-import { generateJSONLD } from '@/lib/structured-data';
-import { AttributionBootstrap } from '@/components/attribution-bootstrap';
-import { CookieConsentIsland } from '@/components/cookie/cookie-consent-island';
-import { Footer } from '@/components/footer';
-import { LangUpdater } from '@/components/i18n/lang-updater';
-import { Header } from '@/components/layout/header';
-import { LazyToaster } from '@/components/lazy/lazy-toaster';
-import { LazyTopLoader } from '@/components/lazy/lazy-top-loader';
-import { ThemeProvider } from '@/components/theme-provider';
-import { ThemeSwitcher } from '@/components/ui/theme-switcher';
-import { LazyWhatsAppButton } from '@/components/whatsapp/lazy-whatsapp-button';
-import { getAppConfig } from '@/config/app';
-import { FOOTER_COLUMNS, FOOTER_STYLE_TOKENS } from '@/config/footer-links';
-import { SITE_CONFIG } from '@/config/paths/site-config';
-import { routing } from '@/i18n/routing';
+import { generateLocaleMetadata } from "@/app/[locale]/layout-metadata";
+import { generatePageStructuredData } from "@/app/[locale]/layout-structured-data";
+import "@/app/globals.css";
+import { Suspense, type ReactNode } from "react";
+import { notFound } from "next/navigation";
+import { NextIntlClientProvider } from "next-intl";
+import { getTranslations, setRequestLocale } from "next-intl/server";
+import { loadCompleteMessages } from "@/lib/load-messages";
+import { generateJSONLD } from "@/lib/structured-data";
+import { AttributionBootstrap } from "@/components/attribution-bootstrap";
+import { CookieConsentIsland } from "@/components/cookie/cookie-consent-island";
+import { Footer } from "@/components/footer";
+import { LangUpdater } from "@/components/i18n/lang-updater";
+import { Header } from "@/components/layout/header";
+import { LazyToaster } from "@/components/lazy/lazy-toaster";
+import { LazyTopLoader } from "@/components/lazy/lazy-top-loader";
+import { ThemeProvider } from "@/components/theme-provider";
+import { ThemeSwitcher } from "@/components/ui/theme-switcher";
+import { LazyWhatsAppButton } from "@/components/whatsapp/lazy-whatsapp-button";
+import { getAppConfig } from "@/config/app";
+import { FOOTER_COLUMNS, FOOTER_STYLE_TOKENS } from "@/config/footer-links";
+import { SITE_CONFIG } from "@/config/paths/site-config";
+import { routing } from "@/i18n/routing";
 
 // Client analytics are rendered as an island to avoid impacting LCP
 
@@ -32,7 +32,7 @@ interface LocaleLayoutProps {
   params: Promise<{ locale: string }>;
 }
 interface AsyncLocaleLayoutContentProps {
-  locale: 'en' | 'zh';
+  locale: "en" | "zh";
   children: ReactNode;
 }
 
@@ -46,10 +46,10 @@ async function AsyncLocaleLayoutContent({
   // Load translations for layout-level strings inside Suspense boundary
   const tFooter = await getTranslations({
     locale,
-    namespace: 'footer',
+    namespace: "footer",
   });
 
-  const footerSystemStatus = tFooter('systemStatus');
+  const footerSystemStatus = tFooter("systemStatus");
 
   const appConfig = getAppConfig();
   const showWhatsAppButton =
@@ -81,26 +81,19 @@ async function AsyncLocaleLayoutContent({
         3. Reference: https://www.w3.org/TR/CSP3/#should-block-inline
       */}
       <script
-        type='application/ld+json'
+        type="application/ld+json"
         dangerouslySetInnerHTML={{
           __html: generateJSONLD(organizationData),
         }}
       />
       <script
-        type='application/ld+json'
+        type="application/ld+json"
         dangerouslySetInnerHTML={{
           __html: generateJSONLD(websiteData),
         }}
       />
-      <NextIntlClientProvider
-        locale={locale}
-        messages={messages}
-      >
-        <ThemeProvider
-          attribute='class'
-          defaultTheme='system'
-          enableSystem
-        >
+      <NextIntlClientProvider locale={locale} messages={messages}>
+        <ThemeProvider attribute="class" defaultTheme="system" enableSystem>
           {/* P1-1 Fix: Single attribution initialization for UTM tracking */}
           <AttributionBootstrap />
 
@@ -111,19 +104,19 @@ async function AsyncLocaleLayoutContent({
           <Header locale={locale} />
 
           {/* 主要内容 */}
-          <main className='flex-1'>{children}</main>
+          <main className="flex-1">{children}</main>
 
           {/* 页脚：使用新 Footer 组件与配置数据，附加主题切换与状态插槽 */}
           <Footer
             columns={FOOTER_COLUMNS}
             tokens={FOOTER_STYLE_TOKENS}
             statusSlot={
-              <span className='text-xs font-medium text-muted-foreground sm:text-sm'>
+              <span className="text-xs font-medium text-muted-foreground sm:text-sm">
                 {footerSystemStatus}
               </span>
             }
             themeToggleSlot={
-              <ThemeSwitcher data-testid='footer-theme-toggle' />
+              <ThemeSwitcher data-testid="footer-theme-toggle" />
             }
           />
 
@@ -149,11 +142,11 @@ export default async function LocaleLayout({
   const { locale } = await params;
 
   // Ensure that the incoming `locale` is valid
-  if (!routing.locales.includes(locale as 'en' | 'zh')) {
+  if (!routing.locales.includes(locale as "en" | "zh")) {
     notFound();
   }
 
-  const typedLocale = locale as 'en' | 'zh';
+  const typedLocale = locale as "en" | "zh";
 
   // Root layout renders <html>/<body> to ensure metadata is injected.
   // This layout provides locale context and page skeleton only.

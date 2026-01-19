@@ -2,10 +2,10 @@
  * @vitest-environment jsdom
  */
 
-import React from 'react';
-import { render, screen, waitFor } from '@testing-library/react';
-import userEvent from '@testing-library/user-event';
-import { beforeEach, describe, expect, it, vi } from 'vitest';
+import React from "react";
+import { render, screen, waitFor } from "@testing-library/react";
+import userEvent from "@testing-library/user-event";
+import { beforeEach, describe, expect, it, vi } from "vitest";
 import {
   Sheet,
   SheetClose,
@@ -14,17 +14,13 @@ import {
   SheetHeader,
   SheetTitle,
   SheetTrigger,
-} from '../sheet';
+} from "../sheet";
 
 // Mock Lucide React icons
-vi.mock('lucide-react', () => ({
-  XIcon: ({ className, ...props }: React.ComponentProps<'svg'>) => (
-    <svg
-      data-testid='x-icon'
-      className={className}
-      {...props}
-    >
-      <path d='M18 6L6 18M6 6l12 12' />
+vi.mock("lucide-react", () => ({
+  XIcon: ({ className, ...props }: React.ComponentProps<"svg">) => (
+    <svg data-testid="x-icon" className={className} {...props}>
+      <path d="M18 6L6 18M6 6l12 12" />
     </svg>
   ),
 }));
@@ -35,7 +31,7 @@ function setupEdgeCasesTest() {
   return { user };
 }
 
-describe('Sheet - Edge Cases', () => {
+describe("Sheet - Edge Cases", () => {
   let user: ReturnType<typeof userEvent.setup>;
 
   beforeEach(() => {
@@ -43,26 +39,26 @@ describe('Sheet - Edge Cases', () => {
     user = setup.user;
   });
 
-  it('handles sheet without header', async () => {
+  it("handles sheet without header", async () => {
     render(
       <Sheet defaultOpen>
-        <SheetContent data-testid='sheet-content'>
+        <SheetContent data-testid="sheet-content">
           <div>Content without header</div>
         </SheetContent>
       </Sheet>,
     );
 
     await waitFor(() => {
-      const content = screen.getByTestId('sheet-content');
+      const content = screen.getByTestId("sheet-content");
       expect(content).toBeInTheDocument();
-      expect(content).toHaveTextContent('Content without header');
+      expect(content).toHaveTextContent("Content without header");
     });
   });
 
-  it('handles sheet without footer', async () => {
+  it("handles sheet without footer", async () => {
     render(
       <Sheet defaultOpen>
-        <SheetContent data-testid='sheet-content'>
+        <SheetContent data-testid="sheet-content">
           <SheetHeader>
             <SheetTitle>Title Only</SheetTitle>
           </SheetHeader>
@@ -72,102 +68,102 @@ describe('Sheet - Edge Cases', () => {
     );
 
     await waitFor(() => {
-      const content = screen.getByTestId('sheet-content');
+      const content = screen.getByTestId("sheet-content");
       expect(content).toBeInTheDocument();
-      expect(content).toHaveTextContent('Title Only');
-      expect(content).toHaveTextContent('Content without footer');
+      expect(content).toHaveTextContent("Title Only");
+      expect(content).toHaveTextContent("Content without footer");
     });
   });
 
-  it('handles empty sheet content', async () => {
+  it("handles empty sheet content", async () => {
     render(
       <Sheet defaultOpen>
-        <SheetContent data-testid='sheet-content' />
+        <SheetContent data-testid="sheet-content" />
       </Sheet>,
     );
 
     await waitFor(() => {
-      const content = screen.getByTestId('sheet-content');
+      const content = screen.getByTestId("sheet-content");
       expect(content).toBeInTheDocument();
     });
   });
 
-  it('handles sheet with only title', async () => {
+  it("handles sheet with only title", async () => {
     render(
       <Sheet defaultOpen>
-        <SheetContent data-testid='sheet-content'>
+        <SheetContent data-testid="sheet-content">
           <SheetTitle>Minimal Sheet</SheetTitle>
         </SheetContent>
       </Sheet>,
     );
 
     await waitFor(() => {
-      const content = screen.getByTestId('sheet-content');
+      const content = screen.getByTestId("sheet-content");
       expect(content).toBeInTheDocument();
-      expect(content).toHaveTextContent('Minimal Sheet');
+      expect(content).toHaveTextContent("Minimal Sheet");
     });
   });
 
-  it('handles sheet with only description', async () => {
+  it("handles sheet with only description", async () => {
     render(
       <Sheet defaultOpen>
-        <SheetContent data-testid='sheet-content'>
+        <SheetContent data-testid="sheet-content">
           <SheetDescription>Just a description</SheetDescription>
         </SheetContent>
       </Sheet>,
     );
 
     await waitFor(() => {
-      const content = screen.getByTestId('sheet-content');
+      const content = screen.getByTestId("sheet-content");
       expect(content).toBeInTheDocument();
-      expect(content).toHaveTextContent('Just a description');
+      expect(content).toHaveTextContent("Just a description");
     });
   });
 
-  it('handles rapid open/close operations', async () => {
+  it("handles rapid open/close operations", async () => {
     render(
       <Sheet>
-        <SheetTrigger data-testid='sheet-trigger'>Open Sheet</SheetTrigger>
-        <SheetContent data-testid='sheet-content'>
+        <SheetTrigger data-testid="sheet-trigger">Open Sheet</SheetTrigger>
+        <SheetContent data-testid="sheet-content">
           <SheetTitle>Rapid Test</SheetTitle>
-          <SheetClose data-testid='close-button'>Close</SheetClose>
+          <SheetClose data-testid="close-button">Close</SheetClose>
         </SheetContent>
       </Sheet>,
     );
 
-    const trigger = screen.getByTestId('sheet-trigger');
+    const trigger = screen.getByTestId("sheet-trigger");
 
     // Rapid open/close operations
     for (let i = 0; i < 3; i++) {
       await user.click(trigger);
 
       await waitFor(() => {
-        expect(screen.getByTestId('sheet-content')).toBeInTheDocument();
+        expect(screen.getByTestId("sheet-content")).toBeInTheDocument();
       });
 
-      const closeButton = screen.getByTestId('close-button');
+      const closeButton = screen.getByTestId("close-button");
       await user.click(closeButton);
 
       await waitFor(() => {
-        expect(screen.queryByTestId('sheet-content')).not.toBeInTheDocument();
+        expect(screen.queryByTestId("sheet-content")).not.toBeInTheDocument();
       });
     }
   });
 
-  it('handles sheet with complex nested content', async () => {
+  it("handles sheet with complex nested content", async () => {
     render(
       <Sheet defaultOpen>
-        <SheetContent data-testid='sheet-content'>
+        <SheetContent data-testid="sheet-content">
           <SheetHeader>
             <SheetTitle>Complex Content</SheetTitle>
             <SheetDescription>Sheet with nested elements</SheetDescription>
           </SheetHeader>
 
-          <div className='nested-container'>
-            <div className='level-1'>
-              <div className='level-2'>
-                <div className='level-3'>
-                  <span data-testid='deeply-nested'>Deeply nested content</span>
+          <div className="nested-container">
+            <div className="level-1">
+              <div className="level-2">
+                <div className="level-3">
+                  <span data-testid="deeply-nested">Deeply nested content</span>
                 </div>
               </div>
             </div>
@@ -177,36 +173,36 @@ describe('Sheet - Edge Cases', () => {
     );
 
     await waitFor(() => {
-      const content = screen.getByTestId('sheet-content');
-      const nestedContent = screen.getByTestId('deeply-nested');
+      const content = screen.getByTestId("sheet-content");
+      const nestedContent = screen.getByTestId("deeply-nested");
 
       expect(content).toBeInTheDocument();
       expect(nestedContent).toBeInTheDocument();
-      expect(nestedContent).toHaveTextContent('Deeply nested content');
+      expect(nestedContent).toHaveTextContent("Deeply nested content");
     });
   });
 
-  it('handles sheet with very long content', async () => {
+  it("handles sheet with very long content", async () => {
     const longContent = Array.from(
       { length: 50 },
       (_, i) =>
         `Paragraph ${i + 1}: This is a very long paragraph with lots of text content that should test how the sheet handles scrolling and overflow.`,
-    ).join(' ');
+    ).join(" ");
 
     render(
       <Sheet defaultOpen>
-        <SheetContent data-testid='sheet-content'>
+        <SheetContent data-testid="sheet-content">
           <SheetHeader>
             <SheetTitle>Long Content Test</SheetTitle>
           </SheetHeader>
-          <div data-testid='long-content'>{longContent}</div>
+          <div data-testid="long-content">{longContent}</div>
         </SheetContent>
       </Sheet>,
     );
 
     await waitFor(() => {
-      const content = screen.getByTestId('sheet-content');
-      const longContentElement = screen.getByTestId('long-content');
+      const content = screen.getByTestId("sheet-content");
+      const longContentElement = screen.getByTestId("long-content");
 
       expect(content).toBeInTheDocument();
       expect(longContentElement).toBeInTheDocument();
@@ -215,10 +211,10 @@ describe('Sheet - Edge Cases', () => {
     });
   });
 
-  it('handles sheet with special characters and unicode', async () => {
+  it("handles sheet with special characters and unicode", async () => {
     render(
       <Sheet defaultOpen>
-        <SheetContent data-testid='sheet-content'>
+        <SheetContent data-testid="sheet-content">
           <SheetHeader>
             <SheetTitle>Special Characters: 🚀 ñáéíóú ©®™</SheetTitle>
             <SheetDescription>
@@ -230,28 +226,28 @@ describe('Sheet - Edge Cases', () => {
     );
 
     await waitFor(() => {
-      const content = screen.getByTestId('sheet-content');
+      const content = screen.getByTestId("sheet-content");
       expect(content).toBeInTheDocument();
-      expect(content).toHaveTextContent('Special Characters: 🚀 ñáéíóú ©®™');
+      expect(content).toHaveTextContent("Special Characters: 🚀 ñáéíóú ©®™");
       expect(content).toHaveTextContent(
-        'Unicode test: 中文 العربية русский 日本語 🎉🎊✨',
+        "Unicode test: 中文 العربية русский 日本語 🎉🎊✨",
       );
     });
   });
 
-  it('handles sheet with dynamic content updates', async () => {
+  it("handles sheet with dynamic content updates", async () => {
     const DynamicSheet = () => {
       const [count, setCount] = React.useState(0);
 
       return (
         <Sheet defaultOpen>
-          <SheetContent data-testid='sheet-content'>
+          <SheetContent data-testid="sheet-content">
             <SheetHeader>
               <SheetTitle>Dynamic Content</SheetTitle>
             </SheetHeader>
-            <div data-testid='counter'>Count: {count}</div>
+            <div data-testid="counter">Count: {count}</div>
             <button
-              data-testid='increment-button'
+              data-testid="increment-button"
               onClick={() => setCount((c) => c + 1)}
             >
               Increment
@@ -264,24 +260,24 @@ describe('Sheet - Edge Cases', () => {
     render(<DynamicSheet />);
 
     await waitFor(() => {
-      const counter = screen.getByTestId('counter');
-      expect(counter).toHaveTextContent('Count: 0');
+      const counter = screen.getByTestId("counter");
+      expect(counter).toHaveTextContent("Count: 0");
     });
 
-    const incrementButton = screen.getByTestId('increment-button');
+    const incrementButton = screen.getByTestId("increment-button");
     await user.click(incrementButton);
 
     await waitFor(() => {
-      const counter = screen.getByTestId('counter');
-      expect(counter).toHaveTextContent('Count: 1');
+      const counter = screen.getByTestId("counter");
+      expect(counter).toHaveTextContent("Count: 1");
     });
 
     await user.click(incrementButton);
     await user.click(incrementButton);
 
     await waitFor(() => {
-      const counter = screen.getByTestId('counter');
-      expect(counter).toHaveTextContent('Count: 3');
+      const counter = screen.getByTestId("counter");
+      expect(counter).toHaveTextContent("Count: 3");
     });
   });
 });

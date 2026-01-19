@@ -108,10 +108,50 @@ export const CONTENT_MANIFEST: ContentManifest = {
   {
     "type": "products",
     "locale": "en",
+    "slug": "low-e-igu",
+    "extension": ".mdx",
+    "filePath": "/content/products/en/low-e-igu.mdx",
+    "relativePath": "content/products/en/low-e-igu.mdx"
+  },
+  {
+    "type": "products",
+    "locale": "en",
     "slug": "sample-product",
     "extension": ".mdx",
     "filePath": "/content/products/en/sample-product.mdx",
     "relativePath": "content/products/en/sample-product.mdx"
+  },
+  {
+    "type": "products",
+    "locale": "en",
+    "slug": "shopfront-system",
+    "extension": ".mdx",
+    "filePath": "/content/products/en/shopfront-system.mdx",
+    "relativePath": "content/products/en/shopfront-system.mdx"
+  },
+  {
+    "type": "products",
+    "locale": "en",
+    "slug": "sliding-door-system",
+    "extension": ".mdx",
+    "filePath": "/content/products/en/sliding-door-system.mdx",
+    "relativePath": "content/products/en/sliding-door-system.mdx"
+  },
+  {
+    "type": "products",
+    "locale": "en",
+    "slug": "unitized-curtain-wall",
+    "extension": ".mdx",
+    "filePath": "/content/products/en/unitized-curtain-wall.mdx",
+    "relativePath": "content/products/en/unitized-curtain-wall.mdx"
+  },
+  {
+    "type": "products",
+    "locale": "zh",
+    "slug": "low-e-igu",
+    "extension": ".mdx",
+    "filePath": "/content/products/zh/low-e-igu.mdx",
+    "relativePath": "content/products/zh/low-e-igu.mdx"
   },
   {
     "type": "products",
@@ -120,6 +160,30 @@ export const CONTENT_MANIFEST: ContentManifest = {
     "extension": ".mdx",
     "filePath": "/content/products/zh/sample-product.mdx",
     "relativePath": "content/products/zh/sample-product.mdx"
+  },
+  {
+    "type": "products",
+    "locale": "zh",
+    "slug": "shopfront-system",
+    "extension": ".mdx",
+    "filePath": "/content/products/zh/shopfront-system.mdx",
+    "relativePath": "content/products/zh/shopfront-system.mdx"
+  },
+  {
+    "type": "products",
+    "locale": "zh",
+    "slug": "sliding-door-system",
+    "extension": ".mdx",
+    "filePath": "/content/products/zh/sliding-door-system.mdx",
+    "relativePath": "content/products/zh/sliding-door-system.mdx"
+  },
+  {
+    "type": "products",
+    "locale": "zh",
+    "slug": "unitized-curtain-wall",
+    "extension": ".mdx",
+    "filePath": "/content/products/zh/unitized-curtain-wall.mdx",
+    "relativePath": "content/products/zh/unitized-curtain-wall.mdx"
   }
 ],
   byKey: {
@@ -203,6 +267,14 @@ export const CONTENT_MANIFEST: ContentManifest = {
     "filePath": "/content/pages/zh/terms.mdx",
     "relativePath": "content/pages/zh/terms.mdx"
   },
+  "products/en/low-e-igu": {
+    "type": "products",
+    "locale": "en",
+    "slug": "low-e-igu",
+    "extension": ".mdx",
+    "filePath": "/content/products/en/low-e-igu.mdx",
+    "relativePath": "content/products/en/low-e-igu.mdx"
+  },
   "products/en/sample-product": {
     "type": "products",
     "locale": "en",
@@ -211,6 +283,38 @@ export const CONTENT_MANIFEST: ContentManifest = {
     "filePath": "/content/products/en/sample-product.mdx",
     "relativePath": "content/products/en/sample-product.mdx"
   },
+  "products/en/shopfront-system": {
+    "type": "products",
+    "locale": "en",
+    "slug": "shopfront-system",
+    "extension": ".mdx",
+    "filePath": "/content/products/en/shopfront-system.mdx",
+    "relativePath": "content/products/en/shopfront-system.mdx"
+  },
+  "products/en/sliding-door-system": {
+    "type": "products",
+    "locale": "en",
+    "slug": "sliding-door-system",
+    "extension": ".mdx",
+    "filePath": "/content/products/en/sliding-door-system.mdx",
+    "relativePath": "content/products/en/sliding-door-system.mdx"
+  },
+  "products/en/unitized-curtain-wall": {
+    "type": "products",
+    "locale": "en",
+    "slug": "unitized-curtain-wall",
+    "extension": ".mdx",
+    "filePath": "/content/products/en/unitized-curtain-wall.mdx",
+    "relativePath": "content/products/en/unitized-curtain-wall.mdx"
+  },
+  "products/zh/low-e-igu": {
+    "type": "products",
+    "locale": "zh",
+    "slug": "low-e-igu",
+    "extension": ".mdx",
+    "filePath": "/content/products/zh/low-e-igu.mdx",
+    "relativePath": "content/products/zh/low-e-igu.mdx"
+  },
   "products/zh/sample-product": {
     "type": "products",
     "locale": "zh",
@@ -218,6 +322,30 @@ export const CONTENT_MANIFEST: ContentManifest = {
     "extension": ".mdx",
     "filePath": "/content/products/zh/sample-product.mdx",
     "relativePath": "content/products/zh/sample-product.mdx"
+  },
+  "products/zh/shopfront-system": {
+    "type": "products",
+    "locale": "zh",
+    "slug": "shopfront-system",
+    "extension": ".mdx",
+    "filePath": "/content/products/zh/shopfront-system.mdx",
+    "relativePath": "content/products/zh/shopfront-system.mdx"
+  },
+  "products/zh/sliding-door-system": {
+    "type": "products",
+    "locale": "zh",
+    "slug": "sliding-door-system",
+    "extension": ".mdx",
+    "filePath": "/content/products/zh/sliding-door-system.mdx",
+    "relativePath": "content/products/zh/sliding-door-system.mdx"
+  },
+  "products/zh/unitized-curtain-wall": {
+    "type": "products",
+    "locale": "zh",
+    "slug": "unitized-curtain-wall",
+    "extension": ".mdx",
+    "filePath": "/content/products/zh/unitized-curtain-wall.mdx",
+    "relativePath": "content/products/zh/unitized-curtain-wall.mdx"
   }
 },
 } as const;

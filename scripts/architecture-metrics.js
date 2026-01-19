@@ -13,37 +13,37 @@
  * - 集成到CI pipeline
  */
 
-const { execSync } = require('child_process');
-const fs = require('fs');
-const path = require('path');
-const glob = require('glob');
+const { execSync } = require("child_process");
+const fs = require("fs");
+const path = require("path");
+const glob = require("glob");
 
 // 架构度量配置
 const METRICS_CONFIG = {
   // 输出目录
-  outputDir: path.join(process.cwd(), 'reports', 'architecture'),
+  outputDir: path.join(process.cwd(), "reports", "architecture"),
 
   // 扫描模式
   scanPatterns: {
-    typescript: 'src/**/*.{ts,tsx}',
-    javascript: 'src/**/*.{js,jsx}',
-    all: 'src/**/*.{ts,tsx,js,jsx}',
-    i18n: 'src/lib/*i18n*',
-    tests: 'src/**/*.{test,spec}.{ts,tsx,js,jsx}',
+    typescript: "src/**/*.{ts,tsx}",
+    javascript: "src/**/*.{js,jsx}",
+    all: "src/**/*.{ts,tsx,js,jsx}",
+    i18n: "src/lib/*i18n*",
+    tests: "src/**/*.{test,spec}.{ts,tsx,js,jsx}",
   },
 
   // 域定义
   domains: [
-    'security',
-    'content',
-    'accessibility',
-    'resend',
-    'whatsapp',
-    'performance-monitoring',
-    'i18n',
-    'locale-storage',
-    'web-vitals',
-    'theme-analytics',
+    "security",
+    "content",
+    "accessibility",
+    "resend",
+    "whatsapp",
+    "performance-monitoring",
+    "i18n",
+    "locale-storage",
+    "web-vitals",
+    "theme-analytics",
   ],
 
   // 质量阈值
@@ -84,7 +84,7 @@ class ArchitectureMetrics {
    * 统计export *数量和分布
    */
   async analyzeExportStar() {
-    console.log('📊 分析export *重新导出...');
+    console.log("📊 分析export *重新导出...");
 
     const files = glob.sync(METRICS_CONFIG.scanPatterns.all);
     let totalExportStar = 0;
@@ -92,7 +92,7 @@ class ArchitectureMetrics {
 
     for (const file of files) {
       try {
-        const content = fs.readFileSync(file, 'utf8');
+        const content = fs.readFileSync(file, "utf8");
         const exportStarMatches = content.match(/export\s*\*\s*from/g);
 
         if (exportStarMatches) {
@@ -121,16 +121,16 @@ class ArchitectureMetrics {
    * 统计TypeScript错误
    */
   async analyzeTypeScriptErrors() {
-    console.log('🔍 分析TypeScript错误...');
+    console.log("🔍 分析TypeScript错误...");
 
     try {
-      const result = execSync('pnpm tsc --noEmit --skipLibCheck', {
-        encoding: 'utf8',
-        stdio: 'pipe',
+      const result = execSync("pnpm tsc --noEmit --skipLibCheck", {
+        encoding: "utf8",
+        stdio: "pipe",
       });
       this.metrics.typeScriptErrors = 0;
     } catch (error) {
-      const output = error.stdout || error.stderr || '';
+      const output = error.stdout || error.stderr || "";
       const errorMatches = output.match(/error TS\d+:/g);
       this.metrics.typeScriptErrors = errorMatches ? errorMatches.length : 0;
     }
@@ -143,13 +143,13 @@ class ArchitectureMetrics {
    * 统计ESLint问题
    */
   async analyzeESLintIssues() {
-    console.log('🔍 分析ESLint问题...');
+    console.log("🔍 分析ESLint问题...");
 
     try {
       // 使用现有的quality-quick-staged脚本来获取ESLint统计
-      const result = execSync('node scripts/quality-quick-staged.js --json', {
-        encoding: 'utf8',
-        stdio: 'pipe',
+      const result = execSync("node scripts/quality-quick-staged.js --json", {
+        encoding: "utf8",
+        stdio: "pipe",
       });
 
       const qualityData = JSON.parse(result);
@@ -158,10 +158,10 @@ class ArchitectureMetrics {
       // 备用方案：直接运行ESLint
       try {
         const result = execSync(
-          'pnpm eslint src --format json --max-warnings 10000',
+          "pnpm eslint src --format json --max-warnings 10000",
           {
-            encoding: 'utf8',
-            stdio: 'pipe',
+            encoding: "utf8",
+            stdio: "pipe",
           },
         );
 
@@ -176,7 +176,7 @@ class ArchitectureMetrics {
       } catch (eslintError) {
         // ESLint可能返回非零退出码但仍有有效输出
         try {
-          const output = eslintError.stdout || '';
+          const output = eslintError.stdout || "";
           if (output) {
             const eslintResults = JSON.parse(output);
             let totalIssues = 0;
@@ -185,11 +185,11 @@ class ArchitectureMetrics {
             });
             this.metrics.eslintIssues = totalIssues;
           } else {
-            console.warn('⚠️ 无法获取ESLint输出，使用估算值');
+            console.warn("⚠️ 无法获取ESLint输出，使用估算值");
             this.metrics.eslintIssues = 2075; // 使用已知的当前值
           }
         } catch (parseError) {
-          console.warn('⚠️ 无法解析ESLint输出，使用估算值');
+          console.warn("⚠️ 无法解析ESLint输出，使用估算值");
           this.metrics.eslintIssues = 2075; // 使用已知的当前值
         }
       }
@@ -203,7 +203,7 @@ class ArchitectureMetrics {
    * 统计文件数量
    */
   async analyzeFileCount() {
-    console.log('📁 统计文件数量...');
+    console.log("📁 统计文件数量...");
 
     const allFiles = glob.sync(METRICS_CONFIG.scanPatterns.all);
     const i18nFiles = glob.sync(METRICS_CONFIG.scanPatterns.i18n);
@@ -224,7 +224,7 @@ class ArchitectureMetrics {
    * 分析文件大小分布
    */
   async analyzeFileSizes() {
-    console.log('📏 分析文件大小分布...');
+    console.log("📏 分析文件大小分布...");
 
     const files = glob.sync(METRICS_CONFIG.scanPatterns.all);
     const sizes = [];
@@ -268,20 +268,20 @@ class ArchitectureMetrics {
         return domain;
       }
     }
-    return 'other';
+    return "other";
   }
 
   /**
    * 生成度量报告
    */
   async generateReport() {
-    console.log('📊 生成架构度量报告...');
+    console.log("📊 生成架构度量报告...");
 
     const report = {
       metadata: {
         timestamp: this.metrics.timestamp,
-        version: '1.0.0',
-        project: 'b2b-web-template',
+        version: "1.0.0",
+        project: "b2b-web-template",
       },
       metrics: this.metrics,
       thresholds: METRICS_CONFIG.thresholds,
@@ -343,14 +343,14 @@ class ArchitectureMetrics {
       this.metrics.exportStarCount > METRICS_CONFIG.thresholds.exportStar.phase1
     ) {
       recommendations.push(
-        '优先处理export *重新导出，当前数量超出第一阶段目标',
+        "优先处理export *重新导出，当前数量超出第一阶段目标",
       );
     }
 
     if (
       this.metrics.typeScriptErrors > METRICS_CONFIG.thresholds.tsErrors.phase1
     ) {
-      recommendations.push('TypeScript错误数量较高，建议分阶段修复');
+      recommendations.push("TypeScript错误数量较高，建议分阶段修复");
     }
 
     return recommendations;
@@ -365,20 +365,20 @@ class ArchitectureMetrics {
 
 | 指标 | 当前值 | 目标值 | 状态 |
 |------|--------|--------|------|
-| Export * 数量 | ${report.metrics.exportStarCount} | ${METRICS_CONFIG.thresholds.exportStar.phase1} | ${report.metrics.exportStarCount <= METRICS_CONFIG.thresholds.exportStar.phase1 ? '✅' : '❌'} |
-| TypeScript 错误 | ${report.metrics.typeScriptErrors} | ${METRICS_CONFIG.thresholds.tsErrors.phase1} | ${report.metrics.typeScriptErrors <= METRICS_CONFIG.thresholds.tsErrors.phase1 ? '✅' : '❌'} |
-| ESLint 问题 | ${report.metrics.eslintIssues} | ${METRICS_CONFIG.thresholds.eslintIssues.target} | ${report.metrics.eslintIssues <= METRICS_CONFIG.thresholds.eslintIssues.target ? '✅' : '❌'} |
-| 总文件数 | ${report.metrics.totalFiles} | ${METRICS_CONFIG.thresholds.totalFiles.target} | ${report.metrics.totalFiles <= METRICS_CONFIG.thresholds.totalFiles.target ? '✅' : '❌'} |
+| Export * 数量 | ${report.metrics.exportStarCount} | ${METRICS_CONFIG.thresholds.exportStar.phase1} | ${report.metrics.exportStarCount <= METRICS_CONFIG.thresholds.exportStar.phase1 ? "✅" : "❌"} |
+| TypeScript 错误 | ${report.metrics.typeScriptErrors} | ${METRICS_CONFIG.thresholds.tsErrors.phase1} | ${report.metrics.typeScriptErrors <= METRICS_CONFIG.thresholds.tsErrors.phase1 ? "✅" : "❌"} |
+| ESLint 问题 | ${report.metrics.eslintIssues} | ${METRICS_CONFIG.thresholds.eslintIssues.target} | ${report.metrics.eslintIssues <= METRICS_CONFIG.thresholds.eslintIssues.target ? "✅" : "❌"} |
+| 总文件数 | ${report.metrics.totalFiles} | ${METRICS_CONFIG.thresholds.totalFiles.target} | ${report.metrics.totalFiles <= METRICS_CONFIG.thresholds.totalFiles.target ? "✅" : "❌"} |
 
 ## Export * 按域分布
 
 ${Object.entries(report.metrics.exportStarByDomain)
   .map(([domain, count]) => `- ${domain}: ${count}`)
-  .join('\n')}
+  .join("\n")}
 
 ## 建议
 
-${report.analysis.recommendations.map((rec) => `- ${rec}`).join('\n')}
+${report.analysis.recommendations.map((rec) => `- ${rec}`).join("\n")}
 `;
   }
 
@@ -386,7 +386,7 @@ ${report.analysis.recommendations.map((rec) => `- ${rec}`).join('\n')}
    * 运行完整分析
    */
   async runFullAnalysis() {
-    console.log('🚀 开始架构度量分析...\n');
+    console.log("🚀 开始架构度量分析...\n");
 
     try {
       await this.analyzeExportStar();
@@ -397,7 +397,7 @@ ${report.analysis.recommendations.map((rec) => `- ${rec}`).join('\n')}
 
       const report = await this.generateReport();
 
-      console.log('\n📊 架构度量分析完成!');
+      console.log("\n📊 架构度量分析完成!");
       console.log(`Export * 数量: ${this.metrics.exportStarCount}`);
       console.log(`TypeScript 错误: ${this.metrics.typeScriptErrors}`);
       console.log(`ESLint 问题: ${this.metrics.eslintIssues}`);
@@ -405,7 +405,7 @@ ${report.analysis.recommendations.map((rec) => `- ${rec}`).join('\n')}
 
       return report;
     } catch (error) {
-      console.error('❌ 分析过程中出现错误:', error.message);
+      console.error("❌ 分析过程中出现错误:", error.message);
       throw error;
     }
   }
@@ -420,7 +420,7 @@ async function main() {
 // 如果直接运行此脚本
 if (require.main === module) {
   main().catch((error) => {
-    console.error('❌ 脚本执行失败:', error);
+    console.error("❌ 脚本执行失败:", error);
     process.exit(1);
   });
 }

@@ -1,14 +1,14 @@
-import { Suspense } from 'react';
-import type { Metadata } from 'next';
-import { getTranslations, setRequestLocale } from 'next-intl/server';
-import type { Locale } from '@/types/content.types';
-import { getAllPostsCached } from '@/lib/content/blog';
+import { Suspense } from "react";
+import type { Metadata } from "next";
+import { getTranslations, setRequestLocale } from "next-intl/server";
+import type { Locale } from "@/types/content.types";
+import { getAllPostsCached } from "@/lib/content/blog";
 import {
   generateMetadataForPath,
   type Locale as SeoLocale,
-} from '@/lib/seo-metadata';
-import { PostGrid } from '@/components/blog/post-grid';
-import { generateLocaleStaticParams } from '@/app/[locale]/generate-static-params';
+} from "@/lib/seo-metadata";
+import { PostGrid } from "@/components/blog/post-grid";
+import { generateLocaleStaticParams } from "@/app/[locale]/generate-static-params";
 
 export function generateStaticParams() {
   return generateLocaleStaticParams();
@@ -16,17 +16,14 @@ export function generateStaticParams() {
 
 function BlogLoadingSkeleton() {
   return (
-    <div className='container mx-auto px-4 py-8 md:py-12'>
-      <div className='mb-8 md:mb-12'>
-        <div className='mb-4 h-10 w-48 animate-pulse rounded bg-muted' />
-        <div className='h-6 w-96 max-w-full animate-pulse rounded bg-muted' />
+    <div className="container mx-auto px-4 py-8 md:py-12">
+      <div className="mb-8 md:mb-12">
+        <div className="mb-4 h-10 w-48 animate-pulse rounded bg-muted" />
+        <div className="h-6 w-96 max-w-full animate-pulse rounded bg-muted" />
       </div>
-      <div className='grid grid-cols-1 gap-6 md:grid-cols-2 lg:grid-cols-3'>
+      <div className="grid grid-cols-1 gap-6 md:grid-cols-2 lg:grid-cols-3">
         {[1, 2, 3, 4, 5, 6].map((i) => (
-          <div
-            key={i}
-            className='h-64 animate-pulse rounded-lg bg-muted'
-          />
+          <div key={i} className="h-64 animate-pulse rounded-lg bg-muted" />
         ))}
       </div>
     </div>
@@ -45,16 +42,16 @@ export async function generateMetadata({
   const { locale } = await params;
   const t = await getTranslations({
     locale,
-    namespace: 'blog',
+    namespace: "blog",
   });
 
   return generateMetadataForPath({
     locale: locale as SeoLocale,
-    pageType: 'blog',
-    path: '/blog',
+    pageType: "blog",
+    path: "/blog",
     config: {
-      title: t('pageTitle'),
-      description: t('pageDescription'),
+      title: t("pageTitle"),
+      description: t("pageDescription"),
     },
   });
 }
@@ -64,24 +61,24 @@ async function BlogContent({ locale }: { locale: string }) {
 
   const t = await getTranslations({
     locale,
-    namespace: 'blog',
+    namespace: "blog",
   });
 
   const posts = await getAllPostsCached(locale as Locale, {
-    sortBy: 'publishedAt',
-    sortOrder: 'desc',
+    sortBy: "publishedAt",
+    sortOrder: "desc",
     draft: false,
   });
 
   const linkPrefix = `/${locale}/blog`;
 
   return (
-    <main className='container mx-auto px-4 py-8 md:py-12'>
+    <main className="container mx-auto px-4 py-8 md:py-12">
       {/* Page Header */}
-      <header className='mb-8 md:mb-12'>
-        <h1 className='text-heading mb-4'>{t('pageTitle')}</h1>
-        <p className='text-body max-w-2xl text-muted-foreground'>
-          {t('pageDescription')}
+      <header className="mb-8 md:mb-12">
+        <h1 className="text-heading mb-4">{t("pageTitle")}</h1>
+        <p className="text-body max-w-2xl text-muted-foreground">
+          {t("pageDescription")}
         </p>
       </header>
 
@@ -91,11 +88,11 @@ async function BlogContent({ locale }: { locale: string }) {
         linkPrefix={linkPrefix}
         locale={locale}
         cardProps={{
-          readingTimeLabel: t('readingTime'),
+          readingTimeLabel: t("readingTime"),
         }}
         emptyState={
-          <div className='py-12 text-center'>
-            <p className='text-muted-foreground'>{t('emptyState')}</p>
+          <div className="py-12 text-center">
+            <p className="text-muted-foreground">{t("emptyState")}</p>
           </div>
         }
       />

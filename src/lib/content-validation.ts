@@ -7,16 +7,16 @@
 import type {
   ContentType,
   ContentValidationResult,
-} from '@/types/content.types';
-import { SECONDS_PER_MINUTE, ZERO } from '@/constants';
-import { COUNT_160 } from '@/constants/count';
+} from "@/types/content.types";
+import { SECONDS_PER_MINUTE, ZERO } from "@/constants";
+import { COUNT_160 } from "@/constants/count";
 import {
   TEST_CONTENT_LIMITS,
   TEST_COUNT_CONSTANTS,
-} from '@/constants/test-constants';
+} from "@/constants/test-constants";
 
 // Known content types for validation
-const KNOWN_CONTENT_TYPES: ContentType[] = ['posts', 'pages', 'products'];
+const KNOWN_CONTENT_TYPES: ContentType[] = ["posts", "pages", "products"];
 
 /**
  * Validation configuration loaded from content.json
@@ -69,25 +69,25 @@ function validateRequiredFields(
 
   // Check title - must exist, be a string, and not be empty/whitespace
   if (
-    !metadata['title'] ||
-    typeof metadata['title'] !== 'string' ||
-    (metadata['title'] as string).trim() === ''
+    !metadata["title"] ||
+    typeof metadata["title"] !== "string" ||
+    (metadata["title"] as string).trim() === ""
   ) {
-    errors.push('Title is required');
+    errors.push("Title is required");
   }
 
-  if (!metadata['publishedAt']) {
-    errors.push('Published date is required');
+  if (!metadata["publishedAt"]) {
+    errors.push("Published date is required");
   }
 
   // Validate slug (required by default for production safety)
   if (config.requireSlug !== false) {
     if (
-      !metadata['slug'] ||
-      typeof metadata['slug'] !== 'string' ||
-      (metadata['slug'] as string).trim() === ''
+      !metadata["slug"] ||
+      typeof metadata["slug"] !== "string" ||
+      (metadata["slug"] as string).trim() === ""
     ) {
-      errors.push('Slug is required');
+      errors.push("Slug is required");
     }
   }
 
@@ -101,31 +101,31 @@ function validateDates(metadata: Record<string, unknown>): string[] {
   const errors: string[] = [];
 
   if (
-    metadata['publishedAt'] &&
-    isNaN(Date.parse(metadata['publishedAt'] as string))
+    metadata["publishedAt"] &&
+    isNaN(Date.parse(metadata["publishedAt"] as string))
   ) {
-    errors.push('Published date must be a valid ISO date');
+    errors.push("Published date must be a valid ISO date");
   }
 
   if (
-    metadata['updatedAt'] &&
-    isNaN(Date.parse(metadata['updatedAt'] as string))
+    metadata["updatedAt"] &&
+    isNaN(Date.parse(metadata["updatedAt"] as string))
   ) {
-    errors.push('Updated date must be a valid ISO date');
+    errors.push("Updated date must be a valid ISO date");
   }
 
   // Check if updatedAt is after publishedAt
   if (
-    metadata['publishedAt'] &&
-    metadata['updatedAt'] &&
-    !isNaN(Date.parse(metadata['publishedAt'] as string)) &&
-    !isNaN(Date.parse(metadata['updatedAt'] as string))
+    metadata["publishedAt"] &&
+    metadata["updatedAt"] &&
+    !isNaN(Date.parse(metadata["publishedAt"] as string)) &&
+    !isNaN(Date.parse(metadata["updatedAt"] as string))
   ) {
-    const publishedDate = new Date(metadata['publishedAt'] as string);
-    const updatedDate = new Date(metadata['updatedAt'] as string);
+    const publishedDate = new Date(metadata["publishedAt"] as string);
+    const updatedDate = new Date(metadata["updatedAt"] as string);
 
     if (updatedDate < publishedDate) {
-      errors.push('Updated date must be after published date');
+      errors.push("Updated date must be after published date");
     }
   }
 
@@ -142,12 +142,12 @@ function validateTitle(
   const errors: string[] = [];
   const maxLength = config.maxTitleLength ?? TEST_CONTENT_LIMITS.TITLE_MAX;
 
-  if (metadata['title'] && typeof metadata['title'] !== 'string') {
-    errors.push('Title must be a string');
+  if (metadata["title"] && typeof metadata["title"] !== "string") {
+    errors.push("Title must be a string");
   }
 
-  if (metadata['title'] && typeof metadata['title'] === 'string') {
-    const title = metadata['title'] as string;
+  if (metadata["title"] && typeof metadata["title"] === "string") {
+    const title = metadata["title"] as string;
     if (title.length > maxLength) {
       errors.push(`Title must be less than ${maxLength} characters`);
     }
@@ -162,14 +162,14 @@ function validateTitle(
 function validateTags(metadata: Record<string, unknown>): string[] {
   const errors: string[] = [];
 
-  if (metadata['tags'] && !Array.isArray(metadata['tags'])) {
-    errors.push('Tags must be an array');
+  if (metadata["tags"] && !Array.isArray(metadata["tags"])) {
+    errors.push("Tags must be an array");
   }
 
-  if (metadata['tags'] && Array.isArray(metadata['tags'])) {
-    const tags = metadata['tags'] as unknown[];
-    if (tags.some((tag) => typeof tag !== 'string')) {
-      errors.push('All tags must be strings');
+  if (metadata["tags"] && Array.isArray(metadata["tags"])) {
+    const tags = metadata["tags"] as unknown[];
+    if (tags.some((tag) => typeof tag !== "string")) {
+      errors.push("All tags must be strings");
     }
   }
 
@@ -187,12 +187,12 @@ function validateExcerpt(
   const maxLength =
     config.maxExcerptLength ?? TEST_CONTENT_LIMITS.DESCRIPTION_MAX;
 
-  if (metadata['excerpt'] && typeof metadata['excerpt'] !== 'string') {
-    errors.push('Excerpt must be a string');
+  if (metadata["excerpt"] && typeof metadata["excerpt"] !== "string") {
+    errors.push("Excerpt must be a string");
   }
 
-  if (metadata['excerpt'] && typeof metadata['excerpt'] === 'string') {
-    const excerpt = metadata['excerpt'] as string;
+  if (metadata["excerpt"] && typeof metadata["excerpt"] === "string") {
+    const excerpt = metadata["excerpt"] as string;
     if (excerpt.length > maxLength) {
       errors.push(`Excerpt must be less than ${maxLength} characters`);
     }
@@ -229,33 +229,33 @@ function validateProductsSpecific(
   // Validate coverImage (required for products)
   if (productConfig?.requireCoverImage !== false) {
     if (
-      !metadata['coverImage'] ||
-      typeof metadata['coverImage'] !== 'string' ||
-      (metadata['coverImage'] as string).trim() === ''
+      !metadata["coverImage"] ||
+      typeof metadata["coverImage"] !== "string" ||
+      (metadata["coverImage"] as string).trim() === ""
     ) {
-      errors.push('Products require a coverImage');
+      errors.push("Products require a coverImage");
     }
   }
 
   // Validate category (required for products)
   if (productConfig?.requireCategory !== false) {
     if (
-      !metadata['category'] ||
-      typeof metadata['category'] !== 'string' ||
-      (metadata['category'] as string).trim() === ''
+      !metadata["category"] ||
+      typeof metadata["category"] !== "string" ||
+      (metadata["category"] as string).trim() === ""
     ) {
-      errors.push('Products require a category');
+      errors.push("Products require a category");
     }
   }
 
   // Validate optional product fields
-  if (!metadata['description']) {
-    warnings.push('Products should have a description for better SEO');
+  if (!metadata["description"]) {
+    warnings.push("Products should have a description for better SEO");
   }
 
-  if (!metadata['moq'] && !metadata['leadTime']) {
+  if (!metadata["moq"] && !metadata["leadTime"]) {
     warnings.push(
-      'B2B products should include MOQ or lead time for buyer reference',
+      "B2B products should include MOQ or lead time for buyer reference",
     );
   }
 
@@ -273,27 +273,27 @@ function validateTypeSpecific(
   const errors: string[] = [];
   const warnings: string[] = [];
 
-  if (type === 'posts') {
-    if (!metadata['excerpt']) {
-      warnings.push('Blog posts should have an excerpt for better SEO');
+  if (type === "posts") {
+    if (!metadata["excerpt"]) {
+      warnings.push("Blog posts should have an excerpt for better SEO");
     }
     if (
-      !metadata['tags'] ||
-      (Array.isArray(metadata['tags']) && metadata['tags'].length === ZERO)
+      !metadata["tags"] ||
+      (Array.isArray(metadata["tags"]) && metadata["tags"].length === ZERO)
     ) {
-      warnings.push('Blog posts should have tags for better categorization');
+      warnings.push("Blog posts should have tags for better categorization");
     }
   }
 
-  if (type === 'products') {
+  if (type === "products") {
     const productValidation = validateProductsSpecific(metadata, config);
     errors.push(...productValidation.errors);
     warnings.push(...productValidation.warnings);
   }
 
   // Check for too many tags (applies to all content types)
-  if (metadata['tags'] && Array.isArray(metadata['tags'])) {
-    const tags = metadata['tags'] as unknown[];
+  if (metadata["tags"] && Array.isArray(metadata["tags"])) {
+    const tags = metadata["tags"] as unknown[];
     if (tags.length > TEST_COUNT_CONSTANTS.LARGE) {
       warnings.push(
         `Too many tags (${tags.length}). Maximum recommended: ${TEST_COUNT_CONSTANTS.LARGE}`,
@@ -316,16 +316,16 @@ function validateSEOTitle(seo: Record<string, unknown>): string[] {
   const warnings: string[] = [];
 
   if (
-    !seo['title'] ||
-    (typeof seo['title'] === 'string' && seo['title'].trim() === '')
+    !seo["title"] ||
+    (typeof seo["title"] === "string" && seo["title"].trim() === "")
   ) {
-    warnings.push('SEO title is recommended');
+    warnings.push("SEO title is recommended");
   } else if (
-    seo['title'] &&
-    typeof seo['title'] === 'string' &&
-    seo['title'].length > SECONDS_PER_MINUTE
+    seo["title"] &&
+    typeof seo["title"] === "string" &&
+    seo["title"].length > SECONDS_PER_MINUTE
   ) {
-    warnings.push('SEO title should be 60 characters or less');
+    warnings.push("SEO title should be 60 characters or less");
   }
 
   return warnings;
@@ -338,16 +338,16 @@ function validateSEODescription(seo: Record<string, unknown>): string[] {
   const warnings: string[] = [];
 
   if (
-    !seo['description'] ||
-    (typeof seo['description'] === 'string' && seo['description'].trim() === '')
+    !seo["description"] ||
+    (typeof seo["description"] === "string" && seo["description"].trim() === "")
   ) {
-    warnings.push('SEO description is recommended');
+    warnings.push("SEO description is recommended");
   } else if (
-    seo['description'] &&
-    typeof seo['description'] === 'string' &&
-    seo['description'].length > COUNT_160
+    seo["description"] &&
+    typeof seo["description"] === "string" &&
+    seo["description"].length > COUNT_160
   ) {
-    warnings.push('SEO description should be 160 characters or less');
+    warnings.push("SEO description should be 160 characters or less");
   }
 
   return warnings;
@@ -358,16 +358,16 @@ function validateSEODescription(seo: Record<string, unknown>): string[] {
  */
 function validateSEO(metadata: Record<string, unknown>): string[] {
   if (
-    metadata['seo'] &&
-    typeof metadata['seo'] === 'object' &&
-    metadata['seo'] !== null
+    metadata["seo"] &&
+    typeof metadata["seo"] === "object" &&
+    metadata["seo"] !== null
   ) {
-    const seo = metadata['seo'] as Record<string, unknown>;
+    const seo = metadata["seo"] as Record<string, unknown>;
     return [...validateSEOTitle(seo), ...validateSEODescription(seo)];
   }
 
   // No SEO object at all
-  return ['SEO title is recommended', 'SEO description is recommended'];
+  return ["SEO title is recommended", "SEO description is recommended"];
 }
 
 /**

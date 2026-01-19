@@ -14,303 +14,225 @@
  * - Performance and lifecycle
  */
 
-import { render, screen } from '@testing-library/react';
-import { describe, expect, it } from 'vitest';
-import { SocialIconMapper } from '@/components/ui/social-icons';
+import { render, screen } from "@testing-library/react";
+import { describe, expect, it } from "vitest";
+import { SocialIconMapper } from "@/components/ui/social-icons";
 
-describe('Social Icons Mapper Tests', () => {
-  describe('SocialIconMapper', () => {
+describe("Social Icons Mapper Tests", () => {
+  describe("SocialIconMapper", () => {
     it('renders Twitter icon for "twitter" input', () => {
-      render(
-        <SocialIconMapper
-          platform='twitter'
-          data-testid='mapped-icon'
-        />,
-      );
+      render(<SocialIconMapper platform="twitter" data-testid="mapped-icon" />);
 
-      const icon = screen.getByTestId('mapped-icon');
+      const icon = screen.getByTestId("mapped-icon");
       expect(icon).toBeInTheDocument();
-      expect(icon.tagName).toBe('svg');
+      expect(icon.tagName).toBe("svg");
     });
 
     it('renders LinkedIn icon for "linkedin" input', () => {
       render(
-        <SocialIconMapper
-          platform='linkedin'
-          data-testid='mapped-icon'
-        />,
+        <SocialIconMapper platform="linkedin" data-testid="mapped-icon" />,
       );
 
-      const icon = screen.getByTestId('mapped-icon');
+      const icon = screen.getByTestId("mapped-icon");
       expect(icon).toBeInTheDocument();
-      expect(icon.tagName).toBe('svg');
+      expect(icon.tagName).toBe("svg");
     });
 
     it('renders GitHub icon for "github" input', () => {
-      render(
-        <SocialIconMapper
-          platform='github'
-          data-testid='mapped-icon'
-        />,
-      );
+      render(<SocialIconMapper platform="github" data-testid="mapped-icon" />);
 
-      const icon = screen.getByTestId('mapped-icon');
+      const icon = screen.getByTestId("mapped-icon");
       expect(icon).toBeInTheDocument();
-      expect(icon.tagName).toBe('svg');
+      expect(icon.tagName).toBe("svg");
     });
 
     it('renders Facebook icon for "facebook" input', () => {
       render(
-        <SocialIconMapper
-          platform='facebook'
-          data-testid='mapped-icon'
-        />,
+        <SocialIconMapper platform="facebook" data-testid="mapped-icon" />,
       );
 
-      const icon = screen.getByTestId('mapped-icon');
+      const icon = screen.getByTestId("mapped-icon");
       expect(icon).toBeInTheDocument();
-      expect(icon.tagName).toBe('svg');
+      expect(icon.tagName).toBe("svg");
     });
 
     it('renders Instagram icon for "instagram" input', () => {
       render(
-        <SocialIconMapper
-          platform='instagram'
-          data-testid='mapped-icon'
-        />,
+        <SocialIconMapper platform="instagram" data-testid="mapped-icon" />,
       );
 
-      const icon = screen.getByTestId('mapped-icon');
+      const icon = screen.getByTestId("mapped-icon");
       expect(icon).toBeInTheDocument();
-      expect(icon.tagName).toBe('svg');
+      expect(icon.tagName).toBe("svg");
     });
 
     it('renders YouTube icon for "youtube" input', () => {
-      render(
-        <SocialIconMapper
-          platform='youtube'
-          data-testid='mapped-icon'
-        />,
-      );
+      render(<SocialIconMapper platform="youtube" data-testid="mapped-icon" />);
 
-      const icon = screen.getByTestId('mapped-icon');
+      const icon = screen.getByTestId("mapped-icon");
       expect(icon).toBeInTheDocument();
-      expect(icon.tagName).toBe('svg');
+      expect(icon.tagName).toBe("svg");
     });
 
-    it('renders external link icon for unknown platform', () => {
-      render(
-        <SocialIconMapper
-          platform='unknown'
-          data-testid='mapped-icon'
-        />,
-      );
+    it("renders external link icon for unknown platform", () => {
+      render(<SocialIconMapper platform="unknown" data-testid="mapped-icon" />);
 
-      const icon = screen.getByTestId('mapped-icon');
+      const icon = screen.getByTestId("mapped-icon");
       expect(icon).toBeInTheDocument();
-      expect(icon.tagName).toBe('svg');
+      expect(icon.tagName).toBe("svg");
     });
 
-    it('handles case insensitive platform names', () => {
-      render(
-        <SocialIconMapper
-          platform='TWITTER'
-          data-testid='mapped-icon'
-        />,
-      );
+    it("handles case insensitive platform names", () => {
+      render(<SocialIconMapper platform="TWITTER" data-testid="mapped-icon" />);
 
-      const icon = screen.getByTestId('mapped-icon');
+      const icon = screen.getByTestId("mapped-icon");
       expect(icon).toBeInTheDocument();
     });
 
-    it('handles mixed case platform names', () => {
+    it("handles mixed case platform names", () => {
       render(
-        <SocialIconMapper
-          platform='LiNkEdIn'
-          data-testid='mapped-icon'
-        />,
+        <SocialIconMapper platform="LiNkEdIn" data-testid="mapped-icon" />,
       );
 
-      const icon = screen.getByTestId('mapped-icon');
+      const icon = screen.getByTestId("mapped-icon");
       expect(icon).toBeInTheDocument();
     });
 
-    it('applies custom className', () => {
+    it("applies custom className", () => {
       render(
         <SocialIconMapper
-          platform='twitter'
-          className='custom-class'
-          data-testid='mapped-icon'
+          platform="twitter"
+          className="custom-class"
+          data-testid="mapped-icon"
         />,
       );
 
-      const icon = screen.getByTestId('mapped-icon');
-      expect(icon).toHaveClass('custom-class');
+      const icon = screen.getByTestId("mapped-icon");
+      expect(icon).toHaveClass("custom-class");
     });
 
-    it('applies default size attributes', () => {
+    it("applies default size attributes", () => {
+      render(<SocialIconMapper platform="twitter" data-testid="mapped-icon" />);
+
+      const icon = screen.getByTestId("mapped-icon");
+      expect(icon).toHaveAttribute("width", "20");
+      expect(icon).toHaveAttribute("height", "20");
+    });
+
+    it("supports custom sizing", () => {
       render(
         <SocialIconMapper
-          platform='twitter'
-          data-testid='mapped-icon'
+          platform="twitter"
+          className="h-8 w-8"
+          data-testid="mapped-icon"
         />,
       );
 
-      const icon = screen.getByTestId('mapped-icon');
-      expect(icon).toHaveAttribute('width', '20');
-      expect(icon).toHaveAttribute('height', '20');
+      const icon = screen.getByTestId("mapped-icon");
+      expect(icon).toHaveClass("h-8", "w-8");
     });
 
-    it('supports custom sizing', () => {
-      render(
-        <SocialIconMapper
-          platform='twitter'
-          className='h-8 w-8'
-          data-testid='mapped-icon'
-        />,
-      );
-
-      const icon = screen.getByTestId('mapped-icon');
-      expect(icon).toHaveClass('h-8', 'w-8');
-    });
-
-    it('maintains consistent sizing across platforms', () => {
-      const platforms = ['twitter', 'linkedin', 'unknown'];
+    it("maintains consistent sizing across platforms", () => {
+      const platforms = ["twitter", "linkedin", "unknown"];
 
       platforms.forEach((platform) => {
         const { unmount } = render(
           <SocialIconMapper
             platform={platform}
-            className='h-6 w-6'
+            className="h-6 w-6"
             data-testid={`${platform}-icon`}
           />,
         );
 
         const icon = screen.getByTestId(`${platform}-icon`);
-        expect(icon).toHaveAttribute('width');
-        expect(icon).toHaveAttribute('height');
+        expect(icon).toHaveAttribute("width");
+        expect(icon).toHaveAttribute("height");
 
         unmount();
       });
     });
 
-    it('supports aria-hidden attribute', () => {
-      render(
-        <SocialIconMapper
-          platform='twitter'
-          data-testid='mapped-icon'
-        />,
-      );
+    it("supports aria-hidden attribute", () => {
+      render(<SocialIconMapper platform="twitter" data-testid="mapped-icon" />);
 
-      const icon = screen.getByTestId('mapped-icon');
-      expect(icon).toHaveAttribute('aria-hidden', 'true');
+      const icon = screen.getByTestId("mapped-icon");
+      expect(icon).toHaveAttribute("aria-hidden", "true");
     });
 
-    it('supports data-testid attribute', () => {
-      render(
-        <SocialIconMapper
-          platform='twitter'
-          data-testid='mapped-icon'
-        />,
-      );
+    it("supports data-testid attribute", () => {
+      render(<SocialIconMapper platform="twitter" data-testid="mapped-icon" />);
 
-      const icon = screen.getByTestId('mapped-icon');
+      const icon = screen.getByTestId("mapped-icon");
       expect(icon).toBeInTheDocument();
     });
 
-    it('handles empty platform gracefully', () => {
-      render(
-        <SocialIconMapper
-          platform=''
-          data-testid='mapped-icon'
-        />,
-      );
+    it("handles empty platform gracefully", () => {
+      render(<SocialIconMapper platform="" data-testid="mapped-icon" />);
 
-      const icon = screen.getByTestId('mapped-icon');
+      const icon = screen.getByTestId("mapped-icon");
       expect(icon).toBeInTheDocument();
-      expect(icon.tagName).toBe('svg');
+      expect(icon.tagName).toBe("svg");
     });
 
-    it('handles null platform gracefully', () => {
-      render(
-        <SocialIconMapper
-          platform=''
-          data-testid='mapped-icon'
-        />,
-      );
+    it("handles null platform gracefully", () => {
+      render(<SocialIconMapper platform="" data-testid="mapped-icon" />);
 
-      const icon = screen.getByTestId('mapped-icon');
+      const icon = screen.getByTestId("mapped-icon");
       expect(icon).toBeInTheDocument();
-      expect(icon.tagName).toBe('svg');
+      expect(icon.tagName).toBe("svg");
     });
 
-    it('handles undefined platform gracefully', () => {
-      render(
-        <SocialIconMapper
-          platform=''
-          data-testid='mapped-icon'
-        />,
-      );
+    it("handles undefined platform gracefully", () => {
+      render(<SocialIconMapper platform="" data-testid="mapped-icon" />);
 
-      const icon = screen.getByTestId('mapped-icon');
+      const icon = screen.getByTestId("mapped-icon");
       expect(icon).toBeInTheDocument();
-      expect(icon.tagName).toBe('svg');
+      expect(icon.tagName).toBe("svg");
     });
 
-    it('supports basic platform mapping', () => {
-      render(
-        <SocialIconMapper
-          platform='twitter'
-          data-testid='mapped-icon'
-        />,
-      );
+    it("supports basic platform mapping", () => {
+      render(<SocialIconMapper platform="twitter" data-testid="mapped-icon" />);
 
-      const icon = screen.getByTestId('mapped-icon');
+      const icon = screen.getByTestId("mapped-icon");
       expect(icon).toBeInTheDocument();
-      expect(icon.tagName).toBe('svg');
+      expect(icon.tagName).toBe("svg");
     });
 
-    it('supports className prop', () => {
+    it("supports className prop", () => {
       render(
         <SocialIconMapper
-          platform='twitter'
-          className='text-red-500'
-          data-testid='mapped-icon'
+          platform="twitter"
+          className="text-red-500"
+          data-testid="mapped-icon"
         />,
       );
 
-      const icon = screen.getByTestId('mapped-icon');
-      expect(icon).toHaveClass('text-red-500');
+      const icon = screen.getByTestId("mapped-icon");
+      expect(icon).toHaveClass("text-red-500");
     });
 
-    it('handles component lifecycle correctly', () => {
+    it("handles component lifecycle correctly", () => {
       const { unmount, rerender } = render(
-        <SocialIconMapper
-          platform='twitter'
-          data-testid='mapped-icon'
-        />,
+        <SocialIconMapper platform="twitter" data-testid="mapped-icon" />,
       );
 
-      expect(screen.getByTestId('mapped-icon')).toBeInTheDocument();
+      expect(screen.getByTestId("mapped-icon")).toBeInTheDocument();
 
       rerender(
-        <SocialIconMapper
-          platform='linkedin'
-          data-testid='mapped-icon'
-        />,
+        <SocialIconMapper platform="linkedin" data-testid="mapped-icon" />,
       );
-      expect(screen.getByTestId('mapped-icon')).toBeInTheDocument();
+      expect(screen.getByTestId("mapped-icon")).toBeInTheDocument();
 
       expect(() => unmount()).not.toThrow();
     });
 
-    it('maintains performance with multiple renders', () => {
+    it("maintains performance with multiple renders", () => {
       const platforms = [
-        'twitter',
-        'linkedin',
-        'github',
-        'facebook',
-        'instagram',
+        "twitter",
+        "linkedin",
+        "github",
+        "facebook",
+        "instagram",
       ];
 
       platforms.forEach((platform) => {
@@ -328,84 +250,76 @@ describe('Social Icons Mapper Tests', () => {
       });
     });
 
-    it('supports data-testid attribute', () => {
-      render(
-        <SocialIconMapper
-          platform='twitter'
-          data-testid='mapped-icon'
-        />,
-      );
+    it("supports data-testid attribute", () => {
+      render(<SocialIconMapper platform="twitter" data-testid="mapped-icon" />);
 
-      const icon = screen.getByTestId('mapped-icon');
+      const icon = screen.getByTestId("mapped-icon");
       expect(icon).toBeInTheDocument();
-      expect(icon).toHaveAttribute('data-testid', 'mapped-icon');
+      expect(icon).toHaveAttribute("data-testid", "mapped-icon");
     });
 
-    it('handles special characters in platform names', () => {
+    it("handles special characters in platform names", () => {
       render(
-        <SocialIconMapper
-          platform='twitter-x'
-          data-testid='mapped-icon'
-        />,
+        <SocialIconMapper platform="twitter-x" data-testid="mapped-icon" />,
       );
 
-      const icon = screen.getByTestId('mapped-icon');
+      const icon = screen.getByTestId("mapped-icon");
       expect(icon).toBeInTheDocument();
-      expect(icon.tagName).toBe('svg');
+      expect(icon.tagName).toBe("svg");
     });
 
-    it('supports responsive classes', () => {
+    it("supports responsive classes", () => {
       render(
         <SocialIconMapper
-          platform='twitter'
-          className='h-4 w-4 md:h-6 md:w-6 lg:h-8 lg:w-8'
-          data-testid='mapped-icon'
+          platform="twitter"
+          className="h-4 w-4 md:h-6 md:w-6 lg:h-8 lg:w-8"
+          data-testid="mapped-icon"
         />,
       );
 
-      const icon = screen.getByTestId('mapped-icon');
+      const icon = screen.getByTestId("mapped-icon");
       expect(icon).toHaveClass(
-        'h-4',
-        'w-4',
-        'md:h-6',
-        'md:w-6',
-        'lg:h-8',
-        'lg:w-8',
+        "h-4",
+        "w-4",
+        "md:h-6",
+        "md:w-6",
+        "lg:h-8",
+        "lg:w-8",
       );
     });
 
-    it('supports color customization', () => {
+    it("supports color customization", () => {
       render(
         <SocialIconMapper
-          platform='twitter'
-          className='text-blue-500 hover:text-blue-600'
-          data-testid='mapped-icon'
+          platform="twitter"
+          className="text-blue-500 hover:text-blue-600"
+          data-testid="mapped-icon"
         />,
       );
 
-      const icon = screen.getByTestId('mapped-icon');
-      expect(icon).toHaveClass('text-blue-500', 'hover:text-blue-600');
+      const icon = screen.getByTestId("mapped-icon");
+      expect(icon).toHaveClass("text-blue-500", "hover:text-blue-600");
     });
 
-    it('supports animation classes', () => {
+    it("supports animation classes", () => {
       render(
         <SocialIconMapper
-          platform='twitter'
-          className='transition-colors duration-200 hover:scale-110'
-          data-testid='mapped-icon'
+          platform="twitter"
+          className="transition-colors duration-200 hover:scale-110"
+          data-testid="mapped-icon"
         />,
       );
 
-      const icon = screen.getByTestId('mapped-icon');
+      const icon = screen.getByTestId("mapped-icon");
       expect(icon).toHaveClass(
-        'transition-colors',
-        'duration-200',
-        'hover:scale-110',
+        "transition-colors",
+        "duration-200",
+        "hover:scale-110",
       );
     });
 
-    it('handles platform name normalization', () => {
-      const variations = ['twitter', 'Twitter', 'TWITTER', 'tWiTtEr'];
+    it("handles platform name normalization", () => {
+      const variations = ["twitter", "Twitter", "TWITTER", "tWiTtEr"];
 
       variations.forEach((variation) => {
         const { unmount } = render(

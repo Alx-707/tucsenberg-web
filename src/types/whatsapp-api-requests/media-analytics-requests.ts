@@ -8,9 +8,9 @@
  * Media upload request
  */
 export interface MediaUploadRequest {
-  messaging_product: 'whatsapp';
+  messaging_product: "whatsapp";
   file: File | Buffer;
-  type: 'image' | 'document' | 'audio' | 'video' | 'sticker';
+  type: "image" | "document" | "audio" | "video" | "sticker";
 }
 
 /**
@@ -20,7 +20,7 @@ export interface MediaUploadRequest {
 export interface AnalyticsRequest {
   start: string; // UNIX timestamp
   end: string; // UNIX timestamp
-  granularity: 'HALF_HOUR' | 'DAY' | 'MONTH';
-  metric_types?: Array<'cost' | 'conversation' | 'phone_number_quality_score'>;
+  granularity: "HALF_HOUR" | "DAY" | "MONTH";
+  metric_types?: Array<"cost" | "conversation" | "phone_number_quality_score">;
   phone_numbers?: string[];
 }

@@ -3,21 +3,21 @@
  * Handles product-specific inquiries via product page drawer
  */
 
-import { NextRequest, NextResponse } from 'next/server';
-import { createCorsPreflightResponse } from '@/lib/api/cors-utils';
-import { getApiMessages, type ApiMessages } from '@/lib/api/get-request-locale';
-import { safeParseJson } from '@/lib/api/safe-parse-json';
-import { processLead, type LeadResult } from '@/lib/lead-pipeline';
-import { LEAD_TYPES } from '@/lib/lead-pipeline/lead-schema';
-import { logger, sanitizeIP } from '@/lib/logger';
+import { NextRequest, NextResponse } from "next/server";
+import { createCorsPreflightResponse } from "@/lib/api/cors-utils";
+import { getApiMessages, type ApiMessages } from "@/lib/api/get-request-locale";
+import { safeParseJson } from "@/lib/api/safe-parse-json";
+import { processLead, type LeadResult } from "@/lib/lead-pipeline";
+import { LEAD_TYPES } from "@/lib/lead-pipeline/lead-schema";
+import { logger, sanitizeIP } from "@/lib/logger";
 import {
   checkDistributedRateLimit,
   createRateLimitHeaders,
-} from '@/lib/security/distributed-rate-limit';
+} from "@/lib/security/distributed-rate-limit";
 import {
   getClientIP,
   verifyTurnstile,
-} from '@/app/api/contact/contact-api-utils';
+} from "@/app/api/contact/contact-api-utils";
 
 // HTTP status codes as named constants
 const HTTP_BAD_REQUEST = 400;
@@ -37,7 +37,7 @@ interface SuccessResponseOptions {
  */
 function createSuccessResponse(options: SuccessResponseOptions): NextResponse {
   const { result, clientIP, processingTime, headers, successMessage } = options;
-  logger.info('Product inquiry submitted successfully', {
+  logger.info("Product inquiry submitted successfully", {
     referenceId: result.referenceId,
     ip: sanitizeIP(clientIP),
     processingTime,
@@ -67,13 +67,13 @@ interface ErrorResponseOptions {
  */
 function createErrorResponse(options: ErrorResponseOptions): NextResponse {
   const { result, clientIP, processingTime, messages } = options;
-  logger.warn('Product inquiry submission failed', {
+  logger.warn("Product inquiry submission failed", {
     error: result.error,
     ip: sanitizeIP(clientIP),
     processingTime,
   });
 
-  const isValidationError = result.error === 'VALIDATION_ERROR';
+  const isValidationError = result.error === "VALIDATION_ERROR";
   return NextResponse.json(
     {
       success: false,
@@ -97,9 +97,9 @@ async function checkRateLimitOrFail(
   clientIP: string,
   messages: ApiMessages,
 ): Promise<RateLimitCheckResult> {
-  const rateLimitResult = await checkDistributedRateLimit(clientIP, 'inquiry');
+  const rateLimitResult = await checkDistributedRateLimit(clientIP, "inquiry");
   if (!rateLimitResult.allowed) {
-    logger.warn('Product inquiry rate limit exceeded', {
+    logger.warn("Product inquiry rate limit exceeded", {
       ip: sanitizeIP(clientIP),
       retryAfter: rateLimitResult.retryAfter,
     });
@@ -130,7 +130,7 @@ async function validateTurnstile(
   const { token, clientIP, messages } = options;
 
   if (!token) {
-    logger.warn('Product inquiry missing Turnstile token', {
+    logger.warn("Product inquiry missing Turnstile token", {
       ip: sanitizeIP(clientIP),
     });
     return NextResponse.json(
@@ -141,7 +141,7 @@ async function validateTurnstile(
 
   const isValid = await verifyTurnstile(token, clientIP);
   if (!isValid) {
-    logger.warn('Product inquiry Turnstile verification failed', {
+    logger.warn("Product inquiry Turnstile verification failed", {
       ip: sanitizeIP(clientIP),
     });
     return NextResponse.json(
@@ -175,7 +175,7 @@ export async function POST(request: NextRequest) {
     const parsedBody = await safeParseJson<{
       turnstileToken?: string;
       [key: string]: unknown;
-    }>(request, { route: '/api/inquiry' });
+    }>(request, { route: "/api/inquiry" });
 
     if (!parsedBody.ok) {
       return NextResponse.json(
@@ -206,8 +206,8 @@ export async function POST(request: NextRequest) {
         })
       : createErrorResponse({ result, clientIP, processingTime, messages });
   } catch (error) {
-    logger.error('Product inquiry submission failed unexpectedly', {
-      error: error instanceof Error ? error.message : 'Unknown error',
+    logger.error("Product inquiry submission failed unexpectedly", {
+      error: error instanceof Error ? error.message : "Unknown error",
       ip: sanitizeIP(clientIP),
       processingTime: Date.now() - startTime,
     });

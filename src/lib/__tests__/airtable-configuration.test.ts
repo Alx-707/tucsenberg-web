@@ -8,17 +8,17 @@
  * - 默认值处理
  */
 
-import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
+import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 import type {
   AirtableBaseLike,
   AirtableServicePrivate,
   DynamicImportModule,
-} from '@/types/test-types';
+} from "@/types/test-types";
 import {
   configureServiceForTesting,
   createMockBase,
-} from '@/test/airtable-helpers';
-import type { AirtableService as AirtableServiceType } from '../airtable/service';
+} from "@/test/airtable-helpers";
+import type { AirtableService as AirtableServiceType } from "../airtable/service";
 
 // Mock Airtable
 const mockCreate = vi.fn();
@@ -32,9 +32,9 @@ const mockTable = vi.fn().mockReturnValue({
   destroy: mockDestroy,
 });
 
-const tableFactory: AirtableBaseLike['table'] = (_name) => {
+const tableFactory: AirtableBaseLike["table"] = (_name) => {
   // Parameter renamed with underscore to indicate it's intentionally unused
-  return mockTable() as ReturnType<AirtableBaseLike['table']>;
+  return mockTable() as ReturnType<AirtableBaseLike["table"]>;
 };
 
 const mockBase = vi.fn(() => createMockBase(tableFactory));
@@ -43,7 +43,7 @@ const mockConfigure = vi.fn();
 const setServiceReady = (service: unknown) =>
   configureServiceForTesting(service, createMockBase(tableFactory));
 
-vi.mock('airtable', () => ({
+vi.mock("airtable", () => ({
   default: {
     configure: mockConfigure,
     base: mockBase,
@@ -51,22 +51,22 @@ vi.mock('airtable', () => ({
 }));
 
 // Use TypeScript Mock modules to bypass Vite's special handling
-vi.mock('@/../env.mjs', async () => {
-  const mockEnv = await import('./mocks/airtable-env');
+vi.mock("@/../env.mjs", async () => {
+  const mockEnv = await import("./mocks/airtable-env");
   return mockEnv;
 });
 
-vi.mock('./logger', async () => {
-  const mockLogger = await import('./mocks/logger');
+vi.mock("./logger", async () => {
+  const mockLogger = await import("./mocks/logger");
   return mockLogger;
 });
 
-vi.mock('./validations', async () => {
-  const mockValidations = await import('./mocks/airtable-validations');
+vi.mock("./validations", async () => {
+  const mockValidations = await import("./mocks/airtable-validations");
   return mockValidations;
 });
 
-describe('Airtable Service - Configuration Tests', () => {
+describe("Airtable Service - Configuration Tests", () => {
   let AirtableServiceClass: typeof AirtableServiceType;
 
   beforeEach(async () => {
@@ -80,7 +80,7 @@ describe('Airtable Service - Configuration Tests', () => {
     mockConfigure.mockClear();
 
     // Dynamically import the module to ensure fresh instance
-    const module = (await import('../airtable')) as DynamicImportModule;
+    const module = (await import("../airtable")) as DynamicImportModule;
     AirtableServiceClass = module.AirtableService as typeof AirtableServiceType;
   });
 
@@ -88,94 +88,94 @@ describe('Airtable Service - Configuration Tests', () => {
     vi.clearAllMocks();
   });
 
-  describe('环境变量配置', () => {
-    it('should configure Airtable with valid environment variables', async () => {
-      vi.doMock('@/../env.mjs', () => ({
+  describe("环境变量配置", () => {
+    it("should configure Airtable with valid environment variables", async () => {
+      vi.doMock("@/../env.mjs", () => ({
         env: {
-          AIRTABLE_API_KEY: 'test-api-key',
-          AIRTABLE_BASE_ID: 'test-base-id',
-          AIRTABLE_TABLE_NAME: 'test-table',
+          AIRTABLE_API_KEY: "test-api-key",
+          AIRTABLE_BASE_ID: "test-base-id",
+          AIRTABLE_TABLE_NAME: "test-table",
         },
       }));
 
-      const { AirtableService: ServiceClass } = await import('../airtable');
+      const { AirtableService: ServiceClass } = await import("../airtable");
       const service = new ServiceClass();
 
       expect(service).toBeDefined();
     });
 
-    it('should use default table name when not provided', async () => {
-      vi.doMock('@/../env.mjs', () => ({
+    it("should use default table name when not provided", async () => {
+      vi.doMock("@/../env.mjs", () => ({
         env: {
-          AIRTABLE_API_KEY: 'test-api-key',
-          AIRTABLE_BASE_ID: 'test-base-id',
+          AIRTABLE_API_KEY: "test-api-key",
+          AIRTABLE_BASE_ID: "test-base-id",
           // Missing AIRTABLE_TABLE_NAME
         },
       }));
 
-      const { AirtableService: ServiceClass } = await import('../airtable');
+      const { AirtableService: ServiceClass } = await import("../airtable");
       const service = new ServiceClass();
 
       expect(service).toBeDefined();
     });
 
-    it('should handle missing API key gracefully', async () => {
-      vi.doMock('@/../env.mjs', () => ({
+    it("should handle missing API key gracefully", async () => {
+      vi.doMock("@/../env.mjs", () => ({
         env: {
           // Missing AIRTABLE_API_KEY
-          AIRTABLE_BASE_ID: 'test-base-id',
-          AIRTABLE_TABLE_NAME: 'test-table',
+          AIRTABLE_BASE_ID: "test-base-id",
+          AIRTABLE_TABLE_NAME: "test-table",
         },
       }));
 
-      const { AirtableService: ServiceClass } = await import('../airtable');
+      const { AirtableService: ServiceClass } = await import("../airtable");
       const service = new ServiceClass();
 
       expect(service.isReady()).toBe(false);
     });
 
-    it('should handle missing base ID gracefully', async () => {
-      vi.doMock('@/../env.mjs', () => ({
+    it("should handle missing base ID gracefully", async () => {
+      vi.doMock("@/../env.mjs", () => ({
         env: {
-          AIRTABLE_API_KEY: 'test-api-key',
+          AIRTABLE_API_KEY: "test-api-key",
           // Missing AIRTABLE_BASE_ID
-          AIRTABLE_TABLE_NAME: 'test-table',
+          AIRTABLE_TABLE_NAME: "test-table",
         },
       }));
 
-      const { AirtableService: ServiceClass } = await import('../airtable');
+      const { AirtableService: ServiceClass } = await import("../airtable");
       const service = new ServiceClass();
 
       expect(service.isReady()).toBe(false);
     });
 
-    it('should handle empty environment variables', async () => {
-      vi.doMock('@/../env.mjs', () => ({
+    it("should handle empty environment variables", async () => {
+      vi.doMock("@/../env.mjs", () => ({
         env: {
-          AIRTABLE_API_KEY: '',
-          AIRTABLE_BASE_ID: '',
-          AIRTABLE_TABLE_NAME: '',
+          AIRTABLE_API_KEY: "",
+          AIRTABLE_BASE_ID: "",
+          AIRTABLE_TABLE_NAME: "",
         },
       }));
 
-      const { AirtableService: ServiceClass } = await import('../airtable');
+      const { AirtableService: ServiceClass } = await import("../airtable");
       const service = new ServiceClass();
 
       expect(service.isReady()).toBe(false);
     });
   });
 
-  describe('服务初始化', () => {
-    it('should initialize service with proper configuration', async () => {
-      vi.doMock('@/../env.mjs', () => ({
+  describe("服务初始化", () => {
+    it("should initialize service with proper configuration", async () => {
+      vi.doMock("@/../env.mjs", () => ({
         env: {
-          AIRTABLE_API_KEY: 'test-api-key',
-          AIRTABLE_BASE_ID: 'test-base-id',
-          AIRTABLE_TABLE_NAME: 'test-table',
+          AIRTABLE_API_KEY: "test-api-key",
+          AIRTABLE_BASE_ID: "test-base-id",
+          AIRTABLE_TABLE_NAME: "test-table",
         },
       }));
 
-      const { AirtableService: ServiceClass } = await import('../airtable');
+      const { AirtableService: ServiceClass } = await import("../airtable");
       const service = new ServiceClass();
 
       expect(service).toBeInstanceOf(ServiceClass);
@@ -183,16 +183,16 @@ describe('Airtable Service - Configuration Tests', () => {
       // The service initializes lazily when needed
     });
 
-    it('should create base instance correctly', async () => {
-      vi.doMock('@/../env.mjs', () => ({
+    it("should create base instance correctly", async () => {
+      vi.doMock("@/../env.mjs", () => ({
         env: {
-          AIRTABLE_API_KEY: 'test-api-key',
-          AIRTABLE_BASE_ID: 'test-base-id',
-          AIRTABLE_TABLE_NAME: 'test-table',
+          AIRTABLE_API_KEY: "test-api-key",
+          AIRTABLE_BASE_ID: "test-base-id",
+          AIRTABLE_TABLE_NAME: "test-table",
         },
       }));
 
-      const { AirtableService: ServiceClass } = await import('../airtable');
+      const { AirtableService: ServiceClass } = await import("../airtable");
       const service = new ServiceClass();
 
       // Access private property for testing
@@ -200,29 +200,29 @@ describe('Airtable Service - Configuration Tests', () => {
       expect(privateService.base).toBeDefined();
     });
 
-    it('should handle initialization errors gracefully', async () => {
+    it("should handle initialization errors gracefully", async () => {
       // Mock Airtable to throw error during configuration
       mockConfigure.mockImplementation(() => {
-        throw new Error('Configuration failed');
+        throw new Error("Configuration failed");
       });
 
-      vi.doMock('@/../env.mjs', () => ({
+      vi.doMock("@/../env.mjs", () => ({
         env: {
-          AIRTABLE_API_KEY: 'test-api-key',
-          AIRTABLE_BASE_ID: 'test-base-id',
-          AIRTABLE_TABLE_NAME: 'test-table',
+          AIRTABLE_API_KEY: "test-api-key",
+          AIRTABLE_BASE_ID: "test-base-id",
+          AIRTABLE_TABLE_NAME: "test-table",
         },
       }));
 
       expect(async () => {
-        const { AirtableService: ServiceClass } = await import('../airtable');
+        const { AirtableService: ServiceClass } = await import("../airtable");
         new ServiceClass();
       }).not.toThrow();
     });
   });
 
-  describe('配置验证', () => {
-    it('should validate required configuration fields', () => {
+  describe("配置验证", () => {
+    it("should validate required configuration fields", () => {
       const service = new AirtableServiceClass();
 
       // Test with missing configuration
@@ -234,7 +234,7 @@ describe('Airtable Service - Configuration Tests', () => {
       expect(service.isReady()).toBe(true);
     });
 
-    it('should check base instance availability', () => {
+    it("should check base instance availability", () => {
       const service = new AirtableServiceClass();
 
       const privateService = service as unknown as AirtableServicePrivate;
@@ -249,7 +249,7 @@ describe('Airtable Service - Configuration Tests', () => {
       expect(service.isReady()).toBe(true);
     });
 
-    it('should validate table instance', () => {
+    it("should validate table instance", () => {
       const service = new AirtableServiceClass();
 
       setServiceReady(service);
@@ -259,25 +259,25 @@ describe('Airtable Service - Configuration Tests', () => {
     });
   });
 
-  describe('默认值处理', () => {
-    it('should use default table name when not specified', async () => {
-      vi.doMock('@/../env.mjs', () => ({
+  describe("默认值处理", () => {
+    it("should use default table name when not specified", async () => {
+      vi.doMock("@/../env.mjs", () => ({
         env: {
-          AIRTABLE_API_KEY: 'test-api-key',
-          AIRTABLE_BASE_ID: 'test-base-id',
+          AIRTABLE_API_KEY: "test-api-key",
+          AIRTABLE_BASE_ID: "test-base-id",
           // AIRTABLE_TABLE_NAME not provided
         },
       }));
 
-      const { AirtableService: ServiceClass } = await import('../airtable');
+      const { AirtableService: ServiceClass } = await import("../airtable");
       const service = new ServiceClass();
 
       expect(service).toBeDefined();
       // Should use default table name
     });
 
-    it('should handle undefined environment variables', async () => {
-      vi.doMock('@/../env.mjs', () => ({
+    it("should handle undefined environment variables", async () => {
+      vi.doMock("@/../env.mjs", () => ({
         env: {
           AIRTABLE_API_KEY: undefined,
           AIRTABLE_BASE_ID: undefined,
@@ -285,14 +285,14 @@ describe('Airtable Service - Configuration Tests', () => {
         },
       }));
 
-      const { AirtableService: ServiceClass } = await import('../airtable');
+      const { AirtableService: ServiceClass } = await import("../airtable");
       const service = new ServiceClass();
 
       expect(service.isReady()).toBe(false);
     });
 
-    it('should handle null environment variables', async () => {
-      vi.doMock('@/../env.mjs', () => ({
+    it("should handle null environment variables", async () => {
+      vi.doMock("@/../env.mjs", () => ({
         env: {
           AIRTABLE_API_KEY: null,
           AIRTABLE_BASE_ID: null,
@@ -300,17 +300,17 @@ describe('Airtable Service - Configuration Tests', () => {
         },
       }));
 
-      const { AirtableService: ServiceClass } = await import('../airtable');
+      const { AirtableService: ServiceClass } = await import("../airtable");
       const service = new ServiceClass();
 
       expect(service.isReady()).toBe(false);
     });
   });
 
-  describe('错误处理', () => {
-    it('should handle configuration errors gracefully', () => {
+  describe("错误处理", () => {
+    it("should handle configuration errors gracefully", () => {
       mockConfigure.mockImplementation(() => {
-        throw new Error('Invalid API key');
+        throw new Error("Invalid API key");
       });
 
       expect(() => {
@@ -318,9 +318,9 @@ describe('Airtable Service - Configuration Tests', () => {
       }).not.toThrow();
     });
 
-    it('should handle base creation errors', () => {
+    it("should handle base creation errors", () => {
       mockBase.mockImplementation(() => {
-        throw new Error('Invalid base ID');
+        throw new Error("Invalid base ID");
       });
 
       expect(() => {
@@ -328,9 +328,9 @@ describe('Airtable Service - Configuration Tests', () => {
       }).not.toThrow();
     });
 
-    it('should handle table creation errors', () => {
+    it("should handle table creation errors", () => {
       mockTable.mockImplementation(() => {
-        throw new Error('Invalid table name');
+        throw new Error("Invalid table name");
       });
 
       expect(() => {

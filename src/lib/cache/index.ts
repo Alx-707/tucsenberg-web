@@ -13,7 +13,7 @@ export {
   productTags,
   seoTags,
   type CacheDomain,
-} from './cache-tags';
+} from "./cache-tags";
 
 export {
   invalidate,
@@ -23,4 +23,4 @@ export {
   invalidateLocale,
   invalidateDomain,
   invalidateCachePath,
-} from './invalidate';
+} from "./invalidate";

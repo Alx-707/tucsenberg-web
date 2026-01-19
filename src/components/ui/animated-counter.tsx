@@ -1,17 +1,17 @@
-'use client';
+"use client";
 
 /// <reference lib="dom" />
-import * as React from 'react';
-import { forwardRef, useEffect, useState } from 'react';
-import { AccessibilityUtils } from '@/lib/accessibility-utils';
-import { logger } from '@/lib/logger';
-import { cn } from '@/lib/utils';
-import { animationUtils } from '@/components/ui/animated-counter-helpers';
-import { COUNT_PAIR, COUNT_TRIPLE, ONE, ZERO } from '@/constants';
-import { COUNT_4 } from '@/constants/count';
-import { MAGIC_0_3, MAGIC_0_5 } from '@/constants/decimal';
-import { ANIMATION_DURATIONS } from '@/constants/performance-constants';
-import { useIntersectionObserver } from '@/hooks/use-intersection-observer';
+import * as React from "react";
+import { forwardRef, useEffect, useState } from "react";
+import { AccessibilityUtils } from "@/lib/accessibility-utils";
+import { logger } from "@/lib/logger";
+import { cn } from "@/lib/utils";
+import { animationUtils } from "@/components/ui/animated-counter-helpers";
+import { COUNT_PAIR, COUNT_TRIPLE, ONE, ZERO } from "@/constants";
+import { COUNT_4 } from "@/constants/count";
+import { MAGIC_0_3, MAGIC_0_5 } from "@/constants/decimal";
+import { ANIMATION_DURATIONS } from "@/constants/performance-constants";
+import { useIntersectionObserver } from "@/hooks/use-intersection-observer";
 
 /**
  * 缓动函数类型
@@ -239,9 +239,9 @@ export const AnimatedCounter = forwardRef<
       delay = ZERO,
       autoStart = false,
       className,
-      'role': roleProp,
-      'aria-live': ariaLiveProp,
-      'aria-atomic': ariaAtomicProp,
+      role: roleProp,
+      "aria-live": ariaLiveProp,
+      "aria-atomic": ariaAtomicProp,
       ...props
     },
     ref,
@@ -260,12 +260,12 @@ export const AnimatedCounter = forwardRef<
     // 合并refs
     const combinedRef = React.useCallback(
       (node: HTMLSpanElement | null) => {
-        if (typeof ref === 'function') {
+        if (typeof ref === "function") {
           ref(node);
         } else if (ref) {
           ref.current = node;
         }
-        if (typeof observerRef === 'function') {
+        if (typeof observerRef === "function") {
           observerRef(node as HTMLElement);
         }
       },
@@ -275,18 +275,18 @@ export const AnimatedCounter = forwardRef<
     // 当目标值改变时重置动画 - 使用key prop来重置组件状态
     const resetKey = `${to}-${from}-${autoStart}-${triggerOnVisible}`;
 
-    const role = roleProp ?? 'status';
-    const ariaLive = ariaLiveProp ?? (role === 'status' ? 'polite' : undefined);
+    const role = roleProp ?? "status";
+    const ariaLive = ariaLiveProp ?? (role === "status" ? "polite" : undefined);
     const ariaAtomic =
-      ariaAtomicProp ?? (role === 'status' ? 'true' : undefined);
+      ariaAtomicProp ?? (role === "status" ? "true" : undefined);
 
     return (
       <span
         key={resetKey}
         ref={combinedRef}
         className={cn(
-          'inline-block tabular-nums',
-          isAnimating && 'animate-pulse',
+          "inline-block tabular-nums",
+          isAnimating && "animate-pulse",
           className,
         )}
         role={role}
@@ -299,7 +299,7 @@ export const AnimatedCounter = forwardRef<
             return formatter(currentValue);
           } catch (error) {
             // Fallback to default formatting if custom formatter throws
-            logger.warn('AnimatedCounter: Formatter error, using fallback', {
+            logger.warn("AnimatedCounter: Formatter error, using fallback", {
               error: error as Error,
             });
             return Math.round(currentValue).toString();
@@ -310,6 +310,6 @@ export const AnimatedCounter = forwardRef<
   },
 );
 
-AnimatedCounter.displayName = 'AnimatedCounter';
+AnimatedCounter.displayName = "AnimatedCounter";
 
 export { AnimatedCounter as default };

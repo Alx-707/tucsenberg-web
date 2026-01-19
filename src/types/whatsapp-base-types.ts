@@ -1,4 +1,4 @@
-import { ZERO } from '@/constants';
+import { ZERO } from "@/constants";
 
 /**
  * WhatsApp API Base Type Definitions
@@ -18,21 +18,21 @@ export interface WhatsAppMessage {
   from: string;
   timestamp: string;
   type:
-    | 'text'
-    | 'image'
-    | 'document'
-    | 'audio'
-    | 'video'
-    | 'location'
-    | 'contacts'
-    | 'template'
-    | 'interactive'
-    | 'reaction'
-    | 'sticker'
-    | 'order'
-    | 'system'
-    | 'button'
-    | 'template_reply';
+    | "text"
+    | "image"
+    | "document"
+    | "audio"
+    | "video"
+    | "location"
+    | "contacts"
+    | "template"
+    | "interactive"
+    | "reaction"
+    | "sticker"
+    | "order"
+    | "system"
+    | "button"
+    | "template_reply";
   text?: {
     body: string;
   };
@@ -110,18 +110,18 @@ export interface ContactName {
 
 export interface ContactPhone {
   phone?: string;
-  type?: 'CELL' | 'MAIN' | 'IPHONE' | 'HOME' | 'WORK';
+  type?: "CELL" | "MAIN" | "IPHONE" | "HOME" | "WORK";
   wa_id?: string;
 }
 
 export interface ContactEmail {
   email?: string;
-  type?: 'WORK' | 'HOME';
+  type?: "WORK" | "HOME";
 }
 
 export interface ContactUrl {
   url?: string;
-  type?: 'WORK' | 'HOME';
+  type?: "WORK" | "HOME";
 }
 
 export interface ContactAddress {
@@ -131,7 +131,7 @@ export interface ContactAddress {
   zip?: string;
   country?: string;
   country_code?: string;
-  type?: 'WORK' | 'HOME';
+  type?: "WORK" | "HOME";
 }
 
 export interface ContactOrg {
@@ -151,7 +151,7 @@ export interface ContactData {
 }
 
 // Message Status Types
-export type MessageStatus = 'sent' | 'delivered' | 'read' | 'failed';
+export type MessageStatus = "sent" | "delivered" | "read" | "failed";
 
 export interface MessageStatusUpdate {
   id: string;
@@ -172,95 +172,95 @@ export interface WhatsAppError {
 }
 
 // Utility Types
-export type MessageType = WhatsAppMessage['type'];
-export type MediaType = 'image' | 'document' | 'audio' | 'video';
+export type MessageType = WhatsAppMessage["type"];
+export type MediaType = "image" | "document" | "audio" | "video";
 
 // Type Guards
 export function isTextMessage(
   message: WhatsAppMessage,
-): message is WhatsAppMessage & { text: NonNullable<WhatsAppMessage['text']> } {
-  return message.type === 'text' && Boolean(message.text);
+): message is WhatsAppMessage & { text: NonNullable<WhatsAppMessage["text"]> } {
+  return message.type === "text" && Boolean(message.text);
 }
 
 export function isImageMessage(
   message: WhatsAppMessage,
 ): message is WhatsAppMessage & {
-  image: NonNullable<WhatsAppMessage['image']>;
+  image: NonNullable<WhatsAppMessage["image"]>;
 } {
-  return message.type === 'image' && Boolean(message.image);
+  return message.type === "image" && Boolean(message.image);
 }
 
 export function isDocumentMessage(
   message: WhatsAppMessage,
 ): message is WhatsAppMessage & {
-  document: NonNullable<WhatsAppMessage['document']>;
+  document: NonNullable<WhatsAppMessage["document"]>;
 } {
-  return message.type === 'document' && Boolean(message.document);
+  return message.type === "document" && Boolean(message.document);
 }
 
 export function isAudioMessage(
   message: WhatsAppMessage,
 ): message is WhatsAppMessage & {
-  audio: NonNullable<WhatsAppMessage['audio']>;
+  audio: NonNullable<WhatsAppMessage["audio"]>;
 } {
-  return message.type === 'audio' && Boolean(message.audio);
+  return message.type === "audio" && Boolean(message.audio);
 }
 
 export function isVideoMessage(
   message: WhatsAppMessage,
 ): message is WhatsAppMessage & {
-  video: NonNullable<WhatsAppMessage['video']>;
+  video: NonNullable<WhatsAppMessage["video"]>;
 } {
-  return message.type === 'video' && Boolean(message.video);
+  return message.type === "video" && Boolean(message.video);
 }
 
 export function isLocationMessage(
   message: WhatsAppMessage,
 ): message is WhatsAppMessage & {
-  location: NonNullable<WhatsAppMessage['location']>;
+  location: NonNullable<WhatsAppMessage["location"]>;
 } {
-  return message.type === 'location' && Boolean(message.location);
+  return message.type === "location" && Boolean(message.location);
 }
 
 export function isContactsMessage(
   message: WhatsAppMessage,
 ): message is WhatsAppMessage & {
-  contacts: NonNullable<WhatsAppMessage['contacts']>;
+  contacts: NonNullable<WhatsAppMessage["contacts"]>;
 } {
-  return message.type === 'contacts' && Boolean(message.contacts);
+  return message.type === "contacts" && Boolean(message.contacts);
 }
 
 // Constants
 export const WHATSAPP_MESSAGE_TYPES = [
-  'text',
-  'image',
-  'document',
-  'audio',
-  'video',
-  'location',
-  'contacts',
-  'template',
-  'interactive',
-  'reaction',
-  'sticker',
-  'order',
-  'system',
-  'button',
-  'template_reply',
+  "text",
+  "image",
+  "document",
+  "audio",
+  "video",
+  "location",
+  "contacts",
+  "template",
+  "interactive",
+  "reaction",
+  "sticker",
+  "order",
+  "system",
+  "button",
+  "template_reply",
 ] as const;
 
 export const WHATSAPP_MESSAGE_STATUSES = [
-  'sent',
-  'delivered',
-  'read',
-  'failed',
+  "sent",
+  "delivered",
+  "read",
+  "failed",
 ] as const;
 
 export const SUPPORTED_MEDIA_TYPES = [
-  'image',
-  'document',
-  'audio',
-  'video',
+  "image",
+  "document",
+  "audio",
+  "video",
 ] as const;
 
 // Validation Helpers
@@ -288,32 +288,32 @@ export function validateWhatsAppMessage(
   const errors: string[] = [];
 
   if (!message.id) {
-    errors.push('Message ID is required');
+    errors.push("Message ID is required");
   }
 
   if (!message.from) {
-    errors.push('Message sender is required');
+    errors.push("Message sender is required");
   }
 
   if (!message.timestamp) {
-    errors.push('Message timestamp is required');
+    errors.push("Message timestamp is required");
   }
 
   if (!message.type || !isValidMessageType(message.type)) {
-    errors.push('Valid message type is required');
+    errors.push("Valid message type is required");
   }
 
   // Type-specific validation
-  if (message.type === 'text' && !message.text?.body) {
-    errors.push('Text message must have body content');
+  if (message.type === "text" && !message.text?.body) {
+    errors.push("Text message must have body content");
   }
 
-  if (message.type === 'location' && message.location) {
+  if (message.type === "location" && message.location) {
     if (
-      typeof message.location.latitude !== 'number' ||
-      typeof message.location.longitude !== 'number'
+      typeof message.location.latitude !== "number" ||
+      typeof message.location.longitude !== "number"
     ) {
-      errors.push('Location message must have valid latitude and longitude');
+      errors.push("Location message must have valid latitude and longitude");
     }
   }
 

@@ -6,14 +6,14 @@
  * @author React 19架构升级项目
  */
 
-import '@testing-library/jest-dom/vitest';
-import _React from 'react';
+import "@testing-library/jest-dom/vitest";
+import _React from "react";
 import {
   fireEvent as _fireEvent,
   render as _render,
   waitFor as _waitFor,
   act,
-} from '@testing-library/react';
+} from "@testing-library/react";
 import {
   afterEach as _afterEach,
   beforeEach as _beforeEach,
@@ -21,14 +21,14 @@ import {
   expect as _expect,
   it as _it,
   vi,
-} from 'vitest';
+} from "vitest";
 import type {
   ActionState,
   ServerActionFunction,
   UseActionStateReturn,
   UseFormStatusReturn,
   UseOptimisticReturn,
-} from '@/types/react19';
+} from "@/types/react19";
 
 /**
  * useOptimistic Hook测试工具函数
@@ -85,9 +85,9 @@ const REACT19_TEST_CONSTANTS = {
     LONG: 300,
   },
   FORM_DATA: {
-    SAMPLE_TEXT: 'test-input-value',
-    SAMPLE_EMAIL: 'test@example.com',
-    SAMPLE_NUMBER: '42',
+    SAMPLE_TEXT: "test-input-value",
+    SAMPLE_EMAIL: "test@example.com",
+    SAMPLE_NUMBER: "42",
   },
 };
 
@@ -98,7 +98,7 @@ export class UseActionStateTestTemplate {
   /**
    * 生成useActionState测试套件
    */
-  static generateTestSuite(hookName: string = 'useActionState'): string {
+  static generateTestSuite(hookName: string = "useActionState"): string {
     return `
 describe('${hookName} Hook Tests', () => {
   // Mock Server Action
@@ -233,7 +233,7 @@ export class UseFormStatusTestTemplate {
   /**
    * 生成useFormStatus测试套件
    */
-  static generateTestSuite(hookName: string = 'useFormStatus'): string {
+  static generateTestSuite(hookName: string = "useFormStatus"): string {
     return `
 describe('${hookName} Hook Tests', () => {
   beforeEach(() => {
@@ -345,7 +345,7 @@ export class UseOptimisticTestTemplate {
   /**
    * 生成useOptimistic测试套件
    */
-  static generateTestSuite(hookName: string = 'useOptimistic'): string {
+  static generateTestSuite(hookName: string = "useOptimistic"): string {
     return `
 describe('${hookName} Hook Tests', () => {
   beforeEach(() => {
@@ -446,7 +446,7 @@ export class UseHookTestTemplate {
   /**
    * 生成use Hook测试套件
    */
-  static generateTestSuite(hookName: string = 'use'): string {
+  static generateTestSuite(hookName: string = "use"): string {
     return `
 describe('${hookName} Hook Tests', () => {
   beforeEach(() => {

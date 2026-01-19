@@ -1,7 +1,7 @@
-import Image from 'next/image';
-import { getBlurPlaceholder } from '@/lib/image';
-import { cn } from '@/lib/utils';
-import { Card, CardContent } from '@/components/ui/card';
+import Image from "next/image";
+import { getBlurPlaceholder } from "@/lib/image";
+import { cn } from "@/lib/utils";
+import { Card, CardContent } from "@/components/ui/card";
 
 export interface Certification {
   /** Unique identifier */
@@ -34,35 +34,35 @@ function CertificationBadgeItem({
   certification: Certification;
 }) {
   return (
-    <Card className='h-full text-center'>
-      <CardContent className='pt-6'>
+    <Card className="h-full text-center">
+      <CardContent className="pt-6">
         {certification.badge !== undefined ? (
           <Image
             src={certification.badge}
             alt={certification.name}
             width={64}
             height={64}
-            className='mx-auto mb-4 h-16 w-16 object-contain'
-            {...getBlurPlaceholder('neutral')}
+            className="mx-auto mb-4 h-16 w-16 object-contain"
+            {...getBlurPlaceholder("neutral")}
           />
         ) : (
-          <div className='mx-auto mb-4 flex h-16 w-16 items-center justify-center rounded-full bg-primary/10'>
-            <span className='text-2xl font-bold text-primary'>
+          <div className="mx-auto mb-4 flex h-16 w-16 items-center justify-center rounded-full bg-primary/10">
+            <span className="text-2xl font-bold text-primary">
               {certification.name.charAt(0)}
             </span>
           </div>
         )}
 
-        <h3 className='mb-1 font-semibold'>{certification.name}</h3>
+        <h3 className="mb-1 font-semibold">{certification.name}</h3>
 
         {certification.issuer !== undefined && (
-          <p className='mb-2 text-xs text-muted-foreground'>
+          <p className="mb-2 text-xs text-muted-foreground">
             {certification.issuer}
           </p>
         )}
 
         {certification.description !== undefined && (
-          <p className='text-sm text-muted-foreground'>
+          <p className="text-sm text-muted-foreground">
             {certification.description}
           </p>
         )}
@@ -86,16 +86,16 @@ export function CertificationBadges({
   }
 
   return (
-    <section className={cn('py-12 md:py-16', className)}>
-      <div className='container mx-auto px-4'>
-        <div className='mb-10 text-center'>
-          <h2 className='mb-2 text-2xl font-bold'>{title}</h2>
+    <section className={cn("py-12 md:py-16", className)}>
+      <div className="container mx-auto px-4">
+        <div className="mb-10 text-center">
+          <h2 className="mb-2 text-2xl font-bold">{title}</h2>
           {subtitle !== undefined && (
-            <p className='text-muted-foreground'>{subtitle}</p>
+            <p className="text-muted-foreground">{subtitle}</p>
           )}
         </div>
 
-        <div className='grid gap-6 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4'>
+        <div className="grid gap-6 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4">
           {certifications.map((certification) => (
             <CertificationBadgeItem
               key={certification.id}

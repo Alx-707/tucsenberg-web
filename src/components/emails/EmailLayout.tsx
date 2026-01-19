@@ -1,4 +1,4 @@
-import type { CSSProperties, ReactNode } from 'react';
+import type { CSSProperties, ReactNode } from "react";
 import {
   Body,
   Container,
@@ -8,14 +8,14 @@ import {
   Preview,
   Section,
   Text,
-} from '@react-email/components';
+} from "@react-email/components";
 import {
   COLORS,
   FONT_FAMILY,
   FONT_SIZES,
   SIZES,
   SPACING,
-} from '@/components/emails/theme';
+} from "@/components/emails/theme";
 
 interface EmailLayoutProps {
   title: string;
@@ -28,38 +28,38 @@ interface EmailLayoutProps {
 
 const bodyStyle: CSSProperties = {
   fontFamily: FONT_FAMILY,
-  lineHeight: '1.6',
+  lineHeight: "1.6",
   color: COLORS.text,
   backgroundColor: COLORS.background,
-  margin: '0',
-  padding: '0',
+  margin: "0",
+  padding: "0",
 };
 
 const containerStyle: CSSProperties = {
   maxWidth: SIZES.maxWidth,
-  margin: '0 auto',
+  margin: "0 auto",
   padding: SPACING.lg,
 };
 
 const headerStyle: CSSProperties = {
   padding: SPACING.lg,
-  textAlign: 'center',
+  textAlign: "center",
   color: COLORS.headerText,
   borderRadius: `${SIZES.borderRadius} ${SIZES.borderRadius} 0 0`,
 };
 
 const headingStyle: CSSProperties = {
-  margin: '0',
+  margin: "0",
   fontSize: FONT_SIZES.xl,
 };
 
 const footerStyle: CSSProperties = {
   padding: SPACING.lg,
-  textAlign: 'center',
+  textAlign: "center",
 };
 
 const footerTextStyle: CSSProperties = {
-  margin: '0',
+  margin: "0",
   fontSize: FONT_SIZES.xs,
   color: COLORS.muted,
 };

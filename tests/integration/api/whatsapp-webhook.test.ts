@@ -1,36 +1,36 @@
-import { NextRequest } from 'next/server';
-import { describe, expect, it, vi } from 'vitest';
-import * as route from '@/app/api/whatsapp/webhook/route';
+import { NextRequest } from "next/server";
+import { describe, expect, it, vi } from "vitest";
+import * as route from "@/app/api/whatsapp/webhook/route";
 
-vi.mock('@/lib/whatsapp-service', () => ({
+vi.mock("@/lib/whatsapp-service", () => ({
   verifyWebhook: vi.fn((mode: string, token: string, challenge: string) => {
-    return mode === 'subscribe' && token === 'token' ? challenge : null;
+    return mode === "subscribe" && token === "token" ? challenge : null;
   }),
   verifyWebhookSignature: vi.fn(() => true),
   handleIncomingMessage: vi.fn(async () => {}),
 }));
 
-describe('api/whatsapp/webhook', () => {
-  it('verifies webhook challenge', async () => {
+describe("api/whatsapp/webhook", () => {
+  it("verifies webhook challenge", async () => {
     const url =
-      'http://localhost/api/whatsapp/webhook?hub.mode=subscribe&hub.verify_token=token&hub.challenge=123';
+      "http://localhost/api/whatsapp/webhook?hub.mode=subscribe&hub.verify_token=token&hub.challenge=123";
     const res = await route.GET(new NextRequest(new Request(url)));
     expect(res.status).toBe(200);
-    expect(await res.text()).toBe('123');
+    expect(await res.text()).toBe("123");
   });
 
-  it('rejects missing params', async () => {
+  it("rejects missing params", async () => {
     const res = await route.GET(
-      new NextRequest(new Request('http://localhost/api/whatsapp/webhook')),
+      new NextRequest(new Request("http://localhost/api/whatsapp/webhook")),
     );
     expect(res.status).toBe(400);
   });
 
-  it('processes incoming message', async () => {
+  it("processes incoming message", async () => {
     const res = await route.POST(
       new NextRequest(
-        new Request('http://localhost/api/whatsapp/webhook', {
-          method: 'POST',
+        new Request("http://localhost/api/whatsapp/webhook", {
+          method: "POST",
           body: JSON.stringify({ entry: [] }),
         }),
       ),
@@ -38,17 +38,17 @@ describe('api/whatsapp/webhook', () => {
     expect(res.status).toBe(200);
   });
 
-  it('returns 400 on invalid JSON body', async () => {
+  it("returns 400 on invalid JSON body", async () => {
     const req = new NextRequest(
-      new Request('http://localhost/api/whatsapp/webhook', {
-        method: 'POST',
-        body: 'invalid json',
+      new Request("http://localhost/api/whatsapp/webhook", {
+        method: "POST",
+        body: "invalid json",
       }),
     );
 
     const res = await route.POST(req);
     const body = await res.json();
     expect(res.status).toBe(400);
-    expect(body.error).toBe('Invalid JSON body');
+    expect(body.error).toBe("Invalid JSON body");
   });
 });

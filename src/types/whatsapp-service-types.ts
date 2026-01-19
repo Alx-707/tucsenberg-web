@@ -19,7 +19,7 @@ import {
   type ServiceEnvironmentConfig,
   type WhatsAppConfig,
   type WhatsAppServiceOptions,
-} from '@/types/whatsapp-service-config';
+} from "@/types/whatsapp-service-config";
 // merged above
 import {
   WhatsAppApiError,
@@ -28,7 +28,7 @@ import {
   WhatsAppRateLimitError,
   type WhatsAppError,
   type WhatsAppValidationError,
-} from '@/types/whatsapp-service-errors';
+} from "@/types/whatsapp-service-errors";
 import type {
   ApiRequest,
   ApiResponse,
@@ -41,7 +41,7 @@ import type {
   WebhookConfig,
   WebhookHandler,
   WhatsAppServiceInterface,
-} from '@/types/whatsapp-service-interface';
+} from "@/types/whatsapp-service-interface";
 import type {
   ErrorEvent,
   HealthCheckEvent,
@@ -55,8 +55,8 @@ import type {
   ServiceMetrics,
   ServiceStatus,
   WhatsAppServiceEvent,
-} from '@/types/whatsapp-service-monitoring';
-import { PERCENTAGE_FULL, ZERO } from '@/constants';
+} from "@/types/whatsapp-service-monitoring";
+import { PERCENTAGE_FULL, ZERO } from "@/constants";
 
 /**
  * WhatsApp Service Types - Main Entry Point
@@ -66,12 +66,12 @@ import { PERCENTAGE_FULL, ZERO } from '@/constants';
  */
 
 // 重新导出所有模块的类型和功能
-export { isWhatsAppService } from '@/types/whatsapp-service-interface';
+export { isWhatsAppService } from "@/types/whatsapp-service-interface";
 export {
   mergeWithDefaults,
   validateServiceOptions,
   validateWhatsAppConfig,
-} from '@/types/whatsapp-service-config';
+} from "@/types/whatsapp-service-config";
 export {
   createErrorFromApiResponse,
   getErrorSeverity,
@@ -81,7 +81,7 @@ export {
   isWhatsAppNetworkError,
   isWhatsAppRateLimitError,
   isWhatsAppValidationError,
-} from '@/types/whatsapp-service-errors';
+} from "@/types/whatsapp-service-errors";
 export type {
   Config,
   Health,
@@ -90,7 +90,7 @@ export type {
   ServiceInterface,
   ServiceOptions,
   Status,
-} from '@/types/whatsapp-service-interface';
+} from "@/types/whatsapp-service-interface";
 export {
   calculateErrorRate,
   calculateUptime,
@@ -99,12 +99,12 @@ export {
   determineHealthStatus,
   needsAttention,
   updateMetrics,
-} from '@/types/whatsapp-service-monitoring';
+} from "@/types/whatsapp-service-monitoring";
 export type {
   AlertConfig,
   HealthCheckConfig,
   MetricsConfig,
-} from '@/types/whatsapp-service-monitoring';
+} from "@/types/whatsapp-service-monitoring";
 
 // ==================== 向后兼容的常量导出 ====================
 
@@ -189,10 +189,10 @@ export {
  */
 export function createDefaultConfig(): WhatsAppConfig {
   return {
-    accessToken: '',
-    phoneNumberId: '',
-    verifyToken: '',
-    apiVersion: 'v18.0',
+    accessToken: "",
+    phoneNumberId: "",
+    verifyToken: "",
+    apiVersion: "v18.0",
   };
 }
 
@@ -227,15 +227,15 @@ export function createDefaultServiceStatus(): ServiceStatus {
     isConnected: false,
     lastActivity: Date.now(),
     health: {
-      status: 'healthy',
+      status: "healthy",
       lastCheck: Date.now(),
       responseTime: ZERO,
       errorRate: ZERO,
       uptime: PERCENTAGE_FULL,
       details: {
-        api: 'available',
-        webhook: 'not_configured',
-        phoneNumber: 'unverified',
+        api: "available",
+        webhook: "not_configured",
+        phoneNumber: "unverified",
       },
     },
     metrics: {
@@ -250,8 +250,8 @@ export function createDefaultServiceStatus(): ServiceStatus {
       lastReset: Date.now(),
     },
     config: {
-      phoneNumberId: '',
-      apiVersion: 'v18.0',
+      phoneNumberId: "",
+      apiVersion: "v18.0",
       webhookConfigured: false,
     },
   };

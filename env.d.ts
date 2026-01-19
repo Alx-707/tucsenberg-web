@@ -54,8 +54,8 @@ interface EnvVariables {
   SECURITY_HEADERS_ENABLED?: string;
 
   // Development & Testing
-  NODE_ENV: 'development' | 'production' | 'test';
-  VERCEL_ENV?: 'development' | 'preview' | 'production';
+  NODE_ENV: "development" | "production" | "test";
+  VERCEL_ENV?: "development" | "preview" | "production";
   VERCEL_URL?: string;
   PORT?: string;
 
@@ -130,7 +130,7 @@ interface EnvVariables {
   NEXT_PUBLIC_SENTRY_DSN?: string;
   NEXT_PUBLIC_VERCEL_ANALYTICS_ID?: string;
   NEXT_PUBLIC_GOOGLE_ANALYTICS_ID?: string;
-  NEXT_PUBLIC_APP_ENV?: 'development' | 'staging' | 'production';
+  NEXT_PUBLIC_APP_ENV?: "development" | "staging" | "production";
   NEXT_PUBLIC_API_BASE_URL?: string;
   NEXT_PUBLIC_ENABLE_PERFORMANCE_MONITORING?: string;
   NEXT_PUBLIC_ENABLE_DEBUG_MODE?: string;
@@ -140,20 +140,20 @@ interface EnvVariables {
 }
 
 // Global module declarations for all possible import paths
-declare module '*/env.mjs' {
+declare module "*/env.mjs" {
   export const env: EnvVariables;
   export default env;
 }
 
 // JSON module declarations for translation files
-declare module '*.json' {
+declare module "*.json" {
   const value: Record<string, unknown>;
   export default value;
 }
 
 // MDX module declarations
-declare module '*.mdx' {
-  import type { ComponentType } from 'react';
+declare module "*.mdx" {
+  import type { ComponentType } from "react";
 
   const MDXComponent: ComponentType;
   export default MDXComponent;
@@ -162,8 +162,8 @@ declare module '*.mdx' {
 }
 
 // Content path alias MDX declarations
-declare module '@content/posts/*' {
-  import type { ComponentType } from 'react';
+declare module "@content/posts/*" {
+  import type { ComponentType } from "react";
 
   const MDXComponent: ComponentType;
   export default MDXComponent;
@@ -171,8 +171,8 @@ declare module '@content/posts/*' {
   export const frontmatter: Record<string, unknown>;
 }
 
-declare module '@content/products/*' {
-  import type { ComponentType } from 'react';
+declare module "@content/products/*" {
+  import type { ComponentType } from "react";
 
   const MDXComponent: ComponentType;
   export default MDXComponent;
@@ -180,8 +180,8 @@ declare module '@content/products/*' {
   export const frontmatter: Record<string, unknown>;
 }
 
-declare module '@content/pages/*' {
-  import type { ComponentType } from 'react';
+declare module "@content/pages/*" {
+  import type { ComponentType } from "react";
 
   const MDXComponent: ComponentType;
   export default MDXComponent;

@@ -9,9 +9,9 @@
  * - 错误处理场景
  */
 
-import { NextRequest } from 'next/server';
-import { beforeEach, describe, expect, it, vi } from 'vitest';
-import { POST } from '@/app/api/contact/route';
+import { NextRequest } from "next/server";
+import { beforeEach, describe, expect, it, vi } from "vitest";
+import { POST } from "@/app/api/contact/route";
 
 // Mock配置 - 使用vi.hoisted确保Mock在模块导入前设置
 const {
@@ -69,7 +69,7 @@ const {
       retryAfter: null,
     })),
     mockCreateRateLimitHeaders: vi.fn(() => new Headers()),
-    mockGetClientIP: vi.fn(() => '127.0.0.1'),
+    mockGetClientIP: vi.fn(() => "127.0.0.1"),
     mockVerifyTurnstile: vi.fn(() => Promise.resolve(true)),
     mockValidateFormData: vi.fn(),
     mockProcessFormSubmission: vi.fn(),
@@ -77,47 +77,47 @@ const {
 });
 
 // Mock外部依赖
-vi.mock('@/lib/airtable', () => ({
+vi.mock("@/lib/airtable", () => ({
   airtableService: mockAirtableService,
 }));
 
-vi.mock('@/lib/resend', () => ({
+vi.mock("@/lib/resend", () => ({
   resendService: mockResendService,
 }));
 
-vi.mock('@/lib/logger', () => ({
+vi.mock("@/lib/logger", () => ({
   logger: mockLogger,
   sanitizeIP: (ip: string | undefined | null) =>
-    ip ? '[REDACTED_IP]' : '[NO_IP]',
+    ip ? "[REDACTED_IP]" : "[NO_IP]",
   sanitizeEmail: (email: string | undefined | null) =>
-    email ? '[REDACTED_EMAIL]' : '[NO_EMAIL]',
+    email ? "[REDACTED_EMAIL]" : "[NO_EMAIL]",
   sanitizeLogContext: <T extends Record<string, unknown>>(context: T): T =>
     context,
 }));
 
-vi.mock('@/lib/validation-helpers', () => mockValidationHelpers);
+vi.mock("@/lib/validation-helpers", () => mockValidationHelpers);
 
 // Mock distributed rate limit (used by contact route)
-vi.mock('@/lib/security/distributed-rate-limit', () => ({
+vi.mock("@/lib/security/distributed-rate-limit", () => ({
   checkDistributedRateLimit: mockCheckDistributedRateLimit,
   createRateLimitHeaders: mockCreateRateLimitHeaders,
 }));
 
 // Mock contact API utils
-vi.mock('@/app/api/contact/contact-api-utils', () => ({
+vi.mock("@/app/api/contact/contact-api-utils", () => ({
   getClientIP: mockGetClientIP,
   verifyTurnstile: mockVerifyTurnstile,
 }));
 
 // Mock contact API validation
-vi.mock('@/app/api/contact/contact-api-validation', () => ({
+vi.mock("@/app/api/contact/contact-api-validation", () => ({
   validateFormData: mockValidateFormData,
   processFormSubmission: mockProcessFormSubmission,
   validateAdminAccess: vi.fn(),
   getContactFormStats: vi.fn(),
 }));
 
-vi.mock('zod', () => ({
+vi.mock("zod", () => ({
   z: {
     object: vi.fn().mockReturnValue(mockExtendedSchema),
     string: vi.fn(() => {
@@ -164,25 +164,25 @@ vi.mock('zod', () => ({
 }));
 
 // Mock环境变量
-Object.defineProperty(process, 'env', {
+Object.defineProperty(process, "env", {
   value: {
-    ADMIN_TOKEN: 'test-admin-token',
-    TURNSTILE_SECRET_KEY: 'test-turnstile-key',
+    ADMIN_TOKEN: "test-admin-token",
+    TURNSTILE_SECRET_KEY: "test-turnstile-key",
   },
   configurable: true,
 });
 
-describe('Contact API Route - POST Tests', () => {
+describe("Contact API Route - POST Tests", () => {
   const validFormData = {
-    firstName: 'John',
-    lastName: 'Doe',
-    email: 'john.doe@example.com',
-    company: 'Test Company',
-    phone: '+1234567890',
-    message: 'Test message',
-    preferredContact: 'email' as const,
+    firstName: "John",
+    lastName: "Doe",
+    email: "john.doe@example.com",
+    company: "Test Company",
+    phone: "+1234567890",
+    message: "Test message",
+    preferredContact: "email" as const,
     marketingConsent: false,
-    turnstileToken: 'valid-token',
+    turnstileToken: "valid-token",
     submittedAt: new Date().toISOString(),
   };
 
@@ -192,12 +192,12 @@ describe('Contact API Route - POST Tests', () => {
     // Reset default mock implementations
     mockAirtableService.isReady.mockReturnValue(true);
     mockResendService.isReady.mockReturnValue(true);
-    mockAirtableService.createContact.mockResolvedValue({ id: 'test-id' });
+    mockAirtableService.createContact.mockResolvedValue({ id: "test-id" });
     mockResendService.sendContactFormEmail.mockResolvedValue({
-      id: 'email-id',
+      id: "email-id",
     });
     mockResendService.sendConfirmationEmail.mockResolvedValue({
-      id: 'confirm-id',
+      id: "confirm-id",
     });
     mockValidationHelpers.validateEmail.mockReturnValue(true);
     mockValidationHelpers.sanitizeInput.mockImplementation((input) => input);
@@ -209,7 +209,7 @@ describe('Contact API Route - POST Tests', () => {
       resetTime: Date.now() + 60000,
       retryAfter: null,
     });
-    mockGetClientIP.mockReturnValue('127.0.0.1');
+    mockGetClientIP.mockReturnValue("127.0.0.1");
     mockVerifyTurnstile.mockResolvedValue(true);
 
     // Setup validation mocks
@@ -223,8 +223,8 @@ describe('Contact API Route - POST Tests', () => {
     mockProcessFormSubmission.mockResolvedValue({
       emailSent: true,
       recordCreated: true,
-      emailMessageId: 'test-email-id',
-      airtableRecordId: 'test-record-id',
+      emailMessageId: "test-email-id",
+      airtableRecordId: "test-record-id",
     });
 
     // Mock fetch for Turnstile verification
@@ -234,19 +234,19 @@ describe('Contact API Route - POST Tests', () => {
     });
   });
 
-  describe('表单数据验证', () => {
-    it('应该成功处理有效的表单提交', async () => {
+  describe("表单数据验证", () => {
+    it("应该成功处理有效的表单提交", async () => {
       // Mock successful validation
       mockSafeParse.mockReturnValue({
         success: true,
         data: validFormData,
       });
 
-      const request = new NextRequest('http://localhost:3000/api/contact', {
-        method: 'POST',
+      const request = new NextRequest("http://localhost:3000/api/contact", {
+        method: "POST",
         body: JSON.stringify(validFormData),
         headers: {
-          'content-type': 'application/json',
+          "content-type": "application/json",
         },
       });
 
@@ -255,23 +255,23 @@ describe('Contact API Route - POST Tests', () => {
 
       expect(response.status).toBe(200);
       expect(data.success).toBe(true);
-      expect(data.message).toContain('Thank you');
+      expect(data.message).toContain("Thank you");
     });
 
-    it('应该处理无效的表单数据', async () => {
+    it("应该处理无效的表单数据", async () => {
       // Mock validation failure
       mockValidateFormData.mockResolvedValue({
         success: false,
-        error: 'Validation failed',
-        details: ['email: Invalid email'],
+        error: "Validation failed",
+        details: ["email: Invalid email"],
         data: null,
       });
 
-      const request = new NextRequest('http://localhost:3000/api/contact', {
-        method: 'POST',
-        body: JSON.stringify({ email: 'invalid-email' }),
+      const request = new NextRequest("http://localhost:3000/api/contact", {
+        method: "POST",
+        body: JSON.stringify({ email: "invalid-email" }),
         headers: {
-          'content-type': 'application/json',
+          "content-type": "application/json",
         },
       });
 
@@ -280,16 +280,16 @@ describe('Contact API Route - POST Tests', () => {
 
       expect(response.status).toBe(400);
       expect(data.success).toBe(false);
-      expect(data.error).toBe('Validation failed');
+      expect(data.error).toBe("Validation failed");
       expect(data.details).toBeDefined();
     });
 
-    it('应该处理JSON解析错误', async () => {
-      const request = new NextRequest('http://localhost:3000/api/contact', {
-        method: 'POST',
-        body: 'invalid-json',
+    it("应该处理JSON解析错误", async () => {
+      const request = new NextRequest("http://localhost:3000/api/contact", {
+        method: "POST",
+        body: "invalid-json",
         headers: {
-          'content-type': 'application/json',
+          "content-type": "application/json",
         },
       });
 
@@ -299,25 +299,25 @@ describe('Contact API Route - POST Tests', () => {
       // 使用 safeParseJson 后，JSON 解析错误应返回 400 + INVALID_JSON
       expect(response.status).toBe(400);
       expect(data.success).toBe(false);
-      expect(data.error).toBe('INVALID_JSON');
+      expect(data.error).toBe("INVALID_JSON");
     });
   });
 
-  describe('Turnstile安全验证', () => {
-    it('应该处理Turnstile验证失败', async () => {
+  describe("Turnstile安全验证", () => {
+    it("应该处理Turnstile验证失败", async () => {
       // Mock validation failure due to Turnstile
       mockValidateFormData.mockResolvedValue({
         success: false,
-        error: 'Security verification failed',
-        details: ['Please complete the security check'],
+        error: "Security verification failed",
+        details: ["Please complete the security check"],
         data: null,
       });
 
-      const request = new NextRequest('http://localhost:3000/api/contact', {
-        method: 'POST',
+      const request = new NextRequest("http://localhost:3000/api/contact", {
+        method: "POST",
         body: JSON.stringify(validFormData),
         headers: {
-          'content-type': 'application/json',
+          "content-type": "application/json",
         },
       });
 
@@ -326,18 +326,18 @@ describe('Contact API Route - POST Tests', () => {
 
       expect(response.status).toBe(400);
       expect(data.success).toBe(false);
-      expect(data.error).toBe('Security verification failed');
+      expect(data.error).toBe("Security verification failed");
     });
 
-    it('应该处理Turnstile服务不可用', async () => {
+    it("应该处理Turnstile服务不可用", async () => {
       // Mock validation throwing an error (simulating service unavailable)
-      mockValidateFormData.mockRejectedValue(new Error('Service unavailable'));
+      mockValidateFormData.mockRejectedValue(new Error("Service unavailable"));
 
-      const request = new NextRequest('http://localhost:3000/api/contact', {
-        method: 'POST',
+      const request = new NextRequest("http://localhost:3000/api/contact", {
+        method: "POST",
         body: JSON.stringify(validFormData),
         headers: {
-          'content-type': 'application/json',
+          "content-type": "application/json",
         },
       });
 
@@ -347,13 +347,13 @@ describe('Contact API Route - POST Tests', () => {
       expect(response.status).toBe(500);
       expect(data.success).toBe(false);
       expect(data.error).toBe(
-        'An unexpected error occurred. Please try again later.',
+        "An unexpected error occurred. Please try again later.",
       );
     });
   });
 
-  describe('服务集成测试', () => {
-    it('应该处理服务不可用的情况', async () => {
+  describe("服务集成测试", () => {
+    it("应该处理服务不可用的情况", async () => {
       // Mock services not ready
       mockAirtableService.isReady.mockReturnValue(false);
       mockResendService.isReady.mockReturnValue(false);
@@ -364,11 +364,11 @@ describe('Contact API Route - POST Tests', () => {
         data: validFormData,
       });
 
-      const request = new NextRequest('http://localhost:3000/api/contact', {
-        method: 'POST',
+      const request = new NextRequest("http://localhost:3000/api/contact", {
+        method: "POST",
         body: JSON.stringify(validFormData),
         headers: {
-          'content-type': 'application/json',
+          "content-type": "application/json",
         },
       });
 
@@ -383,23 +383,23 @@ describe('Contact API Route - POST Tests', () => {
       expect(mockResendService.sendContactFormEmail).not.toHaveBeenCalled();
     });
 
-    it('应该处理Airtable服务错误', async () => {
+    it("应该处理Airtable服务错误", async () => {
       // Mock successful validation but Airtable error in processing
       mockProcessFormSubmission.mockResolvedValue({
         emailSent: true,
         recordCreated: false, // Airtable failed
-        emailMessageId: 'test-email-id',
+        emailMessageId: "test-email-id",
         airtableRecordId: null,
       });
 
       // Expect error to be logged
       mockLogger.error.mockImplementation(() => {});
 
-      const request = new NextRequest('http://localhost:3000/api/contact', {
-        method: 'POST',
+      const request = new NextRequest("http://localhost:3000/api/contact", {
+        method: "POST",
         body: JSON.stringify(validFormData),
         headers: {
-          'content-type': 'application/json',
+          "content-type": "application/json",
         },
       });
 
@@ -412,23 +412,23 @@ describe('Contact API Route - POST Tests', () => {
       // Note: Error logging happens inside processFormSubmission which is mocked
     });
 
-    it('应该处理Resend服务错误', async () => {
+    it("应该处理Resend服务错误", async () => {
       // Mock successful validation but Resend error in processing
       mockProcessFormSubmission.mockResolvedValue({
         emailSent: false, // Resend failed
         recordCreated: true,
         emailMessageId: null,
-        airtableRecordId: 'test-record-id',
+        airtableRecordId: "test-record-id",
       });
 
       // Expect error to be logged
       mockLogger.error.mockImplementation(() => {});
 
-      const request = new NextRequest('http://localhost:3000/api/contact', {
-        method: 'POST',
+      const request = new NextRequest("http://localhost:3000/api/contact", {
+        method: "POST",
         body: JSON.stringify(validFormData),
         headers: {
-          'content-type': 'application/json',
+          "content-type": "application/json",
         },
       });
 

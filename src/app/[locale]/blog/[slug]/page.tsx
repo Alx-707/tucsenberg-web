@@ -1,46 +1,43 @@
-import { Suspense } from 'react';
-import type { Metadata } from 'next';
-import Link from 'next/link';
-import { notFound } from 'next/navigation';
-import { ArrowLeft, Calendar, Clock, Tag, User } from 'lucide-react';
-import { getTranslations, setRequestLocale } from 'next-intl/server';
-import type { Locale, PostDetail } from '@/types/content.types';
-import { getStaticParamsForType } from '@/lib/content-manifest';
-import { getPostBySlugCached } from '@/lib/content/blog';
+import { Suspense } from "react";
+import type { Metadata } from "next";
+import Link from "next/link";
+import { notFound } from "next/navigation";
+import { ArrowLeft, Calendar, Clock, Tag, User } from "lucide-react";
+import { getTranslations, setRequestLocale } from "next-intl/server";
+import type { Locale, PostDetail } from "@/types/content.types";
+import { getStaticParamsForType } from "@/lib/content-manifest";
+import { getPostBySlugCached } from "@/lib/content/blog";
 import {
   generateMetadataForPath,
   type Locale as SeoLocale,
-} from '@/lib/seo-metadata';
-import { generateLocalizedStructuredData } from '@/lib/structured-data';
-import type { ArticleData } from '@/lib/structured-data-types';
-import { MDXContent } from '@/components/mdx';
-import { JsonLdScript } from '@/components/seo';
-import { Badge } from '@/components/ui/badge';
-import { SITE_CONFIG } from '@/config/paths';
+} from "@/lib/seo-metadata";
+import { generateLocalizedStructuredData } from "@/lib/structured-data";
+import type { ArticleData } from "@/lib/structured-data-types";
+import { MDXContent } from "@/components/mdx";
+import { JsonLdScript } from "@/components/seo";
+import { Badge } from "@/components/ui/badge";
+import { SITE_CONFIG } from "@/config/paths";
 
 function BlogDetailLoadingSkeleton() {
   return (
-    <div className='container mx-auto px-4 py-8 md:py-12'>
-      <div className='mb-6 h-6 w-24 animate-pulse rounded bg-muted' />
-      <div className='mx-auto max-w-3xl'>
-        <div className='mb-8 space-y-4'>
-          <div className='flex gap-2'>
-            <div className='h-6 w-20 animate-pulse rounded bg-muted' />
-            <div className='h-6 w-16 animate-pulse rounded bg-muted' />
+    <div className="container mx-auto px-4 py-8 md:py-12">
+      <div className="mb-6 h-6 w-24 animate-pulse rounded bg-muted" />
+      <div className="mx-auto max-w-3xl">
+        <div className="mb-8 space-y-4">
+          <div className="flex gap-2">
+            <div className="h-6 w-20 animate-pulse rounded bg-muted" />
+            <div className="h-6 w-16 animate-pulse rounded bg-muted" />
           </div>
-          <div className='h-12 w-full animate-pulse rounded bg-muted' />
-          <div className='h-6 w-3/4 animate-pulse rounded bg-muted' />
-          <div className='flex gap-4'>
-            <div className='h-5 w-32 animate-pulse rounded bg-muted' />
-            <div className='h-5 w-24 animate-pulse rounded bg-muted' />
+          <div className="h-12 w-full animate-pulse rounded bg-muted" />
+          <div className="h-6 w-3/4 animate-pulse rounded bg-muted" />
+          <div className="flex gap-4">
+            <div className="h-5 w-32 animate-pulse rounded bg-muted" />
+            <div className="h-5 w-24 animate-pulse rounded bg-muted" />
           </div>
         </div>
-        <div className='space-y-4'>
+        <div className="space-y-4">
           {[1, 2, 3, 4, 5].map((i) => (
-            <div
-              key={i}
-              className='h-20 animate-pulse rounded bg-muted'
-            />
+            <div key={i} className="h-20 animate-pulse rounded bg-muted" />
           ))}
         </div>
       </div>
@@ -56,20 +53,20 @@ interface BlogDetailPageProps {
 }
 
 export function generateStaticParams() {
-  return getStaticParamsForType('posts');
+  return getStaticParamsForType("posts");
 }
 
 function buildBlogDetailSEOConfig(
   post: PostDetail,
-): NonNullable<Parameters<typeof generateMetadataForPath>[0]['config']> {
+): NonNullable<Parameters<typeof generateMetadataForPath>[0]["config"]> {
   const title = post.seo?.title ?? post.title;
   const description = post.seo?.description ?? post.description ?? post.excerpt;
 
   const config: NonNullable<
-    Parameters<typeof generateMetadataForPath>[0]['config']
+    Parameters<typeof generateMetadataForPath>[0]["config"]
   > = {
     title,
-    type: 'article',
+    type: "article",
     publishedTime: post.publishedAt,
   };
 
@@ -120,7 +117,7 @@ function buildArticleSchema(
   if (post.categories?.[0] !== undefined)
     articleData.section = post.categories[0];
 
-  return generateLocalizedStructuredData(locale, 'Article', articleData);
+  return generateLocalizedStructuredData(locale, "Article", articleData);
 }
 
 export async function generateMetadata({
@@ -132,12 +129,12 @@ export async function generateMetadata({
     const post = await getPostBySlugCached(locale as Locale, slug);
     return generateMetadataForPath({
       locale: locale as SeoLocale,
-      pageType: 'blog',
+      pageType: "blog",
       path: `/blog/${slug}`,
       config: buildBlogDetailSEOConfig(post),
     });
   } catch {
-    return { title: 'Article Not Found' };
+    return { title: "Article Not Found" };
   }
 }
 
@@ -153,16 +150,16 @@ function ArticleMeta({
   readingTimeLabel,
 }: ArticleMetaProps) {
   return (
-    <div className='flex flex-wrap items-center gap-4 text-sm text-muted-foreground'>
-      <div className='flex items-center gap-1.5'>
-        <Calendar className='h-4 w-4' />
+    <div className="flex flex-wrap items-center gap-4 text-sm text-muted-foreground">
+      <div className="flex items-center gap-1.5">
+        <Calendar className="h-4 w-4" />
         <time dateTime={post.publishedAt}>
           {publishedLabel} {new Date(post.publishedAt).toLocaleDateString()}
         </time>
       </div>
       {post.readingTime !== undefined && (
-        <div className='flex items-center gap-1.5'>
-          <Clock className='h-4 w-4' />
+        <div className="flex items-center gap-1.5">
+          <Clock className="h-4 w-4" />
           <span>
             {post.readingTime} {readingTimeLabel}
           </span>
@@ -186,23 +183,17 @@ function ArticleTags({ tags, categories }: ArticleTagsProps) {
   }
 
   return (
-    <div className='flex flex-wrap gap-2'>
+    <div className="flex flex-wrap gap-2">
       {hasCategories &&
         categories.map((category) => (
-          <Badge
-            key={category}
-            variant='secondary'
-          >
+          <Badge key={category} variant="secondary">
             {category}
           </Badge>
         ))}
       {hasTags &&
         tags.map((tag) => (
-          <Badge
-            key={tag}
-            variant='outline'
-          >
-            <Tag className='mr-1 h-3 w-3' />
+          <Badge key={tag} variant="outline">
+            <Tag className="mr-1 h-3 w-3" />
             {tag}
           </Badge>
         ))}
@@ -212,7 +203,7 @@ function ArticleTags({ tags, categories }: ArticleTagsProps) {
 
 function ArticleExcerpt({ excerpt }: { excerpt: string | undefined }) {
   if (!excerpt) return null;
-  return <p className='text-body text-muted-foreground'>{excerpt}</p>;
+  return <p className="text-body text-muted-foreground">{excerpt}</p>;
 }
 
 function ArticleFooter({
@@ -225,12 +216,12 @@ function ArticleFooter({
   if (!tags || tags.length === 0) return null;
 
   return (
-    <footer className='mt-12 border-t pt-6'>
-      <div className='flex items-center gap-2'>
-        <User className='h-4 w-4 text-muted-foreground' />
-        <span className='text-sm text-muted-foreground'>
-          {authorLabel}{' '}
-          <span className='font-medium text-foreground'>
+    <footer className="mt-12 border-t pt-6">
+      <div className="flex items-center gap-2">
+        <User className="h-4 w-4 text-muted-foreground" />
+        <span className="text-sm text-muted-foreground">
+          {authorLabel}{" "}
+          <span className="font-medium text-foreground">
             {SITE_CONFIG.name}
           </span>
         </span>
@@ -249,7 +240,7 @@ async function BlogDetailContent({
   const localeTyped = locale as Locale;
   setRequestLocale(locale);
 
-  const t = await getTranslations({ locale, namespace: 'blog' });
+  const t = await getTranslations({ locale, namespace: "blog" });
 
   const post = await getPostBySlugCached(localeTyped, slug).catch(() =>
     notFound(),
@@ -257,44 +248,38 @@ async function BlogDetailContent({
   const articleSchema = await buildArticleSchema(localeTyped, slug, post);
 
   return (
-    <main className='container mx-auto px-4 py-8 md:py-12'>
+    <main className="container mx-auto px-4 py-8 md:py-12">
       <JsonLdScript data={articleSchema} />
-      <nav className='mb-6'>
+      <nav className="mb-6">
         <Link
           href={`/${locale}/blog`}
-          className='inline-flex items-center gap-2 text-sm text-muted-foreground transition-colors hover:text-foreground'
+          className="inline-flex items-center gap-2 text-sm text-muted-foreground transition-colors hover:text-foreground"
         >
-          <ArrowLeft className='h-4 w-4' />
-          {t('backToList')}
+          <ArrowLeft className="h-4 w-4" />
+          {t("backToList")}
         </Link>
       </nav>
 
-      <article className='mx-auto max-w-3xl'>
-        <header className='mb-8 space-y-4'>
-          <ArticleTags
-            tags={post.tags}
-            categories={post.categories}
-          />
-          <h1 className='text-heading'>{post.title}</h1>
+      <article className="mx-auto max-w-3xl">
+        <header className="mb-8 space-y-4">
+          <ArticleTags tags={post.tags} categories={post.categories} />
+          <h1 className="text-heading">{post.title}</h1>
           <ArticleExcerpt excerpt={post.excerpt} />
           <ArticleMeta
             post={post}
-            publishedLabel={t('publishedOn')}
-            readingTimeLabel={t('readingTime')}
+            publishedLabel={t("publishedOn")}
+            readingTimeLabel={t("readingTime")}
           />
         </header>
 
         <MDXContent
-          type='posts'
+          type="posts"
           locale={localeTyped}
           slug={slug}
-          className='prose max-w-none prose-neutral dark:prose-invert'
+          className="prose max-w-none prose-neutral dark:prose-invert"
         />
 
-        <ArticleFooter
-          tags={post.tags}
-          authorLabel={t('author')}
-        />
+        <ArticleFooter tags={post.tags} authorLabel={t("author")} />
       </article>
     </main>
   );
@@ -305,10 +290,7 @@ export default async function BlogDetailPage({ params }: BlogDetailPageProps) {
 
   return (
     <Suspense fallback={<BlogDetailLoadingSkeleton />}>
-      <BlogDetailContent
-        locale={locale}
-        slug={slug}
-      />
+      <BlogDetailContent locale={locale} slug={slug} />
     </Suspense>
   );
 }

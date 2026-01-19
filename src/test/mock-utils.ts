@@ -3,8 +3,8 @@
  * 提供标准化的Mock配置，确保测试的一致性和可维护性
  */
 
-import React from 'react';
-import { vi } from 'vitest';
+import React from "react";
+import { vi } from "vitest";
 
 // ================================
 // 核心Mock工具函数
@@ -48,9 +48,9 @@ export const createNextIntlMocks = () => {
     return key;
   });
 
-  mockUseLocale.mockReturnValue('en');
+  mockUseLocale.mockReturnValue("en");
   mockUseMessages.mockReturnValue({});
-  mockUsePathname.mockReturnValue('/');
+  mockUsePathname.mockReturnValue("/");
   mockUseRouter.mockReturnValue({
     push: vi.fn(),
     replace: vi.fn(),
@@ -69,7 +69,7 @@ export const createNextIntlMocks = () => {
       [key: string]: unknown;
     }) => {
       return {
-        type: 'a',
+        type: "a",
         props: { ...props, children },
       };
     },
@@ -95,7 +95,7 @@ export const createNextIntlMocks = () => {
 export const applyNextIntlMocks = (
   mocks: ReturnType<typeof createNextIntlMocks>,
 ) => {
-  vi.mock('next-intl', () => ({
+  vi.mock("next-intl", () => ({
     useTranslations: mocks.mockUseTranslations,
     useLocale: mocks.mockUseLocale,
     useMessages: mocks.mockUseMessages,
@@ -112,11 +112,11 @@ export const applyNextIntlMocks = (
     }) => React.createElement(React.Fragment, null, children),
   }));
 
-  vi.mock('next-intl/link', () => ({
+  vi.mock("next-intl/link", () => ({
     default: mocks.mockLink,
   }));
 
-  vi.mock('next-intl/navigation', () => ({
+  vi.mock("next-intl/navigation", () => ({
     usePathname: mocks.mockUsePathname,
     useRouter: mocks.mockUseRouter,
     redirect: mocks.mockRedirect,
@@ -135,11 +135,11 @@ export const createThemeMocks = () => {
   const mockUseTheme = vi.fn();
 
   mockUseTheme.mockReturnValue({
-    theme: 'light',
+    theme: "light",
     setTheme: mockSetTheme,
-    resolvedTheme: 'light',
-    systemTheme: 'light',
-    themes: ['light', 'dark', 'system'],
+    resolvedTheme: "light",
+    systemTheme: "light",
+    themes: ["light", "dark", "system"],
   });
 
   return {
@@ -152,7 +152,7 @@ export const createThemeMocks = () => {
  * 应用主题系统Mock配置
  */
 export const applyThemeMocks = (mocks: ReturnType<typeof createThemeMocks>) => {
-  vi.mock('next-themes', () => ({
+  vi.mock("next-themes", () => ({
     useTheme: mocks.mockUseTheme,
     ThemeProvider: ({ children }: { children: React.ReactNode }) => children,
   }));
@@ -216,22 +216,22 @@ export const createBrowserAPIMocks = () => {
 export const applyBrowserAPIMocks = (
   mocks: ReturnType<typeof createBrowserAPIMocks>,
 ) => {
-  Object.defineProperty(window, 'matchMedia', {
+  Object.defineProperty(window, "matchMedia", {
     writable: true,
     value: mocks.mockMatchMedia,
   });
 
-  Object.defineProperty(global, 'IntersectionObserver', {
+  Object.defineProperty(global, "IntersectionObserver", {
     writable: true,
     value: mocks.mockIntersectionObserver,
   });
 
-  Object.defineProperty(global, 'ResizeObserver', {
+  Object.defineProperty(global, "ResizeObserver", {
     writable: true,
     value: mocks.mockResizeObserver,
   });
 
-  Object.defineProperty(global, 'localStorage', {
+  Object.defineProperty(global, "localStorage", {
     writable: true,
     value: mocks.mockLocalStorage,
   });
@@ -279,13 +279,13 @@ export const validateMockSetup = () => {
   const issues: string[] = [];
 
   // 检查vi.hoisted是否可用
-  if (typeof vi.hoisted !== 'function') {
-    issues.push('vi.hoisted is not available');
+  if (typeof vi.hoisted !== "function") {
+    issues.push("vi.hoisted is not available");
   }
 
   // 检查关键Mock是否设置
   if (!vi.isMockFunction(vi.fn())) {
-    issues.push('vi.fn() is not working correctly');
+    issues.push("vi.fn() is not working correctly");
   }
 
   return {
@@ -322,7 +322,7 @@ export const createNextRouterMocks = () => {
     prefetch: mockPrefetch,
   });
 
-  mockUsePathname.mockReturnValue('/');
+  mockUsePathname.mockReturnValue("/");
   mockUseSearchParams.mockReturnValue(new URLSearchParams());
 
   return {
@@ -344,7 +344,7 @@ export const createNextRouterMocks = () => {
 export const applyNextRouterMocks = (
   mocks: ReturnType<typeof createNextRouterMocks>,
 ) => {
-  vi.mock('next/navigation', () => ({
+  vi.mock("next/navigation", () => ({
     useRouter: mocks.mockUseRouter,
     usePathname: mocks.mockUsePathname,
     useSearchParams: mocks.mockUseSearchParams,
@@ -384,27 +384,27 @@ export const createPerformanceMocks = () => {
 export const applyPerformanceMocks = (
   mocks: ReturnType<typeof createPerformanceMocks>,
 ) => {
-  Object.defineProperty(global.performance, 'now', {
+  Object.defineProperty(global.performance, "now", {
     writable: true,
     value: mocks.mockPerformanceNow,
   });
 
-  Object.defineProperty(global.performance, 'mark', {
+  Object.defineProperty(global.performance, "mark", {
     writable: true,
     value: mocks.mockPerformanceMark,
   });
 
-  Object.defineProperty(global.performance, 'measure', {
+  Object.defineProperty(global.performance, "measure", {
     writable: true,
     value: mocks.mockPerformanceMeasure,
   });
 
-  Object.defineProperty(global.performance, 'getEntriesByType', {
+  Object.defineProperty(global.performance, "getEntriesByType", {
     writable: true,
     value: mocks.mockGetEntriesByType,
   });
 
-  Object.defineProperty(global.performance, 'getEntriesByName', {
+  Object.defineProperty(global.performance, "getEntriesByName", {
     writable: true,
     value: mocks.mockGetEntriesByName,
   });

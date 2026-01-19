@@ -1,4 +1,4 @@
-export type Locale = 'en' | 'zh';
+export type Locale = "en" | "zh";
 
 // 严格的结构化数据接口定义
 export interface OrganizationData {

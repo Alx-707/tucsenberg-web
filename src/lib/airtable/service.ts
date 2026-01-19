@@ -4,7 +4,7 @@
 
 // 动态引入 Airtable，避免构建期和初始化顺序问题
 // import type 仅用于类型提示，实际模块在运行时按需加载
-import type AirtableNS from 'airtable';
+import type AirtableNS from "airtable";
 import type {
   AirtableQueryOptions,
   AirtableRecord,
@@ -14,18 +14,18 @@ import type {
   LeadSource,
   NewsletterLeadData,
   ProductLeadData,
-} from '@/lib/airtable/types';
-import { env } from '@/lib/env';
-import { LEAD_TYPES, type LeadType } from '@/lib/lead-pipeline/lead-schema';
-import { logger, sanitizeCompany, sanitizeEmail } from '@/lib/logger';
-import { sanitizePlainText } from '@/lib/security-validation';
-import { airtableRecordSchema } from '@/lib/validations';
+} from "@/lib/airtable/types";
+import { env } from "@/lib/env";
+import { LEAD_TYPES, type LeadType } from "@/lib/lead-pipeline/lead-schema";
+import { logger, sanitizeCompany, sanitizeEmail } from "@/lib/logger";
+import { sanitizePlainText } from "@/lib/security-validation";
+import { airtableRecordSchema } from "@/lib/validations";
 import {
   ANIMATION_DURATION_VERY_SLOW,
   ONE,
   PERCENTAGE_FULL,
   ZERO,
-} from '@/constants';
+} from "@/constants";
 
 interface AirtableLike {
   base: (id: string) => AirtableNS.Base;
@@ -43,7 +43,7 @@ export class AirtableService {
   private airtableModule: unknown = null;
 
   constructor() {
-    this.tableName = env.AIRTABLE_TABLE_NAME || 'Contacts';
+    this.tableName = env.AIRTABLE_TABLE_NAME || "Contacts";
     // 不在构造函数中执行初始化，延迟到首次调用方法时
   }
 
@@ -55,7 +55,7 @@ export class AirtableService {
     try {
       if (!env.AIRTABLE_API_KEY || !env.AIRTABLE_BASE_ID) {
         logger.warn(
-          'Airtable configuration missing - service will be disabled',
+          "Airtable configuration missing - service will be disabled",
           {
             hasApiKey: Boolean(env.AIRTABLE_API_KEY),
             hasBaseId: Boolean(env.AIRTABLE_BASE_ID),
@@ -65,7 +65,7 @@ export class AirtableService {
       }
       // 动态加载 airtable 模块
       if (!this.airtableModule) {
-        this.airtableModule = await import('airtable');
+        this.airtableModule = await import("airtable");
       }
       const resolveAirtable = (mod: unknown): AirtableLike | null => {
         const maybe = mod as
@@ -75,11 +75,11 @@ export class AirtableService {
           (maybe as { default?: Partial<AirtableLike> }).default ?? maybe;
         if (
           candidate &&
-          typeof candidate === 'object' &&
-          'base' in candidate &&
-          'configure' in candidate &&
-          typeof (candidate as AirtableLike).base === 'function' &&
-          typeof (candidate as AirtableLike).configure === 'function'
+          typeof candidate === "object" &&
+          "base" in candidate &&
+          "configure" in candidate &&
+          typeof (candidate as AirtableLike).base === "function" &&
+          typeof (candidate as AirtableLike).configure === "function"
         ) {
           return candidate as AirtableLike;
         }
@@ -87,24 +87,24 @@ export class AirtableService {
       };
       const Airtable = resolveAirtable(this.airtableModule);
       if (!Airtable) {
-        logger.warn('Airtable module did not expose expected API');
+        logger.warn("Airtable module did not expose expected API");
         return;
       }
 
       Airtable.configure({
-        endpointUrl: 'https://api.airtable.com',
+        endpointUrl: "https://api.airtable.com",
         apiKey: env.AIRTABLE_API_KEY,
       });
 
       this.base = Airtable.base(env.AIRTABLE_BASE_ID);
       this.isConfigured = true;
 
-      logger.info('Airtable service initialized successfully', {
+      logger.info("Airtable service initialized successfully", {
         tableName: this.tableName,
       });
     } catch (error) {
-      logger.error('Failed to initialize Airtable service', {
-        error: error instanceof Error ? error.message : 'Unknown error',
+      logger.error("Failed to initialize Airtable service", {
+        error: error instanceof Error ? error.message : "Unknown error",
       });
     }
   }
@@ -155,7 +155,7 @@ export class AirtableService {
   ): Promise<AirtableRecord> {
     await this.ensureReady();
     if (!this.isReady()) {
-      throw new Error('Airtable service is not configured');
+      throw new Error("Airtable service is not configured");
     }
 
     try {
@@ -164,17 +164,17 @@ export class AirtableService {
 
       // 构建Airtable记录
       const recordData = {
-        'First Name': sanitizedData.firstName,
-        'Last Name': sanitizedData.lastName,
-        'Email': sanitizedData.email,
-        'Company': sanitizedData.company,
-        'Message': sanitizedData.message,
-        'Phone': sanitizedData.phone || '',
-        'Subject': sanitizedData.subject || '',
-        'Submitted At': new Date().toISOString(),
-        'Status': 'New' as const,
-        'Source': 'Website Contact Form',
-        'Marketing Consent': sanitizedData.marketingConsent || false,
+        "First Name": sanitizedData.firstName,
+        "Last Name": sanitizedData.lastName,
+        Email: sanitizedData.email,
+        Company: sanitizedData.company,
+        Message: sanitizedData.message,
+        Phone: sanitizedData.phone || "",
+        Subject: sanitizedData.subject || "",
+        "Submitted At": new Date().toISOString(),
+        Status: "New" as const,
+        Source: "Website Contact Form",
+        "Marketing Consent": sanitizedData.marketingConsent || false,
       };
 
       // 验证记录格式
@@ -192,10 +192,10 @@ export class AirtableService {
       const [createdRecord] = records;
 
       if (!createdRecord) {
-        throw new Error('Failed to create record');
+        throw new Error("Failed to create record");
       }
 
-      logger.info('Contact record created successfully', {
+      logger.info("Contact record created successfully", {
         recordId: createdRecord.id,
         email: sanitizeEmail(sanitizedData.email),
         company: sanitizeCompany(sanitizedData.company),
@@ -203,14 +203,14 @@ export class AirtableService {
 
       return {
         id: createdRecord.id,
-        fields: createdRecord.fields as AirtableRecord['fields'],
-        createdTime: createdRecord.get('Created Time') as string,
+        fields: createdRecord.fields as AirtableRecord["fields"],
+        createdTime: createdRecord.get("Created Time") as string,
       };
     } catch (error) {
-      logger.error('Failed to create contact record', {
-        error: error instanceof Error ? error.message : 'Unknown error',
+      logger.error("Failed to create contact record", {
+        error: error instanceof Error ? error.message : "Unknown error",
       });
-      throw new Error('Failed to create contact record');
+      throw new Error("Failed to create contact record");
     }
   }
 
@@ -220,13 +220,13 @@ export class AirtableService {
   private getLeadSource(type: LeadType): LeadSource {
     switch (type) {
       case LEAD_TYPES.CONTACT:
-        return 'Website Contact Form';
+        return "Website Contact Form";
       case LEAD_TYPES.PRODUCT:
-        return 'Product Inquiry';
+        return "Product Inquiry";
       case LEAD_TYPES.NEWSLETTER:
-        return 'Newsletter Subscription';
+        return "Newsletter Subscription";
       default:
-        return 'Website Contact Form';
+        return "Website Contact Form";
     }
   }
 
@@ -241,7 +241,7 @@ export class AirtableService {
   ): Promise<AirtableRecord> {
     await this.ensureReady();
     if (!this.isReady()) {
-      throw new Error('Airtable service is not configured');
+      throw new Error("Airtable service is not configured");
     }
 
     try {
@@ -251,54 +251,54 @@ export class AirtableService {
       // Build base record fields using airtable-compatible typing
       type AirtableFieldValue = string | number | boolean;
       const baseFields: Record<string, AirtableFieldValue> = {
-        'Email': data.email.toLowerCase().trim(),
-        'Submitted At': now,
-        'Status': 'New',
-        'Source': source,
+        Email: data.email.toLowerCase().trim(),
+        "Submitted At": now,
+        Status: "New",
+        Source: source,
       };
 
       // Add reference ID if provided
       if (data.referenceId) {
-        baseFields['Reference ID'] = data.referenceId;
+        baseFields["Reference ID"] = data.referenceId;
       }
 
       // Add type-specific fields
       if (type === LEAD_TYPES.CONTACT) {
         const contactData = data as ContactLeadData;
-        baseFields['First Name'] = sanitizePlainText(contactData.firstName);
-        baseFields['Last Name'] = sanitizePlainText(contactData.lastName);
-        baseFields['Company'] = contactData.company
+        baseFields["First Name"] = sanitizePlainText(contactData.firstName);
+        baseFields["Last Name"] = sanitizePlainText(contactData.lastName);
+        baseFields["Company"] = contactData.company
           ? sanitizePlainText(contactData.company)
-          : '';
-        baseFields['Subject'] = contactData.subject || '';
-        baseFields['Message'] = sanitizePlainText(contactData.message);
-        baseFields['Marketing Consent'] = contactData.marketingConsent || false;
+          : "";
+        baseFields["Subject"] = contactData.subject || "";
+        baseFields["Message"] = sanitizePlainText(contactData.message);
+        baseFields["Marketing Consent"] = contactData.marketingConsent || false;
       } else if (type === LEAD_TYPES.PRODUCT) {
         const productData = data as ProductLeadData;
-        baseFields['First Name'] = sanitizePlainText(productData.firstName);
-        baseFields['Last Name'] = sanitizePlainText(productData.lastName);
-        baseFields['Company'] = productData.company
+        baseFields["First Name"] = sanitizePlainText(productData.firstName);
+        baseFields["Last Name"] = sanitizePlainText(productData.lastName);
+        baseFields["Company"] = productData.company
           ? sanitizePlainText(productData.company)
-          : '';
-        baseFields['Message'] = sanitizePlainText(productData.message);
-        baseFields['Product Name'] = productData.productName;
-        baseFields['Product Slug'] = productData.productSlug;
-        baseFields['Quantity'] =
-          typeof productData.quantity === 'number'
+          : "";
+        baseFields["Message"] = sanitizePlainText(productData.message);
+        baseFields["Product Name"] = productData.productName;
+        baseFields["Product Slug"] = productData.productSlug;
+        baseFields["Quantity"] =
+          typeof productData.quantity === "number"
             ? productData.quantity.toString()
             : productData.quantity;
         if (productData.requirements) {
-          baseFields['Requirements'] = sanitizePlainText(
+          baseFields["Requirements"] = sanitizePlainText(
             productData.requirements,
           );
         }
-        baseFields['Marketing Consent'] = productData.marketingConsent || false;
+        baseFields["Marketing Consent"] = productData.marketingConsent || false;
       } else if (type === LEAD_TYPES.NEWSLETTER) {
         // Newsletter only needs email which is already in baseFields
-        baseFields['First Name'] = '';
-        baseFields['Last Name'] = '';
-        baseFields['Company'] = '';
-        baseFields['Message'] = 'Newsletter subscription';
+        baseFields["First Name"] = "";
+        baseFields["Last Name"] = "";
+        baseFields["Company"] = "";
+        baseFields["Message"] = "Newsletter subscription";
       }
 
       // Create record
@@ -314,10 +314,10 @@ export class AirtableService {
         : recordsResult;
 
       if (!createdRecord) {
-        throw new Error('Failed to create lead record');
+        throw new Error("Failed to create lead record");
       }
 
-      logger.info('Lead record created successfully', {
+      logger.info("Lead record created successfully", {
         recordId: createdRecord.id,
         type,
         source,
@@ -327,15 +327,15 @@ export class AirtableService {
 
       return {
         id: createdRecord.id,
-        fields: createdRecord.fields as AirtableRecord['fields'],
-        createdTime: createdRecord.get('Created Time') as string,
+        fields: createdRecord.fields as AirtableRecord["fields"],
+        createdTime: createdRecord.get("Created Time") as string,
       };
     } catch (error) {
-      logger.error('Failed to create lead record', {
-        error: error instanceof Error ? error.message : 'Unknown error',
+      logger.error("Failed to create lead record", {
+        error: error instanceof Error ? error.message : "Unknown error",
         type,
       });
-      throw new Error('Failed to create lead record');
+      throw new Error("Failed to create lead record");
     }
   }
 
@@ -348,7 +348,7 @@ export class AirtableService {
   ): Promise<AirtableRecord[]> {
     await this.ensureReady();
     if (!this.isReady()) {
-      throw new Error('Airtable service is not configured');
+      throw new Error("Airtable service is not configured");
     }
 
     try {
@@ -357,7 +357,7 @@ export class AirtableService {
       const selectOptions: {
         maxRecords: number;
         filterByFormula?: string;
-        sort?: Array<{ field: string; direction: 'asc' | 'desc' }>;
+        sort?: Array<{ field: string; direction: "asc" | "desc" }>;
       } = { maxRecords };
       if (filterByFormula) {
         selectOptions.filterByFormula = filterByFormula;
@@ -372,14 +372,14 @@ export class AirtableService {
 
       return records.map((record) => ({
         id: record.id,
-        fields: record.fields as AirtableRecord['fields'],
-        createdTime: record.get('Created Time') as string,
+        fields: record.fields as AirtableRecord["fields"],
+        createdTime: record.get("Created Time") as string,
       }));
     } catch (error) {
-      logger.error('Failed to fetch contact records', {
-        error: error instanceof Error ? error.message : 'Unknown error',
+      logger.error("Failed to fetch contact records", {
+        error: error instanceof Error ? error.message : "Unknown error",
       });
-      throw new Error('Failed to fetch contact records');
+      throw new Error("Failed to fetch contact records");
     }
   }
 
@@ -393,7 +393,7 @@ export class AirtableService {
   ): Promise<void> {
     await this.ensureReady();
     if (!this.isReady()) {
-      throw new Error('Airtable service is not configured');
+      throw new Error("Airtable service is not configured");
     }
 
     try {
@@ -401,23 +401,23 @@ export class AirtableService {
         {
           id: recordId,
           fields: {
-            'Status': status,
-            'Updated At': new Date().toISOString(),
+            Status: status,
+            "Updated At": new Date().toISOString(),
           },
         },
       ]);
 
-      logger.info('Contact record status updated', {
+      logger.info("Contact record status updated", {
         recordId,
         newStatus: status,
       });
     } catch (error) {
-      logger.error('Failed to update contact record status', {
-        error: error instanceof Error ? error.message : 'Unknown error',
+      logger.error("Failed to update contact record status", {
+        error: error instanceof Error ? error.message : "Unknown error",
         recordId,
         status,
       });
-      throw new Error('Failed to update contact status');
+      throw new Error("Failed to update contact status");
     }
   }
 
@@ -428,21 +428,21 @@ export class AirtableService {
   public async deleteContact(recordId: string): Promise<void> {
     await this.ensureReady();
     if (!this.isReady()) {
-      throw new Error('Airtable service is not configured');
+      throw new Error("Airtable service is not configured");
     }
 
     try {
       await this.base!.table(this.tableName).destroy([recordId]);
 
-      logger.info('Contact record deleted', {
+      logger.info("Contact record deleted", {
         recordId,
       });
     } catch (error) {
-      logger.error('Failed to delete contact record', {
-        error: error instanceof Error ? error.message : 'Unknown error',
+      logger.error("Failed to delete contact record", {
+        error: error instanceof Error ? error.message : "Unknown error",
         recordId,
       });
-      throw new Error('Failed to delete contact record');
+      throw new Error("Failed to delete contact record");
     }
   }
 
@@ -466,8 +466,8 @@ export class AirtableService {
 
       return records.length > ZERO;
     } catch (error) {
-      logger.error('Failed to check duplicate email', {
-        error: error instanceof Error ? error.message : 'Unknown error',
+      logger.error("Failed to check duplicate email", {
+        error: error instanceof Error ? error.message : "Unknown error",
       });
       return false;
     }
@@ -485,7 +485,7 @@ export class AirtableService {
   }> {
     await this.ensureReady();
     if (!this.isReady()) {
-      throw new Error('Airtable service is not configured');
+      throw new Error("Airtable service is not configured");
     }
 
     try {
@@ -512,10 +512,10 @@ export class AirtableService {
         recentContacts: recent.length,
       };
     } catch (error) {
-      logger.error('Failed to get statistics', {
-        error: error instanceof Error ? error.message : 'Unknown error',
+      logger.error("Failed to get statistics", {
+        error: error instanceof Error ? error.message : "Unknown error",
       });
-      throw new Error('Failed to get statistics');
+      throw new Error("Failed to get statistics");
     }
   }
 }

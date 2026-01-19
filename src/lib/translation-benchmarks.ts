@@ -5,8 +5,8 @@
  * 提供翻译质量基准数据管理、比较分析和性能评估功能
  */
 
-import type { Locale } from '@/types/i18n';
-import type { QualityBenchmark } from '@/lib/translation-quality-types';
+import type { Locale } from "@/types/i18n";
+import type { QualityBenchmark } from "@/lib/translation-quality-types";
 
 /**
  * 翻译基准测试管理器
@@ -22,9 +22,9 @@ export class TranslationBenchmarks {
   public initialize(): void {
     // 英语基准数据
     const englishBenchmark: QualityBenchmark = {
-      locale: 'en' as Locale,
+      locale: "en" as Locale,
       averageScore: 85,
-      benchmarkDate: '2024-01-01',
+      benchmarkDate: "2024-01-01",
       sampleSize: 1000,
       categories: {
         grammar: 88,
@@ -36,9 +36,9 @@ export class TranslationBenchmarks {
 
     // 中文基准数据
     const chineseBenchmark: QualityBenchmark = {
-      locale: 'zh' as Locale,
+      locale: "zh" as Locale,
       averageScore: 82,
-      benchmarkDate: '2024-01-01',
+      benchmarkDate: "2024-01-01",
       sampleSize: 800,
       categories: {
         grammar: 85,
@@ -48,8 +48,8 @@ export class TranslationBenchmarks {
       },
     };
 
-    this.benchmarks.set('en' as Locale, englishBenchmark);
-    this.benchmarks.set('zh' as Locale, chineseBenchmark);
+    this.benchmarks.set("en" as Locale, englishBenchmark);
+    this.benchmarks.set("zh" as Locale, chineseBenchmark);
   }
 
   /**
@@ -106,39 +106,39 @@ export class TranslationBenchmarks {
 
     // 根据总体改进情况生成建议
     if (improvement > 10) {
-      recommendations.push('Excellent quality! Above benchmark standards.');
+      recommendations.push("Excellent quality! Above benchmark standards.");
     } else if (improvement < -10) {
       recommendations.push(
-        'Overall quality is significantly below benchmark. Consider comprehensive review.',
+        "Overall quality is significantly below benchmark. Consider comprehensive review.",
       );
     } else if (improvement < 0) {
       recommendations.push(
-        'Quality is below benchmark. Focus on identified issues.',
+        "Quality is below benchmark. Focus on identified issues.",
       );
     }
 
     // 生成具体分类建议
     if (currentScore.grammar < benchmark.categories.grammar) {
       recommendations.push(
-        'Grammar score below benchmark. Review grammatical accuracy.',
+        "Grammar score below benchmark. Review grammatical accuracy.",
       );
     }
 
     if (currentScore.consistency < benchmark.categories.consistency) {
       recommendations.push(
-        'Consistency score below benchmark. Ensure terminology consistency.',
+        "Consistency score below benchmark. Ensure terminology consistency.",
       );
     }
 
     if (currentScore.terminology < benchmark.categories.terminology) {
       recommendations.push(
-        'Terminology score below benchmark. Review domain-specific terms.',
+        "Terminology score below benchmark. Review domain-specific terms.",
       );
     }
 
     if (currentScore.fluency < benchmark.categories.fluency) {
       recommendations.push(
-        'Fluency score below benchmark. Improve natural language flow.',
+        "Fluency score below benchmark. Improve natural language flow.",
       );
     }
 

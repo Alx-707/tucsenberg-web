@@ -27,32 +27,32 @@ export interface SiteConfig {
 // 站点配置
 export const SITE_CONFIG = {
   baseUrl:
-    process.env['NEXT_PUBLIC_BASE_URL'] ||
-    process.env['NEXT_PUBLIC_SITE_URL'] ||
-    'https://b2b-web-template.vercel.app',
-  name: 'B2B Web Template',
-  description: 'Modern B2B Enterprise Web Platform with Next.js',
+    process.env["NEXT_PUBLIC_BASE_URL"] ||
+    process.env["NEXT_PUBLIC_SITE_URL"] ||
+    "https://b2b-web-template.vercel.app",
+  name: "B2B Web Template",
+  description: "Modern B2B Enterprise Web Platform with Next.js",
 
   // SEO配置
   seo: {
-    titleTemplate: '%s | B2B Web Template',
-    defaultTitle: 'B2B Web Template',
-    defaultDescription: 'Modern B2B Enterprise Web Platform with Next.js',
-    keywords: ['Next.js', 'React', 'TypeScript', 'B2B', 'Enterprise'],
+    titleTemplate: "%s | B2B Web Template",
+    defaultTitle: "B2B Web Template",
+    defaultDescription: "Modern B2B Enterprise Web Platform with Next.js",
+    keywords: ["Next.js", "React", "TypeScript", "B2B", "Enterprise"],
   },
 
   // 社交媒体链接
   social: {
-    twitter: 'https://x.com/b2b-web-template',
-    linkedin: 'https://www.linkedin.com/company/b2b-web-template/',
-    github: 'https://github.com/Alx-707/b2b-web-template',
+    twitter: "https://x.com/b2b-web-template",
+    linkedin: "https://www.linkedin.com/company/b2b-web-template/",
+    github: "https://github.com/Alx-707/b2b-web-template",
   },
 
   // 联系信息
   contact: {
-    phone: '+1-555-0123',
-    email: 'hello@b2b-web-template.com',
-    whatsappNumber: process.env['NEXT_PUBLIC_WHATSAPP_NUMBER'] ?? '+1-555-0123',
+    phone: "+1-555-0123",
+    email: "hello@b2b-web-template.com",
+    whatsappNumber: process.env["NEXT_PUBLIC_WHATSAPP_NUMBER"] ?? "+1-555-0123",
   },
 } as const satisfies SiteConfig;
 
@@ -76,8 +76,8 @@ export function isPlaceholder(value: string): boolean {
 export function isBaseUrlConfigured(
   baseUrl: string = SITE_CONFIG.baseUrl,
 ): boolean {
-  if (process.env.NODE_ENV !== 'production') return true;
-  return !baseUrl.includes('example.com') && !baseUrl.includes('localhost');
+  if (process.env.NODE_ENV !== "production") return true;
+  return !baseUrl.includes("example.com") && !baseUrl.includes("localhost");
 }
 
 /**
@@ -94,19 +94,19 @@ export function getUnconfiguredPlaceholders(
 
   // Check top-level string values
   if (isPlaceholder(config.name)) {
-    placeholders.push({ path: 'SITE_CONFIG.name', value: config.name });
+    placeholders.push({ path: "SITE_CONFIG.name", value: config.name });
   }
 
   // Check SEO config
   if (isPlaceholder(config.seo.defaultTitle)) {
     placeholders.push({
-      path: 'SITE_CONFIG.seo.defaultTitle',
+      path: "SITE_CONFIG.seo.defaultTitle",
       value: config.seo.defaultTitle,
     });
   }
-  if (config.seo.titleTemplate.includes('[PROJECT_NAME]')) {
+  if (config.seo.titleTemplate.includes("[PROJECT_NAME]")) {
     placeholders.push({
-      path: 'SITE_CONFIG.seo.titleTemplate',
+      path: "SITE_CONFIG.seo.titleTemplate",
       value: config.seo.titleTemplate,
     });
   }
@@ -114,19 +114,19 @@ export function getUnconfiguredPlaceholders(
   // Check social links
   if (isPlaceholder(config.social.twitter)) {
     placeholders.push({
-      path: 'SITE_CONFIG.social.twitter',
+      path: "SITE_CONFIG.social.twitter",
       value: config.social.twitter,
     });
   }
   if (isPlaceholder(config.social.linkedin)) {
     placeholders.push({
-      path: 'SITE_CONFIG.social.linkedin',
+      path: "SITE_CONFIG.social.linkedin",
       value: config.social.linkedin,
     });
   }
   if (isPlaceholder(config.social.github)) {
     placeholders.push({
-      path: 'SITE_CONFIG.social.github',
+      path: "SITE_CONFIG.social.github",
       value: config.social.github,
     });
   }
@@ -134,7 +134,7 @@ export function getUnconfiguredPlaceholders(
   // Check contact info
   if (isPlaceholder(config.contact.email)) {
     placeholders.push({
-      path: 'SITE_CONFIG.contact.email',
+      path: "SITE_CONFIG.contact.email",
       value: config.contact.email,
     });
   }
@@ -153,7 +153,7 @@ export function validateSiteConfig(config: SiteConfig = SITE_CONFIG): {
 } {
   const errors: string[] = [];
   const warnings: string[] = [];
-  const isProduction = process.env.NODE_ENV === 'production';
+  const isProduction = process.env.NODE_ENV === "production";
 
   // Check base URL
   if (!isBaseUrlConfigured(config.baseUrl)) {

@@ -1,11 +1,11 @@
-import type { MetadataRoute } from 'next';
-import { describe, expect, it, vi } from 'vitest';
-import robots from '../robots';
+import type { MetadataRoute } from "next";
+import { describe, expect, it, vi } from "vitest";
+import robots from "../robots";
 
 // Mock config before import
-vi.mock('@/config/paths', () => ({
+vi.mock("@/config/paths", () => ({
   SITE_CONFIG: {
-    baseUrl: 'https://example.com',
+    baseUrl: "https://example.com",
   },
 }));
 
@@ -18,15 +18,15 @@ type RobotsRuleItem = {
 };
 
 function normalizeRules(
-  rules: MetadataRoute.Robots['rules'],
+  rules: MetadataRoute.Robots["rules"],
 ): RobotsRuleItem[] {
   if (!rules) return [];
   return (Array.isArray(rules) ? rules : [rules]) as RobotsRuleItem[];
 }
 
-describe('robots.ts', () => {
-  describe('robots()', () => {
-    it('should return robots configuration object', () => {
+describe("robots.ts", () => {
+  describe("robots()", () => {
+    it("should return robots configuration object", () => {
       const result = robots();
 
       expect(result).toBeDefined();
@@ -34,60 +34,60 @@ describe('robots.ts', () => {
       expect(result.sitemap).toBeDefined();
     });
 
-    it('should have rules array', () => {
+    it("should have rules array", () => {
       const result = robots();
       const rulesArray = normalizeRules(result.rules);
 
       expect(rulesArray.length).toBeGreaterThan(0);
     });
 
-    it('should have wildcard user agent rule', () => {
+    it("should have wildcard user agent rule", () => {
       const result = robots();
       const rulesArray = normalizeRules(result.rules);
       const wildcardRule = rulesArray.find(
-        (rule) => !Array.isArray(rule.userAgent) && rule.userAgent === '*',
+        (rule) => !Array.isArray(rule.userAgent) && rule.userAgent === "*",
       );
 
       expect(wildcardRule).toBeDefined();
     });
 
-    it('should allow root path', () => {
+    it("should allow root path", () => {
       const result = robots();
       const rulesArray = normalizeRules(result.rules);
       const wildcardRule = rulesArray[0];
 
-      expect(wildcardRule?.allow).toBe('/');
+      expect(wildcardRule?.allow).toBe("/");
     });
 
-    it('should disallow sensitive paths', () => {
-      const result = robots();
-      const rulesArray = normalizeRules(result.rules);
-      const wildcardRule = rulesArray[0];
-      const disallowed = wildcardRule?.disallow;
-
-      expect(disallowed).toContain('/api/');
-      expect(disallowed).toContain('/_next/');
-    });
-
-    it('should disallow test paths', () => {
+    it("should disallow sensitive paths", () => {
       const result = robots();
       const rulesArray = normalizeRules(result.rules);
       const wildcardRule = rulesArray[0];
       const disallowed = wildcardRule?.disallow;
 
-      expect(disallowed).toContain('/error-test/');
+      expect(disallowed).toContain("/api/");
+      expect(disallowed).toContain("/_next/");
     });
 
-    it('should include sitemap URL', () => {
+    it("should disallow test paths", () => {
       const result = robots();
+      const rulesArray = normalizeRules(result.rules);
+      const wildcardRule = rulesArray[0];
+      const disallowed = wildcardRule?.disallow;
 
-      expect(result.sitemap).toBe('https://example.com/sitemap.xml');
+      expect(disallowed).toContain("/error-test/");
     });
 
-    it('should use base URL from config', () => {
+    it("should include sitemap URL", () => {
       const result = robots();
 
-      expect(result.sitemap).toContain('https://example.com');
+      expect(result.sitemap).toBe("https://example.com/sitemap.xml");
+    });
+
+    it("should use base URL from config", () => {
+      const result = robots();
+
+      expect(result.sitemap).toContain("https://example.com");
     });
   });
 });

@@ -12,16 +12,16 @@ import {
   SITE_CONFIG,
   type Locale,
   type PageType,
-} from '@/config/paths';
-import { ONE, ZERO } from '@/constants';
-import { SEO_CONSTANTS } from '@/constants/seo-constants';
+} from "@/config/paths";
+import { ONE, ZERO } from "@/constants";
+import { SEO_CONSTANTS } from "@/constants/seo-constants";
 
 // URL生成选项接口
 export interface URLGeneratorOptions {
   includeLocale?: boolean;
   absolute?: boolean;
   trailingSlash?: boolean;
-  protocol?: 'http' | 'https';
+  protocol?: "http" | "https";
   host?: string;
 }
 
@@ -30,8 +30,8 @@ const DEFAULT_OPTIONS: Required<URLGeneratorOptions> = {
   includeLocale: true,
   absolute: false,
   trailingSlash: false,
-  protocol: 'https',
-  host: '',
+  protocol: "https",
+  host: "",
 };
 
 // hreflang链接接口
@@ -44,13 +44,13 @@ export interface HreflangLink {
 export interface SitemapEntry {
   loc: string;
   changefreq?:
-    | 'always'
-    | 'hourly'
-    | 'daily'
-    | 'weekly'
-    | 'monthly'
-    | 'yearly'
-    | 'never';
+    | "always"
+    | "hourly"
+    | "daily"
+    | "weekly"
+    | "monthly"
+    | "yearly"
+    | "never";
   priority?: number;
   lastmod?: string;
   alternateRefs?: HreflangLink[];
@@ -93,12 +93,12 @@ export class URLGenerator {
     localizedPath: string,
     includeLocale: boolean,
   ): string {
-    let path = '';
+    let path = "";
     // Always include locale prefix when localePrefix: 'always' is configured
     if (includeLocale) {
       path += `/${locale}`;
     }
-    if (localizedPath !== '/' || path === '') {
+    if (localizedPath !== "/" || path === "") {
       path += localizedPath;
     }
     return path;
@@ -108,7 +108,7 @@ export class URLGenerator {
    * Apply trailing slash if needed
    */
   private applyTrailingSlash(path: string, trailingSlash: boolean): string {
-    if (trailingSlash && !path.endsWith('/') && path !== '') {
+    if (trailingSlash && !path.endsWith("/") && path !== "") {
       return `${path}/`;
     }
     return path;
@@ -121,7 +121,7 @@ export class URLGenerator {
     path: string,
     opts: Required<URLGeneratorOptions>,
   ): string {
-    const host = opts.host || this.baseUrl.replace(/^https?:\/\//, '');
+    const host = opts.host || this.baseUrl.replace(/^https?:\/\//, "");
     return `${opts.protocol}://${host}${path}`;
   }
 
@@ -143,7 +143,7 @@ export class URLGenerator {
       return this.buildAbsoluteURL(path, opts);
     }
 
-    return path || '/';
+    return path || "/";
   }
 
   /**
@@ -162,7 +162,7 @@ export class URLGenerator {
    */
   generateLanguageAlternates(
     pageType: PageType,
-  ): Record<Locale | 'x-default', string> {
+  ): Record<Locale | "x-default", string> {
     const alternates: Record<string, string> = {};
 
     this.locales.forEach((locale) => {
@@ -170,12 +170,12 @@ export class URLGenerator {
     });
 
     // x-default 指向默认语言版本
-    alternates['x-default'] = this.generateCanonicalURL(
+    alternates["x-default"] = this.generateCanonicalURL(
       pageType,
       this.defaultLocale,
     );
 
-    return alternates as Record<Locale | 'x-default', string>;
+    return alternates as Record<Locale | "x-default", string>;
   }
 
   /**
@@ -194,7 +194,7 @@ export class URLGenerator {
     // 添加x-default链接（指向默认语言）
     links.push({
       href: this.generateCanonicalURL(pageType, this.defaultLocale),
-      hreflang: 'x-default',
+      hreflang: "x-default",
     });
 
     return links;
@@ -207,7 +207,7 @@ export class URLGenerator {
     pageType: PageType,
     locale: Locale,
     options: {
-      changefreq?: SitemapEntry['changefreq'];
+      changefreq?: SitemapEntry["changefreq"];
       priority?: number;
       lastmod?: string;
     } = {},
@@ -237,11 +237,11 @@ export class URLGenerator {
       this.locales.forEach((locale) => {
         const entry = this.generateSitemapEntry(pageType as PageType, locale, {
           changefreq:
-            pageType === 'home'
+            pageType === "home"
               ? SEO_CONSTANTS.URL_GENERATION.HOME_CHANGEFREQ
               : SEO_CONSTANTS.URL_GENERATION.DEFAULT_CHANGEFREQ,
           priority:
-            pageType === 'home'
+            pageType === "home"
               ? SEO_CONSTANTS.URL_GENERATION.HOME_PAGE_PRIORITY
               : SEO_CONSTANTS.URL_GENERATION.DEFAULT_PAGE_PRIORITY,
         });
@@ -261,11 +261,11 @@ export class URLGenerator {
     isValid: boolean;
   } {
     // 移除协议和域名
-    let path = url.replace(/^https?:\/\/[^/]+/, '');
+    let path = url.replace(/^https?:\/\/[^/]+/, "");
 
     // 移除查询参数和锚点
-    const pathWithoutQuery = path.split('?')[ZERO] || '';
-    path = pathWithoutQuery.split('#')[ZERO] || '';
+    const pathWithoutQuery = path.split("?")[ZERO] || "";
+    path = pathWithoutQuery.split("#")[ZERO] || "";
 
     // 检测语言
     let locale: Locale = this.defaultLocale;
@@ -275,14 +275,14 @@ export class URLGenerator {
     const localeMatch = path.match(/^\/([a-z]{2})(?=\/|$)/);
     if (localeMatch && this.locales.includes(localeMatch[ONE] as Locale)) {
       locale = localeMatch[ONE] as Locale;
-      cleanPath = path.replace(/^\/[a-z]{2}/, '') || '/';
+      cleanPath = path.replace(/^\/[a-z]{2}/, "") || "/";
     }
 
     // 查找页面类型
     let pageType: PageType | null = null;
 
-    if (cleanPath === '/' || cleanPath === '') {
-      pageType = 'home';
+    if (cleanPath === "/" || cleanPath === "") {
+      pageType = "home";
     } else {
       // 查找匹配的页面类型
       for (const [type, paths] of Object.entries(PATHS_CONFIG)) {

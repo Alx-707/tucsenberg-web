@@ -1,11 +1,11 @@
-import { z } from 'zod';
+import { z } from "zod";
 import {
   contactFormSchema,
   type ContactFormData,
-} from '@/lib/form-schema/contact-form-schema';
-import { sanitizePlainText } from '@/lib/security-validation';
-import { CONTACT_FORM_VALIDATION_CONSTANTS } from '@/config/contact-form-config';
-import { COUNT_FIVE, COUNT_TEN, ZERO } from '@/constants';
+} from "@/lib/form-schema/contact-form-schema";
+import { sanitizePlainText } from "@/lib/security-validation";
+import { CONTACT_FORM_VALIDATION_CONSTANTS } from "@/config/contact-form-config";
+import { COUNT_FIVE, COUNT_TEN, ZERO } from "@/constants";
 
 export { contactFormSchema };
 export type { ContactFormData };
@@ -31,19 +31,19 @@ export type ApiResponse = z.infer<typeof apiResponseSchema>;
 export const airtableRecordSchema = z.object({
   id: z.string().optional(),
   fields: z.object({
-    'First Name': z.string(),
-    'Last Name': z.string(),
-    'Email': z.string().email(),
-    'Company': z.string(),
-    'Message': z.string(),
-    'Phone': z.string().optional(),
-    'Subject': z.string().optional(),
-    'Submitted At': z.string(),
-    'Status': z
-      .enum(['New', 'In Progress', 'Completed', 'Archived'])
-      .default('New'),
-    'Source': z.string().default('Website Contact Form'),
-    'Marketing Consent': z.boolean().optional(),
+    "First Name": z.string(),
+    "Last Name": z.string(),
+    Email: z.string().email(),
+    Company: z.string(),
+    Message: z.string(),
+    Phone: z.string().optional(),
+    Subject: z.string().optional(),
+    "Submitted At": z.string(),
+    Status: z
+      .enum(["New", "In Progress", "Completed", "Archived"])
+      .default("New"),
+    Source: z.string().default("Website Contact Form"),
+    "Marketing Consent": z.boolean().optional(),
   }),
   createdTime: z.string().optional(),
 });
@@ -79,7 +79,7 @@ export const emailTemplateDataSchema = z.object({
   website: z
     .string()
     .optional()
-    .refine((value) => !value, 'Website field should be empty'),
+    .refine((value) => !value, "Website field should be empty"),
 });
 
 export type EmailTemplateData = z.infer<typeof emailTemplateDataSchema>;
@@ -116,7 +116,7 @@ export interface FormValidationError {
  * 表单提交状态类型
  * Form submission status types
  */
-export type FormSubmissionStatus = 'idle' | 'submitting' | 'success' | 'error';
+export type FormSubmissionStatus = "idle" | "submitting" | "success" | "error";
 
 /**
  * 验证辅助函数
@@ -130,7 +130,7 @@ export const validationHelpers = {
   isEmailDomainAllowed: (email: string, allowedDomains?: string[]): boolean => {
     if (!allowedDomains || allowedDomains.length === ZERO) return true;
 
-    const parts = email.split('@');
+    const parts = email.split("@");
     const [, rawDomain] = parts;
     const domain = rawDomain?.toLowerCase();
     if (!domain) {
@@ -156,15 +156,15 @@ export const validationHelpers = {
    */
   isSpamContent: (message: string): boolean => {
     const spamKeywords = [
-      'viagra',
-      'casino',
-      'lottery',
-      'winner',
-      'congratulations',
-      'click here',
-      'free money',
-      'make money fast',
-      'work from home',
+      "viagra",
+      "casino",
+      "lottery",
+      "winner",
+      "congratulations",
+      "click here",
+      "free money",
+      "make money fast",
+      "work from home",
     ];
 
     const lowerMessage = message.toLowerCase();
@@ -206,14 +206,14 @@ export const validationConfig = {
 
   // Field requirements
   requiredFields: [
-    'firstName',
-    'lastName',
-    'email',
-    'company',
-    'message',
-    'acceptPrivacy',
+    "firstName",
+    "lastName",
+    "email",
+    "company",
+    "message",
+    "acceptPrivacy",
   ] as const,
-  optionalFields: ['phone', 'subject', 'marketingConsent', 'website'] as const,
+  optionalFields: ["phone", "subject", "marketingConsent", "website"] as const,
 
   // Security settings
   enableHoneypot: true,

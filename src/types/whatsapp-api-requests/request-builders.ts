@@ -3,9 +3,9 @@
  * WhatsApp API Request Builders
  */
 
-import type { SendMessageRequest } from '@/types/whatsapp-api-requests/message-requests';
-import type { ContactData, LocationData } from '@/types/whatsapp-base-types';
-import type { TemplateMessage } from '@/types/whatsapp-template-types';
+import type { SendMessageRequest } from "@/types/whatsapp-api-requests/message-requests";
+import type { ContactData, LocationData } from "@/types/whatsapp-base-types";
+import type { TemplateMessage } from "@/types/whatsapp-template-types";
 
 /**
  * 请求构建器辅助函数
@@ -30,10 +30,10 @@ export const RequestBuilders = {
     }
 
     return {
-      messaging_product: 'whatsapp',
-      recipient_type: 'individual',
+      messaging_product: "whatsapp",
+      recipient_type: "individual",
       to,
-      type: 'text',
+      type: "text",
       text: textPayload,
     };
   },
@@ -47,10 +47,10 @@ export const RequestBuilders = {
     template: TemplateMessage,
   ): SendMessageRequest {
     return {
-      messaging_product: 'whatsapp',
-      recipient_type: 'individual',
+      messaging_product: "whatsapp",
+      recipient_type: "individual",
       to,
-      type: 'template',
+      type: "template",
       template,
     };
   },
@@ -61,42 +61,42 @@ export const RequestBuilders = {
    */
   buildMediaMessage(
     to: string,
-    type: 'image' | 'document' | 'audio' | 'video',
+    type: "image" | "document" | "audio" | "video",
     media: { id?: string; link?: string; caption?: string; filename?: string },
   ): SendMessageRequest {
     // 使用显式分支而不是动态属性，避免 computed property 带来的潜在注入风险，
     // 同时保持与 WhatsApp API 要求一致的 payload 结构。
     switch (type) {
-      case 'image':
+      case "image":
         return {
-          messaging_product: 'whatsapp',
-          recipient_type: 'individual',
+          messaging_product: "whatsapp",
+          recipient_type: "individual",
           to,
-          type: 'image',
+          type: "image",
           image: media,
         } as SendMessageRequest;
-      case 'document':
+      case "document":
         return {
-          messaging_product: 'whatsapp',
-          recipient_type: 'individual',
+          messaging_product: "whatsapp",
+          recipient_type: "individual",
           to,
-          type: 'document',
+          type: "document",
           document: media,
         } as SendMessageRequest;
-      case 'audio':
+      case "audio":
         return {
-          messaging_product: 'whatsapp',
-          recipient_type: 'individual',
+          messaging_product: "whatsapp",
+          recipient_type: "individual",
           to,
-          type: 'audio',
+          type: "audio",
           audio: media,
         } as SendMessageRequest;
-      case 'video':
+      case "video":
         return {
-          messaging_product: 'whatsapp',
-          recipient_type: 'individual',
+          messaging_product: "whatsapp",
+          recipient_type: "individual",
           to,
-          type: 'video',
+          type: "video",
           video: media,
         } as SendMessageRequest;
       default: {
@@ -113,10 +113,10 @@ export const RequestBuilders = {
    */
   buildLocationMessage(to: string, location: LocationData): SendMessageRequest {
     return {
-      messaging_product: 'whatsapp',
-      recipient_type: 'individual',
+      messaging_product: "whatsapp",
+      recipient_type: "individual",
       to,
-      type: 'location',
+      type: "location",
       location,
     };
   },
@@ -130,10 +130,10 @@ export const RequestBuilders = {
     contacts: ContactData[],
   ): SendMessageRequest {
     return {
-      messaging_product: 'whatsapp',
-      recipient_type: 'individual',
+      messaging_product: "whatsapp",
+      recipient_type: "individual",
       to,
-      type: 'contacts',
+      type: "contacts",
       contacts,
     };
   },

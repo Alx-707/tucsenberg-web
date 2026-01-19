@@ -11,10 +11,10 @@
  * UserAgent is NOT used as primary shard (easily spoofed).
  */
 
-import { createHmac } from 'crypto';
-import { NextRequest } from 'next/server';
-import { logger } from '@/lib/logger';
-import { getClientIP } from '@/lib/security/client-ip';
+import { createHmac } from "crypto";
+import { NextRequest } from "next/server";
+import { logger } from "@/lib/logger";
+import { getClientIP } from "@/lib/security/client-ip";
 
 /** Key strategy function signature */
 export type KeyStrategy = (request: NextRequest) => string;
@@ -38,24 +38,24 @@ const MIN_PEPPER_LENGTH = 32;
  */
 function getPepper(): string {
   const currentPepper = process.env.RATE_LIMIT_PEPPER;
-  const isProduction = process.env.NODE_ENV === 'production';
+  const isProduction = process.env.NODE_ENV === "production";
 
   if (!currentPepper) {
     if (isProduction) {
       throw new Error(
-        '[SECURITY] RATE_LIMIT_PEPPER is required in production. ' +
+        "[SECURITY] RATE_LIMIT_PEPPER is required in production. " +
           `Generate with: node -e "console.log(require('crypto').randomBytes(32).toString('hex'))"`,
       );
     }
 
     if (!pepperWarningLogged) {
       logger.warn(
-        '[Rate Limit] RATE_LIMIT_PEPPER not configured. Using default development pepper. ' +
-          'This is insecure - set RATE_LIMIT_PEPPER for production.',
+        "[Rate Limit] RATE_LIMIT_PEPPER not configured. Using default development pepper. " +
+          "This is insecure - set RATE_LIMIT_PEPPER for production.",
       );
       pepperWarningLogged = true;
     }
-    return 'default-dev-pepper-insecure';
+    return "default-dev-pepper-insecure";
   }
 
   // Validate pepper length
@@ -88,9 +88,9 @@ function getPepper(): string {
  */
 export function hmacKey(input: string): string {
   const pepper = getPepper();
-  return createHmac('sha256', pepper)
+  return createHmac("sha256", pepper)
     .update(input)
-    .digest('hex')
+    .digest("hex")
     .slice(0, HMAC_OUTPUT_LENGTH);
 }
 
@@ -112,9 +112,9 @@ export function hmacKeyWithRotation(input: string): string[] {
 
   const previousPepper = process.env.RATE_LIMIT_PEPPER_PREVIOUS;
   if (previousPepper) {
-    const previousKey = createHmac('sha256', previousPepper)
+    const previousKey = createHmac("sha256", previousPepper)
       .update(input)
-      .digest('hex')
+      .digest("hex")
       .slice(0, HMAC_OUTPUT_LENGTH);
     keys.push(previousKey);
   }
@@ -156,7 +156,7 @@ export function getIPKey(request: NextRequest): string {
  */
 export function getSessionPriorityKey(request: NextRequest): string {
   // Check for session cookie (should be server-issued and signed)
-  const sessionCookie = request.cookies.get('session-id');
+  const sessionCookie = request.cookies.get("session-id");
   const sessionValue = sessionCookie?.value;
 
   if (sessionValue && isValidSessionFormat(sessionValue)) {
@@ -189,7 +189,7 @@ export function getSessionPriorityKey(request: NextRequest): string {
  * @returns Rate limit key in format `apikey:{hmacHash}` or `ip:{hmacHash}`
  */
 export function getApiKeyPriorityKey(request: NextRequest): string {
-  const authHeader = request.headers.get('Authorization');
+  const authHeader = request.headers.get("Authorization");
 
   if (authHeader) {
     const bearerMatch = authHeader.match(/^Bearer\s+(.+)$/i);
@@ -222,9 +222,9 @@ function isValidSessionFormat(sessionId: string): boolean {
 
   // Reject obviously invalid values
   if (
-    sessionId === 'undefined' ||
-    sessionId === 'null' ||
-    sessionId === '[object Object]'
+    sessionId === "undefined" ||
+    sessionId === "null" ||
+    sessionId === "[object Object]"
   ) {
     return false;
   }

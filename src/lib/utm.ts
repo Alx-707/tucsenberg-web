@@ -1,4 +1,4 @@
-'use client';
+"use client";
 
 /**
  * UTM Parameter Tracking Utility
@@ -6,7 +6,7 @@
  * Uses first-touch attribution model (only stores if no existing data)
  */
 
-const UTM_STORAGE_KEY = 'marketing_attribution';
+const UTM_STORAGE_KEY = "marketing_attribution";
 
 export interface UtmParams {
   utmSource?: string;
@@ -35,17 +35,17 @@ function sanitizeParam(value: string | null): string | undefined {
 }
 
 export function captureUtmParams(): UtmParams {
-  if (typeof window === 'undefined') return {};
+  if (typeof window === "undefined") return {};
 
   const searchParams = new URLSearchParams(window.location.search);
   const params: UtmParams = {};
 
   // Use explicit property assignment to avoid object injection
-  const utmSource = sanitizeParam(searchParams.get('utm_source'));
-  const utmMedium = sanitizeParam(searchParams.get('utm_medium'));
-  const utmCampaign = sanitizeParam(searchParams.get('utm_campaign'));
-  const utmTerm = sanitizeParam(searchParams.get('utm_term'));
-  const utmContent = sanitizeParam(searchParams.get('utm_content'));
+  const utmSource = sanitizeParam(searchParams.get("utm_source"));
+  const utmMedium = sanitizeParam(searchParams.get("utm_medium"));
+  const utmCampaign = sanitizeParam(searchParams.get("utm_campaign"));
+  const utmTerm = sanitizeParam(searchParams.get("utm_term"));
+  const utmContent = sanitizeParam(searchParams.get("utm_content"));
 
   if (utmSource) params.utmSource = utmSource;
   if (utmMedium) params.utmMedium = utmMedium;
@@ -57,15 +57,15 @@ export function captureUtmParams(): UtmParams {
 }
 
 export function captureClickIds(): ClickIds {
-  if (typeof window === 'undefined') return {};
+  if (typeof window === "undefined") return {};
 
   const searchParams = new URLSearchParams(window.location.search);
   const ids: ClickIds = {};
 
   // Use explicit property assignment to avoid object injection
-  const gclid = sanitizeParam(searchParams.get('gclid'));
-  const fbclid = sanitizeParam(searchParams.get('fbclid'));
-  const msclkid = sanitizeParam(searchParams.get('msclkid'));
+  const gclid = sanitizeParam(searchParams.get("gclid"));
+  const fbclid = sanitizeParam(searchParams.get("fbclid"));
+  const msclkid = sanitizeParam(searchParams.get("msclkid"));
 
   if (gclid) ids.gclid = gclid;
   if (fbclid) ids.fbclid = fbclid;
@@ -75,7 +75,7 @@ export function captureClickIds(): ClickIds {
 }
 
 export function storeAttributionData(): void {
-  if (typeof window === 'undefined') return;
+  if (typeof window === "undefined") return;
 
   // First-touch: only store if no existing data
   const existing = sessionStorage.getItem(UTM_STORAGE_KEY);
@@ -104,7 +104,7 @@ export function storeAttributionData(): void {
 }
 
 export function getAttributionSnapshot(): AttributionData {
-  if (typeof window === 'undefined') return {};
+  if (typeof window === "undefined") return {};
 
   try {
     const stored = sessionStorage.getItem(UTM_STORAGE_KEY);
@@ -128,17 +128,17 @@ export function appendAttributionToFormData(formData: FormData): void {
   const attribution = getAttributionSnapshot();
 
   if (attribution.utmSource)
-    formData.append('utmSource', attribution.utmSource);
+    formData.append("utmSource", attribution.utmSource);
   if (attribution.utmMedium)
-    formData.append('utmMedium', attribution.utmMedium);
+    formData.append("utmMedium", attribution.utmMedium);
   if (attribution.utmCampaign)
-    formData.append('utmCampaign', attribution.utmCampaign);
-  if (attribution.utmTerm) formData.append('utmTerm', attribution.utmTerm);
+    formData.append("utmCampaign", attribution.utmCampaign);
+  if (attribution.utmTerm) formData.append("utmTerm", attribution.utmTerm);
   if (attribution.utmContent)
-    formData.append('utmContent', attribution.utmContent);
-  if (attribution.gclid) formData.append('gclid', attribution.gclid);
-  if (attribution.fbclid) formData.append('fbclid', attribution.fbclid);
-  if (attribution.msclkid) formData.append('msclkid', attribution.msclkid);
+    formData.append("utmContent", attribution.utmContent);
+  if (attribution.gclid) formData.append("gclid", attribution.gclid);
+  if (attribution.fbclid) formData.append("fbclid", attribution.fbclid);
+  if (attribution.msclkid) formData.append("msclkid", attribution.msclkid);
 }
 
 export function getAttributionAsObject(): Record<string, string> {

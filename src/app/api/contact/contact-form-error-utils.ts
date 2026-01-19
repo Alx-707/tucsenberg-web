@@ -1,22 +1,22 @@
-import type { ZodIssue } from 'zod';
+import type { ZodIssue } from "zod";
 
 const FIELD_ERROR_KEY_PREFIX = new Map<string, string>([
-  ['firstName', 'errors.firstName'],
-  ['lastName', 'errors.lastName'],
-  ['email', 'errors.email'],
-  ['company', 'errors.company'],
-  ['message', 'errors.message'],
-  ['phone', 'errors.phone'],
-  ['subject', 'errors.subject'],
-  ['acceptPrivacy', 'errors.acceptPrivacy'],
-  ['website', 'errors.website'],
+  ["firstName", "errors.firstName"],
+  ["lastName", "errors.lastName"],
+  ["email", "errors.email"],
+  ["company", "errors.company"],
+  ["message", "errors.message"],
+  ["phone", "errors.phone"],
+  ["subject", "errors.subject"],
+  ["acceptPrivacy", "errors.acceptPrivacy"],
+  ["website", "errors.website"],
 ]);
 
-const FALLBACK_ERROR_KEY = 'errors.generic';
+const FALLBACK_ERROR_KEY = "errors.generic";
 
 function getBaseErrorKey(issue: ZodIssue): string {
   const [rawField] = issue.path;
-  if (typeof rawField !== 'string') {
+  if (typeof rawField !== "string") {
     return FALLBACK_ERROR_KEY;
   }
 
@@ -25,28 +25,28 @@ function getBaseErrorKey(issue: ZodIssue): string {
 
 function isRequiredMinimum(issue: ZodIssue): boolean {
   return (
-    'minimum' in issue &&
-    typeof issue.minimum === 'number' &&
+    "minimum" in issue &&
+    typeof issue.minimum === "number" &&
     issue.minimum <= 1
   );
 }
 
 function handleCustomIssue(baseKey: string, issue: ZodIssue): string {
-  const message = issue.message?.toLowerCase?.() ?? '';
+  const message = issue.message?.toLowerCase?.() ?? "";
 
-  if (baseKey === 'errors.acceptPrivacy') {
+  if (baseKey === "errors.acceptPrivacy") {
     return `${baseKey}.required`;
   }
 
-  if (baseKey === 'errors.subject') {
+  if (baseKey === "errors.subject") {
     return `${baseKey}.length`;
   }
 
-  if (baseKey === 'errors.phone') {
+  if (baseKey === "errors.phone") {
     return `${baseKey}.invalid`;
   }
 
-  if (baseKey === 'errors.email' && message.includes('domain')) {
+  if (baseKey === "errors.email" && message.includes("domain")) {
     return `${baseKey}.domainNotAllowed`;
   }
 
@@ -57,24 +57,24 @@ function handleCustomIssue(baseKey: string, issue: ZodIssue): string {
 
 export function mapZodIssueToErrorKey(issue: ZodIssue): string {
   const baseKey = getBaseErrorKey(issue);
-  const message = issue.message?.toLowerCase?.() ?? '';
+  const message = issue.message?.toLowerCase?.() ?? "";
 
-  if (message.includes('required')) {
+  if (message.includes("required")) {
     return `${baseKey}.required`;
   }
 
   switch (issue.code) {
-    case 'too_small':
+    case "too_small":
       return isRequiredMinimum(issue)
         ? `${baseKey}.required`
         : `${baseKey}.tooShort`;
-    case 'too_big':
-      return baseKey === 'errors.website'
+    case "too_big":
+      return baseKey === "errors.website"
         ? `${baseKey}.shouldBeEmpty`
         : `${baseKey}.tooLong`;
-    case 'custom':
+    case "custom":
       return handleCustomIssue(baseKey, issue);
-    case 'invalid_type':
+    case "invalid_type":
       return `${baseKey}.invalid`;
     default:
       return handleCustomIssue(baseKey, issue);

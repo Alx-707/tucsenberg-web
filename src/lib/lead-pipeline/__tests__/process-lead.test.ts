@@ -3,12 +3,12 @@
  * Tests for the main lead processing function
  */
 
-import { beforeEach, describe, expect, it, vi } from 'vitest';
-import { CONTACT_SUBJECTS, LEAD_TYPES } from '../lead-schema';
-import { processLead } from '../process-lead';
+import { beforeEach, describe, expect, it, vi } from "vitest";
+import { CONTACT_SUBJECTS, LEAD_TYPES } from "../lead-schema";
+import { processLead } from "../process-lead";
 
 // Ensure real Zod is used
-vi.unmock('zod');
+vi.unmock("zod");
 
 // Hoist mock functions for dynamic import compatibility
 const mockSendContactFormEmail = vi.hoisted(() => vi.fn());
@@ -16,50 +16,50 @@ const mockSendProductInquiryEmail = vi.hoisted(() => vi.fn());
 const mockCreateLead = vi.hoisted(() => vi.fn());
 
 // Mock external services with hoisted functions
-vi.mock('@/lib/resend', () => ({
+vi.mock("@/lib/resend", () => ({
   resendService: {
     sendContactFormEmail: mockSendContactFormEmail,
     sendProductInquiryEmail: mockSendProductInquiryEmail,
   },
 }));
 
-vi.mock('@/lib/airtable', () => ({
+vi.mock("@/lib/airtable", () => ({
   airtableService: {
     createLead: mockCreateLead,
   },
 }));
 
-vi.mock('@/lib/logger', () => ({
+vi.mock("@/lib/logger", () => ({
   logger: {
     info: vi.fn(),
     warn: vi.fn(),
     error: vi.fn(),
   },
   sanitizeEmail: (email: string | undefined | null) =>
-    email ? '[REDACTED_EMAIL]' : '[NO_EMAIL]',
+    email ? "[REDACTED_EMAIL]" : "[NO_EMAIL]",
   sanitizeIP: (ip: string | undefined | null) =>
-    ip ? '[REDACTED_IP]' : '[NO_IP]',
+    ip ? "[REDACTED_IP]" : "[NO_IP]",
   sanitizeCompany: (company: string | undefined | null) =>
-    company ? '[REDACTED]' : '[NO_COMPANY]',
+    company ? "[REDACTED]" : "[NO_COMPANY]",
 }));
 
-describe('processLead', () => {
+describe("processLead", () => {
   beforeEach(() => {
     vi.clearAllMocks();
   });
 
-  describe('Validation', () => {
-    it('should return VALIDATION_ERROR for invalid input', async () => {
-      const invalidInput = { type: 'invalid' };
+  describe("Validation", () => {
+    it("should return VALIDATION_ERROR for invalid input", async () => {
+      const invalidInput = { type: "invalid" };
       const result = await processLead(invalidInput);
 
       expect(result.success).toBe(false);
-      expect(result.error).toBe('VALIDATION_ERROR');
+      expect(result.error).toBe("VALIDATION_ERROR");
       expect(result.emailSent).toBe(false);
       expect(result.recordCreated).toBe(false);
     });
 
-    it('should return VALIDATION_ERROR for missing required fields', async () => {
+    it("should return VALIDATION_ERROR for missing required fields", async () => {
       const missingFields = {
         type: LEAD_TYPES.CONTACT,
         // Missing fullName, email, subject, message, turnstileToken
@@ -67,40 +67,40 @@ describe('processLead', () => {
       const result = await processLead(missingFields);
 
       expect(result.success).toBe(false);
-      expect(result.error).toBe('VALIDATION_ERROR');
+      expect(result.error).toBe("VALIDATION_ERROR");
     });
 
-    it('should return VALIDATION_ERROR for invalid email', async () => {
+    it("should return VALIDATION_ERROR for invalid email", async () => {
       const invalidEmail = {
         type: LEAD_TYPES.CONTACT,
-        fullName: 'John Doe',
-        email: 'not-an-email',
+        fullName: "John Doe",
+        email: "not-an-email",
         subject: CONTACT_SUBJECTS.OTHER,
-        message: 'Test message with enough characters.',
-        turnstileToken: 'token',
+        message: "Test message with enough characters.",
+        turnstileToken: "token",
       };
       const result = await processLead(invalidEmail);
 
       expect(result.success).toBe(false);
-      expect(result.error).toBe('VALIDATION_ERROR');
+      expect(result.error).toBe("VALIDATION_ERROR");
     });
   });
 
-  describe('Contact Lead Processing', () => {
+  describe("Contact Lead Processing", () => {
     const validContactLead = {
       type: LEAD_TYPES.CONTACT,
-      fullName: 'John Doe',
-      email: 'john@example.com',
+      fullName: "John Doe",
+      email: "john@example.com",
       subject: CONTACT_SUBJECTS.PRODUCT_INQUIRY,
-      message: 'This is a test message with enough characters.',
-      turnstileToken: 'valid-token',
-      company: 'Test Company',
+      message: "This is a test message with enough characters.",
+      turnstileToken: "valid-token",
+      company: "Test Company",
       marketingConsent: true,
     };
 
-    it('should process contact lead successfully when both services succeed', async () => {
-      mockSendContactFormEmail.mockResolvedValue('email-id-123');
-      mockCreateLead.mockResolvedValue({ id: 'record-123' });
+    it("should process contact lead successfully when both services succeed", async () => {
+      mockSendContactFormEmail.mockResolvedValue("email-id-123");
+      mockCreateLead.mockResolvedValue({ id: "record-123" });
 
       const result = await processLead(validContactLead);
 
@@ -108,12 +108,12 @@ describe('processLead', () => {
       expect(result.emailSent).toBe(true);
       expect(result.recordCreated).toBe(true);
       expect(result.referenceId).toBeDefined();
-      expect(result.referenceId?.startsWith('CON-')).toBe(true);
+      expect(result.referenceId?.startsWith("CON-")).toBe(true);
     });
 
-    it('should succeed when only email succeeds', async () => {
-      mockSendContactFormEmail.mockResolvedValue('email-id-123');
-      mockCreateLead.mockRejectedValue(new Error('CRM failed'));
+    it("should succeed when only email succeeds", async () => {
+      mockSendContactFormEmail.mockResolvedValue("email-id-123");
+      mockCreateLead.mockRejectedValue(new Error("CRM failed"));
 
       const result = await processLead(validContactLead);
 
@@ -122,9 +122,9 @@ describe('processLead', () => {
       expect(result.recordCreated).toBe(false);
     });
 
-    it('should succeed when only CRM succeeds', async () => {
-      mockSendContactFormEmail.mockRejectedValue(new Error('Email failed'));
-      mockCreateLead.mockResolvedValue({ id: 'record-123' });
+    it("should succeed when only CRM succeeds", async () => {
+      mockSendContactFormEmail.mockRejectedValue(new Error("Email failed"));
+      mockCreateLead.mockResolvedValue({ id: "record-123" });
 
       const result = await processLead(validContactLead);
 
@@ -133,63 +133,63 @@ describe('processLead', () => {
       expect(result.recordCreated).toBe(true);
     });
 
-    it('should fail when both services fail', async () => {
-      mockSendContactFormEmail.mockRejectedValue(new Error('Email failed'));
-      mockCreateLead.mockRejectedValue(new Error('CRM failed'));
+    it("should fail when both services fail", async () => {
+      mockSendContactFormEmail.mockRejectedValue(new Error("Email failed"));
+      mockCreateLead.mockRejectedValue(new Error("CRM failed"));
 
       const result = await processLead(validContactLead);
 
       expect(result.success).toBe(false);
       expect(result.emailSent).toBe(false);
       expect(result.recordCreated).toBe(false);
-      expect(result.error).toBe('PROCESSING_FAILED');
+      expect(result.error).toBe("PROCESSING_FAILED");
     });
 
-    it('should split fullName correctly', async () => {
-      mockSendContactFormEmail.mockResolvedValue('email-id');
-      mockCreateLead.mockResolvedValue({ id: 'rec-id' });
+    it("should split fullName correctly", async () => {
+      mockSendContactFormEmail.mockResolvedValue("email-id");
+      mockCreateLead.mockResolvedValue({ id: "rec-id" });
 
       await processLead(validContactLead);
 
       expect(mockSendContactFormEmail).toHaveBeenCalledWith(
         expect.objectContaining({
-          firstName: 'John',
-          lastName: 'Doe',
+          firstName: "John",
+          lastName: "Doe",
         }),
       );
     });
   });
 
-  describe('Product Lead Processing', () => {
+  describe("Product Lead Processing", () => {
     const validProductLead = {
       type: LEAD_TYPES.PRODUCT,
-      fullName: 'Jane Smith',
-      email: 'jane@example.com',
-      productSlug: 'industrial-pump-x100',
-      productName: 'Industrial Pump X100',
-      quantity: '500 units',
-      company: 'Manufacturing Corp',
-      requirements: 'Custom packaging needed',
+      fullName: "Jane Smith",
+      email: "jane@example.com",
+      productSlug: "industrial-pump-x100",
+      productName: "Industrial Pump X100",
+      quantity: "500 units",
+      company: "Manufacturing Corp",
+      requirements: "Custom packaging needed",
     };
 
-    it('should process product lead successfully', async () => {
-      const { resendService } = await import('@/lib/resend');
-      const { airtableService } = await import('@/lib/airtable');
+    it("should process product lead successfully", async () => {
+      const { resendService } = await import("@/lib/resend");
+      const { airtableService } = await import("@/lib/airtable");
 
       vi.mocked(resendService.sendProductInquiryEmail).mockResolvedValue(
-        'email-id-456',
+        "email-id-456",
       );
       vi.mocked(airtableService.createLead).mockResolvedValue({
-        id: 'record-456',
+        id: "record-456",
         fields: {
-          'First Name': 'Test',
-          'Last Name': 'User',
-          'Email': 'test@example.com',
-          'Company': 'Manufacturing Corp',
-          'Message': 'Product inquiry',
-          'Submitted At': new Date().toISOString(),
-          'Status': 'New',
-          'Source': 'Product Inquiry Form',
+          "First Name": "Test",
+          "Last Name": "User",
+          Email: "test@example.com",
+          Company: "Manufacturing Corp",
+          Message: "Product inquiry",
+          "Submitted At": new Date().toISOString(),
+          Status: "New",
+          Source: "Product Inquiry Form",
         },
       });
 
@@ -198,25 +198,25 @@ describe('processLead', () => {
       expect(result.success).toBe(true);
       expect(result.emailSent).toBe(true);
       expect(result.recordCreated).toBe(true);
-      expect(result.referenceId?.startsWith('PRO-')).toBe(true);
+      expect(result.referenceId?.startsWith("PRO-")).toBe(true);
     });
 
-    it('should call correct email service method', async () => {
-      const { resendService } = await import('@/lib/resend');
-      const { airtableService } = await import('@/lib/airtable');
+    it("should call correct email service method", async () => {
+      const { resendService } = await import("@/lib/resend");
+      const { airtableService } = await import("@/lib/airtable");
 
-      vi.mocked(resendService.sendProductInquiryEmail).mockResolvedValue('id');
+      vi.mocked(resendService.sendProductInquiryEmail).mockResolvedValue("id");
       vi.mocked(airtableService.createLead).mockResolvedValue({
-        id: 'rec',
+        id: "rec",
         fields: {
-          'First Name': 'Test',
-          'Last Name': 'User',
-          'Email': 'test@example.com',
-          'Company': 'Test Co',
-          'Message': 'Test',
-          'Submitted At': new Date().toISOString(),
-          'Status': 'New',
-          'Source': 'Product Inquiry Form',
+          "First Name": "Test",
+          "Last Name": "User",
+          Email: "test@example.com",
+          Company: "Test Co",
+          Message: "Test",
+          "Submitted At": new Date().toISOString(),
+          Status: "New",
+          Source: "Product Inquiry Form",
         },
       });
 
@@ -224,34 +224,34 @@ describe('processLead', () => {
 
       expect(resendService.sendProductInquiryEmail).toHaveBeenCalledWith(
         expect.objectContaining({
-          productName: 'Industrial Pump X100',
-          productSlug: 'industrial-pump-x100',
-          quantity: '500 units',
+          productName: "Industrial Pump X100",
+          productSlug: "industrial-pump-x100",
+          quantity: "500 units",
         }),
       );
     });
   });
 
-  describe('Newsletter Lead Processing', () => {
+  describe("Newsletter Lead Processing", () => {
     const validNewsletterLead = {
       type: LEAD_TYPES.NEWSLETTER,
-      email: 'subscriber@example.com',
+      email: "subscriber@example.com",
     };
 
-    it('should process newsletter lead successfully', async () => {
-      const { airtableService } = await import('@/lib/airtable');
+    it("should process newsletter lead successfully", async () => {
+      const { airtableService } = await import("@/lib/airtable");
 
       vi.mocked(airtableService.createLead).mockResolvedValue({
-        id: 'record-789',
+        id: "record-789",
         fields: {
-          'First Name': 'Subscriber',
-          'Last Name': '',
-          'Email': 'subscriber@example.com',
-          'Company': '',
-          'Message': 'Newsletter subscription',
-          'Submitted At': new Date().toISOString(),
-          'Status': 'New',
-          'Source': 'Newsletter Signup',
+          "First Name": "Subscriber",
+          "Last Name": "",
+          Email: "subscriber@example.com",
+          Company: "",
+          Message: "Newsletter subscription",
+          "Submitted At": new Date().toISOString(),
+          Status: "New",
+          Source: "Newsletter Signup",
         },
       });
 
@@ -260,24 +260,24 @@ describe('processLead', () => {
       expect(result.success).toBe(true);
       expect(result.emailSent).toBe(false); // Newsletter has no email operation
       expect(result.recordCreated).toBe(true);
-      expect(result.referenceId?.startsWith('NEW-')).toBe(true);
+      expect(result.referenceId?.startsWith("NEW-")).toBe(true);
     });
 
-    it('should not call email service for newsletter', async () => {
-      const { resendService } = await import('@/lib/resend');
-      const { airtableService } = await import('@/lib/airtable');
+    it("should not call email service for newsletter", async () => {
+      const { resendService } = await import("@/lib/resend");
+      const { airtableService } = await import("@/lib/airtable");
 
       vi.mocked(airtableService.createLead).mockResolvedValue({
-        id: 'rec',
+        id: "rec",
         fields: {
-          'First Name': 'Subscriber',
-          'Last Name': '',
-          'Email': 'subscriber@example.com',
-          'Company': '',
-          'Message': 'Newsletter',
-          'Submitted At': new Date().toISOString(),
-          'Status': 'New',
-          'Source': 'Newsletter Signup',
+          "First Name": "Subscriber",
+          "Last Name": "",
+          Email: "subscriber@example.com",
+          Company: "",
+          Message: "Newsletter",
+          "Submitted At": new Date().toISOString(),
+          Status: "New",
+          Source: "Newsletter Signup",
         },
       });
 
@@ -287,8 +287,8 @@ describe('processLead', () => {
       expect(resendService.sendProductInquiryEmail).not.toHaveBeenCalled();
     });
 
-    it('should fail when CRM fails for newsletter (no email fallback)', async () => {
-      mockCreateLead.mockRejectedValue(new Error('CRM failed'));
+    it("should fail when CRM fails for newsletter (no email fallback)", async () => {
+      mockCreateLead.mockRejectedValue(new Error("CRM failed"));
 
       const result = await processLead(validNewsletterLead);
 
@@ -296,7 +296,7 @@ describe('processLead', () => {
       expect(result.success).toBe(false);
       expect(result.emailSent).toBe(false);
       expect(result.recordCreated).toBe(false);
-      expect(result.error).toBe('PROCESSING_FAILED');
+      expect(result.error).toBe("PROCESSING_FAILED");
     });
   });
 });

@@ -14,15 +14,15 @@ import {
   MAGIC_64,
   SECONDS_PER_MINUTE,
   ZERO,
-} from '@/constants';
-import { MAGIC_6 } from '@/constants/count';
+} from "@/constants";
+import { MAGIC_6 } from "@/constants/count";
 
 const getCrypto = (): Crypto | null => {
-  if (typeof globalThis === 'undefined') {
+  if (typeof globalThis === "undefined") {
     return null;
   }
   const candidate = (globalThis as { crypto?: Crypto }).crypto;
-  if (candidate && typeof candidate.getRandomValues === 'function') {
+  if (candidate && typeof candidate.getRandomValues === "function") {
     return candidate;
   }
   return null;
@@ -36,13 +36,13 @@ function secureRandomBytes(length: number): Uint8Array {
     return array;
   }
 
-  throw new Error('Secure random generator unavailable');
+  throw new Error("Secure random generator unavailable");
 }
 
 function secureRandomUUID(): string {
   if (
-    typeof crypto !== 'undefined' &&
-    typeof crypto.randomUUID === 'function'
+    typeof crypto !== "undefined" &&
+    typeof crypto.randomUUID === "function"
   ) {
     return crypto.randomUUID();
   }
@@ -56,8 +56,8 @@ function secureRandomUUID(): string {
   dv.setUint8(MAGIC_8, (b8 & HEX_MASK_6_BITS) | HEX_MASK_HIGH_BIT);
 
   const hex = Array.from(array, (byte) =>
-    byte.toString(MAGIC_16).padStart(COUNT_PAIR, '0'),
-  ).join('');
+    byte.toString(MAGIC_16).padStart(COUNT_PAIR, "0"),
+  ).join("");
 
   return [
     hex.substring(ZERO, MAGIC_8),
@@ -65,7 +65,7 @@ function secureRandomUUID(): string {
     hex.substring(MAGIC_12, MAGIC_16),
     hex.substring(MAGIC_16, MAGIC_20),
     hex.substring(MAGIC_20, MAGIC_32),
-  ].join('-');
+  ].join("-");
 }
 
 /**
@@ -96,8 +96,8 @@ export function generateSecureToken(
   const hex = Array.from(array, (byte) =>
     byte
       .toString(TOKEN_CONSTANTS.HEX_BASE)
-      .padStart(TOKEN_CONSTANTS.HEX_PAD_LENGTH, '0'),
-  ).join('');
+      .padStart(TOKEN_CONSTANTS.HEX_PAD_LENGTH, "0"),
+  ).join("");
   return hex.substring(ZERO, length);
 }
 
@@ -111,7 +111,7 @@ export function generateUUID(): string {
 /**
  * Generate a secure random API key
  */
-export function generateApiKey(prefix: string = 'sk'): string {
+export function generateApiKey(prefix: string = "sk"): string {
   const randomPart = generateSecureToken(MAGIC_48);
   return `${prefix}_${randomPart}`;
 }
@@ -136,7 +136,7 @@ export function generateCsrfToken(): string {
  * Re-exported from @/config/security to maintain single source of truth.
  * @see src/config/security.ts for implementation details
  */
-export { generateNonce } from '@/config/security';
+export { generateNonce } from "@/config/security";
 
 /**
  * Validate CSP nonce format
@@ -144,14 +144,14 @@ export { generateNonce } from '@/config/security';
  * Re-exported from @/config/security for consistent validation.
  * @see src/config/security.ts for implementation details
  */
-export { isValidNonce } from '@/config/security';
+export { isValidNonce } from "@/config/security";
 
 /**
  * Generate a secure one-time password (OTP)
  */
 export function generateOTP(length: number = MAGIC_6): string {
-  const digits = '0123456789';
-  let result = '';
+  const digits = "0123456789";
+  let result = "";
 
   const array = secureRandomBytes(length);
   const dv = new DataView(array.buffer);
@@ -167,8 +167,8 @@ export function generateOTP(length: number = MAGIC_6): string {
  * Generate a secure verification code (alphanumeric)
  */
 export function generateVerificationCode(length: number = MAGIC_8): string {
-  const chars = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789';
-  let result = '';
+  const chars = "ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789";
+  let result = "";
 
   const array = secureRandomBytes(length);
   const dv = new DataView(array.buffer);
@@ -184,7 +184,7 @@ export function generateVerificationCode(length: number = MAGIC_8): string {
  * Validate token format
  */
 export function isValidToken(token: string, expectedLength?: number): boolean {
-  if (typeof token !== 'string' || token.length === ZERO) {
+  if (typeof token !== "string" || token.length === ZERO) {
     return false;
   }
 

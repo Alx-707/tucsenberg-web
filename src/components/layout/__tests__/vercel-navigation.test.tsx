@@ -2,10 +2,10 @@
  * @vitest-environment jsdom
  * Tests for VercelNavigation component
  */
-import React from 'react';
-import { act, fireEvent, render, screen } from '@testing-library/react';
-import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
-import { VercelNavigation } from '../vercel-navigation';
+import React from "react";
+import { act, fireEvent, render, screen } from "@testing-library/react";
+import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
+import { VercelNavigation } from "../vercel-navigation";
 
 // Mock hoisted variables
 const { mockUseTranslations } = vi.hoisted(() => ({
@@ -13,12 +13,12 @@ const { mockUseTranslations } = vi.hoisted(() => ({
 }));
 
 // Mock next-intl
-vi.mock('next-intl', () => ({
+vi.mock("next-intl", () => ({
   useTranslations: mockUseTranslations,
 }));
 
 // Mock i18n Link
-vi.mock('@/i18n/routing', () => ({
+vi.mock("@/i18n/routing", () => ({
   Link: ({
     href,
     children,
@@ -31,67 +31,67 @@ vi.mock('@/i18n/routing', () => ({
     <a
       href={href}
       className={className}
-      data-testid={`nav-link-${href.replace(/\//g, '-').replace(/^-/, '')}`}
+      data-testid={`nav-link-${href.replace(/\//g, "-").replace(/^-/, "")}`}
     >
       {children}
     </a>
   ),
   routing: {
     pathnames: {
-      '/': '/',
-      '/products': '/products',
-      '/blog': '/blog',
-      '/faq': '/faq',
-      '/about': '/about',
-      '/privacy': '/privacy',
+      "/": "/",
+      "/products": "/products",
+      "/blog": "/blog",
+      "/faq": "/faq",
+      "/about": "/about",
+      "/privacy": "/privacy",
     },
   },
 }));
 
 // Mock navigation data
-vi.mock('@/lib/navigation', () => ({
+vi.mock("@/lib/navigation", () => ({
   mainNavigation: [
     {
-      key: 'home',
-      href: '/',
-      translationKey: 'navigation.home',
+      key: "home",
+      href: "/",
+      translationKey: "navigation.home",
     },
     {
-      key: 'products',
-      href: '/products',
-      translationKey: 'navigation.products',
+      key: "products",
+      href: "/products",
+      translationKey: "navigation.products",
       children: [
         {
-          key: 'solutions',
-          href: '/products/solutions',
-          translationKey: 'navigation.solutions',
+          key: "solutions",
+          href: "/products/solutions",
+          translationKey: "navigation.solutions",
         },
         {
-          key: 'enterprise',
-          href: '/products/enterprise',
-          translationKey: 'navigation.enterprise',
+          key: "enterprise",
+          href: "/products/enterprise",
+          translationKey: "navigation.enterprise",
         },
       ],
     },
     {
-      key: 'blog',
-      href: '/blog',
-      translationKey: 'navigation.blog',
+      key: "blog",
+      href: "/blog",
+      translationKey: "navigation.blog",
     },
   ],
   NAVIGATION_ARIA: {
-    mainNav: 'Main navigation',
-    mobileMenuButton: 'Toggle mobile menu',
+    mainNav: "Main navigation",
+    mobileMenuButton: "Toggle mobile menu",
   },
 }));
 
 // Mock NavigationMenu components
-vi.mock('@/components/ui/navigation-menu', () => ({
+vi.mock("@/components/ui/navigation-menu", () => ({
   NavigationMenu: ({ children }: { children: React.ReactNode }) => (
-    <div data-testid='navigation-menu'>{children}</div>
+    <div data-testid="navigation-menu">{children}</div>
   ),
   NavigationMenuContent: ({ children }: { children: React.ReactNode }) => (
-    <div data-testid='navigation-menu-content'>{children}</div>
+    <div data-testid="navigation-menu-content">{children}</div>
   ),
   NavigationMenuItem: ({
     children,
@@ -103,7 +103,7 @@ vi.mock('@/components/ui/navigation-menu', () => ({
     onMouseLeave?: () => void;
   }) => (
     <div
-      data-testid='navigation-menu-item'
+      data-testid="navigation-menu-item"
       onMouseEnter={onMouseEnter}
       onMouseLeave={onMouseLeave}
     >
@@ -117,29 +117,26 @@ vi.mock('@/components/ui/navigation-menu', () => ({
     children: React.ReactNode;
     asChild?: boolean;
   }) => (
-    <div
-      data-testid='navigation-menu-link'
-      data-as-child={String(asChild)}
-    >
+    <div data-testid="navigation-menu-link" data-as-child={String(asChild)}>
       {children}
     </div>
   ),
   NavigationMenuList: ({ children }: { children: React.ReactNode }) => (
-    <div data-testid='navigation-menu-list'>{children}</div>
+    <div data-testid="navigation-menu-list">{children}</div>
   ),
   NavigationMenuTrigger: ({
     children,
     onClick,
     className,
-    'aria-expanded': ariaExpanded,
+    "aria-expanded": ariaExpanded,
   }: {
-    'children': React.ReactNode;
-    'onClick'?: () => void;
-    'className'?: string;
-    'aria-expanded'?: boolean;
+    children: React.ReactNode;
+    onClick?: () => void;
+    className?: string;
+    "aria-expanded"?: boolean;
   }) => (
     <button
-      data-testid='navigation-menu-trigger'
+      data-testid="navigation-menu-trigger"
       onClick={onClick}
       className={className}
       aria-expanded={ariaExpanded}
@@ -150,7 +147,7 @@ vi.mock('@/components/ui/navigation-menu', () => ({
 }));
 
 // Mock DropdownContent
-vi.mock('../vercel-dropdown-content', () => ({
+vi.mock("../vercel-dropdown-content", () => ({
   DropdownContent: ({
     items,
     t,
@@ -158,12 +155,9 @@ vi.mock('../vercel-dropdown-content', () => ({
     items: Array<{ key: string; translationKey: string }>;
     t: (key: string) => string;
   }) => (
-    <div data-testid='dropdown-content'>
+    <div data-testid="dropdown-content">
       {items.map((item) => (
-        <span
-          key={item.key}
-          data-testid={`dropdown-item-${item.key}`}
-        >
+        <span key={item.key} data-testid={`dropdown-item-${item.key}`}>
           {t(item.translationKey)}
         </span>
       ))}
@@ -174,20 +168,20 @@ vi.mock('../vercel-dropdown-content', () => ({
 // Translation mock helper
 function createTranslationMock() {
   const translations: Record<string, string> = {
-    'navigation.home': 'Home',
-    'navigation.products': 'Products',
-    'navigation.solutions': 'Solutions',
-    'navigation.enterprise': 'Enterprise',
-    'navigation.blog': 'Blog',
-    'navigation.faq': 'FAQ',
-    'navigation.about': 'About',
-    'navigation.privacy': 'Privacy',
+    "navigation.home": "Home",
+    "navigation.products": "Products",
+    "navigation.solutions": "Solutions",
+    "navigation.enterprise": "Enterprise",
+    "navigation.blog": "Blog",
+    "navigation.faq": "FAQ",
+    "navigation.about": "About",
+    "navigation.privacy": "Privacy",
   };
 
   return (key: string) => translations[key] ?? key;
 }
 
-describe('VercelNavigation', () => {
+describe("VercelNavigation", () => {
   beforeEach(() => {
     vi.useFakeTimers();
     mockUseTranslations.mockReturnValue(createTranslationMock());
@@ -198,115 +192,115 @@ describe('VercelNavigation', () => {
     vi.clearAllMocks();
   });
 
-  describe('basic rendering', () => {
-    it('renders navigation element with aria-label', () => {
+  describe("basic rendering", () => {
+    it("renders navigation element with aria-label", () => {
       render(<VercelNavigation />);
 
-      const nav = screen.getByRole('navigation');
-      expect(nav).toHaveAttribute('aria-label', 'Main navigation');
+      const nav = screen.getByRole("navigation");
+      expect(nav).toHaveAttribute("aria-label", "Main navigation");
     });
 
-    it('renders NavigationMenu component', () => {
+    it("renders NavigationMenu component", () => {
       render(<VercelNavigation />);
 
-      expect(screen.getByTestId('navigation-menu')).toBeInTheDocument();
+      expect(screen.getByTestId("navigation-menu")).toBeInTheDocument();
     });
 
-    it('renders NavigationMenuList', () => {
+    it("renders NavigationMenuList", () => {
       render(<VercelNavigation />);
 
-      expect(screen.getByTestId('navigation-menu-list')).toBeInTheDocument();
+      expect(screen.getByTestId("navigation-menu-list")).toBeInTheDocument();
     });
 
-    it('renders all navigation items', () => {
+    it("renders all navigation items", () => {
       render(<VercelNavigation />);
 
-      const items = screen.getAllByTestId('navigation-menu-item');
+      const items = screen.getAllByTestId("navigation-menu-item");
       expect(items.length).toBe(3); // home, products (dropdown), blog
     });
 
-    it('uses semantic desktop-only class for responsive display', () => {
+    it("uses semantic desktop-only class for responsive display", () => {
       render(<VercelNavigation />);
 
-      const nav = screen.getByRole('navigation');
-      expect(nav).toHaveClass('header-desktop-only');
+      const nav = screen.getByRole("navigation");
+      expect(nav).toHaveClass("header-desktop-only");
     });
   });
 
-  describe('link items', () => {
-    it('renders link items with correct href', () => {
+  describe("link items", () => {
+    it("renders link items with correct href", () => {
       render(<VercelNavigation />);
 
       // Home link
-      expect(screen.getByTestId('nav-link-')).toBeInTheDocument();
+      expect(screen.getByTestId("nav-link-")).toBeInTheDocument();
       // Blog link
-      expect(screen.getByTestId('nav-link-blog')).toBeInTheDocument();
+      expect(screen.getByTestId("nav-link-blog")).toBeInTheDocument();
     });
 
-    it('displays translated text for link items', () => {
+    it("displays translated text for link items", () => {
       render(<VercelNavigation />);
 
-      expect(screen.getByText('Home')).toBeInTheDocument();
-      expect(screen.getByText('Blog')).toBeInTheDocument();
+      expect(screen.getByText("Home")).toBeInTheDocument();
+      expect(screen.getByText("Blog")).toBeInTheDocument();
     });
 
-    it('wraps links with NavigationMenuLink asChild', () => {
+    it("wraps links with NavigationMenuLink asChild", () => {
       render(<VercelNavigation />);
 
-      const menuLinks = screen.getAllByTestId('navigation-menu-link');
+      const menuLinks = screen.getAllByTestId("navigation-menu-link");
       menuLinks.forEach((link) => {
-        expect(link).toHaveAttribute('data-as-child', 'true');
+        expect(link).toHaveAttribute("data-as-child", "true");
       });
     });
   });
 
-  describe('dropdown items', () => {
-    it('renders trigger for dropdown items', () => {
+  describe("dropdown items", () => {
+    it("renders trigger for dropdown items", () => {
       render(<VercelNavigation />);
 
-      const trigger = screen.getByTestId('navigation-menu-trigger');
+      const trigger = screen.getByTestId("navigation-menu-trigger");
       expect(trigger).toBeInTheDocument();
-      expect(trigger).toHaveTextContent('Products');
+      expect(trigger).toHaveTextContent("Products");
     });
 
-    it('renders dropdown content', () => {
+    it("renders dropdown content", () => {
       render(<VercelNavigation />);
 
-      expect(screen.getByTestId('dropdown-content')).toBeInTheDocument();
+      expect(screen.getByTestId("dropdown-content")).toBeInTheDocument();
     });
 
-    it('renders dropdown child items', () => {
+    it("renders dropdown child items", () => {
       render(<VercelNavigation />);
 
-      expect(screen.getByTestId('dropdown-item-solutions')).toBeInTheDocument();
+      expect(screen.getByTestId("dropdown-item-solutions")).toBeInTheDocument();
       expect(
-        screen.getByTestId('dropdown-item-enterprise'),
+        screen.getByTestId("dropdown-item-enterprise"),
       ).toBeInTheDocument();
     });
   });
 
-  describe('hover delay interaction', () => {
-    it('opens dropdown after hover delay', () => {
+  describe("hover delay interaction", () => {
+    it("opens dropdown after hover delay", () => {
       render(<VercelNavigation />);
 
-      const dropdownItem = screen.getAllByTestId('navigation-menu-item')[1]!;
+      const dropdownItem = screen.getAllByTestId("navigation-menu-item")[1]!;
       fireEvent.mouseEnter(dropdownItem);
 
       // Before delay, not expanded
-      const trigger = screen.getByTestId('navigation-menu-trigger');
-      expect(trigger).toHaveAttribute('aria-expanded', 'false');
+      const trigger = screen.getByTestId("navigation-menu-trigger");
+      expect(trigger).toHaveAttribute("aria-expanded", "false");
 
       // After delay, expanded
       act(() => {
         vi.advanceTimersByTime(60);
       });
-      expect(trigger).toHaveAttribute('aria-expanded', 'true');
+      expect(trigger).toHaveAttribute("aria-expanded", "true");
     });
 
-    it('closes dropdown after mouse leave delay', () => {
+    it("closes dropdown after mouse leave delay", () => {
       render(<VercelNavigation />);
 
-      const dropdownItem = screen.getAllByTestId('navigation-menu-item')[1]!;
+      const dropdownItem = screen.getAllByTestId("navigation-menu-item")[1]!;
 
       // Open dropdown
       fireEvent.mouseEnter(dropdownItem);
@@ -314,24 +308,24 @@ describe('VercelNavigation', () => {
         vi.advanceTimersByTime(60);
       });
 
-      const trigger = screen.getByTestId('navigation-menu-trigger');
-      expect(trigger).toHaveAttribute('aria-expanded', 'true');
+      const trigger = screen.getByTestId("navigation-menu-trigger");
+      expect(trigger).toHaveAttribute("aria-expanded", "true");
 
       // Mouse leave
       fireEvent.mouseLeave(dropdownItem);
-      expect(trigger).toHaveAttribute('aria-expanded', 'true'); // Still open
+      expect(trigger).toHaveAttribute("aria-expanded", "true"); // Still open
 
       // After close delay
       act(() => {
         vi.advanceTimersByTime(100);
       });
-      expect(trigger).toHaveAttribute('aria-expanded', 'false');
+      expect(trigger).toHaveAttribute("aria-expanded", "false");
     });
 
-    it('cancels close timer when re-entering', () => {
+    it("cancels close timer when re-entering", () => {
       render(<VercelNavigation />);
 
-      const dropdownItem = screen.getAllByTestId('navigation-menu-item')[1]!;
+      const dropdownItem = screen.getAllByTestId("navigation-menu-item")[1]!;
 
       // Open dropdown
       fireEvent.mouseEnter(dropdownItem);
@@ -353,66 +347,66 @@ describe('VercelNavigation', () => {
         vi.advanceTimersByTime(100);
       });
 
-      const trigger = screen.getByTestId('navigation-menu-trigger');
-      expect(trigger).toHaveAttribute('aria-expanded', 'true');
+      const trigger = screen.getByTestId("navigation-menu-trigger");
+      expect(trigger).toHaveAttribute("aria-expanded", "true");
     });
   });
 
-  describe('click interaction', () => {
-    it('toggles dropdown on click', () => {
+  describe("click interaction", () => {
+    it("toggles dropdown on click", () => {
       render(<VercelNavigation />);
 
-      const trigger = screen.getByTestId('navigation-menu-trigger');
-      expect(trigger).toHaveAttribute('aria-expanded', 'false');
+      const trigger = screen.getByTestId("navigation-menu-trigger");
+      expect(trigger).toHaveAttribute("aria-expanded", "false");
 
       // Click to open
       fireEvent.click(trigger);
-      expect(trigger).toHaveAttribute('aria-expanded', 'true');
+      expect(trigger).toHaveAttribute("aria-expanded", "true");
 
       // Click to close
       fireEvent.click(trigger);
-      expect(trigger).toHaveAttribute('aria-expanded', 'false');
+      expect(trigger).toHaveAttribute("aria-expanded", "false");
     });
   });
 
-  describe('custom className', () => {
-    it('applies custom className to nav element', () => {
-      render(<VercelNavigation className='custom-nav-class' />);
+  describe("custom className", () => {
+    it("applies custom className to nav element", () => {
+      render(<VercelNavigation className="custom-nav-class" />);
 
-      const nav = screen.getByRole('navigation');
-      expect(nav).toHaveClass('custom-nav-class');
+      const nav = screen.getByRole("navigation");
+      expect(nav).toHaveClass("custom-nav-class");
     });
 
-    it('preserves default classes with custom className', () => {
-      render(<VercelNavigation className='my-custom' />);
+    it("preserves default classes with custom className", () => {
+      render(<VercelNavigation className="my-custom" />);
 
-      const nav = screen.getByRole('navigation');
-      expect(nav).toHaveClass('header-desktop-only');
-      expect(nav).toHaveClass('my-custom');
+      const nav = screen.getByRole("navigation");
+      expect(nav).toHaveClass("header-desktop-only");
+      expect(nav).toHaveClass("my-custom");
     });
   });
 
-  describe('accessibility', () => {
-    it('dropdown trigger has aria-expanded attribute', () => {
+  describe("accessibility", () => {
+    it("dropdown trigger has aria-expanded attribute", () => {
       render(<VercelNavigation />);
 
-      const trigger = screen.getByTestId('navigation-menu-trigger');
-      expect(trigger).toHaveAttribute('aria-expanded');
+      const trigger = screen.getByTestId("navigation-menu-trigger");
+      expect(trigger).toHaveAttribute("aria-expanded");
     });
 
-    it('nav element has proper aria-label', () => {
+    it("nav element has proper aria-label", () => {
       render(<VercelNavigation />);
 
-      const nav = screen.getByRole('navigation');
-      expect(nav).toHaveAttribute('aria-label', 'Main navigation');
+      const nav = screen.getByRole("navigation");
+      expect(nav).toHaveAttribute("aria-label", "Main navigation");
     });
   });
 
-  describe('cleanup', () => {
-    it('cleans up timers on unmount', () => {
+  describe("cleanup", () => {
+    it("cleans up timers on unmount", () => {
       const { unmount } = render(<VercelNavigation />);
 
-      const dropdownItem = screen.getAllByTestId('navigation-menu-item')[1]!;
+      const dropdownItem = screen.getAllByTestId("navigation-menu-item")[1]!;
       fireEvent.mouseEnter(dropdownItem);
 
       // Unmount before timer fires

@@ -1,7 +1,7 @@
-import { act, screen } from '@testing-library/react';
-import userEvent from '@testing-library/user-event';
-import { vi } from 'vitest';
-import { TEST_COUNT_CONSTANTS } from '@/constants/test-constants';
+import { act, screen } from "@testing-library/react";
+import userEvent from "@testing-library/user-event";
+import { vi } from "vitest";
+import { TEST_COUNT_CONSTANTS } from "@/constants/test-constants";
 
 // 测试常量
 export const TEST_TIMEOUTS = {
@@ -14,16 +14,16 @@ export const TEST_TIMEOUTS = {
 } as const;
 
 // Mock next-intl hooks
-vi.mock('next-intl', () => ({
-  useLocale: vi.fn(() => 'en'),
+vi.mock("next-intl", () => ({
+  useLocale: vi.fn(() => "en"),
   useTranslations: vi.fn(() => (key: string) => {
     const translations: Record<string, string> = {
-      'language.switch': 'Switch language',
-      'language.english': 'English',
-      'language.chinese': 'Chinese',
-      'language.current': 'Current language: English',
-      'toggle': 'toggle',
-      'selectLanguage': 'Select language',
+      "language.switch": "Switch language",
+      "language.english": "English",
+      "language.chinese": "Chinese",
+      "language.current": "Current language: English",
+      toggle: "toggle",
+      selectLanguage: "Select language",
     };
     // 安全的属性访问，避免对象注入
     const safeTranslations = new Map(Object.entries(translations));
@@ -32,7 +32,7 @@ vi.mock('next-intl', () => ({
 }));
 
 // Mock i18n routing
-vi.mock('@/i18n/routing', () => ({
+vi.mock("@/i18n/routing", () => ({
   Link: ({
     children,
     href,
@@ -42,10 +42,7 @@ vi.mock('@/i18n/routing', () => ({
     href?: string;
     [key: string]: any;
   }) => (
-    <a
-      href={href}
-      {...props}
-    >
+    <a href={href} {...props}>
       {children}
     </a>
   ),
@@ -57,11 +54,11 @@ vi.mock('@/i18n/routing', () => ({
     refresh: vi.fn(),
     prefetch: vi.fn(),
   })),
-  usePathname: vi.fn(() => '/'),
+  usePathname: vi.fn(() => "/"),
 }));
 
 // Mock UI components
-vi.mock('@/components/ui/dropdown-menu', () => ({
+vi.mock("@/components/ui/dropdown-menu", () => ({
   DropdownMenu: ({
     children,
     open,
@@ -72,7 +69,7 @@ vi.mock('@/components/ui/dropdown-menu', () => ({
     onOpenChange?: (open: boolean) => void;
   }) => (
     <div
-      data-testid='dropdown-menu'
+      data-testid="dropdown-menu"
       data-open={open}
       onClick={() => onOpenChange?.(!open)}
     >
@@ -91,7 +88,7 @@ vi.mock('@/components/ui/dropdown-menu', () => ({
     [key: string]: any;
   }) => (
     <div
-      data-testid='dropdown-content'
+      data-testid="dropdown-content"
       data-align={align}
       className={className}
       {...props}
@@ -109,7 +106,7 @@ vi.mock('@/components/ui/dropdown-menu', () => ({
     if (asChild) {
       return children;
     }
-    return <div data-testid='dropdown-trigger'>{children}</div>;
+    return <div data-testid="dropdown-trigger">{children}</div>;
   },
   DropdownMenuItem: ({
     children,
@@ -120,17 +117,13 @@ vi.mock('@/components/ui/dropdown-menu', () => ({
     onClick?: () => void;
     [key: string]: any;
   }) => (
-    <div
-      data-testid='dropdown-item'
-      onClick={onClick}
-      {...props}
-    >
+    <div data-testid="dropdown-item" onClick={onClick} {...props}>
       {children}
     </div>
   ),
 }));
 
-vi.mock('@/components/ui/button', () => ({
+vi.mock("@/components/ui/button", () => ({
   Button: ({
     children,
     variant,
@@ -145,7 +138,7 @@ vi.mock('@/components/ui/button', () => ({
     [key: string]: any;
   }) => (
     <button
-      data-testid='language-button'
+      data-testid="language-button"
       data-variant={variant}
       data-size={size}
       className={className}
@@ -157,7 +150,7 @@ vi.mock('@/components/ui/button', () => ({
 }));
 
 // Mock Lucide icons
-vi.mock('lucide-react', () => ({
+vi.mock("lucide-react", () => ({
   Languages: ({
     className,
     ...props
@@ -165,11 +158,7 @@ vi.mock('lucide-react', () => ({
     className?: string;
     [key: string]: any;
   }) => (
-    <span
-      data-testid='languages-icon'
-      className={className}
-      {...props}
-    >
+    <span data-testid="languages-icon" className={className} {...props}>
       🌐
     </span>
   ),
@@ -180,11 +169,7 @@ vi.mock('lucide-react', () => ({
     className?: string;
     [key: string]: any;
   }) => (
-    <span
-      data-testid='chevron-down-icon'
-      className={className}
-      {...props}
-    >
+    <span data-testid="chevron-down-icon" className={className} {...props}>
       ⌄
     </span>
   ),
@@ -195,11 +180,7 @@ vi.mock('lucide-react', () => ({
     className?: string;
     [key: string]: any;
   }) => (
-    <span
-      data-testid='check-icon'
-      className={className}
-      {...props}
-    >
+    <span data-testid="check-icon" className={className} {...props}>
       ✓
     </span>
   ),
@@ -212,7 +193,7 @@ export const mockAnalytics = {
   page: vi.fn(),
 };
 
-vi.mock('@/lib/analytics', () => ({
+vi.mock("@/lib/analytics", () => ({
   analytics: mockAnalytics,
 }));
 
@@ -226,9 +207,9 @@ export const mockRouter = {
   prefetch: vi.fn(),
 };
 
-vi.mock('next/navigation', () => ({
+vi.mock("next/navigation", () => ({
   useRouter: vi.fn(() => mockRouter),
-  usePathname: vi.fn(() => '/'),
+  usePathname: vi.fn(() => "/"),
   useSearchParams: vi.fn(() => new URLSearchParams()),
 }));
 
@@ -240,14 +221,14 @@ export const mockLocalStorage = {
   clear: vi.fn(),
 };
 
-Object.defineProperty(global, 'localStorage', {
+Object.defineProperty(global, "localStorage", {
   value: mockLocalStorage,
   writable: true,
 });
 
 // Mock matchMedia
 export const mockMatchMedia = vi.fn();
-Object.defineProperty(window, 'matchMedia', {
+Object.defineProperty(window, "matchMedia", {
   value: mockMatchMedia,
   writable: true,
 });
@@ -259,7 +240,7 @@ mockResizeObserver.mockImplementation(() => ({
   unobserve: vi.fn(),
   disconnect: vi.fn(),
 }));
-Object.defineProperty(window, 'ResizeObserver', {
+Object.defineProperty(window, "ResizeObserver", {
   value: mockResizeObserver,
   writable: true,
 });
@@ -271,7 +252,7 @@ mockIntersectionObserver.mockImplementation(() => ({
   unobserve: vi.fn(),
   disconnect: vi.fn(),
 }));
-Object.defineProperty(window, 'IntersectionObserver', {
+Object.defineProperty(window, "IntersectionObserver", {
   value: mockIntersectionObserver,
   writable: true,
 });
@@ -326,7 +307,7 @@ export async function simulateLanguageSwitch(targetLanguage: string) {
   const user = userEvent.setup();
 
   // Click the language switcher button
-  const button = screen.getByTestId('language-button');
+  const button = screen.getByTestId("language-button");
   await user.click(button);
 
   // Wait for dropdown to open
@@ -351,7 +332,7 @@ export async function simulateLanguageSwitch(targetLanguage: string) {
 // Helper function to simulate keyboard navigation
 export async function simulateKeyboardNavigation(key: string) {
   const user = userEvent.setup();
-  const button = screen.getByTestId('language-button');
+  const button = screen.getByTestId("language-button");
 
   button.focus();
   await user.keyboard(key);

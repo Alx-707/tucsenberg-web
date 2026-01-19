@@ -1,21 +1,21 @@
-import { NextRequest } from 'next/server';
-import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
-import { GET, POST } from '../route';
+import { NextRequest } from "next/server";
+import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
+import { GET, POST } from "../route";
 
 // Mock dependencies
 const mockSendWhatsAppMessage = vi.hoisted(() => vi.fn());
 const mockCheckDistributedRateLimit = vi.hoisted(() => vi.fn());
 
-vi.mock('@/lib/whatsapp-service', () => ({
+vi.mock("@/lib/whatsapp-service", () => ({
   sendWhatsAppMessage: mockSendWhatsAppMessage,
   getClientEnvironmentInfo: vi.fn(() => ({
-    environment: 'test',
-    clientType: 'mock',
+    environment: "test",
+    clientType: "mock",
     hasCredentials: false,
   })),
 }));
 
-vi.mock('@/lib/logger', () => ({
+vi.mock("@/lib/logger", () => ({
   logger: {
     error: vi.fn(),
     info: vi.fn(),
@@ -25,14 +25,14 @@ vi.mock('@/lib/logger', () => ({
 }));
 
 // Mock rate limiting to always allow requests in tests
-vi.mock('@/lib/security/distributed-rate-limit', () => ({
+vi.mock("@/lib/security/distributed-rate-limit", () => ({
   checkDistributedRateLimit: mockCheckDistributedRateLimit,
   createRateLimitHeaders: vi.fn(() => new Headers()),
 }));
 
 // Mock getClientIP
-vi.mock('@/app/api/contact/contact-api-utils', () => ({
-  getClientIP: vi.fn(() => '127.0.0.1'),
+vi.mock("@/app/api/contact/contact-api-utils", () => ({
+  getClientIP: vi.fn(() => "127.0.0.1"),
 }));
 
 function createMockRequest(
@@ -40,14 +40,14 @@ function createMockRequest(
   body?: Record<string, unknown>,
   options?: { skipAuth?: boolean },
 ): NextRequest {
-  const url = 'http://localhost:3000/api/whatsapp/send';
+  const url = "http://localhost:3000/api/whatsapp/send";
   const headers: Record<string, string> = {
-    'Content-Type': 'application/json',
+    "Content-Type": "application/json",
   };
 
   // Include auth header by default (API key is mandatory)
   if (!options?.skipAuth) {
-    headers['Authorization'] = 'Bearer test-api-key-12345';
+    headers["Authorization"] = "Bearer test-api-key-12345";
   }
 
   if (body) {
@@ -61,13 +61,13 @@ function createMockRequest(
   return new NextRequest(url, { method, headers });
 }
 
-describe('WhatsApp Send Route', () => {
+describe("WhatsApp Send Route", () => {
   const originalEnv = process.env;
 
   beforeEach(() => {
     vi.clearAllMocks();
     // Set default API key for all tests (mandatory authentication)
-    process.env = { ...originalEnv, WHATSAPP_API_KEY: 'test-api-key-12345' };
+    process.env = { ...originalEnv, WHATSAPP_API_KEY: "test-api-key-12345" };
     // Mock rate limiter to always allow requests
     mockCheckDistributedRateLimit.mockResolvedValue({
       allowed: true,
@@ -78,7 +78,7 @@ describe('WhatsApp Send Route', () => {
     mockSendWhatsAppMessage.mockResolvedValue({
       success: true,
       data: {
-        messages: [{ id: 'msg-123' }],
+        messages: [{ id: "msg-123" }],
       },
     });
   });
@@ -88,21 +88,21 @@ describe('WhatsApp Send Route', () => {
     process.env = originalEnv;
   });
 
-  describe('GET', () => {
-    it('should return API usage documentation', async () => {
-      const request = createMockRequest('GET');
+  describe("GET", () => {
+    it("should return API usage documentation", async () => {
+      const request = createMockRequest("GET");
       const response = GET(request);
       const data = await response.json();
 
       expect(response.status).toBe(200);
-      expect(data.message).toBe('WhatsApp Send Message API');
+      expect(data.message).toBe("WhatsApp Send Message API");
       expect(data.usage).toBeDefined();
-      expect(data.usage.method).toBe('POST');
-      expect(data.usage.endpoint).toBe('/api/whatsapp/send');
+      expect(data.usage.method).toBe("POST");
+      expect(data.usage.endpoint).toBe("/api/whatsapp/send");
     });
 
-    it('should include example messages in documentation', async () => {
-      const request = createMockRequest('GET');
+    it("should include example messages in documentation", async () => {
+      const request = createMockRequest("GET");
       const response = GET(request);
       const data = await response.json();
 
@@ -111,21 +111,21 @@ describe('WhatsApp Send Route', () => {
       expect(data.examples.templateMessage).toBeDefined();
     });
 
-    it('should require authentication', async () => {
-      const request = createMockRequest('GET', undefined, { skipAuth: true });
+    it("should require authentication", async () => {
+      const request = createMockRequest("GET", undefined, { skipAuth: true });
       const response = GET(request);
 
       expect(response.status).toBe(401);
     });
   });
 
-  describe('POST - Text Messages', () => {
-    it('should send a text message successfully', async () => {
-      const request = createMockRequest('POST', {
-        to: '+1234567890',
-        type: 'text',
+  describe("POST - Text Messages", () => {
+    it("should send a text message successfully", async () => {
+      const request = createMockRequest("POST", {
+        to: "+1234567890",
+        type: "text",
         content: {
-          body: 'Hello World!',
+          body: "Hello World!",
         },
       });
 
@@ -134,22 +134,22 @@ describe('WhatsApp Send Route', () => {
 
       expect(response.status).toBe(200);
       expect(data.success).toBe(true);
-      expect(data.messageId).toBe('msg-123');
+      expect(data.messageId).toBe("msg-123");
       expect(mockSendWhatsAppMessage).toHaveBeenCalledWith(
         expect.objectContaining({
-          messaging_product: 'whatsapp',
-          recipient_type: 'individual',
-          to: '+1234567890',
-          type: 'text',
-          text: { body: 'Hello World!' },
+          messaging_product: "whatsapp",
+          recipient_type: "individual",
+          to: "+1234567890",
+          type: "text",
+          text: { body: "Hello World!" },
         }),
       );
     });
 
-    it('should return 400 when body is missing for text message', async () => {
-      const request = createMockRequest('POST', {
-        to: '+1234567890',
-        type: 'text',
+    it("should return 400 when body is missing for text message", async () => {
+      const request = createMockRequest("POST", {
+        to: "+1234567890",
+        type: "text",
         content: {},
       });
 
@@ -161,14 +161,14 @@ describe('WhatsApp Send Route', () => {
     });
   });
 
-  describe('POST - Template Messages', () => {
-    it('should send a template message successfully', async () => {
-      const request = createMockRequest('POST', {
-        to: '+1234567890',
-        type: 'template',
+  describe("POST - Template Messages", () => {
+    it("should send a template message successfully", async () => {
+      const request = createMockRequest("POST", {
+        to: "+1234567890",
+        type: "template",
         content: {
-          templateName: 'welcome_message',
-          languageCode: 'en',
+          templateName: "welcome_message",
+          languageCode: "en",
         },
       });
 
@@ -179,29 +179,29 @@ describe('WhatsApp Send Route', () => {
       expect(data.success).toBe(true);
       expect(mockSendWhatsAppMessage).toHaveBeenCalledWith(
         expect.objectContaining({
-          messaging_product: 'whatsapp',
-          type: 'template',
+          messaging_product: "whatsapp",
+          type: "template",
           template: expect.objectContaining({
-            name: 'welcome_message',
-            language: expect.objectContaining({ code: 'en' }),
+            name: "welcome_message",
+            language: expect.objectContaining({ code: "en" }),
           }),
         }),
       );
     });
 
-    it('should send a template message with components', async () => {
-      const request = createMockRequest('POST', {
-        to: '+1234567890',
-        type: 'template',
+    it("should send a template message with components", async () => {
+      const request = createMockRequest("POST", {
+        to: "+1234567890",
+        type: "template",
         content: {
-          templateName: 'order_confirmation',
-          languageCode: 'en',
+          templateName: "order_confirmation",
+          languageCode: "en",
           components: [
             {
-              type: 'body',
+              type: "body",
               parameters: [
-                { type: 'text', text: 'John Doe' },
-                { type: 'text', text: 'Order #123' },
+                { type: "text", text: "John Doe" },
+                { type: "text", text: "Order #123" },
               ],
             },
           ],
@@ -218,9 +218,9 @@ describe('WhatsApp Send Route', () => {
           template: expect.objectContaining({
             components: expect.arrayContaining([
               expect.objectContaining({
-                type: 'body',
+                type: "body",
                 parameters: expect.arrayContaining([
-                  expect.objectContaining({ type: 'text', text: 'John Doe' }),
+                  expect.objectContaining({ type: "text", text: "John Doe" }),
                 ]),
               }),
             ]),
@@ -229,12 +229,12 @@ describe('WhatsApp Send Route', () => {
       );
     });
 
-    it('should return 400 when templateName is missing', async () => {
-      const request = createMockRequest('POST', {
-        to: '+1234567890',
-        type: 'template',
+    it("should return 400 when templateName is missing", async () => {
+      const request = createMockRequest("POST", {
+        to: "+1234567890",
+        type: "template",
         content: {
-          languageCode: 'en',
+          languageCode: "en",
         },
       });
 
@@ -248,15 +248,15 @@ describe('WhatsApp Send Route', () => {
     });
   });
 
-  describe('POST - Validation Errors', () => {
-    it('should return 400 for invalid JSON', async () => {
-      const url = 'http://localhost:3000/api/whatsapp/send';
+  describe("POST - Validation Errors", () => {
+    it("should return 400 for invalid JSON", async () => {
+      const url = "http://localhost:3000/api/whatsapp/send";
       const request = new NextRequest(url, {
-        method: 'POST',
-        body: 'invalid json',
+        method: "POST",
+        body: "invalid json",
         headers: {
-          'Content-Type': 'application/json',
-          'Authorization': 'Bearer test-api-key-12345',
+          "Content-Type": "application/json",
+          Authorization: "Bearer test-api-key-12345",
         },
       });
 
@@ -265,22 +265,22 @@ describe('WhatsApp Send Route', () => {
       expect(response.status).toBe(400);
     });
 
-    it('should return 500 for empty request body (runtime error)', async () => {
+    it("should return 500 for empty request body (runtime error)", async () => {
       // Empty object passes initial parsing but fails at runtime
       // when trying to access properties
-      const request = createMockRequest('POST', {});
+      const request = createMockRequest("POST", {});
 
       const response = await POST(request);
 
       expect(response.status).toBe(500);
     });
 
-    it('should return 500 for invalid message type (runtime error)', async () => {
+    it("should return 500 for invalid message type (runtime error)", async () => {
       // Invalid type value triggers runtime error in buildWhatsAppMessage
-      const request = createMockRequest('POST', {
-        to: '+1234567890',
-        type: 'invalid',
-        content: { body: 'Hello' },
+      const request = createMockRequest("POST", {
+        to: "+1234567890",
+        type: "invalid",
+        content: { body: "Hello" },
       });
 
       const response = await POST(request);
@@ -288,13 +288,13 @@ describe('WhatsApp Send Route', () => {
       expect(response.status).toBe(500);
     });
 
-    it('should handle empty to field gracefully', async () => {
+    it("should handle empty to field gracefully", async () => {
       // Empty string may pass validation depending on schema
       // Test documents actual behavior
-      const request = createMockRequest('POST', {
-        to: '',
-        type: 'text',
-        content: { body: 'Hello' },
+      const request = createMockRequest("POST", {
+        to: "",
+        type: "text",
+        content: { body: "Hello" },
       });
 
       const response = await POST(request);
@@ -304,11 +304,11 @@ describe('WhatsApp Send Route', () => {
       expect([200, 400]).toContain(response.status);
     });
 
-    it('should return 500 for missing content object', async () => {
+    it("should return 500 for missing content object", async () => {
       // Missing content triggers runtime error
-      const request = createMockRequest('POST', {
-        to: '+1234567890',
-        type: 'text',
+      const request = createMockRequest("POST", {
+        to: "+1234567890",
+        type: "text",
       });
 
       const response = await POST(request);
@@ -317,69 +317,69 @@ describe('WhatsApp Send Route', () => {
     });
   });
 
-  describe('POST - Error Handling', () => {
-    it('should return 500 when service fails', async () => {
+  describe("POST - Error Handling", () => {
+    it("should return 500 when service fails", async () => {
       mockSendWhatsAppMessage.mockResolvedValue({
         success: false,
-        error: 'Service error',
+        error: "Service error",
       });
 
-      const request = createMockRequest('POST', {
-        to: '+1234567890',
-        type: 'text',
-        content: { body: 'Hello' },
+      const request = createMockRequest("POST", {
+        to: "+1234567890",
+        type: "text",
+        content: { body: "Hello" },
       });
 
       const response = await POST(request);
       const data = await response.json();
 
       expect(response.status).toBe(500);
-      expect(data.error).toBe('Failed to send message');
+      expect(data.error).toBe("Failed to send message");
     });
 
-    it('should return 503 when WhatsApp service is not configured', async () => {
+    it("should return 503 when WhatsApp service is not configured", async () => {
       mockSendWhatsAppMessage.mockRejectedValue(
-        new Error('WHATSAPP_ACCESS_TOKEN is not configured'),
+        new Error("WHATSAPP_ACCESS_TOKEN is not configured"),
       );
 
-      const request = createMockRequest('POST', {
-        to: '+1234567890',
-        type: 'text',
-        content: { body: 'Hello' },
+      const request = createMockRequest("POST", {
+        to: "+1234567890",
+        type: "text",
+        content: { body: "Hello" },
       });
 
       const response = await POST(request);
       const data = await response.json();
 
       expect(response.status).toBe(503);
-      expect(data.error).toBe('WhatsApp service not configured');
+      expect(data.error).toBe("WhatsApp service not configured");
     });
 
-    it('should return 500 for unexpected errors', async () => {
-      mockSendWhatsAppMessage.mockRejectedValue(new Error('Unexpected error'));
+    it("should return 500 for unexpected errors", async () => {
+      mockSendWhatsAppMessage.mockRejectedValue(new Error("Unexpected error"));
 
-      const request = createMockRequest('POST', {
-        to: '+1234567890',
-        type: 'text',
-        content: { body: 'Hello' },
+      const request = createMockRequest("POST", {
+        to: "+1234567890",
+        type: "text",
+        content: { body: "Hello" },
       });
 
       const response = await POST(request);
       const data = await response.json();
 
       expect(response.status).toBe(500);
-      expect(data.error).toBe('Failed to send message');
+      expect(data.error).toBe("Failed to send message");
     });
   });
 
-  describe('POST - Authentication', () => {
-    it('should return 401 when Authorization header missing', async () => {
+  describe("POST - Authentication", () => {
+    it("should return 401 when Authorization header missing", async () => {
       const request = createMockRequest(
-        'POST',
+        "POST",
         {
-          to: '+1234567890',
-          type: 'text',
-          content: { body: 'Hello' },
+          to: "+1234567890",
+          type: "text",
+          content: { body: "Hello" },
         },
         { skipAuth: true },
       );
@@ -388,21 +388,21 @@ describe('WhatsApp Send Route', () => {
       const data = await response.json();
 
       expect(response.status).toBe(401);
-      expect(data.error).toBe('Authentication required');
+      expect(data.error).toBe("Authentication required");
     });
 
-    it('should return 401 when API key is invalid', async () => {
-      const url = 'http://localhost:3000/api/whatsapp/send';
+    it("should return 401 when API key is invalid", async () => {
+      const url = "http://localhost:3000/api/whatsapp/send";
       const request = new NextRequest(url, {
-        method: 'POST',
+        method: "POST",
         body: JSON.stringify({
-          to: '+1234567890',
-          type: 'text',
-          content: { body: 'Hello' },
+          to: "+1234567890",
+          type: "text",
+          content: { body: "Hello" },
         }),
         headers: {
-          'Content-Type': 'application/json',
-          'Authorization': 'Bearer wrong-api-key',
+          "Content-Type": "application/json",
+          Authorization: "Bearer wrong-api-key",
         },
       });
 
@@ -410,21 +410,21 @@ describe('WhatsApp Send Route', () => {
       const data = await response.json();
 
       expect(response.status).toBe(401);
-      expect(data.error).toBe('Invalid credentials');
+      expect(data.error).toBe("Invalid credentials");
     });
 
-    it('should return 401 for malformed Authorization header', async () => {
-      const url = 'http://localhost:3000/api/whatsapp/send';
+    it("should return 401 for malformed Authorization header", async () => {
+      const url = "http://localhost:3000/api/whatsapp/send";
       const request = new NextRequest(url, {
-        method: 'POST',
+        method: "POST",
         body: JSON.stringify({
-          to: '+1234567890',
-          type: 'text',
-          content: { body: 'Hello' },
+          to: "+1234567890",
+          type: "text",
+          content: { body: "Hello" },
         }),
         headers: {
-          'Content-Type': 'application/json',
-          'Authorization': 'Basic dXNlcm5hbWU6cGFzc3dvcmQ=',
+          "Content-Type": "application/json",
+          Authorization: "Basic dXNlcm5hbWU6cGFzc3dvcmQ=",
         },
       });
 
@@ -432,14 +432,14 @@ describe('WhatsApp Send Route', () => {
       const data = await response.json();
 
       expect(response.status).toBe(401);
-      expect(data.error).toBe('Invalid authentication format');
+      expect(data.error).toBe("Invalid authentication format");
     });
 
-    it('should succeed with valid API key', async () => {
-      const request = createMockRequest('POST', {
-        to: '+1234567890',
-        type: 'text',
-        content: { body: 'Hello' },
+    it("should succeed with valid API key", async () => {
+      const request = createMockRequest("POST", {
+        to: "+1234567890",
+        type: "text",
+        content: { body: "Hello" },
       });
 
       const response = await POST(request);
@@ -449,15 +449,15 @@ describe('WhatsApp Send Route', () => {
       expect(data.success).toBe(true);
     });
 
-    it('should return 503 when WHATSAPP_API_KEY not configured', async () => {
+    it("should return 503 when WHATSAPP_API_KEY not configured", async () => {
       delete process.env.WHATSAPP_API_KEY;
 
       const request = createMockRequest(
-        'POST',
+        "POST",
         {
-          to: '+1234567890',
-          type: 'text',
-          content: { body: 'Hello' },
+          to: "+1234567890",
+          type: "text",
+          content: { body: "Hello" },
         },
         { skipAuth: true },
       );
@@ -466,12 +466,12 @@ describe('WhatsApp Send Route', () => {
       const data = await response.json();
 
       expect(response.status).toBe(503);
-      expect(data.error).toBe('WhatsApp API service not configured');
+      expect(data.error).toBe("WhatsApp API service not configured");
     });
   });
 
-  describe('POST - Rate Limiting', () => {
-    it('should return 429 when rate limited', async () => {
+  describe("POST - Rate Limiting", () => {
+    it("should return 429 when rate limited", async () => {
       mockCheckDistributedRateLimit.mockResolvedValue({
         allowed: false,
         remaining: 0,
@@ -479,10 +479,10 @@ describe('WhatsApp Send Route', () => {
         retryAfter: 60,
       });
 
-      const request = createMockRequest('POST', {
-        to: '+1234567890',
-        type: 'text',
-        content: { body: 'Hello' },
+      const request = createMockRequest("POST", {
+        to: "+1234567890",
+        type: "text",
+        content: { body: "Hello" },
       });
 
       const response = await POST(request);
@@ -490,10 +490,10 @@ describe('WhatsApp Send Route', () => {
 
       expect(response.status).toBe(429);
       // withRateLimit HOF uses standardized error message
-      expect(data.error).toBe('Too many requests');
+      expect(data.error).toBe("Too many requests");
     });
 
-    it('should include rate limit headers in 429 response', async () => {
+    it("should include rate limit headers in 429 response", async () => {
       const resetTime = Date.now() + 60000;
       mockCheckDistributedRateLimit.mockResolvedValue({
         allowed: false,
@@ -502,10 +502,10 @@ describe('WhatsApp Send Route', () => {
         retryAfter: 60,
       });
 
-      const request = createMockRequest('POST', {
-        to: '+1234567890',
-        type: 'text',
-        content: { body: 'Hello' },
+      const request = createMockRequest("POST", {
+        to: "+1234567890",
+        type: "text",
+        content: { body: "Hello" },
       });
 
       const response = await POST(request);
@@ -515,11 +515,11 @@ describe('WhatsApp Send Route', () => {
       // Verify rate limiting was checked with 'whatsapp' preset
       expect(mockCheckDistributedRateLimit).toHaveBeenCalledWith(
         expect.stringMatching(/^ip:/),
-        'whatsapp',
+        "whatsapp",
       );
     });
 
-    it('should allow request when rate limit not exceeded', async () => {
+    it("should allow request when rate limit not exceeded", async () => {
       mockCheckDistributedRateLimit.mockResolvedValue({
         allowed: true,
         remaining: 4,
@@ -527,10 +527,10 @@ describe('WhatsApp Send Route', () => {
         retryAfter: null,
       });
 
-      const request = createMockRequest('POST', {
-        to: '+1234567890',
-        type: 'text',
-        content: { body: 'Hello' },
+      const request = createMockRequest("POST", {
+        to: "+1234567890",
+        type: "text",
+        content: { body: "Hello" },
       });
 
       const response = await POST(request);
@@ -539,37 +539,37 @@ describe('WhatsApp Send Route', () => {
     });
   });
 
-  describe('POST - Message ID extraction', () => {
-    it('should extract message ID from response', async () => {
+  describe("POST - Message ID extraction", () => {
+    it("should extract message ID from response", async () => {
       mockSendWhatsAppMessage.mockResolvedValue({
         success: true,
         data: {
-          messages: [{ id: 'wamid.abc123' }],
+          messages: [{ id: "wamid.abc123" }],
         },
       });
 
-      const request = createMockRequest('POST', {
-        to: '+1234567890',
-        type: 'text',
-        content: { body: 'Hello' },
+      const request = createMockRequest("POST", {
+        to: "+1234567890",
+        type: "text",
+        content: { body: "Hello" },
       });
 
       const response = await POST(request);
       const data = await response.json();
 
-      expect(data.messageId).toBe('wamid.abc123');
+      expect(data.messageId).toBe("wamid.abc123");
     });
 
-    it('should handle missing messages array', async () => {
+    it("should handle missing messages array", async () => {
       mockSendWhatsAppMessage.mockResolvedValue({
         success: true,
         data: {},
       });
 
-      const request = createMockRequest('POST', {
-        to: '+1234567890',
-        type: 'text',
-        content: { body: 'Hello' },
+      const request = createMockRequest("POST", {
+        to: "+1234567890",
+        type: "text",
+        content: { body: "Hello" },
       });
 
       const response = await POST(request);
@@ -579,16 +579,16 @@ describe('WhatsApp Send Route', () => {
       expect(data.success).toBe(true);
     });
 
-    it('should handle empty messages array', async () => {
+    it("should handle empty messages array", async () => {
       mockSendWhatsAppMessage.mockResolvedValue({
         success: true,
         data: { messages: [] },
       });
 
-      const request = createMockRequest('POST', {
-        to: '+1234567890',
-        type: 'text',
-        content: { body: 'Hello' },
+      const request = createMockRequest("POST", {
+        to: "+1234567890",
+        type: "text",
+        content: { body: "Hello" },
       });
 
       const response = await POST(request);

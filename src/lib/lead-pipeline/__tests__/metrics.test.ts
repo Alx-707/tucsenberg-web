@@ -3,7 +3,7 @@
  * Tests for metrics collection, failure tracking, and alerting
  */
 
-import { beforeEach, describe, expect, it, vi } from 'vitest';
+import { beforeEach, describe, expect, it, vi } from "vitest";
 import {
   categorizeError,
   createLatencyTimer,
@@ -11,9 +11,9 @@ import {
   LeadPipelineMetrics,
   METRIC_SERVICES,
   METRIC_TYPES,
-} from '../metrics';
+} from "../metrics";
 
-vi.mock('@/lib/logger', () => ({
+vi.mock("@/lib/logger", () => ({
   logger: {
     info: vi.fn(),
     warn: vi.fn(),
@@ -21,18 +21,18 @@ vi.mock('@/lib/logger', () => ({
   },
 }));
 
-describe('categorizeError', () => {
-  it('should categorize timeout errors', () => {
-    const error = new Error('Operation timed out');
+describe("categorizeError", () => {
+  it("should categorize timeout errors", () => {
+    const error = new Error("Operation timed out");
     expect(categorizeError(error)).toBe(ERROR_TYPES.TIMEOUT);
   });
 
-  it('should categorize network errors', () => {
+  it("should categorize network errors", () => {
     const errors = [
-      new Error('Network error occurred'),
-      new Error('ECONNREFUSED'),
-      new Error('ENOTFOUND'),
-      new Error('fetch failed'),
+      new Error("Network error occurred"),
+      new Error("ECONNREFUSED"),
+      new Error("ENOTFOUND"),
+      new Error("fetch failed"),
     ];
 
     for (const error of errors) {
@@ -40,16 +40,16 @@ describe('categorizeError', () => {
     }
   });
 
-  it('should categorize rate limit errors', () => {
-    const error = new Error('Rate limit exceeded');
+  it("should categorize rate limit errors", () => {
+    const error = new Error("Rate limit exceeded");
     expect(categorizeError(error)).toBe(ERROR_TYPES.RATE_LIMIT);
   });
 
-  it('should categorize auth errors', () => {
+  it("should categorize auth errors", () => {
     const errors = [
-      new Error('Unauthorized access'),
-      new Error('Authentication failed'),
-      new Error('Invalid API key'),
+      new Error("Unauthorized access"),
+      new Error("Authentication failed"),
+      new Error("Invalid API key"),
     ];
 
     for (const error of errors) {
@@ -57,25 +57,25 @@ describe('categorizeError', () => {
     }
   });
 
-  it('should categorize validation errors', () => {
-    const error = new Error('Validation failed: invalid email');
+  it("should categorize validation errors", () => {
+    const error = new Error("Validation failed: invalid email");
     expect(categorizeError(error)).toBe(ERROR_TYPES.VALIDATION);
   });
 
-  it('should return unknown for unrecognized errors', () => {
-    const error = new Error('Something went wrong');
+  it("should return unknown for unrecognized errors", () => {
+    const error = new Error("Something went wrong");
     expect(categorizeError(error)).toBe(ERROR_TYPES.UNKNOWN);
   });
 
-  it('should return unknown for non-Error values', () => {
-    expect(categorizeError('string error')).toBe(ERROR_TYPES.UNKNOWN);
+  it("should return unknown for non-Error values", () => {
+    expect(categorizeError("string error")).toBe(ERROR_TYPES.UNKNOWN);
     expect(categorizeError(null)).toBe(ERROR_TYPES.UNKNOWN);
     expect(categorizeError(undefined)).toBe(ERROR_TYPES.UNKNOWN);
   });
 });
 
-describe('createLatencyTimer', () => {
-  it('should measure elapsed time', async () => {
+describe("createLatencyTimer", () => {
+  it("should measure elapsed time", async () => {
     const timer = createLatencyTimer();
     const delayMs = 50;
 
@@ -86,7 +86,7 @@ describe('createLatencyTimer', () => {
     expect(elapsed).toBeLessThan(delayMs + 50);
   });
 
-  it('should return consistent results on multiple calls', () => {
+  it("should return consistent results on multiple calls", () => {
     const timer = createLatencyTimer();
     const first = timer.stop();
     const second = timer.stop();
@@ -96,7 +96,7 @@ describe('createLatencyTimer', () => {
   });
 });
 
-describe('LeadPipelineMetrics', () => {
+describe("LeadPipelineMetrics", () => {
   let metrics: LeadPipelineMetrics;
 
   beforeEach(() => {
@@ -104,16 +104,16 @@ describe('LeadPipelineMetrics', () => {
     metrics = new LeadPipelineMetrics();
   });
 
-  describe('recordSuccess', () => {
-    it('should emit success metric with latency', async () => {
-      const { logger } = await import('@/lib/logger');
+  describe("recordSuccess", () => {
+    it("should emit success metric with latency", async () => {
+      const { logger } = await import("@/lib/logger");
 
       metrics.recordSuccess(METRIC_SERVICES.RESEND, 150);
 
       expect(logger.info).toHaveBeenCalledWith(
-        'Lead pipeline metric',
+        "Lead pipeline metric",
         expect.objectContaining({
-          event: 'lead_pipeline_metric',
+          event: "lead_pipeline_metric",
           service: METRIC_SERVICES.RESEND,
           type: METRIC_TYPES.SUCCESS,
           latencyMs: 150,
@@ -121,10 +121,10 @@ describe('LeadPipelineMetrics', () => {
       );
     });
 
-    it('should reset failure count on success', async () => {
+    it("should reset failure count on success", async () => {
       // Simulate some failures first
-      metrics.recordFailure(METRIC_SERVICES.RESEND, 100, new Error('test'));
-      metrics.recordFailure(METRIC_SERVICES.RESEND, 100, new Error('test'));
+      metrics.recordFailure(METRIC_SERVICES.RESEND, 100, new Error("test"));
+      metrics.recordFailure(METRIC_SERVICES.RESEND, 100, new Error("test"));
 
       const stateBeforeSuccess = metrics.getFailureState(
         METRIC_SERVICES.RESEND,
@@ -139,42 +139,42 @@ describe('LeadPipelineMetrics', () => {
     });
   });
 
-  describe('recordFailure', () => {
-    it('should emit failure metric with error details', async () => {
-      const { logger } = await import('@/lib/logger');
-      const error = new Error('Connection timed out');
+  describe("recordFailure", () => {
+    it("should emit failure metric with error details", async () => {
+      const { logger } = await import("@/lib/logger");
+      const error = new Error("Connection timed out");
 
       metrics.recordFailure(METRIC_SERVICES.AIRTABLE, 200, error);
 
       expect(logger.error).toHaveBeenCalledWith(
-        'Lead pipeline metric',
+        "Lead pipeline metric",
         expect.objectContaining({
-          event: 'lead_pipeline_metric',
+          event: "lead_pipeline_metric",
           service: METRIC_SERVICES.AIRTABLE,
           type: METRIC_TYPES.FAILURE,
           latencyMs: 200,
           errorType: ERROR_TYPES.TIMEOUT,
-          errorMessage: 'Connection timed out',
+          errorMessage: "Connection timed out",
         }),
       );
     });
 
-    it('should increment consecutive failure count', () => {
-      metrics.recordFailure(METRIC_SERVICES.RESEND, 100, new Error('test'));
+    it("should increment consecutive failure count", () => {
+      metrics.recordFailure(METRIC_SERVICES.RESEND, 100, new Error("test"));
       expect(
         metrics.getFailureState(METRIC_SERVICES.RESEND).consecutiveFailures,
       ).toBe(1);
 
-      metrics.recordFailure(METRIC_SERVICES.RESEND, 100, new Error('test'));
+      metrics.recordFailure(METRIC_SERVICES.RESEND, 100, new Error("test"));
       expect(
         metrics.getFailureState(METRIC_SERVICES.RESEND).consecutiveFailures,
       ).toBe(2);
     });
   });
 
-  describe('alerting', () => {
-    it('should trigger alert after consecutive failures threshold', async () => {
-      const { logger } = await import('@/lib/logger');
+  describe("alerting", () => {
+    it("should trigger alert after consecutive failures threshold", async () => {
+      const { logger } = await import("@/lib/logger");
       const alertConfig = {
         consecutiveFailureThreshold: 3,
         alertCooldownMs: 0,
@@ -186,14 +186,14 @@ describe('LeadPipelineMetrics', () => {
         alertMetrics.recordFailure(
           METRIC_SERVICES.RESEND,
           100,
-          new Error('test'),
+          new Error("test"),
         );
       }
 
       expect(logger.error).toHaveBeenCalledWith(
-        'Lead pipeline alert: consecutive failures',
+        "Lead pipeline alert: consecutive failures",
         expect.objectContaining({
-          event: 'lead_pipeline_alert',
+          event: "lead_pipeline_alert",
           service: METRIC_SERVICES.RESEND,
           consecutiveFailures: 3,
           threshold: 3,
@@ -201,8 +201,8 @@ describe('LeadPipelineMetrics', () => {
       );
     });
 
-    it('should not trigger alert before threshold', async () => {
-      const { logger } = await import('@/lib/logger');
+    it("should not trigger alert before threshold", async () => {
+      const { logger } = await import("@/lib/logger");
       const alertConfig = {
         consecutiveFailureThreshold: 5,
         alertCooldownMs: 0,
@@ -214,7 +214,7 @@ describe('LeadPipelineMetrics', () => {
         alertMetrics.recordFailure(
           METRIC_SERVICES.RESEND,
           100,
-          new Error('test'),
+          new Error("test"),
         );
       }
 
@@ -222,13 +222,13 @@ describe('LeadPipelineMetrics', () => {
       const alertCalls = vi
         .mocked(logger.error)
         .mock.calls.filter(
-          (call) => call[0] === 'Lead pipeline alert: consecutive failures',
+          (call) => call[0] === "Lead pipeline alert: consecutive failures",
         );
       expect(alertCalls.length).toBe(0);
     });
 
-    it('should respect cooldown period between alerts', async () => {
-      const { logger } = await import('@/lib/logger');
+    it("should respect cooldown period between alerts", async () => {
+      const { logger } = await import("@/lib/logger");
       const alertConfig = {
         consecutiveFailureThreshold: 2,
         alertCooldownMs: 10000,
@@ -239,35 +239,35 @@ describe('LeadPipelineMetrics', () => {
       alertMetrics.recordFailure(
         METRIC_SERVICES.RESEND,
         100,
-        new Error('test'),
+        new Error("test"),
       );
       alertMetrics.recordFailure(
         METRIC_SERVICES.RESEND,
         100,
-        new Error('test'),
+        new Error("test"),
       );
 
       // More failures immediately - should not trigger due to cooldown
       alertMetrics.recordFailure(
         METRIC_SERVICES.RESEND,
         100,
-        new Error('test'),
+        new Error("test"),
       );
       alertMetrics.recordFailure(
         METRIC_SERVICES.RESEND,
         100,
-        new Error('test'),
+        new Error("test"),
       );
 
       const alertCalls = vi
         .mocked(logger.error)
         .mock.calls.filter(
-          (call) => call[0] === 'Lead pipeline alert: consecutive failures',
+          (call) => call[0] === "Lead pipeline alert: consecutive failures",
         );
       expect(alertCalls.length).toBe(1);
     });
 
-    it('should track failures independently per service', () => {
+    it("should track failures independently per service", () => {
       const alertConfig = {
         consecutiveFailureThreshold: 3,
         alertCooldownMs: 0,
@@ -278,19 +278,19 @@ describe('LeadPipelineMetrics', () => {
       alertMetrics.recordFailure(
         METRIC_SERVICES.RESEND,
         100,
-        new Error('test'),
+        new Error("test"),
       );
       alertMetrics.recordFailure(
         METRIC_SERVICES.RESEND,
         100,
-        new Error('test'),
+        new Error("test"),
       );
 
       // Failures on Airtable
       alertMetrics.recordFailure(
         METRIC_SERVICES.AIRTABLE,
         100,
-        new Error('test'),
+        new Error("test"),
       );
 
       expect(
@@ -304,36 +304,36 @@ describe('LeadPipelineMetrics', () => {
     });
   });
 
-  describe('logPipelineSummary', () => {
-    it('should log success summary with info level', async () => {
-      const { logger } = await import('@/lib/logger');
+  describe("logPipelineSummary", () => {
+    it("should log success summary with info level", async () => {
+      const { logger } = await import("@/lib/logger");
 
       metrics.logPipelineSummary({
-        leadId: 'CON-123',
-        leadType: 'contact',
+        leadId: "CON-123",
+        leadType: "contact",
         totalLatencyMs: 500,
         resend: { success: true, latencyMs: 200 },
         airtable: { success: true, latencyMs: 300 },
         overallSuccess: true,
-        timestamp: '2025-01-01T00:00:00.000Z',
+        timestamp: "2025-01-01T00:00:00.000Z",
       });
 
       expect(logger.info).toHaveBeenCalledWith(
-        'Lead pipeline completed',
+        "Lead pipeline completed",
         expect.objectContaining({
-          event: 'lead_pipeline_summary',
-          leadId: 'CON-123',
+          event: "lead_pipeline_summary",
+          leadId: "CON-123",
           overallSuccess: true,
         }),
       );
     });
 
-    it('should log failure summary with error level', async () => {
-      const { logger } = await import('@/lib/logger');
+    it("should log failure summary with error level", async () => {
+      const { logger } = await import("@/lib/logger");
 
       metrics.logPipelineSummary({
-        leadId: 'CON-456',
-        leadType: 'contact',
+        leadId: "CON-456",
+        leadType: "contact",
         totalLatencyMs: 500,
         resend: {
           success: false,
@@ -346,24 +346,24 @@ describe('LeadPipelineMetrics', () => {
           errorType: ERROR_TYPES.NETWORK,
         },
         overallSuccess: false,
-        timestamp: '2025-01-01T00:00:00.000Z',
+        timestamp: "2025-01-01T00:00:00.000Z",
       });
 
       expect(logger.error).toHaveBeenCalledWith(
-        'Lead pipeline completed',
+        "Lead pipeline completed",
         expect.objectContaining({
-          event: 'lead_pipeline_summary',
-          leadId: 'CON-456',
+          event: "lead_pipeline_summary",
+          leadId: "CON-456",
           overallSuccess: false,
         }),
       );
     });
   });
 
-  describe('resetAllStates', () => {
-    it('should reset all failure states', () => {
-      metrics.recordFailure(METRIC_SERVICES.RESEND, 100, new Error('test'));
-      metrics.recordFailure(METRIC_SERVICES.AIRTABLE, 100, new Error('test'));
+  describe("resetAllStates", () => {
+    it("should reset all failure states", () => {
+      metrics.recordFailure(METRIC_SERVICES.RESEND, 100, new Error("test"));
+      metrics.recordFailure(METRIC_SERVICES.AIRTABLE, 100, new Error("test"));
 
       metrics.resetAllStates();
 

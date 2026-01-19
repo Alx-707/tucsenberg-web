@@ -6,7 +6,7 @@ import type {
   ContrastLevel,
   OKLCHColor,
   ThemeColors,
-} from '@/lib/colors/types';
+} from "@/lib/colors/types";
 
 /**
  * 将OKLCH颜色转换为CSS字符串
@@ -34,10 +34,10 @@ export function oklchToCSS(color: OKLCHColor): string {
  */
 function safeAlphaCheck(alpha: unknown): boolean {
   try {
-    if (typeof alpha === 'symbol') {
+    if (typeof alpha === "symbol") {
       return true; // Symbol值总是包含alpha部分
     }
-    if (typeof alpha === 'number') {
+    if (typeof alpha === "number") {
       return alpha < 1;
     }
     // 对于其他类型，尝试转换为数字
@@ -53,12 +53,12 @@ function safeAlphaCheck(alpha: unknown): boolean {
  */
 function safeToString(value: unknown): string {
   try {
-    if (typeof value === 'symbol') {
-      return 'NaN'; // Symbol值转换为NaN字符串
+    if (typeof value === "symbol") {
+      return "NaN"; // Symbol值转换为NaN字符串
     }
     return String(value);
   } catch {
-    return 'NaN'; // 任何转换错误都返回NaN
+    return "NaN"; // 任何转换错误都返回NaN
   }
 }
 
@@ -86,12 +86,12 @@ export function calculateContrast(
 export function checkContrastCompliance(
   foreground: OKLCHColor,
   background: OKLCHColor,
-  level: ContrastLevel = 'AA',
+  level: ContrastLevel = "AA",
 ): boolean {
   const contrast = calculateContrast(foreground, background);
   const aaaMinRatio = 7;
   const aaMinRatio = 4.5;
-  const minRatio = level === 'AAA' ? aaaMinRatio : aaMinRatio;
+  const minRatio = level === "AAA" ? aaaMinRatio : aaMinRatio;
   return contrast >= minRatio;
 }
 
@@ -100,7 +100,7 @@ export function checkContrastCompliance(
  */
 export function generateCSSVariables(
   colors: Partial<ThemeColors>,
-  prefix = '',
+  prefix = "",
 ): Record<string, string> {
   const entries: [string, string][] = [];
 
@@ -108,7 +108,7 @@ export function generateCSSVariables(
     if (!color) {
       return;
     }
-    const cssKey = `--${prefix}${key.replace(/([A-Z])/g, '-$1').toLowerCase()}`;
+    const cssKey = `--${prefix}${key.replace(/([A-Z])/g, "-$1").toLowerCase()}`;
     entries.push([cssKey, oklchToCSS(color as OKLCHColor)]);
   });
 
@@ -129,62 +129,62 @@ export function validateThemeContrast(colors: Partial<ThemeColors>): {
     {
       fg: colors.foreground,
       bg: colors.background,
-      name: 'foreground/background',
+      name: "foreground/background",
     },
     {
       fg: colors.cardForeground,
       bg: colors.card,
-      name: 'card-foreground/card',
+      name: "card-foreground/card",
     },
     {
       fg: colors.primaryForeground,
       bg: colors.primary,
-      name: 'primary-foreground/primary',
+      name: "primary-foreground/primary",
     },
     {
       fg: colors.secondaryForeground,
       bg: colors.secondary,
-      name: 'secondary-foreground/secondary',
+      name: "secondary-foreground/secondary",
     },
     {
       fg: colors.mutedForeground,
       bg: colors.muted,
-      name: 'muted-foreground/muted',
+      name: "muted-foreground/muted",
     },
     {
       fg: colors.accentForeground,
       bg: colors.accent,
-      name: 'accent-foreground/accent',
+      name: "accent-foreground/accent",
     },
     {
       fg: colors.destructiveForeground,
       bg: colors.destructive,
-      name: 'destructive-foreground/destructive',
+      name: "destructive-foreground/destructive",
     },
     {
       fg: colors.successForeground,
       bg: colors.success,
-      name: 'success-foreground/success',
+      name: "success-foreground/success",
     },
     {
       fg: colors.warningForeground,
       bg: colors.warning,
-      name: 'warning-foreground/warning',
+      name: "warning-foreground/warning",
     },
     {
       fg: colors.errorForeground,
       bg: colors.error,
-      name: 'error-foreground/error',
+      name: "error-foreground/error",
     },
     {
       fg: colors.infoForeground,
       bg: colors.info,
-      name: 'info-foreground/info',
+      name: "info-foreground/info",
     },
   ];
 
   checks.forEach(({ fg, bg, name }) => {
-    if (fg && bg && !checkContrastCompliance(fg, bg, 'AA')) {
+    if (fg && bg && !checkContrastCompliance(fg, bg, "AA")) {
       const contrast = calculateContrast(fg, bg);
       const decimalPlaces = 2;
       issues.push(

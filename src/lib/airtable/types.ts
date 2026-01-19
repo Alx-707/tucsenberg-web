@@ -3,7 +3,7 @@
  */
 
 // 重新导出验证相关类型
-export type { AirtableRecord, ContactFormData } from '@/lib/validations';
+export type { AirtableRecord, ContactFormData } from "@/lib/validations";
 
 // Airtable 查询选项类型
 export interface AirtableQueryOptions {
@@ -11,7 +11,7 @@ export interface AirtableQueryOptions {
   filterByFormula?: string;
   sort?: Array<{
     field: string;
-    direction: 'asc' | 'desc';
+    direction: "asc" | "desc";
   }>;
 }
 
@@ -25,13 +25,13 @@ export interface AirtableStatistics {
 }
 
 // 联系人状态类型
-export type ContactStatus = 'New' | 'In Progress' | 'Completed' | 'Archived';
+export type ContactStatus = "New" | "In Progress" | "Completed" | "Archived";
 
 // Lead source type for CRM tracking
 export type LeadSource =
-  | 'Website Contact Form'
-  | 'Product Inquiry'
-  | 'Newsletter Subscription';
+  | "Website Contact Form"
+  | "Product Inquiry"
+  | "Newsletter Subscription";
 
 // Base lead data for CRM
 export interface BaseLeadData {

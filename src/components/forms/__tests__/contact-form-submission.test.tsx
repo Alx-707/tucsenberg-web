@@ -11,21 +11,21 @@ import {
   render,
   screen,
   waitFor,
-} from '@testing-library/react';
-import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
-import { ContactFormContainer } from '@/components/forms/contact-form-container';
+} from "@testing-library/react";
+import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
+import { ContactFormContainer } from "@/components/forms/contact-form-container";
 
 // 确保使用真实的Zod库和validations模块
-vi.unmock('zod');
-vi.unmock('@/lib/validations');
+vi.unmock("zod");
+vi.unmock("@/lib/validations");
 
 // Mock fetch
 global.fetch = vi.fn();
 
 // Mock useActionState for React 19 testing
 const mockUseActionState = vi.hoisted(() => vi.fn());
-vi.mock('react', async () => {
-  const actual = await vi.importActual('react');
+vi.mock("react", async () => {
+  const actual = await vi.importActual("react");
   return {
     ...actual,
     useActionState: mockUseActionState,
@@ -33,7 +33,7 @@ vi.mock('react', async () => {
 });
 
 // Mock Turnstile
-vi.mock('@marsidev/react-turnstile', () => ({
+vi.mock("@marsidev/react-turnstile", () => ({
   Turnstile: ({
     onSuccess,
     onError,
@@ -43,23 +43,20 @@ vi.mock('@marsidev/react-turnstile', () => ({
     onError?: (error: string) => void;
     onExpire?: () => void;
   }) => (
-    <div data-testid='turnstile-mock'>
+    <div data-testid="turnstile-mock">
       <button
-        data-testid='turnstile-success'
-        onClick={() => onSuccess?.('mock-token')}
+        data-testid="turnstile-success"
+        onClick={() => onSuccess?.("mock-token")}
       >
         Success
       </button>
       <button
-        data-testid='turnstile-error'
-        onClick={() => onError?.('mock-error')}
+        data-testid="turnstile-error"
+        onClick={() => onError?.("mock-error")}
       >
         Error
       </button>
-      <button
-        data-testid='turnstile-expire'
-        onClick={() => onExpire?.()}
-      >
+      <button data-testid="turnstile-expire" onClick={() => onExpire?.()}>
         Expire
       </button>
     </div>
@@ -69,24 +66,24 @@ vi.mock('@marsidev/react-turnstile', () => ({
 // Mock next-intl
 const mockT = vi.fn((key: string) => {
   const translations: Record<string, string> = {
-    firstName: 'First Name',
-    lastName: 'Last Name',
-    email: 'Email',
-    company: 'Company',
-    phone: 'Phone',
-    subject: 'Subject',
-    message: 'Message',
-    submit: 'Submit',
-    submitting: 'Submitting...',
-    acceptPrivacy: 'I accept the privacy policy',
-    submitSuccess: 'Message sent successfully',
-    submitError: 'Failed to submit form. Please try again.',
-    rateLimitMessage: 'Please wait before submitting again.',
+    firstName: "First Name",
+    lastName: "Last Name",
+    email: "Email",
+    company: "Company",
+    phone: "Phone",
+    subject: "Subject",
+    message: "Message",
+    submit: "Submit",
+    submitting: "Submitting...",
+    acceptPrivacy: "I accept the privacy policy",
+    submitSuccess: "Message sent successfully",
+    submitError: "Failed to submit form. Please try again.",
+    rateLimitMessage: "Please wait before submitting again.",
   };
   return translations[key] || key; // key 来自测试数据，安全
 });
 
-vi.mock('next-intl', () => ({
+vi.mock("next-intl", () => ({
   useTranslations: () => mockT,
 }));
 
@@ -100,12 +97,12 @@ const originalIntersectionObserver = (
 
 class MockIntersectionObserver implements IntersectionObserver {
   readonly root: Element | Document | null = null;
-  readonly rootMargin = '';
+  readonly rootMargin = "";
   readonly thresholds = [0];
 
   constructor(private readonly callback: IntersectionObserverCallback) {}
 
-  observe: IntersectionObserver['observe'] = vi.fn((element: Element) => {
+  observe: IntersectionObserver["observe"] = vi.fn((element: Element) => {
     this.callback(
       [
         {
@@ -117,9 +114,9 @@ class MockIntersectionObserver implements IntersectionObserver {
     );
   });
 
-  unobserve: IntersectionObserver['unobserve'] = vi.fn();
-  disconnect: IntersectionObserver['disconnect'] = vi.fn();
-  takeRecords: IntersectionObserver['takeRecords'] = vi.fn(() => []);
+  unobserve: IntersectionObserver["unobserve"] = vi.fn();
+  disconnect: IntersectionObserver["disconnect"] = vi.fn();
+  takeRecords: IntersectionObserver["takeRecords"] = vi.fn(() => []);
 }
 
 // 填写有效表单的辅助函数
@@ -128,32 +125,32 @@ const renderContactForm = async () => {
   await act(async () => {
     utils = render(<ContactFormContainer />);
   });
-  await screen.findByTestId('turnstile-mock');
+  await screen.findByTestId("turnstile-mock");
   return utils!;
 };
 
 const _fillValidForm = async () => {
   await act(async () => {
     fireEvent.change(screen.getByLabelText(/first name/i), {
-      target: { value: 'John' },
+      target: { value: "John" },
     });
     fireEvent.change(screen.getByLabelText(/last name/i), {
-      target: { value: 'Doe' },
+      target: { value: "Doe" },
     });
     fireEvent.change(screen.getByLabelText(/email/i), {
-      target: { value: 'john.doe@example.com' },
+      target: { value: "john.doe@example.com" },
     });
     fireEvent.change(screen.getByLabelText(/company/i), {
-      target: { value: 'Test Company' },
+      target: { value: "Test Company" },
     });
     fireEvent.change(screen.getByLabelText(/phone/i), {
-      target: { value: '+1234567890' },
+      target: { value: "+1234567890" },
     });
     fireEvent.change(screen.getByLabelText(/subject/i), {
-      target: { value: 'Test Subject' },
+      target: { value: "Test Subject" },
     });
     fireEvent.change(screen.getByLabelText(/message/i), {
-      target: { value: 'Test message content' },
+      target: { value: "Test message content" },
     });
 
     // 勾选隐私政策
@@ -161,12 +158,12 @@ const _fillValidForm = async () => {
     fireEvent.click(privacyCheckbox);
 
     // 启用 Turnstile
-    const successButton = await screen.findByTestId('turnstile-success');
+    const successButton = await screen.findByTestId("turnstile-success");
     fireEvent.click(successButton);
   });
 };
 
-describe('ContactFormContainer - 提交和错误处理', () => {
+describe("ContactFormContainer - 提交和错误处理", () => {
   beforeEach(() => {
     vi.clearAllMocks();
 
@@ -224,15 +221,15 @@ describe('ContactFormContainer - 提交和错误处理', () => {
         }
       ).IntersectionObserver = originalIntersectionObserver;
     } else {
-      Reflect.deleteProperty(globalThis, 'IntersectionObserver');
+      Reflect.deleteProperty(globalThis, "IntersectionObserver");
     }
   });
 
-  describe('网络错误处理', () => {
-    it('应该处理网络错误', async () => {
+  describe("网络错误处理", () => {
+    it("应该处理网络错误", async () => {
       // Mock useActionState to return error state
       mockUseActionState.mockReturnValue([
-        { success: false, error: 'Network error' }, // state
+        { success: false, error: "Network error" }, // state
         vi.fn(), // formAction
         false, // isPending
       ]);
@@ -243,10 +240,10 @@ describe('ContactFormContainer - 提交和错误处理', () => {
       expect(screen.getByText(/failed to submit form/i)).toBeInTheDocument();
     });
 
-    it('应该处理速率限制错误', async () => {
+    it("应该处理速率限制错误", async () => {
       // Mock useActionState to return rate limit error state
       mockUseActionState.mockReturnValue([
-        { success: false, error: 'Rate limit exceeded' }, // state
+        { success: false, error: "Rate limit exceeded" }, // state
         vi.fn(), // formAction
         false, // isPending
       ]);
@@ -257,25 +254,25 @@ describe('ContactFormContainer - 提交和错误处理', () => {
       expect(screen.getByText(/failed to submit form/i)).toBeInTheDocument();
     });
 
-    it('没有 Turnstile token 时不应该提交', async () => {
+    it("没有 Turnstile token 时不应该提交", async () => {
       await renderContactForm();
 
       // 填写表单但不启用 Turnstile
       await act(async () => {
         fireEvent.change(screen.getByLabelText(/first name/i), {
-          target: { value: 'John' },
+          target: { value: "John" },
         });
         fireEvent.change(screen.getByLabelText(/last name/i), {
-          target: { value: 'Doe' },
+          target: { value: "Doe" },
         });
         fireEvent.change(screen.getByLabelText(/email/i), {
-          target: { value: 'john.doe@example.com' },
+          target: { value: "john.doe@example.com" },
         });
         fireEvent.change(screen.getByLabelText(/company/i), {
-          target: { value: 'Test Company' },
+          target: { value: "Test Company" },
         });
         fireEvent.change(screen.getByLabelText(/message/i), {
-          target: { value: 'Test message content' },
+          target: { value: "Test message content" },
         });
 
         // 勾选隐私政策
@@ -283,7 +280,7 @@ describe('ContactFormContainer - 提交和错误处理', () => {
         fireEvent.click(privacyCheckbox);
       });
 
-      const submitButton = screen.getByRole('button', { name: /submit/i });
+      const submitButton = screen.getByRole("button", { name: /submit/i });
 
       // 按钮应该仍然被禁用
       expect(submitButton).toBeDisabled();
@@ -293,8 +290,8 @@ describe('ContactFormContainer - 提交和错误处理', () => {
     });
   });
 
-  describe('速率限制功能', () => {
-    it('应该在成功提交后显示速率限制', async () => {
+  describe("速率限制功能", () => {
+    it("应该在成功提交后显示速率限制", async () => {
       // Mock useActionState to return success state
       mockUseActionState.mockReturnValue([
         { success: true }, // state
@@ -304,7 +301,7 @@ describe('ContactFormContainer - 提交和错误处理', () => {
 
       await renderContactForm();
 
-      const successButton = await screen.findByTestId('turnstile-success');
+      const successButton = await screen.findByTestId("turnstile-success");
       await act(async () => {
         fireEvent.click(successButton);
       });
@@ -329,7 +326,7 @@ describe('ContactFormContainer - 提交和错误处理', () => {
       );
 
       // 验证按钮禁用状态（可选，允许失败）
-      const submitButton = screen.getByRole('button', { name: /submit/i });
+      const submitButton = screen.getByRole("button", { name: /submit/i });
       try {
         await waitFor(() => expect(submitButton).toBeDisabled(), {
           timeout: 3000,
@@ -337,26 +334,26 @@ describe('ContactFormContainer - 提交和错误处理', () => {
       } catch {
         // 忽略：在个别环境中，可能仅设置了 aria-disabled 或存在短暂时序差异
         console.warn(
-          'Button disabled state check skipped due to timing differences',
+          "Button disabled state check skipped due to timing differences",
         );
       }
     }, 15000); // 增加整个测试的超时到 15 秒
 
-    it('should re-enable submission after cooldown duration elapses', async () => {
+    it("should re-enable submission after cooldown duration elapses", async () => {
       const originalCooldown = process.env.NEXT_PUBLIC_CONTACT_FORM_COOLDOWN_MS;
-      process.env.NEXT_PUBLIC_CONTACT_FORM_COOLDOWN_MS = '50';
+      process.env.NEXT_PUBLIC_CONTACT_FORM_COOLDOWN_MS = "50";
 
       try {
         mockUseActionState.mockReturnValue([{ success: true }, vi.fn(), false]);
 
         await renderContactForm();
 
-        const successButton = await screen.findByTestId('turnstile-success');
+        const successButton = await screen.findByTestId("turnstile-success");
         await act(async () => {
           fireEvent.click(successButton);
         });
 
-        const submitButton = screen.getByRole('button', { name: /submit/i });
+        const submitButton = screen.getByRole("button", { name: /submit/i });
 
         // 使用 findByText 自动等待速率限制提示出现 (符合 Testing Library 最佳实践)
         // 这是主要的验证指标 - 速率限制消息的出现表明功能正常工作
@@ -390,7 +387,7 @@ describe('ContactFormContainer - 提交和错误处理', () => {
       }
     });
 
-    it('速率限制应该在5分钟后解除', async () => {
+    it("速率限制应该在5分钟后解除", async () => {
       // Mock useActionState to return idle state (no rate limiting)
       mockUseActionState.mockReturnValue([
         null, // state
@@ -401,20 +398,20 @@ describe('ContactFormContainer - 提交和错误处理', () => {
       await renderContactForm();
 
       // 启用 Turnstile 以使按钮可用
-      const successButton = await screen.findByTestId('turnstile-success');
+      const successButton = await screen.findByTestId("turnstile-success");
       await act(async () => {
         fireEvent.click(successButton);
       });
 
-      const submitButton = screen.getByRole('button', { name: /submit/i });
+      const submitButton = screen.getByRole("button", { name: /submit/i });
 
       // 按钮应该是启用的（没有速率限制且有Turnstile token）
       expect(submitButton).not.toBeDisabled();
     });
   });
 
-  describe('数据格式化', () => {
-    it('应该正确格式化提交数据', async () => {
+  describe("数据格式化", () => {
+    it("应该正确格式化提交数据", async () => {
       // Mock useActionState to return success state
       mockUseActionState.mockReturnValue([
         { success: true }, // state
@@ -431,7 +428,7 @@ describe('ContactFormContainer - 提交和错误处理', () => {
       expect(screen.getByLabelText(/message/i)).toBeInTheDocument();
 
       // 验证成功状态显示
-      expect(screen.getByText('Message sent successfully')).toBeInTheDocument();
+      expect(screen.getByText("Message sent successfully")).toBeInTheDocument();
     });
   });
 });

@@ -3,21 +3,21 @@
  * Resend email service core class
  */
 
-import { render } from '@react-email/render';
-import { Resend } from 'resend';
-import { env } from '@/lib/env';
-import { logger, sanitizeEmail } from '@/lib/logger';
-import { EMAIL_CONFIG, ResendUtils } from '@/lib/resend-utils';
+import { render } from "@react-email/render";
+import { Resend } from "resend";
+import { env } from "@/lib/env";
+import { logger, sanitizeEmail } from "@/lib/logger";
+import { EMAIL_CONFIG, ResendUtils } from "@/lib/resend-utils";
 import type {
   EmailTemplateData,
   ProductInquiryEmailData,
-} from '@/lib/validations';
+} from "@/lib/validations";
 import {
   ConfirmationEmail,
   ContactFormEmail,
   ProductInquiryEmail,
-} from '@/components/emails';
-import { ZERO } from '@/constants';
+} from "@/components/emails";
+import { ZERO } from "@/constants";
 
 /**
  * Resend邮件服务配置
@@ -49,20 +49,20 @@ export class ResendService {
   private initializeResend(): void {
     try {
       if (!env.RESEND_API_KEY) {
-        logger.warn('Resend API key missing - email service will be disabled');
+        logger.warn("Resend API key missing - email service will be disabled");
         return;
       }
 
       this.resend = new Resend(env.RESEND_API_KEY);
       this.isConfigured = true;
 
-      logger.info('Resend email service initialized successfully', {
+      logger.info("Resend email service initialized successfully", {
         from: this.emailConfig.from,
         replyTo: this.emailConfig.replyTo,
       });
     } catch (error) {
-      logger.error('Failed to initialize Resend service', {
-        error: error instanceof Error ? error.message : 'Unknown error',
+      logger.error("Failed to initialize Resend service", {
+        error: error instanceof Error ? error.message : "Unknown error",
       });
     }
   }
@@ -81,7 +81,7 @@ export class ResendService {
    */
   public async sendContactFormEmail(data: EmailTemplateData): Promise<string> {
     if (!this.isReady()) {
-      throw new Error('Resend service is not configured');
+      throw new Error("Resend service is not configured");
     }
 
     try {
@@ -106,20 +106,20 @@ export class ResendService {
         throw new Error(`Resend API error: ${result.error.message}`);
       }
 
-      logger.info('Contact form email sent successfully', {
+      logger.info("Contact form email sent successfully", {
         messageId: result.data?.id,
         to: sanitizeEmail(this.emailConfig.replyTo),
         from: sanitizeEmail(sanitizedData.email),
         subject,
       });
 
-      return result.data?.id || 'unknown';
+      return result.data?.id || "unknown";
     } catch (error) {
-      logger.error('Failed to send contact form email', {
-        error: error instanceof Error ? error.message : 'Unknown error',
+      logger.error("Failed to send contact form email", {
+        error: error instanceof Error ? error.message : "Unknown error",
         email: sanitizeEmail(data.email),
       });
-      throw new Error('Failed to send email');
+      throw new Error("Failed to send email");
     }
   }
 
@@ -129,7 +129,7 @@ export class ResendService {
    */
   public async sendConfirmationEmail(data: EmailTemplateData): Promise<string> {
     if (!this.isReady()) {
-      throw new Error('Resend service is not configured');
+      throw new Error("Resend service is not configured");
     }
 
     try {
@@ -154,19 +154,19 @@ export class ResendService {
         throw new Error(`Resend API error: ${result.error.message}`);
       }
 
-      logger.info('Confirmation email sent successfully', {
+      logger.info("Confirmation email sent successfully", {
         messageId: result.data?.id,
         to: sanitizeEmail(sanitizedData.email),
         subject,
       });
 
-      return result.data?.id || 'unknown';
+      return result.data?.id || "unknown";
     } catch (error) {
-      logger.error('Failed to send confirmation email', {
-        error: error instanceof Error ? error.message : 'Unknown error',
+      logger.error("Failed to send confirmation email", {
+        error: error instanceof Error ? error.message : "Unknown error",
         email: sanitizeEmail(data.email),
       });
-      throw new Error('Failed to send confirmation email');
+      throw new Error("Failed to send confirmation email");
     }
   }
 
@@ -177,7 +177,7 @@ export class ResendService {
     data: ProductInquiryEmailData,
   ): Promise<string> {
     if (!this.isReady()) {
-      throw new Error('Resend service is not configured');
+      throw new Error("Resend service is not configured");
     }
 
     try {
@@ -203,7 +203,7 @@ export class ResendService {
         throw new Error(`Resend API error: ${result.error.message}`);
       }
 
-      logger.info('Product inquiry email sent successfully', {
+      logger.info("Product inquiry email sent successfully", {
         messageId: result.data?.id,
         to: sanitizeEmail(this.emailConfig.replyTo),
         from: sanitizeEmail(sanitizedData.email),
@@ -211,14 +211,14 @@ export class ResendService {
         quantity: sanitizedData.quantity,
       });
 
-      return result.data?.id || 'unknown';
+      return result.data?.id || "unknown";
     } catch (error) {
-      logger.error('Failed to send product inquiry email', {
-        error: error instanceof Error ? error.message : 'Unknown error',
+      logger.error("Failed to send product inquiry email", {
+        error: error instanceof Error ? error.message : "Unknown error",
         email: sanitizeEmail(data.email),
         product: data.productName,
       });
-      throw new Error('Failed to send product inquiry email');
+      throw new Error("Failed to send product inquiry email");
     }
   }
 

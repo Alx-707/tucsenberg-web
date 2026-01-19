@@ -21,28 +21,28 @@
  * ```
  */
 
-import { NextRequest, NextResponse } from 'next/server';
-import { logger } from '@/lib/logger';
-import { getClientIP as getTrustedClientIP } from '@/lib/security/client-ip';
+import { NextRequest, NextResponse } from "next/server";
+import { logger } from "@/lib/logger";
+import { getClientIP as getTrustedClientIP } from "@/lib/security/client-ip";
 import {
   checkDistributedRateLimit,
   createRateLimitHeaders,
   type RateLimitPreset,
-} from '@/lib/security/distributed-rate-limit';
+} from "@/lib/security/distributed-rate-limit";
 import {
   getIPKey,
   type KeyStrategy,
-} from '@/lib/security/rate-limit-key-strategies';
+} from "@/lib/security/rate-limit-key-strategies";
 
 // Re-export types for convenience
-export type { RateLimitPreset } from '@/lib/security/distributed-rate-limit';
-export type { KeyStrategy } from '@/lib/security/rate-limit-key-strategies';
+export type { RateLimitPreset } from "@/lib/security/distributed-rate-limit";
+export type { KeyStrategy } from "@/lib/security/rate-limit-key-strategies";
 
 /** HTTP status codes */
 const HTTP_TOO_MANY_REQUESTS = 429;
 
 /** Header for degraded mode indication */
-const RATE_LIMIT_DEGRADED_HEADER = 'X-RateLimit-Degraded';
+const RATE_LIMIT_DEGRADED_HEADER = "X-RateLimit-Degraded";
 
 /**
  * Storage failure tracking for alert threshold
@@ -113,13 +113,13 @@ function createRateLimitResponse<T>(
   const headers = createRateLimitHeaders(result);
 
   // Log only safe prefix (max 8 chars) per privacy requirements
-  logger.warn('Rate limit exceeded', {
+  logger.warn("Rate limit exceeded", {
     keyPrefix: keyPrefix.slice(0, 8),
     retryAfter: result.retryAfter,
   });
 
   return NextResponse.json(
-    { success: false, error: 'Too many requests' } as RateLimitErrorBody,
+    { success: false, error: "Too many requests" } as RateLimitErrorBody,
     { status: HTTP_TOO_MANY_REQUESTS, headers },
   ) as NextResponse<T>;
 }
@@ -171,13 +171,13 @@ export function withRateLimit<T = unknown>(
     if (result.degraded) {
       const shouldAlert = trackStorageFailure();
 
-      logger.warn('Rate limit storage degraded (fail-open)', {
+      logger.warn("Rate limit storage degraded (fail-open)", {
         preset,
         alertTriggered: shouldAlert,
       });
 
       if (shouldAlert) {
-        logger.error('ALERT: Rate limit storage failure threshold exceeded', {
+        logger.error("ALERT: Rate limit storage failure threshold exceeded", {
           failureCount: storageFailureTracker.count,
           windowMs: ALERT_WINDOW_MS,
         });
@@ -185,7 +185,7 @@ export function withRateLimit<T = unknown>(
 
       // Execute handler and add degraded header
       const response = await handler(request, { clientIP, degraded: true });
-      response.headers.set(RATE_LIMIT_DEGRADED_HEADER, 'true');
+      response.headers.set(RATE_LIMIT_DEGRADED_HEADER, "true");
       return response;
     }
 

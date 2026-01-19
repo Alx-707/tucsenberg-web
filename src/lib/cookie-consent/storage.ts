@@ -11,13 +11,13 @@ import {
   DEFAULT_CONSENT,
   type CookieConsent,
   type StoredConsent,
-} from '@/lib/cookie-consent/types';
+} from "@/lib/cookie-consent/types";
 
 /** Check if localStorage is available (SSR-safe) */
 function isStorageAvailable(): boolean {
-  if (typeof window === 'undefined') return false;
+  if (typeof window === "undefined") return false;
   try {
-    const test = '__storage_test__';
+    const test = "__storage_test__";
     window.localStorage.setItem(test, test);
     window.localStorage.removeItem(test);
     return true;
@@ -28,22 +28,22 @@ function isStorageAvailable(): boolean {
 
 /** Validate consent object structure */
 function isValidConsent(obj: unknown): obj is CookieConsent {
-  if (typeof obj !== 'object' || obj === null) return false;
+  if (typeof obj !== "object" || obj === null) return false;
   const consent = obj as Record<string, unknown>;
   return (
     consent.necessary === true &&
-    typeof consent.analytics === 'boolean' &&
-    typeof consent.marketing === 'boolean'
+    typeof consent.analytics === "boolean" &&
+    typeof consent.marketing === "boolean"
   );
 }
 
 /** Validate stored consent structure */
 function isValidStoredConsent(obj: unknown): obj is StoredConsent {
-  if (typeof obj !== 'object' || obj === null) return false;
+  if (typeof obj !== "object" || obj === null) return false;
   const stored = obj as Record<string, unknown>;
   return (
-    typeof stored.version === 'number' &&
-    typeof stored.updatedAt === 'string' &&
+    typeof stored.version === "number" &&
+    typeof stored.updatedAt === "string" &&
     isValidConsent(stored.consent)
   );
 }

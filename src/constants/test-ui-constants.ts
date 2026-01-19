@@ -5,7 +5,7 @@
 //   BREAKPOINT_XL,
 //   ZERO,
 // } from '@/constants/magic-numbers';
-import { TEST_BASE_NUMBERS } from './test-base-constants';
+import { TEST_BASE_NUMBERS } from "./test-base-constants";
 
 /**
  * 测试UI相关常量定义

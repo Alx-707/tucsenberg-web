@@ -1,10 +1,10 @@
-import React from 'react';
-import { act, render, screen } from '@testing-library/react';
-import { beforeEach, describe, expect, it, vi } from 'vitest';
+import React from "react";
+import { act, render, screen } from "@testing-library/react";
+import { beforeEach, describe, expect, it, vi } from "vitest";
 import {
   DEFAULT_CONSENT,
   type CookieConsent,
-} from '@/lib/cookie-consent/types';
+} from "@/lib/cookie-consent/types";
 
 const {
   mockLoadConsent,
@@ -20,7 +20,7 @@ const {
   mockCreateRejectAllConsent: vi.fn(),
 }));
 
-vi.mock('@/lib/cookie-consent/storage', () => ({
+vi.mock("@/lib/cookie-consent/storage", () => ({
   loadConsent: mockLoadConsent,
   saveConsent: mockSaveConsent,
   clearConsent: mockClearConsent,
@@ -34,7 +34,7 @@ async function flushMicrotasks() {
   });
 }
 
-describe('CookieConsentProvider (hydration-safe external store)', () => {
+describe("CookieConsentProvider (hydration-safe external store)", () => {
   beforeEach(() => {
     vi.resetModules();
     vi.clearAllMocks();
@@ -46,17 +46,17 @@ describe('CookieConsentProvider (hydration-safe external store)', () => {
     mockCreateRejectAllConsent.mockReturnValue(DEFAULT_CONSENT);
   });
 
-  it('starts with server snapshot and becomes ready after microtask', async () => {
+  it("starts with server snapshot and becomes ready after microtask", async () => {
     mockLoadConsent.mockReturnValue(null);
     const { CookieConsentProvider, useCookieConsent } =
-      await import('../context');
+      await import("../context");
 
     function Consumer() {
       const state = useCookieConsent();
       return (
         <div>
-          <div data-testid='ready'>{String(state.ready)}</div>
-          <div data-testid='hasConsented'>{String(state.hasConsented)}</div>
+          <div data-testid="ready">{String(state.ready)}</div>
+          <div data-testid="hasConsented">{String(state.hasConsented)}</div>
         </div>
       );
     }
@@ -67,18 +67,18 @@ describe('CookieConsentProvider (hydration-safe external store)', () => {
       </CookieConsentProvider>,
     );
 
-    expect(screen.getByTestId('ready')).toHaveTextContent('false');
-    expect(screen.getByTestId('hasConsented')).toHaveTextContent('false');
+    expect(screen.getByTestId("ready")).toHaveTextContent("false");
+    expect(screen.getByTestId("hasConsented")).toHaveTextContent("false");
 
     await act(async () => {
       await flushMicrotasks();
     });
 
-    expect(screen.getByTestId('ready')).toHaveTextContent('true');
-    expect(screen.getByTestId('hasConsented')).toHaveTextContent('false');
+    expect(screen.getByTestId("ready")).toHaveTextContent("true");
+    expect(screen.getByTestId("hasConsented")).toHaveTextContent("false");
   });
 
-  it('loads stored consent on first subscription and marks ready after microtask', async () => {
+  it("loads stored consent on first subscription and marks ready after microtask", async () => {
     mockLoadConsent.mockReturnValue({
       consent: {
         necessary: true,
@@ -90,15 +90,15 @@ describe('CookieConsentProvider (hydration-safe external store)', () => {
     });
 
     const { CookieConsentProvider, useCookieConsent } =
-      await import('../context');
+      await import("../context");
 
     function Consumer() {
       const state = useCookieConsent();
       return (
         <div>
-          <div data-testid='ready'>{String(state.ready)}</div>
-          <div data-testid='analytics'>{String(state.consent.analytics)}</div>
-          <div data-testid='hasConsented'>{String(state.hasConsented)}</div>
+          <div data-testid="ready">{String(state.ready)}</div>
+          <div data-testid="analytics">{String(state.consent.analytics)}</div>
+          <div data-testid="hasConsented">{String(state.hasConsented)}</div>
         </div>
       );
     }
@@ -109,34 +109,31 @@ describe('CookieConsentProvider (hydration-safe external store)', () => {
       </CookieConsentProvider>,
     );
 
-    expect(screen.getByTestId('ready')).toHaveTextContent('false');
+    expect(screen.getByTestId("ready")).toHaveTextContent("false");
 
     await act(async () => {
       await flushMicrotasks();
     });
 
-    expect(screen.getByTestId('ready')).toHaveTextContent('true');
-    expect(screen.getByTestId('hasConsented')).toHaveTextContent('true');
-    expect(screen.getByTestId('analytics')).toHaveTextContent('true');
+    expect(screen.getByTestId("ready")).toHaveTextContent("true");
+    expect(screen.getByTestId("hasConsented")).toHaveTextContent("true");
+    expect(screen.getByTestId("analytics")).toHaveTextContent("true");
   });
 
-  it('acceptAll updates store and persists consent', async () => {
+  it("acceptAll updates store and persists consent", async () => {
     mockLoadConsent.mockReturnValue(null);
     const { CookieConsentProvider, useCookieConsent } =
-      await import('../context');
+      await import("../context");
 
     function Consumer() {
       const state = useCookieConsent();
       return (
         <div>
-          <button
-            type='button'
-            onClick={() => state.acceptAll()}
-          >
+          <button type="button" onClick={() => state.acceptAll()}>
             accept
           </button>
-          <div data-testid='ready'>{String(state.ready)}</div>
-          <div data-testid='analytics'>{String(state.consent.analytics)}</div>
+          <div data-testid="ready">{String(state.ready)}</div>
+          <div data-testid="analytics">{String(state.consent.analytics)}</div>
         </div>
       );
     }
@@ -151,15 +148,15 @@ describe('CookieConsentProvider (hydration-safe external store)', () => {
       await flushMicrotasks();
     });
 
-    expect(screen.getByTestId('ready')).toHaveTextContent('true');
+    expect(screen.getByTestId("ready")).toHaveTextContent("true");
 
     await act(async () => {
-      screen.getByRole('button', { name: 'accept' }).click();
+      screen.getByRole("button", { name: "accept" }).click();
     });
 
     expect(mockSaveConsent).toHaveBeenCalledWith(
       expect.objectContaining({ analytics: true, marketing: true }),
     );
-    expect(screen.getByTestId('analytics')).toHaveTextContent('true');
+    expect(screen.getByTestId("analytics")).toHaveTextContent("true");
   });
 });

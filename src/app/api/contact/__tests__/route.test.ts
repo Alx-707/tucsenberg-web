@@ -1,6 +1,6 @@
-import { NextRequest } from 'next/server';
-import { beforeEach, describe, expect, it, vi } from 'vitest';
-import { GET, POST } from '@/app/api/contact/route';
+import { NextRequest } from "next/server";
+import { beforeEach, describe, expect, it, vi } from "vitest";
+import { GET, POST } from "@/app/api/contact/route";
 
 // Mock配置 - 使用vi.hoisted确保Mock在模块导入前设置
 const {
@@ -31,26 +31,26 @@ const {
 }));
 
 // Mock dependencies
-vi.mock('@/lib/airtable', () => ({
+vi.mock("@/lib/airtable", () => ({
   airtableService: mockAirtableService,
 }));
 
-vi.mock('@/lib/resend', () => ({
+vi.mock("@/lib/resend", () => ({
   resendService: mockResendService,
 }));
 
-vi.mock('@/lib/logger', () => ({
+vi.mock("@/lib/logger", () => ({
   logger: mockLogger,
   sanitizeIP: (ip: string | undefined | null) =>
-    ip ? '[REDACTED_IP]' : '[NO_IP]',
+    ip ? "[REDACTED_IP]" : "[NO_IP]",
   sanitizeEmail: (email: string | undefined | null) =>
-    email ? '[REDACTED_EMAIL]' : '[NO_EMAIL]',
+    email ? "[REDACTED_EMAIL]" : "[NO_EMAIL]",
   sanitizeLogContext: <T extends Record<string, unknown>>(context: T): T =>
     context,
 }));
 
 // Mock distributed rate limit
-vi.mock('@/lib/security/distributed-rate-limit', () => ({
+vi.mock("@/lib/security/distributed-rate-limit", () => ({
   checkDistributedRateLimit: vi.fn(async () => ({
     allowed: true,
     remaining: 5,
@@ -65,15 +65,15 @@ vi.mock('@/lib/security/distributed-rate-limit', () => ({
 // vi.mock('@/lib/validations', () => { ... });
 
 // Mock contact API utils
-vi.mock('@/app/api/contact/contact-api-utils', () => ({
-  getClientIP: vi.fn().mockReturnValue('127.0.0.1'),
+vi.mock("@/app/api/contact/contact-api-utils", () => ({
+  getClientIP: vi.fn().mockReturnValue("127.0.0.1"),
   verifyTurnstile: vi.fn().mockResolvedValue(true),
 }));
 
 // Mock contact API validation
-vi.mock('@/app/api/contact/contact-api-validation', async () => {
+vi.mock("@/app/api/contact/contact-api-validation", async () => {
   const actual = await vi.importActual(
-    '@/app/api/contact/contact-api-validation',
+    "@/app/api/contact/contact-api-validation",
   );
   return {
     ...actual,
@@ -81,8 +81,8 @@ vi.mock('@/app/api/contact/contact-api-validation', async () => {
     processFormSubmission: vi.fn().mockResolvedValue({
       emailSent: true,
       recordCreated: true,
-      emailMessageId: 'email-123',
-      airtableRecordId: 'record-123',
+      emailMessageId: "email-123",
+      airtableRecordId: "record-123",
     }),
     validateAdminAccess: vi.fn(),
     getContactFormStats: vi.fn(),
@@ -90,24 +90,24 @@ vi.mock('@/app/api/contact/contact-api-validation', async () => {
 });
 
 // Mock environment variables
-vi.mock('../../../../env.mjs', () => ({
+vi.mock("../../../../env.mjs", () => ({
   env: {
-    NODE_ENV: 'test',
-    ADMIN_API_TOKEN: 'test-admin-token',
-    TURNSTILE_SECRET_KEY: 'test-turnstile-key',
+    NODE_ENV: "test",
+    ADMIN_API_TOKEN: "test-admin-token",
+    TURNSTILE_SECRET_KEY: "test-turnstile-key",
   },
 }));
 
 // Mock process.env for Turnstile verification
-Object.defineProperty(process, 'env', {
+Object.defineProperty(process, "env", {
   value: {
     ...process.env,
-    NODE_ENV: 'test',
-    TURNSTILE_SECRET_KEY: 'test-turnstile-key',
+    NODE_ENV: "test",
+    TURNSTILE_SECRET_KEY: "test-turnstile-key",
   },
 });
 
-describe('Contact API Route', () => {
+describe("Contact API Route", () => {
   beforeEach(async () => {
     // Vitest v4: ensure mock implementations are reset between tests
     vi.resetAllMocks();
@@ -119,30 +119,30 @@ describe('Contact API Route', () => {
     mockValidationHelpers.sanitizeInput.mockImplementation((input) => input);
 
     // Reset contact-api-utils mocks
-    const contactApiUtils = await import('@/app/api/contact/contact-api-utils');
-    vi.mocked(contactApiUtils.getClientIP).mockReturnValue('127.0.0.1');
+    const contactApiUtils = await import("@/app/api/contact/contact-api-utils");
+    vi.mocked(contactApiUtils.getClientIP).mockReturnValue("127.0.0.1");
     vi.mocked(contactApiUtils.verifyTurnstile).mockResolvedValue(true);
   });
 
-  describe('POST /api/contact', () => {
+  describe("POST /api/contact", () => {
     const validFormData = {
-      firstName: 'John',
-      lastName: 'Doe',
-      email: 'john.doe@example.com',
-      company: 'Test Company',
-      message: 'Test message',
+      firstName: "John",
+      lastName: "Doe",
+      email: "john.doe@example.com",
+      company: "Test Company",
+      message: "Test message",
       acceptPrivacy: true,
-      phone: '+1234567890',
-      subject: 'Test Subject',
+      phone: "+1234567890",
+      subject: "Test Subject",
       marketingConsent: false,
-      turnstileToken: 'valid-token',
+      turnstileToken: "valid-token",
       submittedAt: new Date().toISOString(),
     };
 
-    it('应该成功处理有效的表单提交', async () => {
+    it("应该成功处理有效的表单提交", async () => {
       // Mock successful validation
       const { validateFormData } =
-        await import('@/app/api/contact/contact-api-validation');
+        await import("@/app/api/contact/contact-api-validation");
       vi.mocked(validateFormData).mockResolvedValue({
         success: true,
         error: null,
@@ -152,20 +152,20 @@ describe('Contact API Route', () => {
 
       // Ensure submission processing is mocked to succeed under Vitest v4
       const { processFormSubmission } =
-        await import('@/app/api/contact/contact-api-validation');
+        await import("@/app/api/contact/contact-api-validation");
       vi.mocked(processFormSubmission).mockResolvedValue({
         success: true,
         emailSent: true,
         recordCreated: true,
-        emailMessageId: 'email-123',
-        airtableRecordId: 'record-123',
+        emailMessageId: "email-123",
+        airtableRecordId: "record-123",
       } as any);
 
       // Mock successful service responses
-      mockAirtableService.createContact.mockResolvedValue({ id: 'record-123' });
-      mockResendService.sendContactFormEmail.mockResolvedValue('email-123');
+      mockAirtableService.createContact.mockResolvedValue({ id: "record-123" });
+      mockResendService.sendContactFormEmail.mockResolvedValue("email-123");
       mockResendService.sendConfirmationEmail.mockResolvedValue(
-        'confirmation-123',
+        "confirmation-123",
       );
 
       // Mock Turnstile verification
@@ -174,12 +174,12 @@ describe('Contact API Route', () => {
         json: () => Promise.resolve({ success: true }),
       });
 
-      const request = new NextRequest('http://localhost:3000/api/contact', {
-        method: 'POST',
+      const request = new NextRequest("http://localhost:3000/api/contact", {
+        method: "POST",
         body: JSON.stringify(validFormData),
         headers: {
-          'content-type': 'application/json',
-          'x-forwarded-for': '127.0.0.1',
+          "content-type": "application/json",
+          "x-forwarded-for": "127.0.0.1",
         },
       });
 
@@ -188,25 +188,25 @@ describe('Contact API Route', () => {
 
       expect(response.status).toBe(200);
       expect(data.success).toBe(true);
-      expect(data.message).toContain('Thank you for your message');
+      expect(data.message).toContain("Thank you for your message");
     });
 
-    it('应该处理无效的表单数据', async () => {
+    it("应该处理无效的表单数据", async () => {
       // Mock validation failure
       const { validateFormData } =
-        await import('@/app/api/contact/contact-api-validation');
+        await import("@/app/api/contact/contact-api-validation");
       vi.mocked(validateFormData).mockResolvedValue({
         success: false,
-        error: 'Invalid form data',
-        details: ['email: Invalid email'],
+        error: "Invalid form data",
+        details: ["email: Invalid email"],
         data: null,
       });
 
-      const request = new NextRequest('http://localhost:3000/api/contact', {
-        method: 'POST',
-        body: JSON.stringify({ email: 'invalid-email' }),
+      const request = new NextRequest("http://localhost:3000/api/contact", {
+        method: "POST",
+        body: JSON.stringify({ email: "invalid-email" }),
         headers: {
-          'content-type': 'application/json',
+          "content-type": "application/json",
         },
       });
 
@@ -215,23 +215,23 @@ describe('Contact API Route', () => {
 
       expect(response.status).toBe(400);
       expect(data.success).toBe(false);
-      expect(data.error).toBe('Invalid form data');
+      expect(data.error).toBe("Invalid form data");
       expect(data.details).toBeDefined();
     });
 
-    it('应该处理速率限制', async () => {
+    it("应该处理速率限制", async () => {
       // 模拟多次快速请求来触发速率限制
-      const request = new NextRequest('http://localhost:3000/api/contact', {
-        method: 'POST',
+      const request = new NextRequest("http://localhost:3000/api/contact", {
+        method: "POST",
         body: JSON.stringify(validFormData),
         headers: {
-          'content-type': 'application/json',
-          'x-forwarded-for': '127.0.0.1',
+          "content-type": "application/json",
+          "x-forwarded-for": "127.0.0.1",
         },
       });
 
       // 第一次请求应该成功 - use the global mock from setup.ts
-      const mockValidations = await import('@/lib/validations');
+      const mockValidations = await import("@/lib/validations");
       const mockExtendedSchema = {
         safeParse: vi.fn().mockReturnValue({
           success: true,
@@ -251,8 +251,8 @@ describe('Contact API Route', () => {
         json: () => Promise.resolve({ success: true }),
       });
 
-      mockAirtableService.createContact.mockResolvedValue('record-123');
-      mockResendService.sendContactFormEmail.mockResolvedValue('email-123');
+      mockAirtableService.createContact.mockResolvedValue("record-123");
+      mockResendService.sendContactFormEmail.mockResolvedValue("email-123");
 
       // 执行多次请求
       await POST(request);
@@ -267,18 +267,18 @@ describe('Contact API Route', () => {
       if (response.status === 429) {
         const data = await response.json();
         expect(data.success).toBe(false);
-        expect(data.error).toContain('Too many requests');
+        expect(data.error).toContain("Too many requests");
       }
     });
 
-    it('应该处理Turnstile验证失败', async () => {
+    it("应该处理Turnstile验证失败", async () => {
       // Mock validation failure due to Turnstile
       const { validateFormData } =
-        await import('@/app/api/contact/contact-api-validation');
+        await import("@/app/api/contact/contact-api-validation");
       vi.mocked(validateFormData).mockResolvedValue({
         success: false,
-        error: 'Security verification failed. Please try again.',
-        details: ['Turnstile verification failed'],
+        error: "Security verification failed. Please try again.",
+        details: ["Turnstile verification failed"],
         data: null,
       });
 
@@ -287,16 +287,16 @@ describe('Contact API Route', () => {
         ok: true,
         json: () =>
           Promise.resolve({
-            'success': false,
-            'error-codes': ['invalid-input-response'],
+            success: false,
+            "error-codes": ["invalid-input-response"],
           }),
       });
 
-      const request = new NextRequest('http://localhost:3000/api/contact', {
-        method: 'POST',
+      const request = new NextRequest("http://localhost:3000/api/contact", {
+        method: "POST",
         body: JSON.stringify(validFormData),
         headers: {
-          'content-type': 'application/json',
+          "content-type": "application/json",
         },
       });
 
@@ -306,18 +306,18 @@ describe('Contact API Route', () => {
       expect(response.status).toBe(400);
       expect(data.success).toBe(false);
       expect(data.error).toBe(
-        'Security verification failed. Please try again.',
+        "Security verification failed. Please try again.",
       );
     });
 
-    it('应该处理服务不可用的情况', async () => {
+    it("应该处理服务不可用的情况", async () => {
       // Mock services not ready
       mockAirtableService.isReady.mockReturnValue(false);
       mockResendService.isReady.mockReturnValue(false);
 
       // Mock successful validation
       const { validateFormData, processFormSubmission } =
-        await import('@/app/api/contact/contact-api-validation');
+        await import("@/app/api/contact/contact-api-validation");
       vi.mocked(validateFormData).mockResolvedValue({
         success: true,
         error: null,
@@ -339,11 +339,11 @@ describe('Contact API Route', () => {
         json: () => Promise.resolve({ success: true }),
       });
 
-      const request = new NextRequest('http://localhost:3000/api/contact', {
-        method: 'POST',
+      const request = new NextRequest("http://localhost:3000/api/contact", {
+        method: "POST",
         body: JSON.stringify(validFormData),
         headers: {
-          'content-type': 'application/json',
+          "content-type": "application/json",
         },
       });
 
@@ -357,12 +357,12 @@ describe('Contact API Route', () => {
       expect(mockResendService.sendContactFormEmail).not.toHaveBeenCalled();
     });
 
-    it('应该处理JSON解析错误', async () => {
-      const request = new NextRequest('http://localhost:3000/api/contact', {
-        method: 'POST',
-        body: 'invalid-json',
+    it("应该处理JSON解析错误", async () => {
+      const request = new NextRequest("http://localhost:3000/api/contact", {
+        method: "POST",
+        body: "invalid-json",
         headers: {
-          'content-type': 'application/json',
+          "content-type": "application/json",
         },
       });
 
@@ -372,12 +372,12 @@ describe('Contact API Route', () => {
       // 使用 safeParseJson 后，JSON 解析错误应返回 400 + INVALID_JSON
       expect(response.status).toBe(400);
       expect(data.success).toBe(false);
-      expect(data.error).toBe('INVALID_JSON');
+      expect(data.error).toBe("INVALID_JSON");
     });
   });
 
-  describe('GET /api/contact', () => {
-    it('应该返回统计信息（有效的管理员token）', async () => {
+  describe("GET /api/contact", () => {
+    it("应该返回统计信息（有效的管理员token）", async () => {
       const mockStats = {
         totalContacts: 100,
         newContacts: 10,
@@ -387,7 +387,7 @@ describe('Contact API Route', () => {
 
       // Mock admin validation and stats
       const { validateAdminAccess, getContactFormStats } =
-        await import('@/app/api/contact/contact-api-validation');
+        await import("@/app/api/contact/contact-api-validation");
       vi.mocked(validateAdminAccess).mockReturnValue(true);
       vi.mocked(getContactFormStats).mockResolvedValue({
         success: true,
@@ -396,10 +396,10 @@ describe('Contact API Route', () => {
 
       mockAirtableService.getStatistics.mockResolvedValue(mockStats);
 
-      const request = new NextRequest('http://localhost:3000/api/contact', {
-        method: 'GET',
+      const request = new NextRequest("http://localhost:3000/api/contact", {
+        method: "GET",
         headers: {
-          authorization: 'Bearer test-admin-token',
+          authorization: "Bearer test-admin-token",
         },
       });
 
@@ -411,11 +411,11 @@ describe('Contact API Route', () => {
       expect(data.data).toEqual(mockStats);
     });
 
-    it('应该拒绝无效的管理员token', async () => {
-      const request = new NextRequest('http://localhost:3000/api/contact', {
-        method: 'GET',
+    it("应该拒绝无效的管理员token", async () => {
+      const request = new NextRequest("http://localhost:3000/api/contact", {
+        method: "GET",
         headers: {
-          authorization: 'Bearer invalid-token',
+          authorization: "Bearer invalid-token",
         },
       });
 
@@ -423,27 +423,27 @@ describe('Contact API Route', () => {
       const data = await response.json();
 
       expect(response.status).toBe(401);
-      expect(data.error).toBe('Unauthorized');
+      expect(data.error).toBe("Unauthorized");
     });
 
-    it('应该处理缺少authorization header的情况', async () => {
-      const request = new NextRequest('http://localhost:3000/api/contact', {
-        method: 'GET',
+    it("应该处理缺少authorization header的情况", async () => {
+      const request = new NextRequest("http://localhost:3000/api/contact", {
+        method: "GET",
       });
 
       const response = await GET(request);
       const data = await response.json();
 
       expect(response.status).toBe(401);
-      expect(data.error).toBe('Unauthorized');
+      expect(data.error).toBe("Unauthorized");
     });
 
-    it('应该处理Airtable服务不可用的情况', async () => {
+    it("应该处理Airtable服务不可用的情况", async () => {
       mockAirtableService.isReady.mockReturnValue(false);
 
       // Mock admin validation and stats
       const { validateAdminAccess, getContactFormStats } =
-        await import('@/app/api/contact/contact-api-validation');
+        await import("@/app/api/contact/contact-api-validation");
       vi.mocked(validateAdminAccess).mockReturnValue(true);
       vi.mocked(getContactFormStats).mockResolvedValue({
         success: true,
@@ -455,10 +455,10 @@ describe('Contact API Route', () => {
         },
       });
 
-      const request = new NextRequest('http://localhost:3000/api/contact', {
-        method: 'GET',
+      const request = new NextRequest("http://localhost:3000/api/contact", {
+        method: "GET",
         headers: {
-          authorization: 'Bearer test-admin-token',
+          authorization: "Bearer test-admin-token",
         },
       });
 
@@ -476,26 +476,26 @@ describe('Contact API Route', () => {
     });
   });
 
-  describe('错误处理', () => {
-    it('应该记录错误日志', async () => {
+  describe("错误处理", () => {
+    it("应该记录错误日志", async () => {
       const testFormData = {
-        firstName: 'John',
-        lastName: 'Doe',
-        email: 'john.doe@example.com',
-        company: 'Test Company',
-        message: 'Test message',
-        phone: '+1234567890',
-        subject: 'Test Subject',
+        firstName: "John",
+        lastName: "Doe",
+        email: "john.doe@example.com",
+        company: "Test Company",
+        message: "Test message",
+        phone: "+1234567890",
+        subject: "Test Subject",
         marketingConsent: false,
-        turnstileToken: 'valid-token',
+        turnstileToken: "valid-token",
         submittedAt: new Date().toISOString(),
       };
 
       // Mock validation error - use the global mock from setup.ts
-      const mockValidations = await import('@/lib/validations');
+      const mockValidations = await import("@/lib/validations");
       const mockExtendedSchema = {
         safeParse: vi.fn().mockImplementation(() => {
-          throw new Error('Validation error');
+          throw new Error("Validation error");
         }),
         parse: vi.fn(),
         parseAsync: vi.fn(),
@@ -506,11 +506,11 @@ describe('Contact API Route', () => {
         mockExtendedSchema as any,
       );
 
-      const request = new NextRequest('http://localhost:3000/api/contact', {
-        method: 'POST',
+      const request = new NextRequest("http://localhost:3000/api/contact", {
+        method: "POST",
         body: JSON.stringify(testFormData),
         headers: {
-          'content-type': 'application/json',
+          "content-type": "application/json",
         },
       });
 

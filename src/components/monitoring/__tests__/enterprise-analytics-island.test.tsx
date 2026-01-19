@@ -1,20 +1,20 @@
-import { render, screen } from '@testing-library/react';
-import { beforeEach, describe, expect, it, vi } from 'vitest';
+import { render, screen } from "@testing-library/react";
+import { beforeEach, describe, expect, it, vi } from "vitest";
 import {
   DEFAULT_CONSENT,
   type CookieConsentContextValue,
-} from '@/lib/cookie-consent/types';
+} from "@/lib/cookie-consent/types";
 
 const { mockUseLocale, mockUseCookieConsentOptional } = vi.hoisted(() => ({
-  mockUseLocale: vi.fn(() => 'en'),
+  mockUseLocale: vi.fn(() => "en"),
   mockUseCookieConsentOptional: vi.fn<() => CookieConsentContextValue | null>(),
 }));
 
-vi.mock('next-intl', () => ({
+vi.mock("next-intl", () => ({
   useLocale: mockUseLocale,
 }));
 
-vi.mock('@/lib/cookie-consent', () => ({
+vi.mock("@/lib/cookie-consent", () => ({
   useCookieConsentOptional: mockUseCookieConsentOptional,
 }));
 
@@ -25,11 +25,11 @@ const { mockLogger } = vi.hoisted(() => ({
   },
 }));
 
-vi.mock('@/lib/logger', () => ({
+vi.mock("@/lib/logger", () => ({
   logger: mockLogger,
 }));
 
-vi.mock('web-vitals', () => ({
+vi.mock("web-vitals", () => ({
   onCLS: vi.fn(),
   onFCP: vi.fn(),
   onLCP: vi.fn(),
@@ -38,10 +38,10 @@ vi.mock('web-vitals', () => ({
 }));
 
 let dynamicIndex = 0;
-vi.mock('next/dynamic', () => ({
+vi.mock("next/dynamic", () => ({
   default: () => {
     dynamicIndex += 1;
-    const testId = dynamicIndex === 1 ? 'analytics' : 'speed-insights';
+    const testId = dynamicIndex === 1 ? "analytics" : "speed-insights";
     const DynamicComponent = () => <div data-testid={testId} />;
     DynamicComponent.displayName = `MockDynamic(${testId})`;
     return DynamicComponent;
@@ -49,7 +49,7 @@ vi.mock('next/dynamic', () => ({
 }));
 
 function createCookieConsentValue(
-  overrides: Partial<Pick<CookieConsentContextValue, 'ready' | 'consent'>> = {},
+  overrides: Partial<Pick<CookieConsentContextValue, "ready" | "consent">> = {},
 ): CookieConsentContextValue {
   return {
     consent: overrides.consent ?? DEFAULT_CONSENT,
@@ -63,7 +63,7 @@ function createCookieConsentValue(
   };
 }
 
-describe('EnterpriseAnalyticsIsland', () => {
+describe("EnterpriseAnalyticsIsland", () => {
   beforeEach(() => {
     vi.clearAllMocks();
     vi.resetModules();
@@ -73,47 +73,47 @@ describe('EnterpriseAnalyticsIsland', () => {
     delete (window as unknown as Record<string, unknown>).gtag;
   });
 
-  it('renders nothing when consent system exists but is not ready', async () => {
+  it("renders nothing when consent system exists but is not ready", async () => {
     mockUseCookieConsentOptional.mockReturnValue(
       createCookieConsentValue({ ready: false }),
     );
 
     const { EnterpriseAnalyticsIsland } =
-      await import('../enterprise-analytics-island');
+      await import("../enterprise-analytics-island");
     const { container } = render(<EnterpriseAnalyticsIsland />);
 
     expect(container).toBeEmptyDOMElement();
-    expect(screen.queryByTestId('analytics')).not.toBeInTheDocument();
+    expect(screen.queryByTestId("analytics")).not.toBeInTheDocument();
   });
 
-  it('renders analytics components when no consent system exists (prod)', async () => {
+  it("renders analytics components when no consent system exists (prod)", async () => {
     mockUseCookieConsentOptional.mockReturnValue(null);
-    vi.stubEnv('NODE_ENV', 'production');
+    vi.stubEnv("NODE_ENV", "production");
 
     const { EnterpriseAnalyticsIsland } =
-      await import('../enterprise-analytics-island');
+      await import("../enterprise-analytics-island");
     render(<EnterpriseAnalyticsIsland />);
 
-    expect(screen.getByTestId('analytics')).toBeInTheDocument();
-    expect(screen.getByTestId('speed-insights')).toBeInTheDocument();
+    expect(screen.getByTestId("analytics")).toBeInTheDocument();
+    expect(screen.getByTestId("speed-insights")).toBeInTheDocument();
   });
 
-  it('initializes GA4 dataLayer and gtag when enabled in production', async () => {
+  it("initializes GA4 dataLayer and gtag when enabled in production", async () => {
     mockUseCookieConsentOptional.mockReturnValue(null);
-    vi.stubEnv('NODE_ENV', 'production');
-    vi.stubEnv('NEXT_PUBLIC_GA_MEASUREMENT_ID', 'G-TEST123');
+    vi.stubEnv("NODE_ENV", "production");
+    vi.stubEnv("NEXT_PUBLIC_GA_MEASUREMENT_ID", "G-TEST123");
 
     const { EnterpriseAnalyticsIsland } =
-      await import('../enterprise-analytics-island');
+      await import("../enterprise-analytics-island");
     render(<EnterpriseAnalyticsIsland />);
 
     // GA4 initialization should set up dataLayer
     expect(window.dataLayer).toBeDefined();
     expect(Array.isArray(window.dataLayer)).toBe(true);
-    expect(typeof window.gtag).toBe('function');
+    expect(typeof window.gtag).toBe("function");
   });
 
-  it('renders nothing when analytics consent is denied', async () => {
+  it("renders nothing when analytics consent is denied", async () => {
     mockUseCookieConsentOptional.mockReturnValue(
       createCookieConsentValue({
         ready: true,
@@ -122,7 +122,7 @@ describe('EnterpriseAnalyticsIsland', () => {
     );
 
     const { EnterpriseAnalyticsIsland } =
-      await import('../enterprise-analytics-island');
+      await import("../enterprise-analytics-island");
     const { container } = render(<EnterpriseAnalyticsIsland />);
 
     expect(container).toBeEmptyDOMElement();

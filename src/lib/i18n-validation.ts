@@ -2,26 +2,26 @@
  * 企业级国际化验证工具
  * 提供翻译完整性检查、质量验证和同步机制
  */
-import { ONE, PERCENTAGE_FULL, ZERO } from '@/constants';
-import { routing } from '@/i18n/routing';
+import { ONE, PERCENTAGE_FULL, ZERO } from "@/constants";
+import { routing } from "@/i18n/routing";
 
 // 测试环境检测
 const isTestEnvironment =
-  typeof process !== 'undefined' && process.env.NODE_ENV === 'test';
+  typeof process !== "undefined" && process.env.NODE_ENV === "test";
 
-type KnownLocale = 'en' | 'zh';
+type KnownLocale = "en" | "zh";
 type TranslationsMap = Partial<Record<KnownLocale, Record<string, unknown>>>;
 
 function isKnownLocale(l: string): l is KnownLocale {
-  return l === 'en' || l === 'zh';
+  return l === "en" || l === "zh";
 }
 
 function getByLocale(
   translations: TranslationsMap,
   locale: string,
 ): Record<string, unknown> | undefined {
-  if (locale === 'en') return translations.en;
-  if (locale === 'zh') return translations.zh;
+  if (locale === "en") return translations.en;
+  if (locale === "zh") return translations.zh;
   return undefined;
 }
 
@@ -35,19 +35,19 @@ export interface TranslationValidationResult {
 }
 
 export interface TranslationError {
-  type: 'missing_key' | 'type_mismatch' | 'invalid_format' | 'empty_value';
+  type: "missing_key" | "type_mismatch" | "invalid_format" | "empty_value";
   key: string;
   locale: string;
   message: string;
-  severity: 'critical' | 'high' | 'medium' | 'low';
+  severity: "critical" | "high" | "medium" | "low";
 }
 
 export interface TranslationWarning {
   type:
-    | 'untranslated'
-    | 'length_mismatch'
-    | 'format_inconsistency'
-    | 'placeholder_mismatch';
+    | "untranslated"
+    | "length_mismatch"
+    | "format_inconsistency"
+    | "placeholder_mismatch";
   key: string;
   locale: string;
   message: string;
@@ -65,11 +65,11 @@ function processMockTranslation(params: {
 
   if (!mockData) {
     errors.push({
-      type: 'missing_key',
-      key: 'translation_file',
+      type: "missing_key",
+      key: "translation_file",
       locale,
       message: `Translation file for locale ${locale} not found`,
-      severity: 'critical',
+      severity: "critical",
     });
     return;
   }
@@ -79,20 +79,20 @@ function processMockTranslation(params: {
   }
 
   // 验证Mock数据格式
-  if (typeof mockData === 'string') {
+  if (typeof mockData === "string") {
     errors.push({
-      type: 'invalid_format',
-      key: 'translation_file',
+      type: "invalid_format",
+      key: "translation_file",
       locale,
       message: `Translation file for locale ${locale} contains malformed data: expected object, got string`,
-      severity: 'critical',
+      severity: "critical",
     });
     return;
   }
 
-  if (locale === 'en') {
+  if (locale === "en") {
     translations.en = mockData as Record<string, unknown>;
-  } else if (locale === 'zh') {
+  } else if (locale === "zh") {
     translations.zh = mockData as Record<string, unknown>;
   }
 }
@@ -110,7 +110,7 @@ async function loadTranslations(
     try {
       // 动态导入Mock翻译数据
       const { getMockTranslation } =
-        await import('./__tests__/mocks/translations');
+        await import("./__tests__/mocks/translations");
 
       for (const locale of routing.locales) {
         processMockTranslation({
@@ -143,15 +143,15 @@ async function loadProductionTranslations(
     try {
       const messages = await import(`../../messages/${locale}.json`);
       if (!isKnownLocale(locale)) continue;
-      if (locale === 'en') translations.en = messages.default;
+      if (locale === "en") translations.en = messages.default;
       else translations.zh = messages.default;
     } catch {
       errors.push({
-        type: 'missing_key',
-        key: 'translation_file',
+        type: "missing_key",
+        key: "translation_file",
         locale,
         message: `Translation file for locale ${locale} not found`,
-        severity: 'critical',
+        severity: "critical",
       });
     }
   }
@@ -195,16 +195,16 @@ function validateEmptyTranslations(
 
     if (allEmpty) {
       const hasEmptyFileError = errors.some((e) =>
-        e.message.includes('All translation files are empty'),
+        e.message.includes("All translation files are empty"),
       );
 
       if (!hasEmptyFileError) {
         errors.push({
-          type: 'empty_value',
-          key: 'all_translations',
-          locale: 'all',
-          message: 'All translation files are empty',
-          severity: 'critical',
+          type: "empty_value",
+          key: "all_translations",
+          locale: "all",
+          message: "All translation files are empty",
+          severity: "critical",
         });
       }
     }
@@ -246,7 +246,7 @@ export async function validateTranslations(): Promise<TranslationValidationResul
 
     // 判断有效性
     const criticalErrors = errors.filter(
-      (e) => e.severity === 'critical' || e.severity === 'high',
+      (e) => e.severity === "critical" || e.severity === "high",
     );
     const isValid = criticalErrors.length === ZERO;
 
@@ -263,11 +263,11 @@ export async function validateTranslations(): Promise<TranslationValidationResul
       isValid: false,
       errors: [
         {
-          type: 'invalid_format',
-          key: 'validation',
-          locale: 'all',
-          message: `Validation failed: ${error instanceof Error ? error.message : 'Unknown error'}`,
-          severity: 'critical',
+          type: "invalid_format",
+          key: "validation",
+          locale: "all",
+          message: `Validation failed: ${error instanceof Error ? error.message : "Unknown error"}`,
+          severity: "critical",
         },
       ],
       warnings: [],
@@ -281,13 +281,13 @@ export async function validateTranslations(): Promise<TranslationValidationResul
 /**
  * 提取对象中的所有键路径
  */
-function extractKeys(obj: Record<string, unknown>, prefix = ''): string[] {
+function extractKeys(obj: Record<string, unknown>, prefix = ""): string[] {
   const keys: string[] = [];
 
   for (const [key, value] of Object.entries(obj)) {
     const fullKey = prefix ? `${prefix}.${key}` : key;
 
-    if (value && typeof value === 'object' && !Array.isArray(value)) {
+    if (value && typeof value === "object" && !Array.isArray(value)) {
       keys.push(...extractKeys(value as Record<string, unknown>, fullKey));
     } else {
       keys.push(fullKey);
@@ -301,7 +301,7 @@ function extractKeys(obj: Record<string, unknown>, prefix = ''): string[] {
  * 获取嵌套对象的值
  */
 function getNestedValue(obj: Record<string, unknown>, path: string): unknown {
-  const segments = path.split('.');
+  const segments = path.split(".");
   let current: unknown = obj;
   // 更宽松的安全检查，支持更多特殊字符和Unicode
   // 包括：字母、数字、下划线、连字符、中文、日文、韩文、拉丁扩展字符等
@@ -311,7 +311,7 @@ function getNestedValue(obj: Record<string, unknown>, path: string): unknown {
     if (!safe.test(seg)) return undefined;
     if (
       current &&
-      typeof current === 'object' &&
+      typeof current === "object" &&
       current !== null &&
       !Array.isArray(current)
     ) {
@@ -332,32 +332,32 @@ export function generateTranslationReport(
 ): string {
   const { isValid, errors, warnings, coverage, missingKeys } = result;
 
-  let report = '# 翻译质量报告\n\n';
+  let report = "# 翻译质量报告\n\n";
 
-  report += `## 总体状态: ${isValid ? '✅ 通过' : '❌ 失败'}\n`;
+  report += `## 总体状态: ${isValid ? "✅ 通过" : "❌ 失败"}\n`;
   report += `## 覆盖率: ${coverage.toFixed(ONE)}%\n\n`;
 
   if (errors.length > ZERO) {
-    report += '## 错误\n\n';
+    report += "## 错误\n\n";
     errors.forEach((error) => {
       report += `- **${error.severity.toUpperCase()}**: ${error.message} (${error.locale}.${error.key})\n`;
     });
-    report += '\n';
+    report += "\n";
   }
 
   if (warnings.length > ZERO) {
-    report += '## 警告\n\n';
+    report += "## 警告\n\n";
     warnings.forEach((warning) => {
       report += `- **${warning.type}**: ${warning.message} (${warning.locale}.${warning.key})\n`;
       if (warning.suggestion) {
         report += `  建议: ${warning.suggestion}\n`;
       }
     });
-    report += '\n';
+    report += "\n";
   }
 
   if (missingKeys.length > ZERO) {
-    report += '## 缺失的翻译键\n\n';
+    report += "## 缺失的翻译键\n\n";
     missingKeys.forEach((key) => {
       report += `- ${key}\n`;
     });
@@ -388,11 +388,11 @@ function validateTranslationCompleteness(params: {
       if (!localeKeys.has(key)) {
         missingKeys.push(`${locale}.${key}`);
         errors.push({
-          type: 'missing_key',
+          type: "missing_key",
           key,
           locale,
           message: `Missing translation for key: ${key}`,
-          severity: 'high',
+          severity: "high",
         });
       }
     }
@@ -426,18 +426,18 @@ function validateTranslationQuality(params: {
     const value = getNestedValue(translation, key);
 
     // 检查空值
-    if (!value || (typeof value === 'string' && value.trim() === '')) {
+    if (!value || (typeof value === "string" && value.trim() === "")) {
       errors.push({
-        type: 'empty_value',
+        type: "empty_value",
         key,
         locale,
         message: `Empty translation value for key: ${key}`,
-        severity: 'medium',
+        severity: "medium",
       });
     }
 
     // 检查是否未翻译（与其他语言相同）
-    if (typeof value === 'string') {
+    if (typeof value === "string") {
       checkUntranslatedContent({ value, key, locale, translations, warnings });
       checkPlaceholderConsistency({
         value,
@@ -465,9 +465,9 @@ function checkUntranslatedContent(params: {
   for (const otherLocale of otherLocales) {
     const otherTrans = getByLocale(translations, otherLocale) || {};
     const otherValue = getNestedValue(otherTrans, key);
-    if (value === otherValue && key !== 'home.title') {
+    if (value === otherValue && key !== "home.title") {
       warnings.push({
-        type: 'untranslated',
+        type: "untranslated",
         key,
         locale,
         message: `Possibly untranslated: same value as ${otherLocale}`,
@@ -489,20 +489,20 @@ function checkPlaceholderConsistency(params: {
 }): void {
   const { value, key, locale, translations, warnings } = params;
   const placeholders = value.match(/\{[^}]+\}/g) || [];
-  const refLocale: KnownLocale = routing.locales.includes('en') ? 'en' : 'zh';
+  const refLocale: KnownLocale = routing.locales.includes("en") ? "en" : "zh";
   const refTrans = getByLocale(translations, refLocale) || {};
   const referencePlaceholders = getNestedValue(refTrans, key);
-  if (typeof referencePlaceholders === 'string') {
+  if (typeof referencePlaceholders === "string") {
     const refPlaceholders = referencePlaceholders.match(/\{[^}]+\}/g) || [];
 
     // 检查占位符数量
     if (placeholders.length !== refPlaceholders.length) {
       warnings.push({
-        type: 'placeholder_mismatch',
+        type: "placeholder_mismatch",
         key,
         locale,
         message: `Placeholder count mismatch: expected ${refPlaceholders.length}, got ${placeholders.length}`,
-        suggestion: `Ensure all placeholders are present: ${refPlaceholders.join(', ')}`,
+        suggestion: `Ensure all placeholders are present: ${refPlaceholders.join(", ")}`,
       });
     }
 
@@ -518,11 +518,11 @@ function checkPlaceholderConsistency(params: {
 
     if (missingPlaceholders.length > 0 || extraPlaceholders.length > 0) {
       warnings.push({
-        type: 'placeholder_mismatch',
+        type: "placeholder_mismatch",
         key,
         locale,
-        message: `Placeholder name mismatch: missing ${missingPlaceholders.join(', ')}, extra ${extraPlaceholders.join(', ')}`,
-        suggestion: `Use exact placeholders: ${refPlaceholders.join(', ')}`,
+        message: `Placeholder name mismatch: missing ${missingPlaceholders.join(", ")}, extra ${extraPlaceholders.join(", ")}`,
+        suggestion: `Use exact placeholders: ${refPlaceholders.join(", ")}`,
       });
     }
   }

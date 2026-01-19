@@ -356,46 +356,113 @@
     }
   },
   "about": {
-    "pageTitle": "关于我们",
-    "pageDescription": "了解更多关于我们公司、使命和致力于提供优质产品的团队。",
+    "pageTitle": "关于图森堡玻璃",
+    "pageDescription": "领先的建筑玻璃和铝合金门窗系统制造商，服务澳大利亚和欧洲市场。通过AS 2047和AS 1288认证。",
     "hero": {
-      "title": "关于我们",
-      "subtitle": "您值得信赖的全球贸易伙伴",
-      "description": "我们是一家专业从事高品质工业产品制造和出口的领先企业。凭借多年的国际贸易经验，我们致力于为全球客户提供卓越的产品和服务。"
+      "badge": "成立于2010年",
+      "title": "现代建筑的精密工程",
+      "subtitle": "您值得信赖的高性能玻璃和铝合金幕墙解决方案合作伙伴。为澳大利亚和欧洲的建筑商、承包商和经销商提供服务。"
     },
-    "mission": {
-      "title": "我们的使命",
-      "content": "提供创新、高品质的产品，满足全球客户不断变化的需求，同时保持最高的服务和诚信标准。"
+    "overview": {
+      "title": "我们的历程与愿景",
+      "history": "图森堡玻璃成立于2010年，已从区域制造商发展成为全球知名的优质建筑玻璃供应商。我们的现代化工厂将德国工程精度与可扩展的生产能力相结合，可承接任何规模的项目。",
+      "mission": "我们致力于提供卓越的幕墙解决方案，提升建筑性能、能源效率和美学价值。每一件离开我们工厂的产品都符合国际建筑规范的严格要求。",
+      "highlight1": "15年以上行业经验",
+      "highlight2": "现代化生产设施",
+      "highlight3": "专业出口物流与合规团队"
     },
-    "values": {
-      "title": "核心价值观",
-      "quality": {
-        "title": "质量至上",
-        "description": "我们对质量绝不妥协。每件产品都经过严格的测试和质量控制。"
+    "factory": {
+      "title": "制造能力",
+      "subtitle": "我们50,000平方米的生产基地配备先进的自动化设备，确保任何规模项目的精度、一致性和产能。",
+      "stats": {
+        "capacity": "月产能",
+        "capacityUnit": "平方米/月",
+        "experience": "行业经验",
+        "experienceUnit": "年",
+        "markets": "全球市场",
+        "marketsUnit": "国家",
+        "projects": "完成项目",
+        "projectsUnit": "个"
       },
-      "innovation": {
-        "title": "持续创新",
-        "description": "我们投资研发，为市场带来前沿解决方案。"
+      "process": {
+        "tempering": {
+          "title": "玻璃钢化",
+          "description": "双室对流钢化炉，配备计算机温度控制系统，确保安全玻璃生产的一致性。"
+        },
+        "coating": {
+          "title": "镀膜生产线",
+          "description": "先进的Low-E和太阳能控制镀膜技术，提升热性能和能源效率。"
+        },
+        "cnc": {
+          "title": "CNC加工",
+          "description": "高精度切割、钻孔和边缘加工，公差可达0.1毫米，确保完美配合。"
+        }
       },
-      "service": {
-        "title": "客户服务",
-        "description": "您的成功是我们的首要任务。我们提供全面的售前和售后支持。"
+      "galleryLabel": "工厂图片"
+    },
+    "certifications": {
+      "title": "质量认证",
+      "subtitle": "符合严格的国际安全、性能和环境责任标准。",
+      "viewAll": "查看所有证书",
+      "as2047": "门窗及外部玻璃门标准",
+      "as1288": "建筑玻璃选用与安装标准",
+      "iso9001": "质量管理体系认证",
+      "ce": "欧洲合格认证标志"
+    },
+    "global": {
+      "badge": "全球布局",
+      "title": "卓越品质 出口全球",
+      "description": "我们专注于建筑玻璃产品的国际物流和合规服务。我们专业的出口团队确保您的玻璃产品安全、准时送达，并完全符合当地建筑规范。",
+      "markets": {
+        "australia": "澳大利亚",
+        "newZealand": "新西兰",
+        "germany": "德国",
+        "uk": "英国"
       },
-      "integrity": {
-        "title": "诚信经营",
-        "description": "我们基于信任、透明和相互尊重建立长期合作关系。"
+      "mapPlaceholder": "交互式地图占位"
+    },
+    "projects": {
+      "title": "精选项目案例",
+      "case1": {
+        "title": "天际大厦",
+        "location": "澳大利亚悉尼"
+      },
+      "case2": {
+        "title": "海港景观公寓",
+        "location": "新西兰奥克兰"
+      },
+      "case3": {
+        "title": "科技园区",
+        "location": "德国柏林"
+      },
+      "imagePlaceholder": "项目图片"
+    },
+    "team": {
+      "title": "领导团队",
+      "member1": {
+        "name": "陈亚历",
+        "role": "首席执行官"
+      },
+      "member2": {
+        "name": "莎拉·米切尔",
+        "role": "出口销售总监"
+      },
+      "member3": {
+        "name": "李大卫",
+        "role": "技术总监"
+      },
+      "member4": {
+        "name": "王艾玛",
+        "role": "生产经理"
       }
     },
-    "stats": {
-      "yearsExperience": "年行业经验",
-      "countriesServed": "服务国家",
-      "happyClients": "满意客户",
-      "productsDelivered": "交付产品"
-    },
     "cta": {
-      "title": "准备好与我们合作了吗？",
-      "description": "联系我们的团队，讨论您的需求，了解我们如何帮助您的业务增长。",
-      "button": "联系我们"
+      "contact": "联系销售",
+      "downloadBrochure": "公司简介",
+      "finalTitle": "准备好讨论您的项目了吗？",
+      "finalSubtitle": "为您的下一个商业或住宅开发项目获取具有竞争力的报价。我们的团队将在24小时内回复。",
+      "emailUs": "发送邮件",
+      "callUs": "预约通话"
     }
   },
   "products": {
@@ -440,6 +507,27 @@
       "success": "询价已成功发送！我们将在 24 小时内回复您。",
       "error": "询价发送失败，请稍后重试。",
       "turnstileRequired": "请完成安全验证。"
+    },
+    "category": {
+      "hero": {
+        "viewProducts": "查看产品",
+        "requestQuote": "获取报价"
+      },
+      "trust": {
+        "climateTitle": "专为澳大利亚气候设计",
+        "climateDescription": "我们的产品经过严格测试，可承受澳大利亚独特的环境条件，从极端高温到沿海风暴。",
+        "compliant": "合规认证"
+      },
+      "grid": {
+        "title": "本类目产品",
+        "viewDetails": "查看详情"
+      },
+      "cta": {
+        "readyToStart": "准备好开始您的项目了吗？",
+        "contactDescription": "联系我们的专家团队，为您的下一个建筑项目找到完美的玻璃解决方案。",
+        "contactUs": "联系我们",
+        "learnMore": "了解更多"
+      }
     }
   },
   "title": "B2B Web Template",

@@ -5,7 +5,7 @@
  * 提供翻译质量评估、基准测试和比较分析的类型定义
  */
 
-import type { Locale } from '@/types/i18n';
+import type { Locale } from "@/types/i18n";
 
 /**
  * 质量基准数据接口
@@ -78,17 +78,17 @@ export interface QualityScore {
 export interface QualityIssue {
   /** 问题类型 */
   type:
-    | 'missing'
-    | 'placeholder'
-    | 'length'
-    | 'grammar'
-    | 'language'
-    | 'context'
-    | 'consistency'
-    | 'terminology'
-    | 'fluency';
+    | "missing"
+    | "placeholder"
+    | "length"
+    | "grammar"
+    | "language"
+    | "context"
+    | "consistency"
+    | "terminology"
+    | "fluency";
   /** 严重程度 */
-  severity: 'low' | 'medium' | 'high' | 'critical';
+  severity: "low" | "medium" | "high" | "critical";
   /** 问题描述 */
   message: string;
   /** 改进建议 */
@@ -223,7 +223,7 @@ export interface QualityTrend {
   /** 趋势统计 */
   statistics: {
     average: number;
-    trend: 'improving' | 'declining' | 'stable';
+    trend: "improving" | "declining" | "stable";
     changeRate: number;
   };
 }

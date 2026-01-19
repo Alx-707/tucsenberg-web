@@ -1,10 +1,10 @@
-'use client';
+"use client";
 
-import { useEffect, useState } from 'react';
+import { useEffect, useState } from "react";
 import {
   IDLE_CALLBACK_FALLBACK_DELAY,
   IDLE_CALLBACK_TIMEOUT_LONG,
-} from '@/constants/time';
+} from "@/constants/time";
 
 const DEFAULT_IDLE_TIMEOUT = IDLE_CALLBACK_TIMEOUT_LONG;
 const DEFAULT_FALLBACK_DELAY = IDLE_CALLBACK_FALLBACK_DELAY;
@@ -29,7 +29,7 @@ export function useIdleRender(options: UseIdleRenderOptions = {}): boolean {
       | undefined;
     const cic = window.cancelIdleCallback as ((id: number) => void) | undefined;
 
-    if (typeof ric === 'function') {
+    if (typeof ric === "function") {
       const id = ric(
         () => {
           if (canceled) return;
@@ -40,7 +40,7 @@ export function useIdleRender(options: UseIdleRenderOptions = {}): boolean {
 
       return () => {
         canceled = true;
-        if (typeof cic === 'function') cic(id);
+        if (typeof cic === "function") cic(id);
       };
     }
 

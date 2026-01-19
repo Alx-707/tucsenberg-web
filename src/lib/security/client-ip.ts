@@ -9,8 +9,8 @@
  * direct connection spoofing.
  */
 
-import { isIP } from 'net';
-import { NextRequest } from 'next/server';
+import { isIP } from "net";
+import { NextRequest } from "next/server";
 
 /**
  * Trusted proxy configuration per platform
@@ -39,43 +39,43 @@ interface TrustedProxyConfig {
 const PROXY_CONFIGS: Record<string, TrustedProxyConfig> = {
   vercel: {
     // Vercel strips client-provided X-Forwarded-For, safe to trust
-    trustedHeaders: ['x-real-ip', 'x-forwarded-for'],
+    trustedHeaders: ["x-real-ip", "x-forwarded-for"],
   },
   cloudflare: {
     // cf-connecting-ip is set by Cloudflare edge, most reliable
-    trustedHeaders: ['cf-connecting-ip', 'x-forwarded-for'],
+    trustedHeaders: ["cf-connecting-ip", "x-forwarded-for"],
     // TODO: Implement source IP validation using these ranges
     // Common Cloudflare IP ranges (not exhaustive, for reference)
     // Latest ranges: https://www.cloudflare.com/ips/
     cdnIpRanges: [
-      '173.245.48.0/20',
-      '103.21.244.0/22',
-      '103.22.200.0/22',
-      '103.31.4.0/22',
-      '141.101.64.0/18',
-      '108.162.192.0/18',
-      '190.93.240.0/20',
-      '188.114.96.0/20',
-      '197.234.240.0/22',
-      '198.41.128.0/17',
-      '162.158.0.0/15',
-      '104.16.0.0/13',
-      '104.24.0.0/14',
-      '172.64.0.0/13',
-      '131.0.72.0/22',
+      "173.245.48.0/20",
+      "103.21.244.0/22",
+      "103.22.200.0/22",
+      "103.31.4.0/22",
+      "141.101.64.0/18",
+      "108.162.192.0/18",
+      "190.93.240.0/20",
+      "188.114.96.0/20",
+      "197.234.240.0/22",
+      "198.41.128.0/17",
+      "162.158.0.0/15",
+      "104.16.0.0/13",
+      "104.24.0.0/14",
+      "172.64.0.0/13",
+      "131.0.72.0/22",
     ],
   },
   development: {
     // Accept headers for local testing (less secure)
-    trustedHeaders: ['x-forwarded-for', 'x-real-ip'],
+    trustedHeaders: ["x-forwarded-for", "x-real-ip"],
   },
 };
 
 /** Default fallback IP when none can be determined */
-const FALLBACK_IP = '0.0.0.0';
+const FALLBACK_IP = "0.0.0.0";
 
 /** Development localhost IP */
-const LOCALHOST_IP = '127.0.0.1';
+const LOCALHOST_IP = "127.0.0.1";
 
 /**
  * Get deployment platform from environment
@@ -88,13 +88,13 @@ function getDeploymentPlatform(): string | null {
   if (!platform) {
     // Auto-detect common platforms
     if (process.env.VERCEL) {
-      return 'vercel';
+      return "vercel";
     }
     if (process.env.CF_PAGES) {
-      return 'cloudflare';
+      return "cloudflare";
     }
-    if (process.env.NODE_ENV === 'development') {
-      return 'development';
+    if (process.env.NODE_ENV === "development") {
+      return "development";
     }
     return null;
   }
@@ -113,8 +113,8 @@ function getDeploymentPlatform(): string | null {
  * @returns First IP address, trimmed and normalized (port stripped)
  */
 function parseFirstIP(headerValue: string): string {
-  const firstIP = headerValue.split(',')[0];
-  if (!firstIP) return '';
+  const firstIP = headerValue.split(",")[0];
+  if (!firstIP) return "";
   return stripPort(firstIP.trim());
 }
 
@@ -128,8 +128,8 @@ function parseFirstIP(headerValue: string): string {
  */
 function stripPort(ip: string): string {
   // IPv6 with port: [::1]:8080
-  if (ip.startsWith('[')) {
-    const bracketEnd = ip.indexOf(']');
+  if (ip.startsWith("[")) {
+    const bracketEnd = ip.indexOf("]");
     if (bracketEnd !== -1) {
       return ip.slice(1, bracketEnd);
     }
@@ -139,7 +139,7 @@ function stripPort(ip: string): string {
   // Only strip if there's exactly one colon (IPv6 has multiple)
   const colonCount = (ip.match(/:/g) ?? []).length;
   if (colonCount === 1) {
-    return ip.split(':')[0] ?? ip;
+    return ip.split(":")[0] ?? ip;
   }
 
   return ip;
@@ -157,7 +157,7 @@ function stripPort(ip: string): string {
  * @returns true if valid IPv4 or IPv6 address
  */
 function isValidIP(ip: string): boolean {
-  if (!ip || ip === 'unknown') {
+  if (!ip || ip === "unknown") {
     return false;
   }
 
@@ -184,9 +184,9 @@ function getNextJsIP(request: NextRequest): string | null {
  * Get platform-specific proxy config
  */
 function getPlatformConfig(platform: string): TrustedProxyConfig | undefined {
-  if (platform === 'vercel') return PROXY_CONFIGS.vercel;
-  if (platform === 'cloudflare') return PROXY_CONFIGS.cloudflare;
-  if (platform === 'development') return PROXY_CONFIGS.development;
+  if (platform === "vercel") return PROXY_CONFIGS.vercel;
+  if (platform === "cloudflare") return PROXY_CONFIGS.cloudflare;
+  if (platform === "development") return PROXY_CONFIGS.development;
   return undefined;
 }
 
@@ -246,7 +246,7 @@ export function getClientIP(request: NextRequest): string {
   if (nextIP) return nextIP;
 
   // Development localhost fallback
-  if (platform === 'development') return LOCALHOST_IP;
+  if (platform === "development") return LOCALHOST_IP;
 
   return FALLBACK_IP;
 }
@@ -260,18 +260,18 @@ export function getClientIP(request: NextRequest): string {
 export function getIPChain(request: NextRequest): string[] {
   const chain: string[] = [];
 
-  const xff = request.headers.get('x-forwarded-for');
+  const xff = request.headers.get("x-forwarded-for");
   if (xff) {
-    const ips = xff.split(',').map((ip) => ip.trim());
+    const ips = xff.split(",").map((ip) => ip.trim());
     chain.push(...ips.filter(isValidIP));
   }
 
-  const realIP = request.headers.get('x-real-ip');
+  const realIP = request.headers.get("x-real-ip");
   if (realIP && isValidIP(realIP) && !chain.includes(realIP)) {
     chain.push(realIP);
   }
 
-  const cfIP = request.headers.get('cf-connecting-ip');
+  const cfIP = request.headers.get("cf-connecting-ip");
   if (cfIP && isValidIP(cfIP) && !chain.includes(cfIP)) {
     chain.unshift(cfIP); // Cloudflare IP is authoritative
   }

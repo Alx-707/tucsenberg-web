@@ -1,10 +1,10 @@
-import { expect, type Locator, type Page } from '@playwright/test';
+import { expect, type Locator, type Page } from "@playwright/test";
 
 const MAIN_NAV_ROLE_OPTIONS = {
   name: /main navigation/i,
 } as const;
 
-const HEADER_MOBILE_MENU_BUTTON_TESTID = 'header-mobile-menu-button';
+const HEADER_MOBILE_MENU_BUTTON_TESTID = "header-mobile-menu-button";
 
 /**
  * Wait for the html[lang] attribute to be updated after hydration.
@@ -32,14 +32,14 @@ export async function expectHtmlLang(
   expectedLang: string,
 ): Promise<void> {
   await waitForHtmlLang(page, expectedLang);
-  await expect(page.locator('html')).toHaveAttribute('lang', expectedLang);
+  await expect(page.locator("html")).toHaveAttribute("lang", expectedLang);
 }
 
 /**
  * 获取主导航栏定位器，针对桌面/移动场景自动回退
  */
 export function getNav(page: Page): Locator {
-  const nav = page.getByRole('navigation', MAIN_NAV_ROLE_OPTIONS);
+  const nav = page.getByRole("navigation", MAIN_NAV_ROLE_OPTIONS);
   return nav.first();
 }
 
@@ -85,6 +85,6 @@ export async function clickNavLinkByName(
   linkName: string,
 ): Promise<void> {
   const nav = getNav(page);
-  const link = nav.getByRole('link', { name: linkName });
+  const link = nav.getByRole("link", { name: linkName });
   await link.click();
 }

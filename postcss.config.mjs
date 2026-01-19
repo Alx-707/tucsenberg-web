@@ -1,12 +1,12 @@
 const config = {
   plugins: [
-    '@tailwindcss/postcss',
+    "@tailwindcss/postcss",
     // CSS 优化插件
     [
-      'cssnano',
+      "cssnano",
       {
         preset: [
-          'default',
+          "default",
           {
             // 保留重要的注释
             discardComments: {

@@ -4,18 +4,18 @@
  * 验证 Location 响应头修复对实际用户体验的影响
  */
 
-import { expect, test } from '@playwright/test';
-import { expectHtmlLang } from './helpers/navigation';
+import { expect, test } from "@playwright/test";
+import { expectHtmlLang } from "./helpers/navigation";
 
 const rawBaseUrl =
   process.env.PLAYWRIGHT_BASE_URL ??
   process.env.BASE_URL ??
   process.env.STAGING_URL ??
-  'http://localhost:3000';
+  "http://localhost:3000";
 
-const BASE_URL = rawBaseUrl.replace(/\/$/, '');
+const BASE_URL = rawBaseUrl.replace(/\/$/, "");
 
-test.describe('Next.js 16 国际化重定向验证', () => {
+test.describe("Next.js 16 国际化重定向验证", () => {
   test.beforeEach(async ({ page }) => {
     // 清除 Cookie（next-intl 使用 NEXT_LOCALE cookie 存储语言偏好）
     await page.context().clearCookies();
@@ -23,8 +23,8 @@ test.describe('Next.js 16 国际化重定向验证', () => {
     // ❌ 移除 localStorage.clear() 避免 Mobile Safari SecurityError
   });
 
-  test.describe('基础语言检测和重定向', () => {
-    test('应该正确访问中文首页并设置Cookie', async ({ page }) => {
+  test.describe("基础语言检测和重定向", () => {
+    test("应该正确访问中文首页并设置Cookie", async ({ page }) => {
       // 直接访问中文首页
       const response = await page.goto(`${BASE_URL}/zh`);
 
@@ -36,33 +36,33 @@ test.describe('Next.js 16 国际化重定向验证', () => {
 
       // 验证 NEXT_LOCALE cookie（允许运行时差异，先尝试等待 document.cookie）
       await page
-        .waitForFunction(() => document.cookie.includes('NEXT_LOCALE=zh'), {
+        .waitForFunction(() => document.cookie.includes("NEXT_LOCALE=zh"), {
           timeout: 1500,
         })
         .catch(() => undefined);
 
       const cookies = await page.context().cookies();
-      const localeCookie = cookies.find((c) => c.name === 'NEXT_LOCALE');
+      const localeCookie = cookies.find((c) => c.name === "NEXT_LOCALE");
       const docCookieVal = await page.evaluate(() => {
         const entry = document.cookie
-          .split('; ')
-          .find((c) => c.startsWith('NEXT_LOCALE='));
-        return entry ? entry.split('=')[1] : undefined;
+          .split("; ")
+          .find((c) => c.startsWith("NEXT_LOCALE="));
+        return entry ? entry.split("=")[1] : undefined;
       });
       if (localeCookie?.value || docCookieVal) {
-        expect(localeCookie?.value ?? docCookieVal).toBe('zh');
+        expect(localeCookie?.value ?? docCookieVal).toBe("zh");
       } else {
         console.warn(
-          'NEXT_LOCALE cookie not present; continuing with html[lang] validation',
+          "NEXT_LOCALE cookie not present; continuing with html[lang] validation",
         );
       }
 
       // 验证页面语言（等待 hydration 后 LangUpdater 更新 html[lang]）
       // waitForHtmlLang 已包含断言，无需额外的 toHaveAttribute
-      await expectHtmlLang(page, 'zh');
+      await expectHtmlLang(page, "zh");
     });
 
-    test('应该正确访问英文About页并设置Cookie', async ({ page }) => {
+    test("应该正确访问英文About页并设置Cookie", async ({ page }) => {
       // 直接访问英文About页
       const response = await page.goto(`${BASE_URL}/en/about`);
 
@@ -73,32 +73,32 @@ test.describe('Next.js 16 国际化重定向验证', () => {
 
       // 验证 NEXT_LOCALE cookie（允许运行时差异，先尝试等待 document.cookie）
       await page
-        .waitForFunction(() => document.cookie.includes('NEXT_LOCALE=en'), {
+        .waitForFunction(() => document.cookie.includes("NEXT_LOCALE=en"), {
           timeout: 1500,
         })
         .catch(() => undefined);
 
       const cookies = await page.context().cookies();
-      const localeCookie = cookies.find((c) => c.name === 'NEXT_LOCALE');
+      const localeCookie = cookies.find((c) => c.name === "NEXT_LOCALE");
       const docCookieVal = await page.evaluate(() => {
         const entry = document.cookie
-          .split('; ')
-          .find((c) => c.startsWith('NEXT_LOCALE='));
-        return entry ? entry.split('=')[1] : undefined;
+          .split("; ")
+          .find((c) => c.startsWith("NEXT_LOCALE="));
+        return entry ? entry.split("=")[1] : undefined;
       });
       if (localeCookie?.value || docCookieVal) {
-        expect(localeCookie?.value ?? docCookieVal).toBe('en');
+        expect(localeCookie?.value ?? docCookieVal).toBe("en");
       } else {
         console.warn(
-          'NEXT_LOCALE cookie not present; continuing with html[lang] validation',
+          "NEXT_LOCALE cookie not present; continuing with html[lang] validation",
         );
       }
 
       // 验证页面语言
-      await expect(page.locator('html')).toHaveAttribute('lang', 'en');
+      await expect(page.locator("html")).toHaveAttribute("lang", "en");
     });
 
-    test('应该正确处理中文路径访问', async ({ page }) => {
+    test("应该正确处理中文路径访问", async ({ page }) => {
       const response = await page.goto(`${BASE_URL}/zh/about`);
 
       expect(response?.status()).toBeLessThan(400);
@@ -107,12 +107,12 @@ test.describe('Next.js 16 国际化重定向验证', () => {
       expect(page.url()).toMatch(/\/zh\/about\/?$/);
 
       // 验证页面语言（等待 hydration 后 LangUpdater 更新 html[lang]）
-      await expectHtmlLang(page, 'zh');
+      await expectHtmlLang(page, "zh");
     });
   });
 
-  test.describe('路径本地化验证', () => {
-    test('应该正确处理本地化路径映射', async ({ page }) => {
+  test.describe("路径本地化验证", () => {
+    test("应该正确处理本地化路径映射", async ({ page }) => {
       // 测试产品页面的路径（使用 Shared Pathnames）
       const response = await page.goto(`${BASE_URL}/zh/products`);
 
@@ -120,17 +120,17 @@ test.describe('Next.js 16 国际化重定向验证', () => {
       expect(page.url()).toMatch(/\/zh\/products\/?$/);
 
       // 验证页面内容
-      await expect(page.locator('h1, h2, h3').first()).toBeVisible();
+      await expect(page.locator("h1, h2, h3").first()).toBeVisible();
     });
 
-    test('应该正确处理联系页面的路径本地化', async ({ page }) => {
+    test("应该正确处理联系页面的路径本地化", async ({ page }) => {
       const response = await page.goto(`${BASE_URL}/zh/contact`);
 
       expect(response?.status()).toBeLessThan(400);
       expect(page.url()).toMatch(/\/zh\/contact\/?$/);
     });
 
-    test('应该正确处理英文原始路径', async ({ page }) => {
+    test("应该正确处理英文原始路径", async ({ page }) => {
       // localePrefix: 'always' 要求所有路径必须包含语言前缀
       const response = await page.goto(`${BASE_URL}/en/contact`);
 
@@ -139,20 +139,20 @@ test.describe('Next.js 16 国际化重定向验证', () => {
     });
   });
 
-  test.describe('重定向性能和稳定性', () => {
-    test('应该快速完成语言检测和重定向', async ({ page, browserName }) => {
+  test.describe("重定向性能和稳定性", () => {
+    test("应该快速完成语言检测和重定向", async ({ page, browserName }) => {
       test.slow();
 
       const startTime = Date.now();
 
       await page.setExtraHTTPHeaders({
-        'Accept-Language': 'zh-CN,zh;q=0.9',
+        "Accept-Language": "zh-CN,zh;q=0.9",
       });
 
       // localePrefix: 'always' 要求所有路径必须包含语言前缀
       const response = await page.goto(`${BASE_URL}/zh/products`, {
         timeout: 30000,
-        waitUntil: 'domcontentloaded',
+        waitUntil: "domcontentloaded",
       });
       const endTime = Date.now();
 
@@ -163,13 +163,13 @@ test.describe('Next.js 16 国际化重定向验证', () => {
       // Dev server 有编译开销且并行测试共享资源,需要更高阈值
       const redirectTime = endTime - startTime;
       const isCI = Boolean(process.env.CI);
-      const baseThreshold = browserName === 'webkit' ? 4000 : 3000;
+      const baseThreshold = browserName === "webkit" ? 4000 : 3000;
       // CI: 使用 1.5x 阈值; 本地 dev: 使用 5x 阈值（编译开销 + 4 workers 并行测试）
       const timeoutThreshold = isCI ? baseThreshold * 1.5 : baseThreshold * 5;
       expect(redirectTime).toBeLessThan(timeoutThreshold);
     });
 
-    test('应该处理并发请求而不出现竞态条件', async ({ browser }) => {
+    test("应该处理并发请求而不出现竞态条件", async ({ browser }) => {
       test.setTimeout(90_000);
 
       const promises: Promise<{
@@ -190,12 +190,12 @@ test.describe('Next.js 16 国际化重定向验证', () => {
         contexts.push(context);
 
         const page = await context.newPage();
-        const targetLocale = i % 2 === 0 ? 'zh' : 'en';
+        const targetLocale = i % 2 === 0 ? "zh" : "en";
         const targetUrl = `${BASE_URL}/${targetLocale}/about`;
 
         promises.push(
           page
-            .goto(targetUrl, { timeout: 45000, waitUntil: 'domcontentloaded' })
+            .goto(targetUrl, { timeout: 45000, waitUntil: "domcontentloaded" })
             .then((response) => ({
               status: response?.status(),
               url: page.url(),
@@ -203,7 +203,7 @@ test.describe('Next.js 16 国际化重定向验证', () => {
             }))
             .catch(() => ({
               status: undefined,
-              url: '',
+              url: "",
               expectedLocale: targetLocale,
             })),
         );
@@ -229,10 +229,10 @@ test.describe('Next.js 16 国际化重定向验证', () => {
 
       // 验证每个请求都保持了正确的语言环境（无意外重定向）
       const zhResults = successfulResults.filter(
-        (r) => r.expectedLocale === 'zh',
+        (r) => r.expectedLocale === "zh",
       );
       const enResults = successfulResults.filter(
-        (r) => r.expectedLocale === 'en',
+        (r) => r.expectedLocale === "en",
       );
 
       // 中文请求应该保持在 /zh/about
@@ -247,8 +247,8 @@ test.describe('Next.js 16 国际化重定向验证', () => {
     });
   });
 
-  test.describe('错误处理和回退机制', () => {
-    test('应该处理无效的语言前缀', async ({ page }) => {
+  test.describe("错误处理和回退机制", () => {
+    test("应该处理无效的语言前缀", async ({ page }) => {
       test.setTimeout(45_000);
       const response = await page.goto(`${BASE_URL}/invalid-lang/about`);
 
@@ -256,26 +256,26 @@ test.describe('Next.js 16 国际化重定向验证', () => {
       expect([200, 404, 301, 302, 307, 308]).toContain(response?.status() || 0);
     });
 
-    test('应该处理不存在的本地化路径', async ({ page }) => {
+    test("应该处理不存在的本地化路径", async ({ page }) => {
       const response = await page.goto(`${BASE_URL}/zh/nonexistent-path`, {
         timeout: 30000,
-        waitUntil: 'domcontentloaded',
+        waitUntil: "domcontentloaded",
       });
 
       // 应该返回 404
       expect(response?.status()).toBe(404);
     });
 
-    test('应该在语言检测失败时回退到默认语言', async ({ page }) => {
+    test("应该在语言检测失败时回退到默认语言", async ({ page }) => {
       // 不设置任何语言偏好头（localePrefix: 'always' 模式下语言由 URL 决定）
       await page.setExtraHTTPHeaders({
-        'Accept-Language': '',
+        "Accept-Language": "",
       });
 
       // localePrefix: 'always' 要求所有路径必须包含语言前缀
       const response = await page.goto(`${BASE_URL}/en/blog`, {
         timeout: 30000,
-        waitUntil: 'networkidle',
+        waitUntil: "networkidle",
       });
 
       expect(response?.status()).toBeLessThan(400);
@@ -286,7 +286,7 @@ test.describe('Next.js 16 国际化重定向验证', () => {
 
       // 等待客户端水合完成后再检查 lang 属性
       // LangUpdater 组件会在 useEffect 中更新 html[lang]
-      await expectHtmlLang(page, 'en');
+      await expectHtmlLang(page, "en");
 
       // NOTE: 此测试仅验证 lang 属性设置正确，不验证页面内容是否正常加载。
       // 如果页面渲染 global-error.tsx，测试仍会通过（因为 global-error 也设置 lang）。
@@ -294,25 +294,25 @@ test.describe('Next.js 16 国际化重定向验证', () => {
     });
   });
 
-  test.describe('SEO 和元数据验证', () => {
-    test('应该为不同语言设置正确的 hreflang 标签', async ({ page }) => {
+  test.describe("SEO 和元数据验证", () => {
+    test("应该为不同语言设置正确的 hreflang 标签", async ({ page }) => {
       // localePrefix: 'always' 要求所有路径必须包含语言前缀
       await page.goto(`${BASE_URL}/en/about`);
 
       // 检查 hreflang 标签
-      const hreflangLinks = await page.locator('link[hreflang]').all();
+      const hreflangLinks = await page.locator("link[hreflang]").all();
       expect(hreflangLinks.length).toBeGreaterThan(0);
 
       // 验证包含英文和中文的 hreflang
       const hreflangValues = await Promise.all(
-        hreflangLinks.map((link) => link.getAttribute('hreflang')),
+        hreflangLinks.map((link) => link.getAttribute("hreflang")),
       );
 
-      expect(hreflangValues).toContain('en');
-      expect(hreflangValues).toContain('zh');
+      expect(hreflangValues).toContain("en");
+      expect(hreflangValues).toContain("zh");
     });
 
-    test('应该为中文页面设置正确的元数据', async ({ page }) => {
+    test("应该为中文页面设置正确的元数据", async ({ page }) => {
       await page.goto(`${BASE_URL}/zh/about`);
 
       // 验证页面标题和描述
@@ -321,16 +321,16 @@ test.describe('Next.js 16 国际化重定向验证', () => {
 
       const description = await page
         .locator('meta[name="description"]')
-        .getAttribute('content');
+        .getAttribute("content");
       expect(description).toBeTruthy();
 
       // 验证语言属性（等待 hydration 后 LangUpdater 更新 html[lang]）
-      await expectHtmlLang(page, 'zh');
+      await expectHtmlLang(page, "zh");
     });
   });
 
-  test.describe('用户体验验证', () => {
-    test('语言切换应该保持在相同的页面类型', async ({ page }) => {
+  test.describe("用户体验验证", () => {
+    test("语言切换应该保持在相同的页面类型", async ({ page }) => {
       // localePrefix: 'always' 要求所有路径必须包含语言前缀
       await page.goto(`${BASE_URL}/en/about`);
 
@@ -345,7 +345,7 @@ test.describe('Next.js 16 国际化重定向验证', () => {
         await languageToggle.click();
 
         // 等待导航完成
-        await page.waitForLoadState('networkidle');
+        await page.waitForLoadState("networkidle");
 
         // 验证切换到中文版本的对应页面（使用 Shared Pathnames）
         const finalUrl = page.url();
@@ -353,10 +353,10 @@ test.describe('Next.js 16 国际化重定向验证', () => {
       }
     });
 
-    test('页面加载应该流畅无闪烁', async ({ page }) => {
+    test("页面加载应该流畅无闪烁", async ({ page }) => {
       // 监控页面加载过程
       let redirectCount = 0;
-      page.on('response', (response) => {
+      page.on("response", (response) => {
         if ([301, 302, 307, 308].includes(response.status())) {
           redirectCount++;
         }
@@ -369,7 +369,7 @@ test.describe('Next.js 16 国际化重定向验证', () => {
       expect(redirectCount).toBeLessThanOrEqual(2);
 
       // 验证页面最终正确加载
-      await expect(page.locator('body')).toBeVisible();
+      await expect(page.locator("body")).toBeVisible();
     });
   });
 });

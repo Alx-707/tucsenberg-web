@@ -8,7 +8,7 @@ import {
   MAGIC_2000,
   PERCENTAGE_FULL,
   ZERO,
-} from '@/constants';
+} from "@/constants";
 
 /**
  * WhatsApp Service Monitoring and Health Types
@@ -25,7 +25,7 @@ import {
  */
 export interface ServiceHealth {
   /** Overall service status */
-  status: 'healthy' | 'degraded' | 'unhealthy';
+  status: "healthy" | "degraded" | "unhealthy";
   /** Timestamp of last health check */
   lastCheck: number;
   /** Average response time in milliseconds */
@@ -37,11 +37,11 @@ export interface ServiceHealth {
   /** Detailed health information */
   details?: {
     /** API availability status */
-    api: 'available' | 'unavailable';
+    api: "available" | "unavailable";
     /** Webhook configuration status */
-    webhook: 'configured' | 'not_configured' | 'error';
+    webhook: "configured" | "not_configured" | "error";
     /** Phone number verification status */
-    phoneNumber: 'verified' | 'unverified' | 'error';
+    phoneNumber: "verified" | "unverified" | "error";
   };
 }
 
@@ -110,7 +110,7 @@ export interface ServiceEvent {
   /** Event-specific data */
   data: Record<string, unknown>;
   /** Source of the event */
-  source: 'api' | 'webhook' | 'service';
+  source: "api" | "webhook" | "service";
 }
 
 /**
@@ -118,7 +118,7 @@ export interface ServiceEvent {
  * Fired when a message is successfully sent
  */
 export interface MessageSentEvent extends ServiceEvent {
-  type: 'message_sent';
+  type: "message_sent";
   data: {
     /** WhatsApp message ID */
     messageId: string;
@@ -136,7 +136,7 @@ export interface MessageSentEvent extends ServiceEvent {
  * Fired when a message is delivered to recipient
  */
 export interface MessageDeliveredEvent extends ServiceEvent {
-  type: 'message_delivered';
+  type: "message_delivered";
   data: {
     /** WhatsApp message ID */
     messageId: string;
@@ -152,7 +152,7 @@ export interface MessageDeliveredEvent extends ServiceEvent {
  * Fired when a message is read by recipient
  */
 export interface MessageReadEvent extends ServiceEvent {
-  type: 'message_read';
+  type: "message_read";
   data: {
     /** WhatsApp message ID */
     messageId: string;
@@ -168,7 +168,7 @@ export interface MessageReadEvent extends ServiceEvent {
  * Fired when a message fails to send
  */
 export interface MessageFailedEvent extends ServiceEvent {
-  type: 'message_failed';
+  type: "message_failed";
   data: {
     /** WhatsApp message ID (if available) */
     messageId?: string;
@@ -190,7 +190,7 @@ export interface MessageFailedEvent extends ServiceEvent {
  * Fired when a service error occurs
  */
 export interface ErrorEvent extends ServiceEvent {
-  type: 'error';
+  type: "error";
   data: {
     /** Error object */
     error: {
@@ -210,10 +210,10 @@ export interface ErrorEvent extends ServiceEvent {
  * Fired when a health check is performed
  */
 export interface HealthCheckEvent extends ServiceEvent {
-  type: 'health_check';
+  type: "health_check";
   data: {
     /** Health status result */
-    status: 'healthy' | 'degraded' | 'unhealthy';
+    status: "healthy" | "degraded" | "unhealthy";
     /** Response time for health check */
     responseTime: number;
     /** Any issues detected */
@@ -226,7 +226,7 @@ export interface HealthCheckEvent extends ServiceEvent {
  * Fired when rate limiting occurs
  */
 export interface RateLimitEvent extends ServiceEvent {
-  type: 'rate_limit';
+  type: "rate_limit";
   data: {
     /** Seconds to wait before retrying */
     retryAfter: number;
@@ -339,14 +339,14 @@ export function determineHealthStatus(
   errorRate: number,
   responseTime: number,
   uptime: number,
-): 'healthy' | 'degraded' | 'unhealthy' {
+): "healthy" | "degraded" | "unhealthy" {
   // Unhealthy thresholds
   if (
     errorRate > COUNT_TEN ||
     responseTime > FIVE_SECONDS_MS ||
     uptime < MAGIC_95
   ) {
-    return 'unhealthy';
+    return "unhealthy";
   }
 
   // Degraded thresholds
@@ -355,10 +355,10 @@ export function determineHealthStatus(
     responseTime > MAGIC_2000 ||
     uptime < MAGIC_99
   ) {
-    return 'degraded';
+    return "degraded";
   }
 
-  return 'healthy';
+  return "healthy";
 }
 
 /**
@@ -383,15 +383,15 @@ export function createDefaultMetrics(): ServiceMetrics {
  */
 export function createDefaultHealth(): ServiceHealth {
   return {
-    status: 'healthy',
+    status: "healthy",
     lastCheck: Date.now(),
     responseTime: ZERO,
     errorRate: ZERO,
     uptime: PERCENTAGE_FULL,
     details: {
-      api: 'available',
-      webhook: 'not_configured',
-      phoneNumber: 'unverified',
+      api: "available",
+      webhook: "not_configured",
+      phoneNumber: "unverified",
     },
   };
 }
@@ -442,7 +442,7 @@ export function needsAttention(
   metrics: ServiceMetrics,
 ): boolean {
   return (
-    health.status !== 'healthy' ||
+    health.status !== "healthy" ||
     (health.errorRate && health.errorRate > COUNT_FIVE) ||
     (health.responseTime && health.responseTime > MAGIC_2000) ||
     metrics.messagesFailed > metrics.messagesSent * MAGIC_0_1

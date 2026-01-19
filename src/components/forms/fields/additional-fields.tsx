@@ -1,5 +1,5 @@
-import { Input } from '@/components/ui/input';
-import { Label } from '@/components/ui/label';
+import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
 
 /**
  * Additional fields component - React 19 Native Form Version
@@ -15,28 +15,28 @@ interface AdditionalFieldsProps {
 export function AdditionalFields({ t, isPending }: AdditionalFieldsProps) {
   return (
     <>
-      <div className='grid grid-cols-1 gap-4 md:grid-cols-2'>
-        <div className='space-y-2'>
-          <Label htmlFor='phone'>{t('phone')}</Label>
+      <div className="grid grid-cols-1 gap-4 md:grid-cols-2">
+        <div className="space-y-2">
+          <Label htmlFor="phone">{t("phone")}</Label>
           <Input
-            id='phone'
-            name='phone'
-            type='tel'
-            placeholder={t('phonePlaceholder')}
+            id="phone"
+            name="phone"
+            type="tel"
+            placeholder={t("phonePlaceholder")}
             disabled={isPending}
-            aria-describedby='phone-error'
+            aria-describedby="phone-error"
           />
         </div>
 
-        <div className='space-y-2'>
-          <Label htmlFor='subject'>{t('subject')}</Label>
+        <div className="space-y-2">
+          <Label htmlFor="subject">{t("subject")}</Label>
           <Input
-            id='subject'
-            name='subject'
-            type='text'
-            placeholder={t('subjectPlaceholder')}
+            id="subject"
+            name="subject"
+            type="text"
+            placeholder={t("subjectPlaceholder")}
             disabled={isPending}
-            aria-describedby='subject-error'
+            aria-describedby="subject-error"
           />
         </div>
       </div>

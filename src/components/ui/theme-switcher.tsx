@@ -1,33 +1,33 @@
-'use client';
+"use client";
 
-import { useCallback, useEffect, useState } from 'react';
-import dynamic from 'next/dynamic';
-import { Monitor, Moon, Sun } from 'lucide-react';
-import { useTheme } from 'next-themes';
-import { cn } from '@/lib/utils';
+import { useCallback, useEffect, useState } from "react";
+import dynamic from "next/dynamic";
+import { Monitor, Moon, Sun } from "lucide-react";
+import { useTheme } from "next-themes";
+import { cn } from "@/lib/utils";
 
 // P0-1 Fix: Move dynamic import to module scope (was inside render causing new component type per render)
 const MotionHighlight = dynamic(
   () =>
-    import('./theme-switcher-highlight').then((m) => m.ThemeSwitcherHighlight),
+    import("./theme-switcher-highlight").then((m) => m.ThemeSwitcherHighlight),
   { ssr: false },
 );
 
 const themes = [
   {
-    key: 'system',
+    key: "system",
     icon: Monitor,
-    label: 'System theme',
+    label: "System theme",
   },
   {
-    key: 'light',
+    key: "light",
     icon: Sun,
-    label: 'Light theme',
+    label: "Light theme",
   },
   {
-    key: 'dark',
+    key: "dark",
     icon: Moon,
-    label: 'Dark theme',
+    label: "Dark theme",
   },
 ];
 
@@ -38,12 +38,12 @@ export type ThemeSwitcherProps = React.HTMLAttributes<HTMLDivElement> & {
 export const ThemeSwitcher = ({ className, ...rest }: ThemeSwitcherProps) => {
   const { theme, setTheme } = useTheme();
   const [mounted, setMounted] = useState(false);
-  const dataTestId = (rest as Record<string, unknown>)['data-testid'] as
+  const dataTestId = (rest as Record<string, unknown>)["data-testid"] as
     | string
     | undefined;
 
   const handleThemeClick = useCallback(
-    (themeKey: 'light' | 'dark' | 'system') => {
+    (themeKey: "light" | "dark" | "system") => {
       setTheme(themeKey);
     },
     [setTheme],
@@ -61,21 +61,21 @@ export const ThemeSwitcher = ({ className, ...rest }: ThemeSwitcherProps) => {
     return (
       <div
         className={cn(
-          'relative isolate flex h-8 rounded-full bg-background p-1 ring-1 ring-border',
+          "relative isolate flex h-8 rounded-full bg-background p-1 ring-1 ring-border",
           className,
         )}
         {...rest}
-        data-testid={dataTestId ?? 'theme-toggle'}
+        data-testid={dataTestId ?? "theme-toggle"}
       >
         {themes.map(({ key, icon: Icon, label }) => (
           <button
             aria-label={label}
-            className='relative h-6 w-6 rounded-full'
+            className="relative h-6 w-6 rounded-full"
             key={key}
-            type='button'
+            type="button"
             disabled
           >
-            <Icon className='relative z-10 m-auto h-4 w-4 text-muted-foreground' />
+            <Icon className="relative z-10 m-auto h-4 w-4 text-muted-foreground" />
           </button>
         ))}
       </div>
@@ -85,11 +85,11 @@ export const ThemeSwitcher = ({ className, ...rest }: ThemeSwitcherProps) => {
   return (
     <div
       className={cn(
-        'relative isolate flex h-8 rounded-full bg-background p-1 ring-1 ring-border',
+        "relative isolate flex h-8 rounded-full bg-background p-1 ring-1 ring-border",
         className,
       )}
       {...rest}
-      data-testid={dataTestId ?? 'theme-toggle'}
+      data-testid={dataTestId ?? "theme-toggle"}
     >
       {themes.map(({ key, icon: Icon, label }) => {
         const isActive = theme === key;
@@ -97,16 +97,16 @@ export const ThemeSwitcher = ({ className, ...rest }: ThemeSwitcherProps) => {
         return (
           <button
             aria-label={label}
-            className='relative h-6 w-6 rounded-full'
+            className="relative h-6 w-6 rounded-full"
             key={key}
-            onClick={() => handleThemeClick(key as 'light' | 'dark' | 'system')}
-            type='button'
+            onClick={() => handleThemeClick(key as "light" | "dark" | "system")}
+            type="button"
           >
             {isActive ? <MotionHighlight /> : null}
             <Icon
               className={cn(
-                'relative z-10 m-auto h-4 w-4',
-                isActive ? 'text-foreground' : 'text-muted-foreground',
+                "relative z-10 m-auto h-4 w-4",
+                isActive ? "text-foreground" : "text-muted-foreground",
               )}
             />
           </button>

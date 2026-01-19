@@ -1,18 +1,18 @@
-import { expect, test, type Locator, type Page } from '@playwright/test';
-import { checkA11y, injectAxe } from './helpers/axe';
+import { expect, test, type Locator, type Page } from "@playwright/test";
+import { checkA11y, injectAxe } from "./helpers/axe";
 import {
   clickNavLinkByName,
   getHeaderMobileMenuButton,
   getNav,
   isHeaderInMobileMode,
   waitForHtmlLang,
-} from './helpers/navigation';
+} from "./helpers/navigation";
 import {
   removeInterferingElements,
   safeClick,
   waitForLoadWithFallback,
   waitForStablePage,
-} from './test-environment-setup';
+} from "./test-environment-setup";
 
 /**
  * Get the open language dropdown (avoids strict mode violation from closed instances)
@@ -28,34 +28,34 @@ function getOpenLanguageDropdown(page: Page): Locator {
  */
 function getLanguageLinkInOpenDropdown(
   page: Page,
-  locale: 'en' | 'zh',
+  locale: "en" | "zh",
 ): Locator {
   return getOpenLanguageDropdown(page)
     .locator(`[data-testid="language-link-${locale}"]`)
     .first();
 }
 
-test.describe('Internationalization (i18n)', () => {
+test.describe("Internationalization (i18n)", () => {
   test.beforeEach(async ({ page }) => {
-    await page.goto('/');
-    await page.waitForURL('**/en');
+    await page.goto("/");
+    await page.waitForURL("**/en");
     await waitForLoadWithFallback(page);
     await removeInterferingElements(page);
     await waitForStablePage(page);
   });
 
-  test('should default to English locale and display correct lang attribute', async ({
+  test("should default to English locale and display correct lang attribute", async ({
     page,
   }) => {
     // Verify URL contains English locale
-    expect(page.url()).toContain('/en');
+    expect(page.url()).toContain("/en");
 
     // Verify lang attribute on html element
-    const htmlLang = await page.locator('html').getAttribute('lang');
-    expect(htmlLang).toBe('en');
+    const htmlLang = await page.locator("html").getAttribute("lang");
+    expect(htmlLang).toBe("en");
 
     // Verify English content is displayed（严格模式下只使用第一个 hero section）
-    const heroSection = page.getByTestId('hero-section').first();
+    const heroSection = page.getByTestId("hero-section").first();
     await expect(heroSection).toBeVisible();
 
     // Check navigation per form factor
@@ -65,13 +65,13 @@ test.describe('Internationalization (i18n)', () => {
       await expect(mobileMenuButton).toBeVisible();
     } else {
       const nav = getNav(page);
-      await expect(nav.getByRole('link', { name: 'Home' })).toBeVisible();
-      await expect(nav.getByRole('link', { name: 'About' })).toBeVisible();
+      await expect(nav.getByRole("link", { name: "Home" })).toBeVisible();
+      await expect(nav.getByRole("link", { name: "About" })).toBeVisible();
     }
   });
 
-  test.describe('Language Switching', () => {
-    test('should switch from English to Chinese and update content', async ({
+  test.describe("Language Switching", () => {
+    test("should switch from English to Chinese and update content", async ({
       page,
     }) => {
       // Open language dropdown using a robust selector (exclude disabled variants)
@@ -88,29 +88,29 @@ test.describe('Internationalization (i18n)', () => {
         )
         .first();
       await expect(expandedToggle).toBeVisible();
-      await expect(dropdownContent).toHaveAttribute('data-state', 'open');
+      await expect(dropdownContent).toHaveAttribute("data-state", "open");
 
       // Verify English is currently active
-      const englishLink = getLanguageLinkInOpenDropdown(page, 'en');
-      await expect(englishLink.getByTestId('check-icon')).toBeVisible();
+      const englishLink = getLanguageLinkInOpenDropdown(page, "en");
+      await expect(englishLink.getByTestId("check-icon")).toBeVisible();
 
       // Click Chinese language option
-      const chineseLink = getLanguageLinkInOpenDropdown(page, 'zh');
+      const chineseLink = getLanguageLinkInOpenDropdown(page, "zh");
       await expect(chineseLink).toBeVisible();
       await chineseLink.click();
 
       // Wait for navigation to Chinese locale
-      await page.waitForURL('**/zh');
+      await page.waitForURL("**/zh");
       await waitForLoadWithFallback(page);
       await waitForStablePage(page);
 
       // Prefer semantic verification with fallback for cross-browser timing
       try {
-        await expect(page.locator('html')).toHaveAttribute('lang', 'zh');
+        await expect(page.locator("html")).toHaveAttribute("lang", "zh");
       } catch {
         // Fallback: verify Chinese UI is present
         const nav = getNav(page);
-        await expect(nav.getByRole('link', { name: '首页' })).toBeVisible();
+        await expect(nav.getByRole("link", { name: "首页" })).toBeVisible();
       }
 
       // Verify Chinese navigation is displayed (per form factor)
@@ -126,29 +126,29 @@ test.describe('Internationalization (i18n)', () => {
             // Fallback to click if tap fails
             await mobileMenuButton.click();
           }
-          const mobileNavSheet = page.getByRole('dialog', {
+          const mobileNavSheet = page.getByRole("dialog", {
             name: /mobile navigation/i,
           });
           await expect(mobileNavSheet).toBeVisible();
           await expect(
-            mobileNavSheet.getByRole('link', { name: '首页' }),
+            mobileNavSheet.getByRole("link", { name: "首页" }),
           ).toBeVisible();
           await expect(
-            mobileNavSheet.getByRole('link', { name: '关于' }),
+            mobileNavSheet.getByRole("link", { name: "关于" }),
           ).toBeVisible();
         } else {
           const nav = getNav(page);
-          await expect(nav.getByRole('link', { name: '首页' })).toBeVisible();
-          await expect(nav.getByRole('link', { name: '关于' })).toBeVisible();
+          await expect(nav.getByRole("link", { name: "首页" })).toBeVisible();
+          await expect(nav.getByRole("link", { name: "关于" })).toBeVisible();
         }
       }
 
       // Verify hero section content is in Chinese（页面存在多个 hero section 时仅断言第一个）
-      const heroSection = page.getByTestId('hero-section').first();
+      const heroSection = page.getByTestId("hero-section").first();
       await expect(heroSection).toBeVisible();
     });
 
-    test('should switch from Chinese back to English', async ({ page }) => {
+    test("should switch from Chinese back to English", async ({ page }) => {
       // First switch to Chinese (open dropdown)
       await safeClick(
         page,
@@ -162,11 +162,11 @@ test.describe('Internationalization (i18n)', () => {
         )
         .first();
       await expect(expandedToggleA).toBeVisible();
-      await expect(dropdownContentA).toHaveAttribute('data-state', 'open');
+      await expect(dropdownContentA).toHaveAttribute("data-state", "open");
 
-      const chineseLink = getLanguageLinkInOpenDropdown(page, 'zh');
+      const chineseLink = getLanguageLinkInOpenDropdown(page, "zh");
       await chineseLink.click();
-      await page.waitForURL('**/zh');
+      await page.waitForURL("**/zh");
       await waitForStablePage(page);
 
       // Now switch back to English (reopen dropdown)
@@ -181,27 +181,27 @@ test.describe('Internationalization (i18n)', () => {
         )
         .first();
       await expect(expandedToggleB).toBeVisible();
-      await expect(dropdownContentReopen).toHaveAttribute('data-state', 'open');
+      await expect(dropdownContentReopen).toHaveAttribute("data-state", "open");
 
-      const englishLink = getLanguageLinkInOpenDropdown(page, 'en');
+      const englishLink = getLanguageLinkInOpenDropdown(page, "en");
       await englishLink.click();
 
       // More robust waiting: expect key English UI elements instead of just URL
-      await expect(page.locator('html')).toHaveAttribute('lang', 'en', {
+      await expect(page.locator("html")).toHaveAttribute("lang", "en", {
         timeout: 30_000,
       });
       await expect(
-        page.getByRole('link', { name: 'Home' }).first(),
+        page.getByRole("link", { name: "Home" }).first(),
       ).toBeVisible({ timeout: 30_000 });
       await waitForStablePage(page);
 
       // Verify language via attribute with a graceful fallback
       try {
-        await expect(page.locator('html')).toHaveAttribute('lang', 'en');
+        await expect(page.locator("html")).toHaveAttribute("lang", "en");
       } catch {
         // Fallback: verify English UI is present
         const nav = getNav(page);
-        await expect(nav.getByRole('link', { name: 'Home' })).toBeVisible();
+        await expect(nav.getByRole("link", { name: "Home" })).toBeVisible();
       }
 
       {
@@ -214,20 +214,20 @@ test.describe('Internationalization (i18n)', () => {
           } catch {
             await mobileMenuButton.click();
           }
-          const mobileNavSheet = page.getByRole('dialog', {
+          const mobileNavSheet = page.getByRole("dialog", {
             name: /mobile navigation/i,
           });
           await expect(
-            mobileNavSheet.getByRole('link', { name: 'Home' }),
+            mobileNavSheet.getByRole("link", { name: "Home" }),
           ).toBeVisible();
         } else {
           const nav = getNav(page);
-          await expect(nav.getByRole('link', { name: 'Home' })).toBeVisible();
+          await expect(nav.getByRole("link", { name: "Home" })).toBeVisible();
         }
       }
     });
 
-    test('should show loading indicator during language switch', async ({
+    test("should show loading indicator during language switch", async ({
       page,
     }) => {
       await safeClick(
@@ -241,16 +241,16 @@ test.describe('Internationalization (i18n)', () => {
         )
         .first();
       await expect(expandedToggle).toBeVisible();
-      await expect(dropdownContentB).toHaveAttribute('data-state', 'open');
+      await expect(dropdownContentB).toHaveAttribute("data-state", "open");
 
       // Click Chinese link and immediately check for loading state
-      const chineseLink = getLanguageLinkInOpenDropdown(page, 'zh');
+      const chineseLink = getLanguageLinkInOpenDropdown(page, "zh");
 
       // Start the click but don't wait for completion
       const clickPromise = chineseLink.click();
 
       // Check for loading spinner (this happens very quickly)
-      const loadingSpinner = chineseLink.locator('.animate-spin');
+      const loadingSpinner = chineseLink.locator(".animate-spin");
 
       // The spinner might appear briefly
       try {
@@ -261,20 +261,20 @@ test.describe('Internationalization (i18n)', () => {
 
       // Wait for the click to complete
       await clickPromise;
-      await page.waitForURL('**/zh');
+      await page.waitForURL("**/zh");
       await waitForLoadWithFallback(page);
 
       // Prefer semantic verification with fallback due to mobile timing windows
-      const htmlLang = await page.locator('html').getAttribute('lang');
-      if (htmlLang !== 'zh') {
+      const htmlLang = await page.locator("html").getAttribute("lang");
+      if (htmlLang !== "zh") {
         const nav = getNav(page);
-        await expect(nav.getByRole('link', { name: '首页' })).toBeVisible();
+        await expect(nav.getByRole("link", { name: "首页" })).toBeVisible();
       } else {
-        expect(htmlLang).toBe('zh');
+        expect(htmlLang).toBe("zh");
       }
     });
 
-    test('should preserve current page path during language switch', async ({
+    test("should preserve current page path during language switch", async ({
       page,
     }) => {
       // Navigate to About page first (per form factor)
@@ -288,19 +288,19 @@ test.describe('Internationalization (i18n)', () => {
           } catch {
             await mobileMenuButton.click();
           }
-          const mobileNavSheet = page.getByRole('dialog', {
+          const mobileNavSheet = page.getByRole("dialog", {
             name: /mobile navigation/i,
           });
           await expect(mobileNavSheet).toBeVisible();
           await mobileNavSheet
-            .getByRole('link', { name: 'About' })
+            .getByRole("link", { name: "About" })
             .first()
             .click();
         } else {
-          await clickNavLinkByName(page, 'About');
+          await clickNavLinkByName(page, "About");
         }
       }
-      await page.waitForURL('**/en/about');
+      await page.waitForURL("**/en/about");
 
       // Switch language
       await safeClick(
@@ -314,18 +314,18 @@ test.describe('Internationalization (i18n)', () => {
         )
         .first();
       await expect(expandedToggle).toBeVisible();
-      await expect(dropdownContentC).toHaveAttribute('data-state', 'open');
+      await expect(dropdownContentC).toHaveAttribute("data-state", "open");
 
-      const chineseLink = getLanguageLinkInOpenDropdown(page, 'zh');
+      const chineseLink = getLanguageLinkInOpenDropdown(page, "zh");
       await chineseLink.click();
 
       // Should navigate to Chinese version of the same page
-      await page.waitForURL('**/zh/about');
+      await page.waitForURL("**/zh/about");
       await waitForLoadWithFallback(page);
 
       // Verify we're on the Chinese About page with fallback
       try {
-        await expect(page.locator('html')).toHaveAttribute('lang', 'zh');
+        await expect(page.locator("html")).toHaveAttribute("lang", "zh");
       } catch {
         // Lang attribute check failed, continue with URL verification
       }
@@ -333,13 +333,13 @@ test.describe('Internationalization (i18n)', () => {
     });
   });
 
-  test.describe('Theme Localization', () => {
-    test('should display theme toggle in correct language (conditional)', async ({
+  test.describe("Theme Localization", () => {
+    test("should display theme toggle in correct language (conditional)", async ({
       page,
     }) => {
       // Test English theme labels
-      const themeToggleButton = page.getByRole('button', {
-        name: 'Toggle theme',
+      const themeToggleButton = page.getByRole("button", {
+        name: "Toggle theme",
       });
       if (!(await themeToggleButton.count())) {
         // Feature not present: consider as non-applicable pass
@@ -350,23 +350,23 @@ test.describe('Internationalization (i18n)', () => {
 
       // Verify English theme menu items
       await expect(
-        page.getByRole('menuitem', { name: /Light/i }),
+        page.getByRole("menuitem", { name: /Light/i }),
       ).toBeVisible();
-      await expect(page.getByRole('menuitem', { name: /Dark/i })).toBeVisible();
+      await expect(page.getByRole("menuitem", { name: /Dark/i })).toBeVisible();
       await expect(
-        page.getByRole('menuitem', { name: /System/i }),
+        page.getByRole("menuitem", { name: /System/i }),
       ).toBeVisible();
 
       // Close theme menu
-      await page.keyboard.press('Escape');
+      await page.keyboard.press("Escape");
 
       // Switch to Chinese
-      const languageToggleButton = page.getByTestId('language-toggle-button');
+      const languageToggleButton = page.getByTestId("language-toggle-button");
       await languageToggleButton.click();
 
-      const chineseLink = getLanguageLinkInOpenDropdown(page, 'zh');
+      const chineseLink = getLanguageLinkInOpenDropdown(page, "zh");
       await chineseLink.click();
-      await page.waitForURL('**/zh');
+      await page.waitForURL("**/zh");
       await waitForStablePage(page);
 
       // Test Chinese theme labels
@@ -374,22 +374,22 @@ test.describe('Internationalization (i18n)', () => {
 
       // Verify Chinese theme menu items
       await expect(
-        page.getByRole('menuitem', { name: /明亮模式/i }),
+        page.getByRole("menuitem", { name: /明亮模式/i }),
       ).toBeVisible();
       await expect(
-        page.getByRole('menuitem', { name: /暗黑模式/i }),
+        page.getByRole("menuitem", { name: /暗黑模式/i }),
       ).toBeVisible();
       await expect(
-        page.getByRole('menuitem', { name: /系统模式/i }),
+        page.getByRole("menuitem", { name: /系统模式/i }),
       ).toBeVisible();
     });
 
-    test('should maintain theme preference across language switches (conditional)', async ({
+    test("should maintain theme preference across language switches (conditional)", async ({
       page,
     }) => {
       // Set dark theme in English
-      const themeToggleButton = page.getByRole('button', {
-        name: 'Toggle theme',
+      const themeToggleButton = page.getByRole("button", {
+        name: "Toggle theme",
       });
       if (!(await themeToggleButton.count())) {
         expect(true).toBe(true);
@@ -397,35 +397,35 @@ test.describe('Internationalization (i18n)', () => {
       }
       await themeToggleButton.click();
 
-      const darkMenuItem = page.getByRole('menuitem', { name: /Dark/i });
+      const darkMenuItem = page.getByRole("menuitem", { name: /Dark/i });
       await darkMenuItem.click();
 
       // Verify dark theme is applied
-      await expect(page.locator('html')).toHaveClass(/dark/);
+      await expect(page.locator("html")).toHaveClass(/dark/);
 
       // Switch to Chinese
-      const languageToggleButton = page.getByTestId('language-toggle-button');
+      const languageToggleButton = page.getByTestId("language-toggle-button");
       await languageToggleButton.click();
 
-      const chineseLink = getLanguageLinkInOpenDropdown(page, 'zh');
+      const chineseLink = getLanguageLinkInOpenDropdown(page, "zh");
       await chineseLink.click();
-      await page.waitForURL('**/zh');
+      await page.waitForURL("**/zh");
       await waitForStablePage(page);
 
       // Verify dark theme is still applied
-      await expect(page.locator('html')).toHaveClass(/dark/);
+      await expect(page.locator("html")).toHaveClass(/dark/);
 
       // Verify theme toggle shows correct state in Chinese
       await themeToggleButton.click();
-      const darkMenuItemZh = page.getByRole('menuitem', { name: /暗黑模式/i });
+      const darkMenuItemZh = page.getByRole("menuitem", { name: /暗黑模式/i });
 
       // The dark theme item should be marked as active/selected
       await expect(darkMenuItemZh).toBeVisible();
     });
   });
 
-  test.describe('Content Translation Validation', () => {
-    test('should display all navigation items in both languages', async ({
+  test.describe("Content Translation Validation", () => {
+    test("should display all navigation items in both languages", async ({
       page,
     }) => {
       // Test English navigation per form factor
@@ -440,26 +440,26 @@ test.describe('Internationalization (i18n)', () => {
         } catch {
           await mobileMenuButton.click();
         }
-        container = page.getByRole('dialog', {
+        container = page.getByRole("dialog", {
           name: /mobile navigation/i,
         });
         await expect(container).toBeVisible();
       } else {
         await expect(nav).toBeVisible();
       }
-      const englishNavItems = ['Home', 'Products', 'Blog', 'About'];
+      const englishNavItems = ["Home", "Products", "Blog", "About"];
 
       for (const item of englishNavItems) {
         const candidate = container
-          .getByRole('link', { name: item })
-          .or(container.getByRole('button', { name: item }));
+          .getByRole("link", { name: item })
+          .or(container.getByRole("button", { name: item }));
         await expect(candidate.first()).toBeVisible();
       }
 
       // Switch to Chinese
       // Close mobile sheet first to avoid overlay intercepting pointer events
       if (isMobile && container) {
-        const closeBtn = (container as any).getByRole?.('button', {
+        const closeBtn = (container as any).getByRole?.("button", {
           name: /close/i,
         });
         try {
@@ -469,32 +469,32 @@ test.describe('Internationalization (i18n)', () => {
         }
         try {
           if (closeBtn) await closeBtn.click();
-          else await page.keyboard.press('Escape');
+          else await page.keyboard.press("Escape");
         } catch {
           // Close action failed, continue
         }
-        await expect(page.getByRole('dialog', { name: /mobile navigation/i }))
+        await expect(page.getByRole("dialog", { name: /mobile navigation/i }))
           .not.toBeVisible({ timeout: 2000 })
           .catch(() => {
             // Dialog still visible, continue
           });
       }
-      const languageToggleButton = page.getByTestId('language-toggle-button');
+      const languageToggleButton = page.getByTestId("language-toggle-button");
       await languageToggleButton.click();
       const dropdownContentD = getOpenLanguageDropdown(page);
       await expect(languageToggleButton).toHaveAttribute(
-        'aria-expanded',
-        'true',
+        "aria-expanded",
+        "true",
       );
-      await expect(dropdownContentD).toHaveAttribute('data-state', 'open');
+      await expect(dropdownContentD).toHaveAttribute("data-state", "open");
 
-      const chineseLink = getLanguageLinkInOpenDropdown(page, 'zh');
+      const chineseLink = getLanguageLinkInOpenDropdown(page, "zh");
       await chineseLink.click();
-      await page.waitForURL('**/zh');
+      await page.waitForURL("**/zh");
       await waitForStablePage(page);
 
       // Test Chinese navigation (adjust based on actual translations)
-      const chineseNavItems = ['首页', '产品', '博客', '关于'];
+      const chineseNavItems = ["首页", "产品", "博客", "关于"];
 
       // Recompute container after navigation to zh (dialog/nav may have re-rendered)
       {
@@ -507,7 +507,7 @@ test.describe('Internationalization (i18n)', () => {
           } catch {
             await mobileMenuButton2.click();
           }
-          container = page.getByRole('dialog', {
+          container = page.getByRole("dialog", {
             name: /mobile navigation/i,
           });
           await expect(container).toBeVisible();
@@ -518,19 +518,19 @@ test.describe('Internationalization (i18n)', () => {
 
       for (const item of chineseNavItems) {
         const candidate = container
-          .getByRole('link', { name: item })
-          .or(container.getByRole('button', { name: item }));
+          .getByRole("link", { name: item })
+          .or(container.getByRole("button", { name: item }));
         await expect(candidate.first()).toBeVisible();
       }
     });
 
-    test('should handle missing translations gracefully', async ({ page }) => {
+    test("should handle missing translations gracefully", async ({ page }) => {
       // This test verifies fallback behavior for missing translation keys
       // Navigate to a page that might have incomplete translations
 
       const nav = getNav(page);
-      const diagnosticsLink = nav.getByRole('link', {
-        name: 'Performance Diagnostics',
+      const diagnosticsLink = nav.getByRole("link", {
+        name: "Performance Diagnostics",
       });
 
       if (await diagnosticsLink.isVisible()) {
@@ -538,22 +538,22 @@ test.describe('Internationalization (i18n)', () => {
         await waitForLoadWithFallback(page);
 
         // Switch to Chinese
-        const languageToggleButton = page.getByTestId('language-toggle-button');
+        const languageToggleButton = page.getByTestId("language-toggle-button");
         await languageToggleButton.click();
 
-        const chineseLink = getLanguageLinkInOpenDropdown(page, 'zh');
+        const chineseLink = getLanguageLinkInOpenDropdown(page, "zh");
         await chineseLink.click();
-        await page.waitForURL('**/zh/diagnostics');
+        await page.waitForURL("**/zh/diagnostics");
         await waitForStablePage(page);
 
         // Page should still load even if some translations are missing
         // Content should either show Chinese translations or fallback to English
-        await expect(page.getByRole('heading').first()).toBeVisible();
+        await expect(page.getByRole("heading").first()).toBeVisible();
       }
     });
   });
 
-  test.describe('Mobile i18n Experience', () => {
+  test.describe("Mobile i18n Experience", () => {
     // Ensure mobile-like context across browsers (Firefox 不支持 isMobile)
     // 仅使用 viewport + hasTouch 模拟移动设备特性
     test.use({
@@ -563,7 +563,7 @@ test.describe('Internationalization (i18n)', () => {
     // Note: Mobile tests automatically run on Mobile Chrome (Pixel 5) and Mobile Safari (iPhone 12)
     // as configured in playwright.config.ts projects. No need to use test.use() here.
 
-    test('should work correctly on mobile devices', async ({ page }) => {
+    test("should work correctly on mobile devices", async ({ page }) => {
       // On mobile, language switching is done through the mobile menu
       // (language-toggle-button is header-desktop-only, hidden below 1280px)
       const mobileMenuButton = getHeaderMobileMenuButton(page);
@@ -576,14 +576,14 @@ test.describe('Internationalization (i18n)', () => {
         await mobileMenuButton.click();
       }
 
-      const mobileNavSheet = page.getByRole('dialog', {
+      const mobileNavSheet = page.getByRole("dialog", {
         name: /mobile navigation/i,
       });
       await expect(mobileNavSheet).toBeVisible();
 
       // Find and click Chinese language link in mobile menu
-      const chineseLink = mobileNavSheet.getByRole('link', {
-        name: '简体中文',
+      const chineseLink = mobileNavSheet.getByRole("link", {
+        name: "简体中文",
       });
       await expect(chineseLink).toBeVisible();
       try {
@@ -592,13 +592,13 @@ test.describe('Internationalization (i18n)', () => {
         await chineseLink.click();
       }
 
-      await page.waitForURL('**/zh');
+      await page.waitForURL("**/zh");
       await waitForLoadWithFallback(page);
       await waitForStablePage(page);
       // Wait for hydration to update html[lang] (PPR mode requires client-side correction)
-      await waitForHtmlLang(page, 'zh');
-      const currentLang = await page.locator('html').getAttribute('lang');
-      expect(currentLang).toBe('zh');
+      await waitForHtmlLang(page, "zh");
+      const currentLang = await page.locator("html").getAttribute("lang");
+      expect(currentLang).toBe("zh");
 
       // Verify mobile navigation works in Chinese
       await expect(mobileMenuButton).toBeVisible();
@@ -609,20 +609,20 @@ test.describe('Internationalization (i18n)', () => {
         await mobileMenuButton.click();
       }
 
-      const mobileNavSheetZh = page.getByRole('dialog', {
+      const mobileNavSheetZh = page.getByRole("dialog", {
         name: /mobile navigation/i,
       });
       await expect(mobileNavSheetZh).toBeVisible();
 
       // Verify Chinese navigation items in mobile menu
       await expect(
-        mobileNavSheetZh.getByRole('link', { name: '首页' }),
+        mobileNavSheetZh.getByRole("link", { name: "首页" }),
       ).toBeVisible();
     });
   });
 
-  test.describe('Accessibility and i18n', () => {
-    test('should pass accessibility checks in both languages', async ({
+  test.describe("Accessibility and i18n", () => {
+    test("should pass accessibility checks in both languages", async ({
       page,
     }) => {
       await injectAxe(page);
@@ -636,16 +636,16 @@ test.describe('Internationalization (i18n)', () => {
       // Wait for language toggle to be enabled (not in isPending state)
       await page.waitForSelector(
         'button[data-testid="language-toggle-button"]:not(:disabled)',
-        { state: 'visible', timeout: 10000 },
+        { state: "visible", timeout: 10000 },
       );
 
       // Switch to Chinese and check again
-      const languageToggleButton = page.getByTestId('language-toggle-button');
+      const languageToggleButton = page.getByTestId("language-toggle-button");
       await languageToggleButton.click();
 
-      const chineseLink = getLanguageLinkInOpenDropdown(page, 'zh');
+      const chineseLink = getLanguageLinkInOpenDropdown(page, "zh");
       await chineseLink.click();
-      await page.waitForURL('**/zh');
+      await page.waitForURL("**/zh");
       await waitForStablePage(page);
 
       // 导航后需再次注入 axe（window 上下文已刷新）
@@ -657,19 +657,19 @@ test.describe('Internationalization (i18n)', () => {
         detailedReportOptions: { html: true },
         axeOptions: {
           rules: {
-            'color-contrast': { enabled: false },
+            "color-contrast": { enabled: false },
           },
         },
-        includedImpacts: ['critical', 'serious'],
+        includedImpacts: ["critical", "serious"],
       });
     });
 
-    test('should have proper lang attributes for screen readers', async ({
+    test("should have proper lang attributes for screen readers", async ({
       page,
     }) => {
       // Verify English lang attribute
-      let htmlLang = await page.locator('html').getAttribute('lang');
-      expect(htmlLang).toBe('en');
+      let htmlLang = await page.locator("html").getAttribute("lang");
+      expect(htmlLang).toBe("en");
 
       // Switch to Chinese
       await safeClick(
@@ -677,47 +677,47 @@ test.describe('Internationalization (i18n)', () => {
         'button[data-testid="language-toggle-button"]:not(:disabled)',
       );
 
-      const chineseLink = getLanguageLinkInOpenDropdown(page, 'zh');
+      const chineseLink = getLanguageLinkInOpenDropdown(page, "zh");
       await chineseLink.click();
 
       // More robust: wait for Chinese UI elements instead of just URL/networkidle
-      await expect(page.locator('html')).toHaveAttribute('lang', 'zh', {
+      await expect(page.locator("html")).toHaveAttribute("lang", "zh", {
         timeout: 30_000,
       });
       await expect(
-        page.getByRole('link', { name: '首页' }).first(),
+        page.getByRole("link", { name: "首页" }).first(),
       ).toBeVisible({ timeout: 30_000 });
       await waitForStablePage(page);
 
       // Verify Chinese lang attribute with fallback to visible Chinese UI
-      htmlLang = await page.locator('html').getAttribute('lang');
-      if (htmlLang !== 'zh') {
+      htmlLang = await page.locator("html").getAttribute("lang");
+      if (htmlLang !== "zh") {
         const nav = getNav(page);
-        await expect(nav.getByRole('link', { name: '首页' })).toBeVisible();
+        await expect(nav.getByRole("link", { name: "首页" })).toBeVisible();
       } else {
-        expect(htmlLang).toBe('zh');
+        expect(htmlLang).toBe("zh");
       }
 
       // Verify language toggle has proper ARIA labels
       const anyLanguageToggle = page
         .locator('button[data-testid="language-toggle-button"]')
         .first();
-      await expect(anyLanguageToggle).toHaveAttribute('aria-label');
+      await expect(anyLanguageToggle).toHaveAttribute("aria-label");
 
       // Verify language links have proper attributes
       await safeClick(
         page,
         'button[data-testid="language-toggle-button"]:not(:disabled)',
       );
-      const englishLink = getLanguageLinkInOpenDropdown(page, 'en');
-      const chineseLinkInDropdown = getLanguageLinkInOpenDropdown(page, 'zh');
-      await expect(englishLink).toHaveAttribute('data-locale', 'en');
-      await expect(chineseLinkInDropdown).toHaveAttribute('data-locale', 'zh');
+      const englishLink = getLanguageLinkInOpenDropdown(page, "en");
+      const chineseLinkInDropdown = getLanguageLinkInOpenDropdown(page, "zh");
+      await expect(englishLink).toHaveAttribute("data-locale", "en");
+      await expect(chineseLinkInDropdown).toHaveAttribute("data-locale", "zh");
     });
   });
 
-  test.describe('URL and SEO', () => {
-    test('should generate correct URLs for different locales', async ({
+  test.describe("URL and SEO", () => {
+    test("should generate correct URLs for different locales", async ({
       page,
     }) => {
       // Test English URLs
@@ -734,54 +734,54 @@ test.describe('Internationalization (i18n)', () => {
           } catch {
             await mobileMenuButton.click();
           }
-          const mobileNavSheet = page.getByRole('dialog', {
+          const mobileNavSheet = page.getByRole("dialog", {
             name: /mobile navigation/i,
           });
           await expect(mobileNavSheet).toBeVisible();
           await mobileNavSheet
-            .getByRole('link', { name: 'About' })
+            .getByRole("link", { name: "About" })
             .first()
             .click();
         } else {
-          await clickNavLinkByName(page, 'About');
+          await clickNavLinkByName(page, "About");
         }
       }
-      await page.waitForURL('**/en/about');
+      await page.waitForURL("**/en/about");
 
-      expect(page.url()).toContain('/en/about');
+      expect(page.url()).toContain("/en/about");
 
       // Switch to Chinese
-      const languageToggleButton = page.getByTestId('language-toggle-button');
+      const languageToggleButton = page.getByTestId("language-toggle-button");
       await languageToggleButton.click();
 
-      const chineseLink = getLanguageLinkInOpenDropdown(page, 'zh');
+      const chineseLink = getLanguageLinkInOpenDropdown(page, "zh");
       await chineseLink.click();
-      await page.waitForURL('**/zh/about');
+      await page.waitForURL("**/zh/about");
 
-      expect(page.url()).toContain('/zh/about');
+      expect(page.url()).toContain("/zh/about");
     });
 
-    test('should handle direct navigation to localized URLs', async ({
+    test("should handle direct navigation to localized URLs", async ({
       page,
     }) => {
       // Direct navigation to Chinese homepage
-      await page.goto('/zh');
+      await page.goto("/zh");
       await waitForLoadWithFallback(page);
       await waitForStablePage(page);
 
       // Verify Chinese content (wait for hydration to update html[lang])
-      await waitForHtmlLang(page, 'zh');
-      const htmlLang = await page.locator('html').getAttribute('lang');
-      expect(htmlLang).toBe('zh');
+      await waitForHtmlLang(page, "zh");
+      const htmlLang = await page.locator("html").getAttribute("lang");
+      expect(htmlLang).toBe("zh");
 
       // Direct navigation to Chinese About page
-      await page.goto('/zh/about');
+      await page.goto("/zh/about");
       await waitForLoadWithFallback(page);
-      await waitForHtmlLang(page, 'zh');
+      await waitForHtmlLang(page, "zh");
 
-      expect(page.url()).toContain('/zh/about');
-      const aboutLang = await page.locator('html').getAttribute('lang');
-      expect(aboutLang).toBe('zh');
+      expect(page.url()).toContain("/zh/about");
+      const aboutLang = await page.locator("html").getAttribute("lang");
+      expect(aboutLang).toBe("zh");
     });
   });
 });

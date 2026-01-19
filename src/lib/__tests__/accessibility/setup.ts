@@ -1,14 +1,14 @@
-import { vi } from 'vitest';
-import type { AccessibilityManagerPrivate } from '@/types/test-types';
-import { AccessibilityManager, useAccessibility } from '@/lib/accessibility';
-import type { ScreenReaderConfig } from '@/lib/accessibility-types';
+import { vi } from "vitest";
+import type { AccessibilityManagerPrivate } from "@/types/test-types";
+import { AccessibilityManager, useAccessibility } from "@/lib/accessibility";
+import type { ScreenReaderConfig } from "@/lib/accessibility-types";
 import {
   DELAY_CONSTANTS,
   PERFORMANCE_CONSTANTS,
-} from '../../../constants/app-constants';
+} from "../../../constants/app-constants";
 
 // Mock logger module
-vi.mock('../../logger', () => ({
+vi.mock("../../logger", () => ({
   logger: {
     warn: vi.fn(),
     info: vi.fn(),
@@ -23,29 +23,29 @@ export const mockRemoveChild = vi.fn();
 export const mockGetElementById = vi.fn();
 export const mockCreateElement = vi.fn();
 
-Object.defineProperty(document, 'getElementById', {
+Object.defineProperty(document, "getElementById", {
   value: mockGetElementById,
   writable: true,
 });
 
-Object.defineProperty(document, 'createElement', {
+Object.defineProperty(document, "createElement", {
   value: mockCreateElement,
   writable: true,
 });
 
-Object.defineProperty(document.body, 'appendChild', {
+Object.defineProperty(document.body, "appendChild", {
   value: mockAppendChild,
   writable: true,
 });
 
-Object.defineProperty(document.body, 'removeChild', {
+Object.defineProperty(document.body, "removeChild", {
   value: mockRemoveChild,
   writable: true,
 });
 
 // Mock window.matchMedia
 export const mockMatchMedia = vi.fn();
-Object.defineProperty(window, 'matchMedia', {
+Object.defineProperty(window, "matchMedia", {
   value: mockMatchMedia,
   writable: true,
 });
@@ -62,14 +62,14 @@ export const mockSpeechSynthesis = {
   paused: false,
 };
 
-Object.defineProperty(window, 'speechSynthesis', {
+Object.defineProperty(window, "speechSynthesis", {
   value: mockSpeechSynthesis,
   writable: true,
 });
 
 // Mock SpeechSynthesisUtterance
 export const mockSpeechSynthesisUtterance = vi.fn();
-Object.defineProperty(window, 'SpeechSynthesisUtterance', {
+Object.defineProperty(window, "SpeechSynthesisUtterance", {
   value: mockSpeechSynthesisUtterance,
   writable: true,
 });
@@ -81,7 +81,7 @@ mockResizeObserver.mockImplementation(() => ({
   unobserve: vi.fn(),
   disconnect: vi.fn(),
 }));
-Object.defineProperty(window, 'ResizeObserver', {
+Object.defineProperty(window, "ResizeObserver", {
   value: mockResizeObserver,
   writable: true,
 });
@@ -93,7 +93,7 @@ mockIntersectionObserver.mockImplementation(() => ({
   unobserve: vi.fn(),
   disconnect: vi.fn(),
 }));
-Object.defineProperty(window, 'IntersectionObserver', {
+Object.defineProperty(window, "IntersectionObserver", {
   value: mockIntersectionObserver,
   writable: true,
 });
@@ -105,7 +105,7 @@ mockMutationObserver.mockImplementation(() => ({
   disconnect: vi.fn(),
   takeRecords: vi.fn(() => []),
 }));
-Object.defineProperty(window, 'MutationObserver', {
+Object.defineProperty(window, "MutationObserver", {
   value: mockMutationObserver,
   writable: true,
 });
@@ -116,9 +116,9 @@ export function setupAccessibilityTest() {
 
   // Create mock live region element
   const mockLiveRegion = {
-    id: 'accessibility-live-region',
+    id: "accessibility-live-region",
     setAttribute: vi.fn(),
-    textContent: '',
+    textContent: "",
     style: {},
     remove: vi.fn(),
   } as unknown;
@@ -154,7 +154,7 @@ export function setupAccessibilityTest() {
   mockSpeechSynthesisUtterance.mockClear();
   mockSpeechSynthesisUtterance.mockImplementation((text) => ({
     text,
-    lang: 'en-US',
+    lang: "en-US",
     voice: null,
     volume: 1,
     rate: 1,
@@ -179,7 +179,7 @@ export function setupAccessibilityTest() {
 // Helper function to create accessibility manager instance
 const defaultAccessibilityConfig: ScreenReaderConfig = {
   enabled: true,
-  language: 'en',
+  language: "en",
   announceDelay: DELAY_CONSTANTS.STANDARD_TIMEOUT,
 };
 
@@ -233,7 +233,7 @@ export function simulateMediaQueryChange(query: string, matches: boolean) {
 
 // Helper function to simulate keyboard events
 export function simulateKeyboardEvent(key: string, target?: HTMLElement) {
-  const event = new KeyboardEvent('keydown', {
+  const event = new KeyboardEvent("keydown", {
     key,
     code: key,
     bubbles: true,
@@ -252,7 +252,7 @@ export function simulateKeyboardEvent(key: string, target?: HTMLElement) {
 // Helper function to simulate focus events
 export function simulateFocusEvent(
   target: HTMLElement,
-  type: 'focus' | 'blur' = 'focus',
+  type: "focus" | "blur" = "focus",
 ) {
   const event = new FocusEvent(type, {
     bubbles: true,

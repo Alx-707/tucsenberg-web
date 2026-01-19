@@ -1,0 +1,860 @@
+<testsuites id="" name="" tests="109" failures="0" skipped="2" errors="0" time="68.423814">
+<testsuite name="basic-navigation.spec.ts" timestamp="2026-01-19T08:06:41.278Z" hostname="chromium" tests="4" failures="0" skipped="0" time="4.399" errors="0">
+<testcase name="Basic Navigation › should load homepage successfully" classname="basic-navigation.spec.ts" time="1.537">
+</testcase>
+<testcase name="Basic Navigation › should navigate between pages" classname="basic-navigation.spec.ts" time="1.373">
+<system-out>
+<![CDATA[🧹 Removing interfering elements...
+✅ Interfering elements removed
+⏳ Waiting for page to stabilize...
+✅ Page is stable
+]]>
+</system-out>
+</testcase>
+<testcase name="Basic Navigation › should handle language switching" classname="basic-navigation.spec.ts" time="0.25">
+</testcase>
+<testcase name="Basic Navigation › should be responsive on mobile" classname="basic-navigation.spec.ts" time="1.239">
+<system-out>
+<![CDATA[🧹 Removing interfering elements...
+✅ Interfering elements removed
+⏳ Waiting for page to stabilize...
+✅ Page is stable
+]]>
+</system-out>
+</testcase>
+</testsuite>
+<testsuite name="contact-form-smoke.spec.ts" timestamp="2026-01-19T08:06:41.278Z" hostname="chromium" tests="19" failures="0" skipped="0" time="18.151" errors="0">
+<testcase name="Contact Form - Smoke Tests (Staging) › 1. Turnstile 验证流程 › 应该加载 Turnstile widget（英文页面）" classname="contact-form-smoke.spec.ts" time="3.716">
+<system-out>
+<![CDATA[✅ Turnstile element detected
+]]>
+</system-out>
+</testcase>
+<testcase name="Contact Form - Smoke Tests (Staging) › 1. Turnstile 验证流程 › 应该加载 Turnstile widget（中文页面）" classname="contact-form-smoke.spec.ts" time="0.619">
+</testcase>
+<testcase name="Contact Form - Smoke Tests (Staging) › 1. Turnstile 验证流程 › 提交按钮初始状态应该被禁用" classname="contact-form-smoke.spec.ts" time="0.622">
+</testcase>
+<testcase name="Contact Form - Smoke Tests (Staging) › 2. 表单验证与错误信息 › 应该显示必填字段错误（英文）" classname="contact-form-smoke.spec.ts" time="0.358">
+</testcase>
+<testcase name="Contact Form - Smoke Tests (Staging) › 2. 表单验证与错误信息 › 应该显示必填字段错误（中文）" classname="contact-form-smoke.spec.ts" time="0.251">
+</testcase>
+<testcase name="Contact Form - Smoke Tests (Staging) › 2. 表单验证与错误信息 › 应该验证邮箱格式" classname="contact-form-smoke.spec.ts" time="0.317">
+</testcase>
+<testcase name="Contact Form - Smoke Tests (Staging) › 3. 表单字段渲染 › 应该渲染所有必需字段（英文）" classname="contact-form-smoke.spec.ts" time="0.626">
+</testcase>
+<testcase name="Contact Form - Smoke Tests (Staging) › 3. 表单字段渲染 › 应该渲染所有必需字段（中文）" classname="contact-form-smoke.spec.ts" time="0.623">
+</testcase>
+<testcase name="Contact Form - Smoke Tests (Staging) › 4. 国际化（i18n）验证 › 英文页面应该显示英文标签" classname="contact-form-smoke.spec.ts" time="0.624">
+</testcase>
+<testcase name="Contact Form - Smoke Tests (Staging) › 4. 国际化（i18n）验证 › 中文页面应该显示中文标签" classname="contact-form-smoke.spec.ts" time="0.35">
+</testcase>
+<testcase name="Contact Form - Smoke Tests (Staging) › 5. 性能与可访问性 › 页面加载时间应该合理" classname="contact-form-smoke.spec.ts" time="0.212">
+<system-out>
+<![CDATA[✅ Contact page loaded in 72ms
+]]>
+</system-out>
+</testcase>
+<testcase name="Contact Form - Smoke Tests (Staging) › 5. 性能与可访问性 › 表单应该有正确的 ARIA 属性" classname="contact-form-smoke.spec.ts" time="0.62">
+</testcase>
+<testcase name="Contact Form - Smoke Tests (Staging) › 6. 响应式设计 › 应该在移动设备上正确显示" classname="contact-form-smoke.spec.ts" time="0.613">
+</testcase>
+<testcase name="Contact Form - Smoke Tests (Staging) › 6. 响应式设计 › 应该在桌面设备上正确显示" classname="contact-form-smoke.spec.ts" time="0.647">
+</testcase>
+<testcase name="Contact Form - Smoke Tests (Staging) › 7. 网络请求验证 › 应该正确加载页面资源" classname="contact-form-smoke.spec.ts" time="0.238">
+</testcase>
+<testcase name="Contact Form - Smoke Tests (Staging) › 8. 速率限制（Rate Limiting） › 应该在超过速率限制后显示错误（英文）" classname="contact-form-smoke.spec.ts" time="2.299">
+</testcase>
+<testcase name="Contact Form - Smoke Tests (Staging) › 8. 速率限制（Rate Limiting） › 应该在超过速率限制后显示错误（中文）" classname="contact-form-smoke.spec.ts" time="0.609">
+</testcase>
+<testcase name="Contact Form - Smoke Tests (Staging) › 9. 表单提交验证 › 应该能够成功提交表单（英文）" classname="contact-form-smoke.spec.ts" time="2.362">
+</testcase>
+<testcase name="Contact Form - Smoke Tests (Staging) › 9. 表单提交验证 › 应该能够成功提交表单（中文）" classname="contact-form-smoke.spec.ts" time="2.445">
+</testcase>
+</testsuite>
+<testsuite name="header-layout.bbox.spec.ts" timestamp="2026-01-19T08:06:41.278Z" hostname="chromium" tests="8" failures="0" skipped="0" time="7.965" errors="0">
+<testcase name="Header layout (bbox regression) › en / mobile" classname="header-layout.bbox.spec.ts" time="1.139">
+<system-out>
+<![CDATA[🧹 Removing interfering elements...
+✅ Interfering elements removed
+⏳ Waiting for page to stabilize...
+✅ Page is stable
+]]>
+</system-out>
+</testcase>
+<testcase name="Header layout (bbox regression) › en / tablet" classname="header-layout.bbox.spec.ts" time="0.694">
+<system-out>
+<![CDATA[🧹 Removing interfering elements...
+✅ Interfering elements removed
+⏳ Waiting for page to stabilize...
+✅ Page is stable
+]]>
+</system-out>
+</testcase>
+<testcase name="Header layout (bbox regression) › en / desktop-1024" classname="header-layout.bbox.spec.ts" time="0.701">
+<system-out>
+<![CDATA[🧹 Removing interfering elements...
+✅ Interfering elements removed
+⏳ Waiting for page to stabilize...
+✅ Page is stable
+]]>
+</system-out>
+</testcase>
+<testcase name="Header layout (bbox regression) › en / desktop-1280" classname="header-layout.bbox.spec.ts" time="1.212">
+<system-out>
+<![CDATA[🧹 Removing interfering elements...
+✅ Interfering elements removed
+⏳ Waiting for page to stabilize...
+✅ Page is stable
+]]>
+</system-out>
+</testcase>
+<testcase name="Header layout (bbox regression) › zh / mobile" classname="header-layout.bbox.spec.ts" time="0.665">
+<system-out>
+<![CDATA[🧹 Removing interfering elements...
+✅ Interfering elements removed
+⏳ Waiting for page to stabilize...
+✅ Page is stable
+]]>
+</system-out>
+</testcase>
+<testcase name="Header layout (bbox regression) › zh / tablet" classname="header-layout.bbox.spec.ts" time="1.135">
+<system-out>
+<![CDATA[🧹 Removing interfering elements...
+✅ Interfering elements removed
+⏳ Waiting for page to stabilize...
+✅ Page is stable
+]]>
+</system-out>
+</testcase>
+<testcase name="Header layout (bbox regression) › zh / desktop-1024" classname="header-layout.bbox.spec.ts" time="1.166">
+<system-out>
+<![CDATA[🧹 Removing interfering elements...
+✅ Interfering elements removed
+⏳ Waiting for page to stabilize...
+✅ Page is stable
+]]>
+</system-out>
+</testcase>
+<testcase name="Header layout (bbox regression) › zh / desktop-1280" classname="header-layout.bbox.spec.ts" time="1.253">
+<system-out>
+<![CDATA[🧹 Removing interfering elements...
+✅ Interfering elements removed
+⏳ Waiting for page to stabilize...
+✅ Page is stable
+]]>
+</system-out>
+</testcase>
+</testsuite>
+<testsuite name="homepage.spec.ts" timestamp="2026-01-19T08:06:41.278Z" hostname="chromium" tests="12" failures="0" skipped="0" time="10.023" errors="0">
+<testcase name="Homepage Core Functionality › should load homepage with all core sections" classname="homepage.spec.ts" time="1.005">
+<system-out>
+<![CDATA[🧹 Removing interfering elements...
+✅ Interfering elements removed
+⏳ Waiting for page to stabilize...
+✅ Page is stable
+]]>
+</system-out>
+</testcase>
+<testcase name="Homepage Core Functionality › should display hero section with correct content and animations" classname="homepage.spec.ts" time="0.656">
+<system-out>
+<![CDATA[🧹 Removing interfering elements...
+✅ Interfering elements removed
+⏳ Waiting for page to stabilize...
+✅ Page is stable
+]]>
+</system-out>
+</testcase>
+<testcase name="Homepage Core Functionality › should handle CTA button interactions correctly" classname="homepage.spec.ts" time="0.745">
+<system-out>
+<![CDATA[🧹 Removing interfering elements...
+✅ Interfering elements removed
+⏳ Waiting for page to stabilize...
+✅ Page is stable
+]]>
+</system-out>
+</testcase>
+<testcase name="Homepage Core Functionality › Responsive Design Tests › should display correctly on desktop (1920x1080)" classname="homepage.spec.ts" time="1.067">
+<system-out>
+<![CDATA[🧹 Removing interfering elements...
+✅ Interfering elements removed
+⏳ Waiting for page to stabilize...
+✅ Page is stable
+⏳ Waiting for page to stabilize...
+✅ Page is stable
+]]>
+</system-out>
+</testcase>
+<testcase name="Homepage Core Functionality › Responsive Design Tests › should display correctly on tablet (768x1024)" classname="homepage.spec.ts" time="1.025">
+<system-out>
+<![CDATA[🧹 Removing interfering elements...
+✅ Interfering elements removed
+⏳ Waiting for page to stabilize...
+✅ Page is stable
+⏳ Waiting for page to stabilize...
+✅ Page is stable
+]]>
+</system-out>
+</testcase>
+<testcase name="Homepage Core Functionality › Responsive Design Tests › should display correctly on mobile (375x667)" classname="homepage.spec.ts" time="0.677">
+<system-out>
+<![CDATA[🧹 Removing interfering elements...
+✅ Interfering elements removed
+⏳ Waiting for page to stabilize...
+✅ Page is stable
+⏳ Waiting for page to stabilize...
+✅ Page is stable
+]]>
+</system-out>
+</testcase>
+<testcase name="Homepage Core Functionality › Performance Tests › should load within performance budgets" classname="homepage.spec.ts" time="0.643">
+<system-out>
+<![CDATA[🧹 Removing interfering elements...
+✅ Interfering elements removed
+⏳ Waiting for page to stabilize...
+✅ Page is stable
+]]>
+</system-out>
+</testcase>
+<testcase name="Homepage Core Functionality › Performance Tests › should handle slow network conditions gracefully" classname="homepage.spec.ts" time="0.55">
+<system-out>
+<![CDATA[🧹 Removing interfering elements...
+✅ Interfering elements removed
+⏳ Waiting for page to stabilize...
+✅ Page is stable
+]]>
+</system-out>
+</testcase>
+<testcase name="Homepage Core Functionality › Accessibility Tests › should pass automated accessibility checks" classname="homepage.spec.ts" time="0.896">
+<system-out>
+<![CDATA[🧹 Removing interfering elements...
+✅ Interfering elements removed
+⏳ Waiting for page to stabilize...
+✅ Page is stable
+]]>
+</system-out>
+</testcase>
+<testcase name="Homepage Core Functionality › Accessibility Tests › should support keyboard navigation" classname="homepage.spec.ts" time="0.686">
+<system-out>
+<![CDATA[🧹 Removing interfering elements...
+✅ Interfering elements removed
+⏳ Waiting for page to stabilize...
+✅ Page is stable
+]]>
+</system-out>
+</testcase>
+<testcase name="Homepage Core Functionality › Accessibility Tests › should have proper ARIA attributes and semantic structure" classname="homepage.spec.ts" time="1.012">
+<system-out>
+<![CDATA[🧹 Removing interfering elements...
+✅ Interfering elements removed
+⏳ Waiting for page to stabilize...
+✅ Page is stable
+]]>
+</system-out>
+</testcase>
+<testcase name="Homepage Core Functionality › Accessibility Tests › should respect reduced motion preferences" classname="homepage.spec.ts" time="1.061">
+<system-out>
+<![CDATA[🧹 Removing interfering elements...
+✅ Interfering elements removed
+⏳ Waiting for page to stabilize...
+✅ Page is stable
+⏳ Waiting for page to stabilize...
+✅ Page is stable
+]]>
+</system-out>
+</testcase>
+</testsuite>
+<testsuite name="i18n-redirect-validation.spec.ts" timestamp="2026-01-19T08:06:41.278Z" hostname="chromium" tests="15" failures="0" skipped="0" time="29.178" errors="0">
+<testcase name="Next.js 16 国际化重定向验证 › 基础语言检测和重定向 › 应该正确访问中文首页并设置Cookie" classname="i18n-redirect-validation.spec.ts" time="10.529">
+</testcase>
+<testcase name="Next.js 16 国际化重定向验证 › 基础语言检测和重定向 › 应该正确访问英文About页并设置Cookie" classname="i18n-redirect-validation.spec.ts" time="10.502">
+</testcase>
+<testcase name="Next.js 16 国际化重定向验证 › 基础语言检测和重定向 › 应该正确处理中文路径访问" classname="i18n-redirect-validation.spec.ts" time="0.604">
+</testcase>
+<testcase name="Next.js 16 国际化重定向验证 › 路径本地化验证 › 应该正确处理本地化路径映射" classname="i18n-redirect-validation.spec.ts" time="0.293">
+</testcase>
+<testcase name="Next.js 16 国际化重定向验证 › 路径本地化验证 › 应该正确处理联系页面的路径本地化" classname="i18n-redirect-validation.spec.ts" time="0.236">
+</testcase>
+<testcase name="Next.js 16 国际化重定向验证 › 路径本地化验证 › 应该正确处理英文原始路径" classname="i18n-redirect-validation.spec.ts" time="0.235">
+</testcase>
+<testcase name="Next.js 16 国际化重定向验证 › 重定向性能和稳定性 › 应该快速完成语言检测和重定向" classname="i18n-redirect-validation.spec.ts" time="0.219">
+<properties>
+<property name="slow" value="">
+</property>
+</properties>
+</testcase>
+<testcase name="Next.js 16 国际化重定向验证 › 重定向性能和稳定性 › 应该处理并发请求而不出现竞态条件" classname="i18n-redirect-validation.spec.ts" time="2.28">
+</testcase>
+<testcase name="Next.js 16 国际化重定向验证 › 错误处理和回退机制 › 应该处理无效的语言前缀" classname="i18n-redirect-validation.spec.ts" time="0.498">
+</testcase>
+<testcase name="Next.js 16 国际化重定向验证 › 错误处理和回退机制 › 应该处理不存在的本地化路径" classname="i18n-redirect-validation.spec.ts" time="0.561">
+</testcase>
+<testcase name="Next.js 16 国际化重定向验证 › 错误处理和回退机制 › 应该在语言检测失败时回退到默认语言" classname="i18n-redirect-validation.spec.ts" time="1.898">
+</testcase>
+<testcase name="Next.js 16 国际化重定向验证 › SEO 和元数据验证 › 应该为不同语言设置正确的 hreflang 标签" classname="i18n-redirect-validation.spec.ts" time="0.263">
+</testcase>
+<testcase name="Next.js 16 国际化重定向验证 › SEO 和元数据验证 › 应该为中文页面设置正确的元数据" classname="i18n-redirect-validation.spec.ts" time="0.587">
+</testcase>
+<testcase name="Next.js 16 国际化重定向验证 › 用户体验验证 › 语言切换应该保持在相同的页面类型" classname="i18n-redirect-validation.spec.ts" time="0.235">
+</testcase>
+<testcase name="Next.js 16 国际化重定向验证 › 用户体验验证 › 页面加载应该流畅无闪烁" classname="i18n-redirect-validation.spec.ts" time="0.238">
+</testcase>
+</testsuite>
+<testsuite name="i18n.spec.ts" timestamp="2026-01-19T08:06:41.278Z" hostname="chromium" tests="14" failures="0" skipped="0" time="17.691" errors="0">
+<testcase name="Internationalization (i18n) › should default to English locale and display correct lang attribute" classname="i18n.spec.ts" time="1.008">
+<system-out>
+<![CDATA[🧹 Removing interfering elements...
+✅ Interfering elements removed
+⏳ Waiting for page to stabilize...
+✅ Page is stable
+]]>
+</system-out>
+</testcase>
+<testcase name="Internationalization (i18n) › Language Switching › should switch from English to Chinese and update content" classname="i18n.spec.ts" time="1.629">
+<system-out>
+<![CDATA[🧹 Removing interfering elements...
+✅ Interfering elements removed
+⏳ Waiting for page to stabilize...
+✅ Page is stable
+🖱️  Safe clicking: button[data-testid="language-toggle-button"]:not(:disabled)
+🧹 Removing interfering elements...
+✅ Interfering elements removed
+🧹 Removing interfering elements...
+✅ Interfering elements removed
+✅ Successfully clicked: button[data-testid="language-toggle-button"]:not(:disabled)
+⏳ Waiting for page to stabilize...
+✅ Page is stable
+]]>
+</system-out>
+</testcase>
+<testcase name="Internationalization (i18n) › Language Switching › should switch from Chinese back to English" classname="i18n.spec.ts" time="1.906">
+<system-out>
+<![CDATA[🧹 Removing interfering elements...
+✅ Interfering elements removed
+⏳ Waiting for page to stabilize...
+✅ Page is stable
+🖱️  Safe clicking: button[data-testid="language-toggle-button"]:not(:disabled)
+🧹 Removing interfering elements...
+✅ Interfering elements removed
+🧹 Removing interfering elements...
+✅ Interfering elements removed
+✅ Successfully clicked: button[data-testid="language-toggle-button"]:not(:disabled)
+⏳ Waiting for page to stabilize...
+✅ Page is stable
+🖱️  Safe clicking: button[data-testid="language-toggle-button"]:not(:disabled)
+🧹 Removing interfering elements...
+✅ Interfering elements removed
+🧹 Removing interfering elements...
+✅ Interfering elements removed
+✅ Successfully clicked: button[data-testid="language-toggle-button"]:not(:disabled)
+⏳ Waiting for page to stabilize...
+✅ Page is stable
+]]>
+</system-out>
+</testcase>
+<testcase name="Internationalization (i18n) › Language Switching › should show loading indicator during language switch" classname="i18n.spec.ts" time="1.836">
+<system-out>
+<![CDATA[🧹 Removing interfering elements...
+✅ Interfering elements removed
+⏳ Waiting for page to stabilize...
+✅ Page is stable
+🖱️  Safe clicking: button[data-testid="language-toggle-button"]:not(:disabled)
+🧹 Removing interfering elements...
+✅ Interfering elements removed
+🧹 Removing interfering elements...
+✅ Interfering elements removed
+✅ Successfully clicked: button[data-testid="language-toggle-button"]:not(:disabled)
+]]>
+</system-out>
+</testcase>
+<testcase name="Internationalization (i18n) › Language Switching › should preserve current page path during language switch" classname="i18n.spec.ts" time="1.901">
+<system-out>
+<![CDATA[🧹 Removing interfering elements...
+✅ Interfering elements removed
+⏳ Waiting for page to stabilize...
+✅ Page is stable
+🖱️  Safe clicking: button[data-testid="language-toggle-button"]:not(:disabled)
+🧹 Removing interfering elements...
+✅ Interfering elements removed
+🧹 Removing interfering elements...
+✅ Interfering elements removed
+✅ Successfully clicked: button[data-testid="language-toggle-button"]:not(:disabled)
+]]>
+</system-out>
+</testcase>
+<testcase name="Internationalization (i18n) › Theme Localization › should display theme toggle in correct language (conditional)" classname="i18n.spec.ts" time="0.236">
+<system-out>
+<![CDATA[🧹 Removing interfering elements...
+✅ Interfering elements removed
+⏳ Waiting for page to stabilize...
+✅ Page is stable
+]]>
+</system-out>
+</testcase>
+<testcase name="Internationalization (i18n) › Theme Localization › should maintain theme preference across language switches (conditional)" classname="i18n.spec.ts" time="0.255">
+<system-out>
+<![CDATA[🧹 Removing interfering elements...
+✅ Interfering elements removed
+⏳ Waiting for page to stabilize...
+✅ Page is stable
+]]>
+</system-out>
+</testcase>
+<testcase name="Internationalization (i18n) › Content Translation Validation › should display all navigation items in both languages" classname="i18n.spec.ts" time="1.523">
+<system-out>
+<![CDATA[🧹 Removing interfering elements...
+✅ Interfering elements removed
+⏳ Waiting for page to stabilize...
+✅ Page is stable
+⏳ Waiting for page to stabilize...
+✅ Page is stable
+]]>
+</system-out>
+</testcase>
+<testcase name="Internationalization (i18n) › Content Translation Validation › should handle missing translations gracefully" classname="i18n.spec.ts" time="0.241">
+<system-out>
+<![CDATA[🧹 Removing interfering elements...
+✅ Interfering elements removed
+⏳ Waiting for page to stabilize...
+✅ Page is stable
+]]>
+</system-out>
+</testcase>
+<testcase name="Internationalization (i18n) › Mobile i18n Experience › should work correctly on mobile devices" classname="i18n.spec.ts" time="1.944">
+<system-out>
+<![CDATA[🧹 Removing interfering elements...
+✅ Interfering elements removed
+⏳ Waiting for page to stabilize...
+✅ Page is stable
+⏳ Waiting for page to stabilize...
+✅ Page is stable
+]]>
+</system-out>
+</testcase>
+<testcase name="Internationalization (i18n) › Accessibility and i18n › should pass accessibility checks in both languages" classname="i18n.spec.ts" time="1.533">
+<system-out>
+<![CDATA[🧹 Removing interfering elements...
+✅ Interfering elements removed
+⏳ Waiting for page to stabilize...
+✅ Page is stable
+⏳ Waiting for page to stabilize...
+✅ Page is stable
+]]>
+</system-out>
+</testcase>
+<testcase name="Internationalization (i18n) › Accessibility and i18n › should have proper lang attributes for screen readers" classname="i18n.spec.ts" time="1.704">
+<system-out>
+<![CDATA[🧹 Removing interfering elements...
+✅ Interfering elements removed
+⏳ Waiting for page to stabilize...
+✅ Page is stable
+🖱️  Safe clicking: button[data-testid="language-toggle-button"]:not(:disabled)
+🧹 Removing interfering elements...
+✅ Interfering elements removed
+🧹 Removing interfering elements...
+✅ Interfering elements removed
+✅ Successfully clicked: button[data-testid="language-toggle-button"]:not(:disabled)
+⏳ Waiting for page to stabilize...
+✅ Page is stable
+🖱️  Safe clicking: button[data-testid="language-toggle-button"]:not(:disabled)
+🧹 Removing interfering elements...
+✅ Interfering elements removed
+🧹 Removing interfering elements...
+✅ Interfering elements removed
+✅ Successfully clicked: button[data-testid="language-toggle-button"]:not(:disabled)
+]]>
+</system-out>
+</testcase>
+<testcase name="Internationalization (i18n) › URL and SEO › should generate correct URLs for different locales" classname="i18n.spec.ts" time="0.95">
+<system-out>
+<![CDATA[🧹 Removing interfering elements...
+✅ Interfering elements removed
+⏳ Waiting for page to stabilize...
+✅ Page is stable
+]]>
+</system-out>
+</testcase>
+<testcase name="Internationalization (i18n) › URL and SEO › should handle direct navigation to localized URLs" classname="i18n.spec.ts" time="1.025">
+<system-out>
+<![CDATA[🧹 Removing interfering elements...
+✅ Interfering elements removed
+⏳ Waiting for page to stabilize...
+✅ Page is stable
+⏳ Waiting for page to stabilize...
+✅ Page is stable
+]]>
+</system-out>
+</testcase>
+</testsuite>
+<testsuite name="navigation.spec.ts" timestamp="2026-01-19T08:06:41.278Z" hostname="chromium" tests="18" failures="0" skipped="0" time="19.832" errors="0">
+<testcase name="Navigation System › should redirect root path to default locale" classname="navigation.spec.ts" time="0.327">
+<system-out>
+<![CDATA[🧹 Removing interfering elements...
+✅ Interfering elements removed
+⏳ Waiting for page to stabilize...
+✅ Page is stable
+⏳ Waiting for page to stabilize...
+✅ Page is stable
+]]>
+</system-out>
+</testcase>
+<testcase name="Navigation System › Desktop Navigation › should display all main navigation links" classname="navigation.spec.ts" time="1.181">
+<system-out>
+<![CDATA[🧹 Removing interfering elements...
+✅ Interfering elements removed
+⏳ Waiting for page to stabilize...
+✅ Page is stable
+]]>
+</system-out>
+</testcase>
+<testcase name="Navigation System › Desktop Navigation › should navigate between pages and highlight active link" classname="navigation.spec.ts" time="0.857">
+<system-out>
+<![CDATA[🧹 Removing interfering elements...
+✅ Interfering elements removed
+⏳ Waiting for page to stabilize...
+✅ Page is stable
+🖱️  Safe clicking: nav a[href="/en/about"]:visible
+🧹 Removing interfering elements...
+✅ Interfering elements removed
+🧹 Removing interfering elements...
+✅ Interfering elements removed
+✅ Successfully clicked: nav a[href="/en/about"]:visible
+⏳ Waiting for page to stabilize...
+✅ Page is stable
+⏳ Waiting for page to stabilize...
+✅ Page is stable
+]]>
+</system-out>
+</testcase>
+<testcase name="Navigation System › Desktop Navigation › should support keyboard navigation" classname="navigation.spec.ts" time="1.207">
+<system-out>
+<![CDATA[🧹 Removing interfering elements...
+✅ Interfering elements removed
+⏳ Waiting for page to stabilize...
+✅ Page is stable
+]]>
+</system-out>
+</testcase>
+<testcase name="Navigation System › Desktop Navigation › should handle external links correctly" classname="navigation.spec.ts" time="0.268">
+<system-out>
+<![CDATA[🧹 Removing interfering elements...
+✅ Interfering elements removed
+⏳ Waiting for page to stabilize...
+✅ Page is stable
+]]>
+</system-out>
+</testcase>
+<testcase name="Navigation System › Mobile Navigation › should display hamburger menu on mobile" classname="navigation.spec.ts" time="1.136">
+<system-out>
+<![CDATA[🧹 Removing interfering elements...
+✅ Interfering elements removed
+⏳ Waiting for page to stabilize...
+✅ Page is stable
+]]>
+</system-out>
+</testcase>
+<testcase name="Navigation System › Mobile Navigation › should open and close mobile navigation sheet" classname="navigation.spec.ts" time="2.399">
+<system-out>
+<![CDATA[🧹 Removing interfering elements...
+✅ Interfering elements removed
+⏳ Waiting for page to stabilize...
+✅ Page is stable
+]]>
+</system-out>
+</testcase>
+<testcase name="Navigation System › Mobile Navigation › should navigate from mobile menu and auto-close" classname="navigation.spec.ts" time="1.905">
+<system-out>
+<![CDATA[🧹 Removing interfering elements...
+✅ Interfering elements removed
+⏳ Waiting for page to stabilize...
+✅ Page is stable
+⏳ Waiting for page to stabilize...
+✅ Page is stable
+]]>
+</system-out>
+</testcase>
+<testcase name="Navigation System › Mobile Navigation › should support touch interactions" classname="navigation.spec.ts" time="0.72">
+<system-out>
+<![CDATA[🧹 Removing interfering elements...
+✅ Interfering elements removed
+⏳ Waiting for page to stabilize...
+✅ Page is stable
+]]>
+</system-out>
+</testcase>
+<testcase name="Navigation System › Route Handling › should handle non-existent routes with 404 page" classname="navigation.spec.ts" time="0.352">
+<system-out>
+<![CDATA[🧹 Removing interfering elements...
+✅ Interfering elements removed
+⏳ Waiting for page to stabilize...
+✅ Page is stable
+]]>
+</system-out>
+</testcase>
+<testcase name="Navigation System › Route Handling › should preserve query parameters during navigation" classname="navigation.spec.ts" time="1.256">
+<system-out>
+<![CDATA[🧹 Removing interfering elements...
+✅ Interfering elements removed
+⏳ Waiting for page to stabilize...
+✅ Page is stable
+]]>
+</system-out>
+</testcase>
+<testcase name="Navigation System › Route Handling › should handle browser back/forward navigation" classname="navigation.spec.ts" time="2.027">
+<system-out>
+<![CDATA[🧹 Removing interfering elements...
+✅ Interfering elements removed
+⏳ Waiting for page to stabilize...
+✅ Page is stable
+]]>
+</system-out>
+</testcase>
+<testcase name="Navigation System › Accessibility Tests › should pass navigation accessibility checks" classname="navigation.spec.ts" time="1.301">
+<system-out>
+<![CDATA[🧹 Removing interfering elements...
+✅ Interfering elements removed
+⏳ Waiting for page to stabilize...
+✅ Page is stable
+]]>
+</system-out>
+</testcase>
+<testcase name="Navigation System › Accessibility Tests › should have proper ARIA attributes" classname="navigation.spec.ts" time="1.139">
+<system-out>
+<![CDATA[🧹 Removing interfering elements...
+✅ Interfering elements removed
+⏳ Waiting for page to stabilize...
+✅ Page is stable
+]]>
+</system-out>
+</testcase>
+<testcase name="Navigation System › Accessibility Tests › should support screen reader navigation" classname="navigation.spec.ts" time="1.134">
+<system-out>
+<![CDATA[🧹 Removing interfering elements...
+✅ Interfering elements removed
+⏳ Waiting for page to stabilize...
+✅ Page is stable
+]]>
+</system-out>
+</testcase>
+<testcase name="Navigation System › Accessibility Tests › should work with high contrast mode" classname="navigation.spec.ts" time="1.158">
+<system-out>
+<![CDATA[🧹 Removing interfering elements...
+✅ Interfering elements removed
+⏳ Waiting for page to stabilize...
+✅ Page is stable
+⏳ Waiting for page to stabilize...
+✅ Page is stable
+]]>
+</system-out>
+</testcase>
+<testcase name="Navigation System › Performance Tests › should navigate quickly between pages" classname="navigation.spec.ts" time="1.181">
+<system-out>
+<![CDATA[🧹 Removing interfering elements...
+✅ Interfering elements removed
+⏳ Waiting for page to stabilize...
+✅ Page is stable
+About navigation time: 850ms
+]]>
+</system-out>
+</testcase>
+<testcase name="Navigation System › Performance Tests › should preload navigation links" classname="navigation.spec.ts" time="0.284">
+<system-out>
+<![CDATA[🧹 Removing interfering elements...
+✅ Interfering elements removed
+⏳ Waiting for page to stabilize...
+✅ Page is stable
+]]>
+</system-out>
+</testcase>
+</testsuite>
+<testsuite name="performance.spec.ts" timestamp="2026-01-19T08:06:41.278Z" hostname="chromium" tests="4" failures="0" skipped="0" time="3.227" errors="0">
+<testcase name="Performance Tests › should load homepage within acceptable time" classname="performance.spec.ts" time="0.326">
+<system-out>
+<![CDATA[Homepage load time: 129ms
+]]>
+</system-out>
+</testcase>
+<testcase name="Performance Tests › should have good Core Web Vitals" classname="performance.spec.ts" time="0.603">
+<system-out>
+<![CDATA[Core Web Vitals: {}
+]]>
+</system-out>
+</testcase>
+<testcase name="Performance Tests › should not have console errors" classname="performance.spec.ts" time="1.741">
+</testcase>
+<testcase name="Performance Tests › should handle network failures gracefully" classname="performance.spec.ts" time="0.557">
+</testcase>
+</testsuite>
+<testsuite name="safe-navigation.spec.ts" timestamp="2026-01-19T08:06:41.278Z" hostname="chromium" tests="6" failures="0" skipped="0" time="11.302" errors="0">
+<testcase name="Safe Navigation Tests › should load homepage without interference" classname="safe-navigation.spec.ts" time="1.765">
+<system-out>
+<![CDATA[🧹 Removing interfering elements...
+✅ Interfering elements removed
+⏳ Waiting for page to stabilize...
+✅ Page is stable
+✅ Homepage loaded cleanly without React Scan interference
+]]>
+</system-out>
+</testcase>
+<testcase name="Safe Navigation Tests › should navigate between pages safely" classname="safe-navigation.spec.ts" time="1.966">
+<system-out>
+<![CDATA[🧹 Removing interfering elements...
+✅ Interfering elements removed
+⏳ Waiting for page to stabilize...
+✅ Page is stable
+🖥️  Testing desktop navigation...
+🖱️  Safe clicking: a[href*="/about"]:visible
+🧹 Removing interfering elements...
+✅ Interfering elements removed
+🧹 Removing interfering elements...
+✅ Interfering elements removed
+✅ Successfully clicked: a[href*="/about"]:visible
+ℹ️  Navigation clicked but URL didn't change as expected: http://localhost:3000/en
+]]>
+</system-out>
+</testcase>
+<testcase name="Safe Navigation Tests › should handle mobile menu safely" classname="safe-navigation.spec.ts" time="1.76">
+<system-out>
+<![CDATA[🧹 Removing interfering elements...
+✅ Interfering elements removed
+⏳ Waiting for page to stabilize...
+✅ Page is stable
+🧹 Removing interfering elements...
+✅ Interfering elements removed
+ℹ️  Mobile menu button not found or not visible
+]]>
+</system-out>
+</testcase>
+<testcase name="Safe Navigation Tests › should handle theme toggle safely" classname="safe-navigation.spec.ts" time="1.84">
+<system-out>
+<![CDATA[🧹 Removing interfering elements...
+✅ Interfering elements removed
+⏳ Waiting for page to stabilize...
+✅ Page is stable
+🎯 Found theme toggle button: button[aria-label*="theme"]
+🖱️  Safe clicking: button[aria-label*="theme"]
+🧹 Removing interfering elements...
+✅ Interfering elements removed
+🧹 Removing interfering elements...
+✅ Interfering elements removed
+✅ Successfully clicked: button[aria-label*="theme"]
+🎨 Theme changed from light to light
+✅ Theme toggle interaction completed
+]]>
+</system-out>
+</testcase>
+<testcase name="Safe Navigation Tests › should handle language switcher safely" classname="safe-navigation.spec.ts" time="2.209">
+<system-out>
+<![CDATA[🧹 Removing interfering elements...
+✅ Interfering elements removed
+⏳ Waiting for page to stabilize...
+✅ Page is stable
+🎯 Found language switcher: [data-testid="language-switcher"]
+🖱️  Safe clicking: [data-testid="language-switcher"]
+🧹 Removing interfering elements...
+✅ Interfering elements removed
+🧹 Removing interfering elements...
+✅ Interfering elements removed
+✅ Successfully clicked: [data-testid="language-switcher"]
+🌐 Language switcher clicked, URL: http://localhost:3000/en -> http://localhost:3000/en
+✅ Language switcher interaction completed
+]]>
+</system-out>
+</testcase>
+<testcase name="Safe Navigation Tests › should verify no React Scan elements exist" classname="safe-navigation.spec.ts" time="1.762">
+<system-out>
+<![CDATA[🧹 Removing interfering elements...
+✅ Interfering elements removed
+⏳ Waiting for page to stabilize...
+✅ Page is stable
+✅ No #react-scan-toolbar-root elements found
+✅ No [data-testid="react-scan-indicator"] elements found
+✅ No [data-testid="react-scan-control-panel"] elements found
+✅ No .react-scan-overlay elements found
+✅ No .react-scan-toolbar elements found
+✅ React Scan interference verification completed
+]]>
+</system-out>
+</testcase>
+</testsuite>
+<testsuite name="visual-regression.spec.ts" timestamp="2026-01-19T08:06:41.278Z" hostname="chromium" tests="9" failures="0" skipped="2" time="5.174" errors="0">
+<testcase name="Visual Regression - Header Component › Header - en - mobile" classname="visual-regression.spec.ts" time="0.639">
+<system-out>
+<![CDATA[🧹 Removing interfering elements...
+✅ Interfering elements removed
+⏳ Waiting for page to stabilize...
+✅ Page is stable
+]]>
+</system-out>
+</testcase>
+<testcase name="Visual Regression - Header Component › Header - en - tablet" classname="visual-regression.spec.ts" time="0.641">
+<system-out>
+<![CDATA[🧹 Removing interfering elements...
+✅ Interfering elements removed
+⏳ Waiting for page to stabilize...
+✅ Page is stable
+]]>
+</system-out>
+</testcase>
+<testcase name="Visual Regression - Header Component › Header - en - desktop" classname="visual-regression.spec.ts" time="0.665">
+<system-out>
+<![CDATA[🧹 Removing interfering elements...
+✅ Interfering elements removed
+⏳ Waiting for page to stabilize...
+✅ Page is stable
+]]>
+</system-out>
+</testcase>
+<testcase name="Visual Regression - Header Component › Header - zh - mobile" classname="visual-regression.spec.ts" time="0.621">
+<system-out>
+<![CDATA[🧹 Removing interfering elements...
+✅ Interfering elements removed
+⏳ Waiting for page to stabilize...
+✅ Page is stable
+]]>
+</system-out>
+</testcase>
+<testcase name="Visual Regression - Header Component › Header - zh - tablet" classname="visual-regression.spec.ts" time="0.64">
+<system-out>
+<![CDATA[🧹 Removing interfering elements...
+✅ Interfering elements removed
+⏳ Waiting for page to stabilize...
+✅ Page is stable
+]]>
+</system-out>
+</testcase>
+<testcase name="Visual Regression - Header Component › Header - zh - desktop" classname="visual-regression.spec.ts" time="0.657">
+<system-out>
+<![CDATA[🧹 Removing interfering elements...
+✅ Interfering elements removed
+⏳ Waiting for page to stabilize...
+✅ Page is stable
+]]>
+</system-out>
+</testcase>
+<testcase name="Visual Regression - Footer Component @optional › Footer - en - desktop" classname="visual-regression.spec.ts" time="0">
+<properties>
+<property name="skip" value="Footer visual tests are optional in CI due to dynamic content">
+</property>
+</properties>
+<skipped>
+</skipped>
+</testcase>
+<testcase name="Visual Regression - Footer Component @optional › Footer - zh - desktop" classname="visual-regression.spec.ts" time="0">
+<properties>
+<property name="skip" value="Footer visual tests are optional in CI due to dynamic content">
+</property>
+</properties>
+<skipped>
+</skipped>
+</testcase>
+<testcase name="Visual Regression - Theme Variants › Header - dark mode - desktop" classname="visual-regression.spec.ts" time="1.311">
+<system-out>
+<![CDATA[🧹 Removing interfering elements...
+✅ Interfering elements removed
+⏳ Waiting for page to stabilize...
+✅ Page is stable
+]]>
+</system-out>
+</testcase>
+</testsuite>
+</testsuites>

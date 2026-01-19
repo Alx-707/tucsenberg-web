@@ -1,44 +1,44 @@
-import type { MetadataRoute } from 'next';
+import type { MetadataRoute } from "next";
 import type {
   Locale,
   PostSummary,
   ProductSummary,
-} from '@/types/content.types';
-import { getAllPostsCached } from '@/lib/content/blog';
-import { getAllProductsCached } from '@/lib/content/products';
+} from "@/types/content.types";
+import { getAllPostsCached } from "@/lib/content/blog";
+import { getAllProductsCached } from "@/lib/content/products";
 import {
   getContentLastModified,
   getProductLastModified,
   getStaticPageLastModified,
   type StaticPageLastModConfig,
-} from '@/lib/sitemap-utils';
-import { SITE_CONFIG } from '@/config/paths';
-import { routing } from '@/i18n/routing';
+} from "@/lib/sitemap-utils";
+import { SITE_CONFIG } from "@/config/paths";
+import { routing } from "@/i18n/routing";
 
 // Base URL for the site - uses centralized SITE_CONFIG for consistency
 const BASE_URL = SITE_CONFIG.baseUrl;
 
 // Static pages that exist in all locales
 const STATIC_PAGES = [
-  '',
-  '/about',
-  '/contact',
-  '/products',
-  '/blog',
-  '/faq',
-  '/privacy',
-  '/terms',
+  "",
+  "/about",
+  "/contact",
+  "/products",
+  "/blog",
+  "/faq",
+  "/privacy",
+  "/terms",
 ] as const;
 
 // Change frequency mapping for different page types
 type ChangeFrequency =
-  | 'always'
-  | 'hourly'
-  | 'daily'
-  | 'weekly'
-  | 'monthly'
-  | 'yearly'
-  | 'never';
+  | "always"
+  | "hourly"
+  | "daily"
+  | "weekly"
+  | "monthly"
+  | "yearly"
+  | "never";
 
 interface PageConfig {
   changeFrequency: ChangeFrequency;
@@ -47,19 +47,19 @@ interface PageConfig {
 
 // Page config lookup using Map for security
 const PAGE_CONFIG_MAP = new Map<string, PageConfig>([
-  ['', { changeFrequency: 'daily', priority: 1.0 }],
-  ['/about', { changeFrequency: 'monthly', priority: 0.8 }],
-  ['/contact', { changeFrequency: 'monthly', priority: 0.8 }],
-  ['/products', { changeFrequency: 'weekly', priority: 0.9 }],
-  ['/blog', { changeFrequency: 'weekly', priority: 0.7 }],
-  ['/faq', { changeFrequency: 'monthly', priority: 0.6 }],
-  ['/privacy', { changeFrequency: 'monthly', priority: 0.7 }],
-  ['product', { changeFrequency: 'weekly', priority: 0.8 }],
-  ['blogPost', { changeFrequency: 'monthly', priority: 0.6 }],
+  ["", { changeFrequency: "daily", priority: 1.0 }],
+  ["/about", { changeFrequency: "monthly", priority: 0.8 }],
+  ["/contact", { changeFrequency: "monthly", priority: 0.8 }],
+  ["/products", { changeFrequency: "weekly", priority: 0.9 }],
+  ["/blog", { changeFrequency: "weekly", priority: 0.7 }],
+  ["/faq", { changeFrequency: "monthly", priority: 0.6 }],
+  ["/privacy", { changeFrequency: "monthly", priority: 0.7 }],
+  ["product", { changeFrequency: "weekly", priority: 0.8 }],
+  ["blogPost", { changeFrequency: "monthly", priority: 0.6 }],
 ]);
 
 const DEFAULT_CONFIG: PageConfig = {
-  changeFrequency: 'weekly',
+  changeFrequency: "weekly",
   priority: 0.5,
 };
 
@@ -67,20 +67,20 @@ const DEFAULT_CONFIG: PageConfig = {
 // Update these dates when static page content changes significantly
 const STATIC_PAGE_LASTMOD: StaticPageLastModConfig = new Map([
   // Homepage - updated frequently
-  ['', new Date('2024-12-01T00:00:00Z')],
+  ["", new Date("2024-12-01T00:00:00Z")],
   // About page - rarely changes
-  ['/about', new Date('2024-06-01T00:00:00Z')],
+  ["/about", new Date("2024-06-01T00:00:00Z")],
   // Contact page - rarely changes
-  ['/contact', new Date('2024-06-01T00:00:00Z')],
+  ["/contact", new Date("2024-06-01T00:00:00Z")],
   // Products listing - updated when products change
-  ['/products', new Date('2024-11-01T00:00:00Z')],
+  ["/products", new Date("2024-11-01T00:00:00Z")],
   // Blog listing - updated when posts change
-  ['/blog', new Date('2024-11-01T00:00:00Z')],
+  ["/blog", new Date("2024-11-01T00:00:00Z")],
   // FAQ - occasionally updated
-  ['/faq', new Date('2024-09-01T00:00:00Z')],
+  ["/faq", new Date("2024-09-01T00:00:00Z")],
   // Legal pages - updated when terms change
-  ['/privacy', new Date('2024-06-01T00:00:00Z')],
-  ['/terms', new Date('2024-06-01T00:00:00Z')],
+  ["/privacy", new Date("2024-06-01T00:00:00Z")],
+  ["/terms", new Date("2024-06-01T00:00:00Z")],
 ]);
 
 // Helper to get page config
@@ -95,7 +95,7 @@ function buildAlternateLanguages(path: string): Record<string, string> {
     `${BASE_URL}/${locale}${path}`,
   ]);
   // x-default 指向默认语言版本，帮助搜索引擎识别语言选择器页面
-  entries.push(['x-default', `${BASE_URL}/${routing.defaultLocale}${path}`]);
+  entries.push(["x-default", `${BASE_URL}/${routing.defaultLocale}${path}`]);
   return Object.fromEntries(entries);
 }
 
@@ -161,7 +161,7 @@ function buildProductAlternates(
   const defaultLocaleProducts = allProductsByLocale.get(routing.defaultLocale);
   if (defaultLocaleProducts?.some((p) => p.slug === slug)) {
     entries.push([
-      'x-default',
+      "x-default",
       `${BASE_URL}/${routing.defaultLocale}${productPath}`,
     ]);
   }
@@ -190,7 +190,7 @@ async function fetchAllProductsByLocale(): Promise<
 // Generate product page entries for all locales
 async function generateProductEntries(): Promise<MetadataRoute.Sitemap> {
   const entries: MetadataRoute.Sitemap = [];
-  const config = getPageConfig('product');
+  const config = getPageConfig("product");
   const allProductsByLocale = await fetchAllProductsByLocale();
 
   // Track processed product slugs to avoid duplicates
@@ -261,7 +261,7 @@ function buildBlogAlternates(
   const defaultLocalePosts = allPostsByLocale.get(routing.defaultLocale);
   if (defaultLocalePosts?.some((p) => p.slug === slug)) {
     entries.push([
-      'x-default',
+      "x-default",
       `${BASE_URL}/${routing.defaultLocale}${postPath}`,
     ]);
   }
@@ -272,7 +272,7 @@ function buildBlogAlternates(
 // Generate blog post page entries for all locales
 async function generateBlogEntries(): Promise<MetadataRoute.Sitemap> {
   const entries: MetadataRoute.Sitemap = [];
-  const config = getPageConfig('blogPost');
+  const config = getPageConfig("blogPost");
   const allPostsByLocale = await fetchAllPostsByLocale();
 
   // Track processed post slugs to avoid duplicates

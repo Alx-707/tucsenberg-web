@@ -7,9 +7,9 @@ import {
   PERCENTAGE_FULL,
   SECONDS_PER_MINUTE,
   ZERO,
-} from '@/constants';
-import { MAGIC_20 } from '@/constants/count';
-import { MINUTE_MS } from '@/constants/time';
+} from "@/constants";
+import { MAGIC_20 } from "@/constants/count";
+import { MINUTE_MS } from "@/constants/time";
 
 /**
  * 速率限制工具
@@ -163,36 +163,36 @@ export interface RateLimitTier {
   windowMs: number;
 }
 
-type DefaultTierKey = 'strict' | 'normal' | 'relaxed' | 'premium';
+type DefaultTierKey = "strict" | "normal" | "relaxed" | "premium";
 
 const defaultTiers: Record<DefaultTierKey, RateLimitTier> = {
   strict: {
-    name: 'strict',
+    name: "strict",
     maxRequests: COUNT_FIVE,
     windowMs: MINUTE_MS, // 1 minute
   },
   normal: {
-    name: 'normal',
+    name: "normal",
     maxRequests: COUNT_TEN,
     windowMs: MINUTE_MS, // 1 minute
   },
   relaxed: {
-    name: 'relaxed',
+    name: "relaxed",
     maxRequests: MAGIC_20,
     windowMs: MINUTE_MS, // 1 minute
   },
   premium: {
-    name: 'premium',
+    name: "premium",
     maxRequests: PERCENTAGE_FULL,
     windowMs: MINUTE_MS, // 1 minute
   },
 } as const;
 
 const allowedTierKeys: ReadonlyArray<DefaultTierKey> = [
-  'strict',
-  'normal',
-  'relaxed',
-  'premium',
+  "strict",
+  "normal",
+  "relaxed",
+  "premium",
 ];
 
 const isDefaultTierKey = (value: string): value is DefaultTierKey =>
@@ -203,22 +203,22 @@ const isDefaultTierKey = (value: string): value is DefaultTierKey =>
  */
 export function rateLimitWithTier(
   identifier: string,
-  tierName: string = 'normal',
+  tierName: string = "normal",
 ): boolean {
   const tierKey: DefaultTierKey = isDefaultTierKey(tierName)
     ? tierName
-    : 'normal';
+    : "normal";
 
   let tier: (typeof defaultTiers)[DefaultTierKey];
 
   switch (tierKey) {
-    case 'strict':
+    case "strict":
       tier = defaultTiers.strict;
       break;
-    case 'relaxed':
+    case "relaxed":
       tier = defaultTiers.relaxed;
       break;
-    case 'premium':
+    case "premium":
       tier = defaultTiers.premium;
       break;
     default:
@@ -297,7 +297,7 @@ export function cleanupSlidingWindow(): void {
 }
 
 // Clean up rate limit entries every 5 minutes
-if (typeof setInterval !== 'undefined') {
+if (typeof setInterval !== "undefined") {
   setInterval(
     () => {
       cleanupRateLimit();

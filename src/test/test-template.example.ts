@@ -10,14 +10,14 @@
  * 4. 按照示例编写测试用例
  */
 
-import { screen, waitFor } from '@testing-library/react';
-import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
+import { screen, waitFor } from "@testing-library/react";
+import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 import {
   applyEnhancedTestMocks,
   createEnhancedTestMocks,
   createMockEvent,
   validateMockSetup,
-} from '@/test/mock-utils';
+} from "@/test/mock-utils";
 
 // ================================
 // Mock配置 - 使用vi.hoisted确保正确设置
@@ -69,12 +69,12 @@ const TestComponent: React.FC<TestComponentProps> = ({
 // 测试套件
 // ================================
 
-describe('TestComponent', () => {
+describe("TestComponent", () => {
   // 验证Mock设置
   beforeEach(() => {
     const validation = validateMockSetup();
     if (!validation.isValid) {
-      console.warn('Mock setup issues:', validation.issues);
+      console.warn("Mock setup issues:", validation.issues);
     }
 
     // 重置所有Mock
@@ -82,13 +82,13 @@ describe('TestComponent', () => {
 
     // 设置默认Mock返回值
     mocks.mockUseTranslations.mockReturnValue((key: string) => `mocked-${key}`);
-    mocks.mockUseLocale.mockReturnValue('en');
+    mocks.mockUseLocale.mockReturnValue("en");
     mocks.mockUseTheme.mockReturnValue({
-      theme: 'light',
+      theme: "light",
       setTheme: mocks.mockSetTheme,
-      resolvedTheme: 'light',
-      systemTheme: 'light',
-      themes: ['light', 'dark', 'system'],
+      resolvedTheme: "light",
+      systemTheme: "light",
+      themes: ["light", "dark", "system"],
     });
   });
 
@@ -100,8 +100,8 @@ describe('TestComponent', () => {
   // 基础渲染测试
   // ================================
 
-  describe('基础渲染', () => {
-    it('应该正确渲染组件', () => {
+  describe("基础渲染", () => {
+    it("应该正确渲染组件", () => {
       // render(<TestComponent />);
       // JSX示例已注释，实际使用时请取消注释并将文件扩展名改为.tsx
 
@@ -111,13 +111,13 @@ describe('TestComponent', () => {
       expect(true).toBe(true); // 占位测试
     });
 
-    it('应该接受自定义props', () => {
-      const customTitle = 'Custom Title';
+    it("应该接受自定义props", () => {
+      const customTitle = "Custom Title";
       // render(<TestComponent title={customTitle} locale="zh" />);
 
       // expect(screen.getByText(customTitle)).toBeInTheDocument();
       // expect(screen.getByTestId('locale')).toHaveTextContent('zh');
-      expect(customTitle).toBe('Custom Title'); // 占位测试
+      expect(customTitle).toBe("Custom Title"); // 占位测试
     });
   });
 
@@ -125,8 +125,8 @@ describe('TestComponent', () => {
   // 交互测试
   // ================================
 
-  describe('用户交互', () => {
-    it('应该处理点击事件', () => {
+  describe("用户交互", () => {
+    it("应该处理点击事件", () => {
       const mockOnClick = vi.fn();
       // render(<TestComponent onClick={mockOnClick} />);
 
@@ -137,12 +137,12 @@ describe('TestComponent', () => {
       expect(mockOnClick).toBeDefined(); // 占位测试
     });
 
-    it('应该处理键盘事件', () => {
+    it("应该处理键盘事件", () => {
       const mockOnClick = vi.fn();
       // render(<TestComponent onClick={mockOnClick} />);
 
       // const button = screen.getByTestId('test-button');
-      const enterEvent = createMockEvent('keydown', { key: 'Enter' });
+      const enterEvent = createMockEvent("keydown", { key: "Enter" });
 
       // fireEvent(button, enterEvent);
 
@@ -156,43 +156,43 @@ describe('TestComponent', () => {
   // Mock功能测试
   // ================================
 
-  describe('Mock功能验证', () => {
-    it('应该正确Mock国际化功能', () => {
+  describe("Mock功能验证", () => {
+    it("应该正确Mock国际化功能", () => {
       // 测试翻译Mock
       const translateFn = mocks.mockUseTranslations();
-      expect(translateFn('hello')).toBe('mocked-hello');
+      expect(translateFn("hello")).toBe("mocked-hello");
 
       // 测试语言环境Mock
-      expect(mocks.mockUseLocale()).toBe('en');
+      expect(mocks.mockUseLocale()).toBe("en");
     });
 
-    it('应该正确Mock主题功能', () => {
+    it("应该正确Mock主题功能", () => {
       const themeData = mocks.mockUseTheme();
-      expect(themeData.theme).toBe('light');
-      expect(themeData.themes).toContain('dark');
+      expect(themeData.theme).toBe("light");
+      expect(themeData.themes).toContain("dark");
     });
 
-    it('应该正确Mock路由功能', () => {
+    it("应该正确Mock路由功能", () => {
       const router = mocks.mockUseRouter();
 
-      router.push('/test-path');
-      expect(mocks.mockPush).toHaveBeenCalledWith('/test-path');
+      router.push("/test-path");
+      expect(mocks.mockPush).toHaveBeenCalledWith("/test-path");
 
-      expect(mocks.mockUsePathname()).toBe('/');
+      expect(mocks.mockUsePathname()).toBe("/");
     });
 
-    it('应该正确Mock浏览器API', () => {
+    it("应该正确Mock浏览器API", () => {
       // 测试localStorage Mock
-      mocks.mockLocalStorage.setItem('test-key', 'test-value');
+      mocks.mockLocalStorage.setItem("test-key", "test-value");
       expect(mocks.mockLocalStorage.setItem).toHaveBeenCalledWith(
-        'test-key',
-        'test-value',
+        "test-key",
+        "test-value",
       );
 
       // 测试matchMedia Mock
-      const mediaQuery = mocks.mockMatchMedia('(min-width: 768px)');
+      const mediaQuery = mocks.mockMatchMedia("(min-width: 768px)");
       expect(mediaQuery.matches).toBe(false);
-      expect(mediaQuery.media).toBe('(min-width: 768px)');
+      expect(mediaQuery.media).toBe("(min-width: 768px)");
     });
   });
 
@@ -200,8 +200,8 @@ describe('TestComponent', () => {
   // 异步操作测试
   // ================================
 
-  describe('异步操作', () => {
-    it('应该处理异步状态变化', async () => {
+  describe("异步操作", () => {
+    it("应该处理异步状态变化", async () => {
       // const AsyncComponent = () => {
       //   const [loading, setLoading] = React.useState(true);
 
@@ -231,17 +231,17 @@ describe('TestComponent', () => {
   // 错误处理测试
   // ================================
 
-  describe('错误处理', () => {
-    it('应该处理Mock函数抛出的错误', () => {
+  describe("错误处理", () => {
+    it("应该处理Mock函数抛出的错误", () => {
       // 设置Mock抛出错误
       mocks.mockUseTranslations.mockImplementation(() => {
-        throw new Error('Translation error');
+        throw new Error("Translation error");
       });
 
       // 使用错误边界或try-catch测试错误处理
       expect(() => {
         mocks.mockUseTranslations();
-      }).toThrow('Translation error');
+      }).toThrow("Translation error");
     });
   });
 
@@ -249,15 +249,15 @@ describe('TestComponent', () => {
   // 性能测试
   // ================================
 
-  describe('性能相关', () => {
-    it('应该正确Mock性能API', () => {
+  describe("性能相关", () => {
+    it("应该正确Mock性能API", () => {
       // 测试performance.now Mock
       const now = mocks.mockPerformanceNow();
-      expect(typeof now).toBe('number');
+      expect(typeof now).toBe("number");
 
       // 测试性能标记
-      mocks.mockPerformanceMark('test-mark');
-      expect(mocks.mockPerformanceMark).toHaveBeenCalledWith('test-mark');
+      mocks.mockPerformanceMark("test-mark");
+      expect(mocks.mockPerformanceMark).toHaveBeenCalledWith("test-mark");
     });
   });
 });

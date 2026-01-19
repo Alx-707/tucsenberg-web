@@ -1,4 +1,4 @@
-import { ZERO } from '@/constants';
+import { ZERO } from "@/constants";
 
 /**
  * 安全对象访问工具库
@@ -25,7 +25,7 @@ export function safeGetProperty<T extends object>(
   allowedKeys?: readonly (string | number | symbol)[],
 ): T[keyof T] | undefined {
   const stringKey = String(key);
-  const UNSAFE_KEYS = ['__proto__', 'constructor', 'prototype'];
+  const UNSAFE_KEYS = ["__proto__", "constructor", "prototype"];
   if (UNSAFE_KEYS.includes(stringKey)) {
     return undefined;
   }
@@ -58,7 +58,7 @@ export function safeSetProperty<T extends object>(params: {
 }): boolean {
   const { obj, key, value, allowedKeys } = params;
   const stringKey = String(key);
-  const UNSAFE_KEYS = ['__proto__', 'constructor', 'prototype'];
+  const UNSAFE_KEYS = ["__proto__", "constructor", "prototype"];
 
   if (UNSAFE_KEYS.includes(stringKey)) {
     return false;
@@ -91,12 +91,12 @@ export function safeGetLanguageConfig(
   locale: string,
 ) {
   // 白名单验证 - 只允许已知的locale值
-  const allowedLocales = ['en', 'zh'] as const;
+  const allowedLocales = ["en", "zh"] as const;
   type AllowedLocale = (typeof allowedLocales)[number];
 
   if (!allowedLocales.includes(locale as AllowedLocale)) {
     // 返回默认配置（英文）
-    return safeGetProperty(languageConfig, 'en');
+    return safeGetProperty(languageConfig, "en");
   }
 
   return safeGetProperty(languageConfig, locale);
@@ -143,7 +143,7 @@ export function safeGetNestedProperty(
   let current: unknown = obj;
 
   for (const key of path) {
-    if (current && typeof current === 'object') {
+    if (current && typeof current === "object") {
       // 如果提供了白名单，进行验证
       if (allowedKeys && !allowedKeys.includes(key)) {
         return undefined;
@@ -274,19 +274,19 @@ export function safeMergeObjects<T extends Record<string, unknown>>(
  * Common whitelist configurations
  */
 export const COMMON_WHITELISTS = {
-  LOCALES: ['en', 'zh'] as const,
+  LOCALES: ["en", "zh"] as const,
   PAGE_TYPES: [
-    'home',
-    'about',
-    'contact',
-    'blog',
-    'products',
-    'services',
-    'pricing',
-    'support',
-    'privacy',
-    'terms',
+    "home",
+    "about",
+    "contact",
+    "blog",
+    "products",
+    "services",
+    "pricing",
+    "support",
+    "privacy",
+    "terms",
   ] as const,
-  THEME_MODES: ['light', 'dark', 'system'] as const,
-  DETECTION_SOURCES: ['user', 'geo', 'browser'] as const,
+  THEME_MODES: ["light", "dark", "system"] as const,
+  DETECTION_SOURCES: ["user", "geo", "browser"] as const,
 } as const;

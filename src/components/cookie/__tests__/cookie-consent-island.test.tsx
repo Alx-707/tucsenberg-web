@@ -1,5 +1,5 @@
-import { render, screen } from '@testing-library/react';
-import { beforeEach, describe, expect, it, vi } from 'vitest';
+import { render, screen } from "@testing-library/react";
+import { beforeEach, describe, expect, it, vi } from "vitest";
 
 const {
   mockCookieConsentProvider,
@@ -7,65 +7,65 @@ const {
   mockEnterpriseAnalyticsIsland,
 } = vi.hoisted(() => ({
   mockCookieConsentProvider: vi.fn(({ children }) => (
-    <div data-testid='cookie-consent-provider'>{children}</div>
+    <div data-testid="cookie-consent-provider">{children}</div>
   )),
-  mockLazyCookieBanner: vi.fn(() => <div data-testid='lazy-cookie-banner' />),
+  mockLazyCookieBanner: vi.fn(() => <div data-testid="lazy-cookie-banner" />),
   mockEnterpriseAnalyticsIsland: vi.fn(() => (
-    <div data-testid='enterprise-analytics-island' />
+    <div data-testid="enterprise-analytics-island" />
   )),
 }));
 
-vi.mock('@/lib/cookie-consent', () => ({
+vi.mock("@/lib/cookie-consent", () => ({
   CookieConsentProvider: mockCookieConsentProvider,
 }));
 
-vi.mock('@/components/cookie/lazy-cookie-banner', () => ({
+vi.mock("@/components/cookie/lazy-cookie-banner", () => ({
   LazyCookieBanner: mockLazyCookieBanner,
 }));
 
-vi.mock('@/components/monitoring/enterprise-analytics-island', () => ({
+vi.mock("@/components/monitoring/enterprise-analytics-island", () => ({
   EnterpriseAnalyticsIsland: mockEnterpriseAnalyticsIsland,
 }));
 
-describe('CookieConsentIsland', () => {
+describe("CookieConsentIsland", () => {
   beforeEach(() => {
     vi.clearAllMocks();
     vi.resetModules();
   });
 
-  it('renders CookieConsentProvider wrapping children', async () => {
-    const { CookieConsentIsland } = await import('../cookie-consent-island');
+  it("renders CookieConsentProvider wrapping children", async () => {
+    const { CookieConsentIsland } = await import("../cookie-consent-island");
     render(<CookieConsentIsland />);
 
-    expect(screen.getByTestId('cookie-consent-provider')).toBeInTheDocument();
+    expect(screen.getByTestId("cookie-consent-provider")).toBeInTheDocument();
   });
 
-  it('renders LazyCookieBanner inside Suspense', async () => {
-    const { CookieConsentIsland } = await import('../cookie-consent-island');
+  it("renders LazyCookieBanner inside Suspense", async () => {
+    const { CookieConsentIsland } = await import("../cookie-consent-island");
     render(<CookieConsentIsland />);
 
-    expect(screen.getByTestId('lazy-cookie-banner')).toBeInTheDocument();
+    expect(screen.getByTestId("lazy-cookie-banner")).toBeInTheDocument();
   });
 
-  it('renders EnterpriseAnalyticsIsland in production', async () => {
-    vi.stubEnv('NODE_ENV', 'production');
+  it("renders EnterpriseAnalyticsIsland in production", async () => {
+    vi.stubEnv("NODE_ENV", "production");
 
-    const { CookieConsentIsland } = await import('../cookie-consent-island');
+    const { CookieConsentIsland } = await import("../cookie-consent-island");
     render(<CookieConsentIsland />);
 
     expect(
-      screen.getByTestId('enterprise-analytics-island'),
+      screen.getByTestId("enterprise-analytics-island"),
     ).toBeInTheDocument();
   });
 
-  it('does not render EnterpriseAnalyticsIsland in development', async () => {
-    vi.stubEnv('NODE_ENV', 'development');
+  it("does not render EnterpriseAnalyticsIsland in development", async () => {
+    vi.stubEnv("NODE_ENV", "development");
 
-    const { CookieConsentIsland } = await import('../cookie-consent-island');
+    const { CookieConsentIsland } = await import("../cookie-consent-island");
     render(<CookieConsentIsland />);
 
     expect(
-      screen.queryByTestId('enterprise-analytics-island'),
+      screen.queryByTestId("enterprise-analytics-island"),
     ).not.toBeInTheDocument();
   });
 });

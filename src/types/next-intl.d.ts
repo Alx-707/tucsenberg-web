@@ -7,8 +7,8 @@
  * @see https://next-intl.dev/docs/workflows/typescript
  */
 
-import type enCritical from '@messages/en/critical.json';
-import type enDeferred from '@messages/en/deferred.json';
+import type enCritical from "@messages/en/critical.json";
+import type enDeferred from "@messages/en/deferred.json";
 
 type CriticalMessages = typeof enCritical;
 type DeferredMessages = typeof enDeferred;

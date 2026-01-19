@@ -1,8 +1,8 @@
-import { createNavigation } from 'next-intl/navigation';
-import { routing } from '@/i18n/routing-config';
+import { createNavigation } from "next-intl/navigation";
+import { routing } from "@/i18n/routing-config";
 
 // Re-export the routing config from edge-safe module
-export { routing, type Locale } from '@/i18n/routing-config';
+export { routing, type Locale } from "@/i18n/routing-config";
 
 // Lightweight wrappers around Next.js' navigation APIs
 // that will consider the routing configuration
@@ -12,4 +12,4 @@ export const { Link, redirect, usePathname, useRouter } =
   createNavigation(routing);
 
 // 导出配置验证函数，供其他模块使用
-export { validatePathsConfig } from '@/config/paths';
+export { validatePathsConfig } from "@/config/paths";

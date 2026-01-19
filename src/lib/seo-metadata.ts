@@ -1,23 +1,23 @@
-import type { Metadata } from 'next';
-import enCritical from '@messages/en/critical.json';
-import zhCritical from '@messages/zh/critical.json';
-import { SITE_CONFIG, type Locale, type PageType } from '@/config/paths';
-import { ONE } from '@/constants';
-import { routing } from '@/i18n/routing-config';
+import type { Metadata } from "next";
+import enCritical from "@messages/en/critical.json";
+import zhCritical from "@messages/zh/critical.json";
+import { SITE_CONFIG, type Locale, type PageType } from "@/config/paths";
+import { ONE } from "@/constants";
+import { routing } from "@/i18n/routing-config";
 import {
   generateCanonicalURL,
   generateLanguageAlternates,
-} from '@/services/url-generator';
+} from "@/services/url-generator";
 
 // 重新导出类型以保持向后兼容
-export type { Locale, PageType } from '@/config/paths';
+export type { Locale, PageType } from "@/config/paths";
 
 interface SEOConfig {
   title?: string;
   description?: string;
   keywords?: string[];
   image?: string;
-  type?: 'website' | 'article' | 'product';
+  type?: "website" | "article" | "product";
   publishedTime?: string;
   modifiedTime?: string;
   authors?: string[];
@@ -37,7 +37,7 @@ interface SEOMessages {
   pages?: SEOPagesTranslations;
 }
 
-const FALLBACK_LOCALE: Locale = 'en';
+const FALLBACK_LOCALE: Locale = "en";
 
 // 静态 SEO 翻译映射（同步访问，避免 async getTranslations）
 const SEO_TRANSLATIONS: Record<Locale, SEOMessages> = {
@@ -46,15 +46,15 @@ const SEO_TRANSLATIONS: Record<Locale, SEOMessages> = {
 };
 
 function resolveLocale(locale: Locale): Locale {
-  return locale === 'zh' ? 'zh' : FALLBACK_LOCALE;
+  return locale === "zh" ? "zh" : FALLBACK_LOCALE;
 }
 
 function normalizePath(path: string): string {
   const trimmed = path.trim();
-  if (trimmed === '' || trimmed === '/') {
-    return '';
+  if (trimmed === "" || trimmed === "/") {
+    return "";
   }
-  return trimmed.startsWith('/') ? trimmed : `/${trimmed}`;
+  return trimmed.startsWith("/") ? trimmed : `/${trimmed}`;
 }
 
 function buildCanonicalForPath(locale: Locale, path: string): string {
@@ -74,7 +74,7 @@ function buildLanguagesForPath(path: string): Record<string, string> {
     new URL(`/${locale}${normalizedPath}`, SITE_CONFIG.baseUrl).toString(),
   ]);
   entries.push([
-    'x-default',
+    "x-default",
     new URL(
       `/${routing.defaultLocale}${normalizedPath}`,
       SITE_CONFIG.baseUrl,
@@ -87,7 +87,7 @@ function buildLanguagesForPath(path: string): Record<string, string> {
 interface TranslationFieldOptions {
   translations: SEOMessages;
   pageType: PageType;
-  key: 'title' | 'description';
+  key: "title" | "description";
   defaultValue: string;
   override?: string | undefined;
 }
@@ -97,21 +97,21 @@ function getPageDataByType(
   pageType: PageType,
 ): { title?: string; description?: string } | undefined {
   switch (pageType) {
-    case 'home':
+    case "home":
       return pages.home;
-    case 'about':
+    case "about":
       return pages.about;
-    case 'contact':
+    case "contact":
       return pages.contact;
-    case 'blog':
+    case "blog":
       return pages.blog;
-    case 'products':
+    case "products":
       return pages.products;
-    case 'faq':
+    case "faq":
       return pages.faq;
-    case 'privacy':
+    case "privacy":
       return pages.privacy;
-    case 'terms':
+    case "terms":
       return pages.terms;
     default:
       return undefined;
@@ -121,12 +121,12 @@ function getPageDataByType(
 function getPageTranslation(
   pages: SEOPagesTranslations | undefined,
   pageType: PageType,
-  key: 'title' | 'description',
+  key: "title" | "description",
 ): string | undefined {
   if (!pages) return undefined;
   const pageData = getPageDataByType(pages, pageType);
   if (!pageData) return undefined;
-  return key === 'title' ? pageData.title : pageData.description;
+  return key === "title" ? pageData.title : pageData.description;
 }
 
 function pickTranslatedField(options: TranslationFieldOptions): string {
@@ -134,11 +134,11 @@ function pickTranslatedField(options: TranslationFieldOptions): string {
 
   const pageValue = getPageTranslation(translations.pages, pageType, key);
   const rootValue =
-    key === 'title' ? translations.title : translations.description;
+    key === "title" ? translations.title : translations.description;
 
   const candidate = override ?? pageValue ?? rootValue ?? defaultValue;
 
-  return typeof candidate === 'string' && candidate.trim().length > 0
+  return typeof candidate === "string" && candidate.trim().length > 0
     ? candidate
     : defaultValue;
 }
@@ -194,7 +194,7 @@ function mergeSEOConfig(
  * 直接从静态 JSON 读取翻译，确保 metadata 嵌入初始 HTML
  */
 function getTranslationsForLocale(locale: Locale): SEOMessages {
-  return locale === 'zh' ? SEO_TRANSLATIONS.zh : SEO_TRANSLATIONS.en;
+  return locale === "zh" ? SEO_TRANSLATIONS.zh : SEO_TRANSLATIONS.en;
 }
 
 export function generateLocalizedMetadata(
@@ -208,14 +208,14 @@ export function generateLocalizedMetadata(
   const title = pickTranslatedField({
     translations,
     pageType,
-    key: 'title',
+    key: "title",
     defaultValue: SITE_CONFIG.seo.defaultTitle,
     override: config.title,
   });
   const description = pickTranslatedField({
     translations,
     pageType,
-    key: 'description',
+    key: "description",
     defaultValue: SITE_CONFIG.seo.defaultDescription,
     override: config.description,
   });
@@ -231,7 +231,7 @@ export function generateLocalizedMetadata(
       config.keywords ??
       (translations.keywords
         ? translations.keywords
-            .split(',')
+            .split(",")
             .map((keyword) => keyword.trim())
             .filter(Boolean)
         : undefined),
@@ -242,7 +242,7 @@ export function generateLocalizedMetadata(
       description,
       siteName,
       locale: safeLocale,
-      type: (config.type === 'product' ? 'website' : config.type) || 'website',
+      type: (config.type === "product" ? "website" : config.type) || "website",
       images: config.image ? [{ url: config.image }] : undefined,
       publishedTime: config.publishedTime,
       modifiedTime: config.modifiedTime,
@@ -252,7 +252,7 @@ export function generateLocalizedMetadata(
 
     // Twitter Card
     twitter: {
-      card: 'summary_large_image',
+      card: "summary_large_image",
       title,
       description,
       images: config.image ? [config.image] : undefined,
@@ -269,18 +269,18 @@ export function generateLocalizedMetadata(
       index: true,
       follow: true,
       googleBot: {
-        'index': true,
-        'follow': true,
-        'max-video-preview': -ONE,
-        'max-image-preview': 'large',
-        'max-snippet': -ONE,
+        index: true,
+        follow: true,
+        "max-video-preview": -ONE,
+        "max-image-preview": "large",
+        "max-snippet": -ONE,
       },
     },
 
     // 验证标签
     verification: {
-      google: process.env['GOOGLE_SITE_VERIFICATION'],
-      yandex: process.env['YANDEX_VERIFICATION'],
+      google: process.env["GOOGLE_SITE_VERIFICATION"],
+      yandex: process.env["YANDEX_VERIFICATION"],
     },
   };
 
@@ -319,13 +319,13 @@ export function generateMetadataForPath(
   };
 
   const { openGraph } = metadata;
-  if (openGraph && typeof openGraph === 'object') {
+  if (openGraph && typeof openGraph === "object") {
     (openGraph as { url?: string | URL }).url = canonical;
     metadata.openGraph = openGraph;
   } else {
     metadata.openGraph = {
       url: canonical,
-    } as unknown as Metadata['openGraph'];
+    } as unknown as Metadata["openGraph"];
   }
 
   return metadata;
@@ -340,71 +340,71 @@ export function createPageSEOConfig(
 ): SEOConfig {
   const baseConfigs: Record<PageType, SEOConfig> = {
     home: {
-      type: 'website' as const,
+      type: "website" as const,
       keywords: [
         ...SITE_CONFIG.seo.keywords,
-        'shadcn/ui',
-        'Radix UI',
-        'Modern Web',
-        'Enterprise Platform',
-        'B2B Solution',
+        "shadcn/ui",
+        "Radix UI",
+        "Modern Web",
+        "Enterprise Platform",
+        "B2B Solution",
       ],
-      image: '/images/og-image.jpg',
+      image: "/images/og-image.jpg",
     },
     about: {
-      type: 'website' as const,
-      keywords: ['About', 'Company', 'Team', 'Enterprise'],
+      type: "website" as const,
+      keywords: ["About", "Company", "Team", "Enterprise"],
     },
     contact: {
-      type: 'website' as const,
-      keywords: ['Contact', 'Support', 'Business'],
+      type: "website" as const,
+      keywords: ["Contact", "Support", "Business"],
     },
     blog: {
-      type: 'article' as const,
-      keywords: ['Blog', 'Articles', 'Technology', 'Insights'],
+      type: "article" as const,
+      keywords: ["Blog", "Articles", "Technology", "Insights"],
     },
     products: {
-      type: 'website' as const,
-      keywords: ['Products', 'Solutions', 'Enterprise', 'B2B'],
+      type: "website" as const,
+      keywords: ["Products", "Solutions", "Enterprise", "B2B"],
     },
     faq: {
-      type: 'website' as const,
-      keywords: ['FAQ', 'Help', 'Questions', 'Support'],
+      type: "website" as const,
+      keywords: ["FAQ", "Help", "Questions", "Support"],
     },
     privacy: {
-      type: 'website' as const,
-      keywords: ['Privacy', 'Policy', 'Data Protection'],
+      type: "website" as const,
+      keywords: ["Privacy", "Policy", "Data Protection"],
     },
     terms: {
-      type: 'website' as const,
-      keywords: ['Terms', 'Conditions', 'Legal'],
+      type: "website" as const,
+      keywords: ["Terms", "Conditions", "Legal"],
     },
   };
 
   let baseConfig = baseConfigs.home;
   switch (pageType) {
-    case 'home':
+    case "home":
       baseConfig = baseConfigs.home;
       break;
-    case 'about':
+    case "about":
       baseConfig = baseConfigs.about;
       break;
-    case 'contact':
+    case "contact":
       baseConfig = baseConfigs.contact;
       break;
-    case 'blog':
+    case "blog":
       baseConfig = baseConfigs.blog;
       break;
-    case 'products':
+    case "products":
       baseConfig = baseConfigs.products;
       break;
-    case 'faq':
+    case "faq":
       baseConfig = baseConfigs.faq;
       break;
-    case 'privacy':
+    case "privacy":
       baseConfig = baseConfigs.privacy;
       break;
-    case 'terms':
+    case "terms":
       baseConfig = baseConfigs.terms;
       break;
     default:

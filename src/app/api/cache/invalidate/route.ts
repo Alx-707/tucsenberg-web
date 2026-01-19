@@ -20,10 +20,10 @@
  * @see src/lib/cache/invalidate.ts - Core invalidation utilities
  */
 
-import { NextRequest, NextResponse } from 'next/server';
-import { z } from 'zod';
-import type { Locale } from '@/types/content.types';
-import { createValidationErrorResponse } from '@/lib/api/validation-error-response';
+import { NextRequest, NextResponse } from "next/server";
+import { z } from "zod";
+import type { Locale } from "@/types/content.types";
+import { createValidationErrorResponse } from "@/lib/api/validation-error-response";
 import {
   CACHE_DOMAINS,
   invalidateContent,
@@ -31,30 +31,30 @@ import {
   invalidateI18n,
   invalidateLocale,
   invalidateProduct,
-} from '@/lib/cache';
-import { logger } from '@/lib/logger';
+} from "@/lib/cache";
+import { logger } from "@/lib/logger";
 import {
   checkDistributedRateLimit,
   createRateLimitHeaders,
-} from '@/lib/security/distributed-rate-limit';
-import { getClientIP } from '@/app/api/contact/contact-api-utils';
-import { API_ERROR_CODES } from '@/constants/api-error-codes';
+} from "@/lib/security/distributed-rate-limit";
+import { getClientIP } from "@/app/api/contact/contact-api-utils";
+import { API_ERROR_CODES } from "@/constants/api-error-codes";
 
-const VALID_LOCALES = ['en', 'zh'] as const;
-const VALID_DOMAINS = ['i18n', 'content', 'product', 'all'] as const;
+const VALID_LOCALES = ["en", "zh"] as const;
+const VALID_DOMAINS = ["i18n", "content", "product", "all"] as const;
 const VALID_ENTITIES = [
-  'critical',
-  'deferred',
-  'blog',
-  'page',
-  'detail',
-  'categories',
-  'featured',
+  "critical",
+  "deferred",
+  "blog",
+  "page",
+  "detail",
+  "categories",
+  "featured",
 ] as const;
 
 const cacheInvalidationSchema = z.object({
   domain: z.enum(VALID_DOMAINS, {
-    message: `domain must be one of: ${VALID_DOMAINS.join(', ')}`,
+    message: `domain must be one of: ${VALID_DOMAINS.join(", ")}`,
   }),
   locale: z.enum(VALID_LOCALES).optional(),
   entity: z.enum(VALID_ENTITIES).optional(),
@@ -64,24 +64,24 @@ const cacheInvalidationSchema = z.object({
 type InvalidationRequest = z.infer<typeof cacheInvalidationSchema>;
 
 function isValidLocale(locale: unknown): locale is Locale {
-  return typeof locale === 'string' && VALID_LOCALES.includes(locale as Locale);
+  return typeof locale === "string" && VALID_LOCALES.includes(locale as Locale);
 }
 
 function validateApiKey(request: NextRequest): boolean {
   const secret = process.env.CACHE_INVALIDATION_SECRET;
 
   // In development, allow without secret if not set
-  if (!secret && process.env.NODE_ENV === 'development') {
+  if (!secret && process.env.NODE_ENV === "development") {
     return true;
   }
 
   if (!secret) {
-    logger.error('CACHE_INVALIDATION_SECRET not configured');
+    logger.error("CACHE_INVALIDATION_SECRET not configured");
     return false;
   }
 
-  const authHeader = request.headers.get('authorization');
-  if (!authHeader?.startsWith('Bearer ')) {
+  const authHeader = request.headers.get("authorization");
+  if (!authHeader?.startsWith("Bearer ")) {
     return false;
   }
 
@@ -100,8 +100,8 @@ function handleI18nInvalidation(
   entity: string | undefined,
 ): InvalidationResult {
   if (locale && isValidLocale(locale)) {
-    if (entity === 'critical') return invalidateI18n.critical(locale);
-    if (entity === 'deferred') return invalidateI18n.deferred(locale);
+    if (entity === "critical") return invalidateI18n.critical(locale);
+    if (entity === "deferred") return invalidateI18n.deferred(locale);
     return invalidateI18n.locale(locale);
   }
   return invalidateI18n.all();
@@ -112,10 +112,10 @@ function handleContentInvalidation(
   entity: string | undefined,
   identifier: string | undefined,
 ): InvalidationResult {
-  if (entity === 'blog' && identifier) {
+  if (entity === "blog" && identifier) {
     return invalidateContent.blogPost(identifier, locale);
   }
-  if (entity === 'page' && identifier) {
+  if (entity === "page" && identifier) {
     return invalidateContent.page(identifier, locale);
   }
   return invalidateContent.locale(locale);
@@ -126,11 +126,11 @@ function handleProductInvalidation(
   entity: string | undefined,
   identifier: string | undefined,
 ): InvalidationResult {
-  if (entity === 'detail' && identifier) {
+  if (entity === "detail" && identifier) {
     return invalidateProduct.detail(identifier, locale);
   }
-  if (entity === 'categories') return invalidateProduct.categories(locale);
-  if (entity === 'featured') return invalidateProduct.featured(locale);
+  if (entity === "categories") return invalidateProduct.categories(locale);
+  if (entity === "featured") return invalidateProduct.featured(locale);
   return invalidateProduct.locale(locale);
 }
 
@@ -150,7 +150,7 @@ function handleAllInvalidation(locale: Locale | undefined): InvalidationResult {
   };
 }
 
-type RateLimitPresetType = 'cacheInvalidatePreAuth' | 'cacheInvalidate';
+type RateLimitPresetType = "cacheInvalidatePreAuth" | "cacheInvalidate";
 
 async function checkRateLimitAndRespond(
   clientIP: string,
@@ -218,14 +218,14 @@ async function handleCacheInvalidation(
     identifier,
   });
 
-  if ('errorCode' in result) {
+  if ("errorCode" in result) {
     return NextResponse.json(
       { success: false, errorCode: result.errorCode },
       { status: result.status },
     );
   }
 
-  logger.info('Cache invalidation triggered', {
+  logger.info("Cache invalidation triggered", {
     domain,
     locale,
     entity,
@@ -242,8 +242,8 @@ export async function POST(request: NextRequest) {
   // 1. Pre-auth rate limit (brute force protection)
   const preAuthBlock = await checkRateLimitAndRespond(
     clientIP,
-    'cacheInvalidatePreAuth',
-    'pre-auth',
+    "cacheInvalidatePreAuth",
+    "pre-auth",
   );
   if (preAuthBlock) return preAuthBlock;
 
@@ -258,15 +258,15 @@ export async function POST(request: NextRequest) {
   // 3. Post-auth rate limit (defense in depth)
   const postAuthBlock = await checkRateLimitAndRespond(
     clientIP,
-    'cacheInvalidate',
-    'post-auth',
+    "cacheInvalidate",
+    "post-auth",
   );
   if (postAuthBlock) return postAuthBlock;
 
   try {
     return await handleCacheInvalidation(request);
   } catch (error) {
-    logger.error('Cache invalidation failed', error);
+    logger.error("Cache invalidation failed", error);
     return NextResponse.json(
       { success: false, errorCode: API_ERROR_CODES.CACHE_INVALIDATION_FAILED },
       { status: 500 },
@@ -286,10 +286,10 @@ interface ProcessOptions {
 function processDomainInvalidation(options: ProcessOptions): ProcessResult {
   const { domain, locale, entity, identifier } = options;
   switch (domain) {
-    case 'i18n':
+    case "i18n":
       return handleI18nInvalidation(locale, entity);
 
-    case 'content':
+    case "content":
       if (!locale || !isValidLocale(locale)) {
         return {
           errorCode: API_ERROR_CODES.CACHE_LOCALE_REQUIRED,
@@ -298,7 +298,7 @@ function processDomainInvalidation(options: ProcessOptions): ProcessResult {
       }
       return handleContentInvalidation(locale, entity, identifier);
 
-    case 'product':
+    case "product":
       if (!locale || !isValidLocale(locale)) {
         return {
           errorCode: API_ERROR_CODES.CACHE_LOCALE_REQUIRED,
@@ -307,7 +307,7 @@ function processDomainInvalidation(options: ProcessOptions): ProcessResult {
       }
       return handleProductInvalidation(locale, entity, identifier);
 
-    case 'all':
+    case "all":
       return handleAllInvalidation(locale);
 
     default:
@@ -317,16 +317,16 @@ function processDomainInvalidation(options: ProcessOptions): ProcessResult {
 
 export function GET() {
   return NextResponse.json({
-    message: 'Cache Invalidation API',
+    message: "Cache Invalidation API",
     usage: {
-      method: 'POST',
-      authentication: 'Bearer <CACHE_INVALIDATION_SECRET>',
+      method: "POST",
+      authentication: "Bearer <CACHE_INVALIDATION_SECRET>",
       body: {
-        domain: 'i18n | content | product | all',
-        locale: 'en | zh (optional for i18n, required for others)',
+        domain: "i18n | content | product | all",
+        locale: "en | zh (optional for i18n, required for others)",
         entity:
-          'critical | deferred | blog | page | detail | categories | featured',
-        identifier: 'slug or specific identifier',
+          "critical | deferred | blog | page | detail | categories | featured",
+        identifier: "slug or specific identifier",
       },
     },
   });

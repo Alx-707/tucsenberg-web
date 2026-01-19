@@ -10,7 +10,7 @@ import {
   TEST_SAMPLE_CONSTANTS,
   TEST_SCREEN_CONSTANTS,
   TEST_SPECIAL_CONSTANTS,
-} from './test-ui-constants';
+} from "./test-ui-constants";
 
 // ==================== 应用特定测试常量 ====================
 
@@ -474,4 +474,4 @@ export {
   TEST_SAMPLE_CONSTANTS,
   TEST_SCREEN_CONSTANTS,
   TEST_SPECIAL_CONSTANTS,
-} from './test-ui-constants';
+} from "./test-ui-constants";

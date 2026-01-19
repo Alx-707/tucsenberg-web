@@ -1,31 +1,31 @@
-'use client';
+"use client";
 
-import { useActionState, useCallback, useRef, useState } from 'react';
-import dynamic from 'next/dynamic';
-import { CheckCircle, Loader2, Mail, XCircle } from 'lucide-react';
-import { useTranslations } from 'next-intl';
-import { cn } from '@/lib/utils';
-import { getAttributionAsObject } from '@/lib/utm';
-import { Button } from '@/components/ui/button';
+import { useActionState, useCallback, useRef, useState } from "react";
+import dynamic from "next/dynamic";
+import { CheckCircle, Loader2, Mail, XCircle } from "lucide-react";
+import { useTranslations } from "next-intl";
+import { cn } from "@/lib/utils";
+import { getAttributionAsObject } from "@/lib/utm";
+import { Button } from "@/components/ui/button";
 import {
   Card,
   CardContent,
   CardDescription,
   CardHeader,
   CardTitle,
-} from '@/components/ui/card';
-import { Input } from '@/components/ui/input';
+} from "@/components/ui/card";
+import { Input } from "@/components/ui/input";
 
 // Lazy load Turnstile for performance
 const TurnstileWidget = dynamic(
   () =>
-    import('@/components/security/turnstile').then((m) => m.TurnstileWidget),
+    import("@/components/security/turnstile").then((m) => m.TurnstileWidget),
   {
     ssr: false,
     loading: () => (
       <div
-        className='h-[65px] w-full animate-pulse rounded-md bg-muted'
-        aria-hidden='true'
+        className="h-[65px] w-full animate-pulse rounded-md bg-muted"
+        aria-hidden="true"
       />
     ),
   },
@@ -35,7 +35,7 @@ export interface BlogNewsletterProps {
   /** Custom class name */
   className?: string;
   /** Variant style */
-  variant?: 'default' | 'compact' | 'inline';
+  variant?: "default" | "compact" | "inline";
 }
 
 interface FormState {
@@ -53,9 +53,9 @@ const initialState: FormState = {
  */
 function SuccessMessage({ message }: { message: string }) {
   return (
-    <div className='flex items-center gap-3 py-4 text-green-600'>
-      <CheckCircle className='h-5 w-5 shrink-0' />
-      <p className='text-sm font-medium'>{message}</p>
+    <div className="flex items-center gap-3 py-4 text-green-600">
+      <CheckCircle className="h-5 w-5 shrink-0" />
+      <p className="text-sm font-medium">{message}</p>
     </div>
   );
 }
@@ -65,8 +65,8 @@ function SuccessMessage({ message }: { message: string }) {
  */
 function ErrorMessage({ error }: { error: string }) {
   return (
-    <div className='flex items-center gap-2 rounded-md bg-red-50 p-3 text-sm text-red-600'>
-      <XCircle className='h-4 w-4 shrink-0' />
+    <div className="flex items-center gap-2 rounded-md bg-red-50 p-3 text-sm text-red-600">
+      <XCircle className="h-4 w-4 shrink-0" />
       {error}
     </div>
   );
@@ -94,43 +94,40 @@ function NewsletterForm({
   placeholder: string;
   submitLabel: string;
   submittingLabel: string;
-  variant: 'default' | 'compact' | 'inline';
+  variant: "default" | "compact" | "inline";
   turnstileToken: string | null;
   onTurnstileSuccess: (token: string) => void;
   onTurnstileError: () => void;
   onTurnstileExpire: () => void;
 }) {
-  const isInline = variant === 'inline';
+  const isInline = variant === "inline";
   const isButtonDisabled = isSubmitting || !turnstileToken;
 
   return (
-    <form
-      action={onSubmit}
-      className='space-y-3'
-    >
-      <div className={cn(isInline && 'flex gap-2')}>
+    <form action={onSubmit} className="space-y-3">
+      <div className={cn(isInline && "flex gap-2")}>
         <Input
-          type='email'
-          name='email'
+          type="email"
+          name="email"
           required
           placeholder={placeholder}
           aria-label={placeholder}
-          className={cn(isInline && 'flex-1')}
+          className={cn(isInline && "flex-1")}
           disabled={isSubmitting}
         />
         <Button
-          type='submit'
+          type="submit"
           disabled={isButtonDisabled}
-          className={cn(!isInline && 'w-full')}
+          className={cn(!isInline && "w-full")}
         >
           {isSubmitting ? (
             <>
-              <Loader2 className='mr-2 h-4 w-4 animate-spin' />
+              <Loader2 className="mr-2 h-4 w-4 animate-spin" />
               {submittingLabel}
             </>
           ) : (
             <>
-              <Mail className='mr-2 h-4 w-4' />
+              <Mail className="mr-2 h-4 w-4" />
               {submitLabel}
             </>
           )}
@@ -140,9 +137,9 @@ function NewsletterForm({
         onSuccess={onTurnstileSuccess}
         onError={onTurnstileError}
         onExpire={onTurnstileExpire}
-        action='newsletter_subscribe'
-        size='compact'
-        theme='auto'
+        action="newsletter_subscribe"
+        size="compact"
+        theme="auto"
       />
       {error !== undefined && <ErrorMessage error={error} />}
     </form>
@@ -166,9 +163,9 @@ function CompactVariant({
   formProps: Parameters<typeof NewsletterForm>[0];
 }) {
   return (
-    <div className={cn('space-y-3', className)}>
-      <h3 className='text-lg font-semibold'>{title}</h3>
-      <p className='text-sm text-muted-foreground'>{description}</p>
+    <div className={cn("space-y-3", className)}>
+      <h3 className="text-lg font-semibold">{title}</h3>
+      <p className="text-sm text-muted-foreground">{description}</p>
       {success ? (
         <SuccessMessage message={successMessage} />
       ) : (
@@ -195,13 +192,13 @@ function InlineVariant({
   formProps: Parameters<typeof NewsletterForm>[0];
 }) {
   return (
-    <div className={cn('rounded-lg border bg-muted/30 p-4', className)}>
-      <div className='flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between'>
-        <div className='min-w-0 flex-1'>
-          <h3 className='font-semibold'>{title}</h3>
-          <p className='text-sm text-muted-foreground'>{description}</p>
+    <div className={cn("rounded-lg border bg-muted/30 p-4", className)}>
+      <div className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
+        <div className="min-w-0 flex-1">
+          <h3 className="font-semibold">{title}</h3>
+          <p className="text-sm text-muted-foreground">{description}</p>
         </div>
-        <div className='sm:w-80'>
+        <div className="sm:w-80">
           {success ? (
             <SuccessMessage message={successMessage} />
           ) : (
@@ -218,9 +215,9 @@ function InlineVariant({
  */
 export function BlogNewsletter({
   className,
-  variant = 'default',
+  variant = "default",
 }: BlogNewsletterProps) {
-  const t = useTranslations('blog.newsletter');
+  const t = useTranslations("blog.newsletter");
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [turnstileToken, setTurnstileToken] = useState<string | null>(null);
   const turnstileTokenRef = useRef<string | null>(null);
@@ -246,30 +243,30 @@ export function BlogNewsletter({
   ): Promise<FormState> {
     setIsSubmitting(true);
     try {
-      const email = String(formData.get('email') ?? '').trim();
+      const email = String(formData.get("email") ?? "").trim();
       const token = turnstileTokenRef.current;
-      if (!token) return { success: false, error: t('turnstileRequired') };
+      if (!token) return { success: false, error: t("turnstileRequired") };
 
       const attribution = getAttributionAsObject();
-      const response = await fetch('/api/subscribe', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
+      const response = await fetch("/api/subscribe", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
         // nosemgrep: object-injection-sink-spread-operator
         // Safe: attribution is from getAttributionAsObject() which returns sanitized alphanumeric values
         body: JSON.stringify({
           email,
-          pageType: 'blog',
+          pageType: "blog",
           turnstileToken: token,
           ...attribution,
         }),
       });
       const result = await response.json();
       if (!response.ok || result.success !== true) {
-        return { success: false, error: result.message ?? t('error') };
+        return { success: false, error: result.message ?? t("error") };
       }
       return { success: true, error: undefined };
     } catch {
-      return { success: false, error: t('error') };
+      return { success: false, error: t("error") };
     } finally {
       setIsSubmitting(false);
     }
@@ -281,9 +278,9 @@ export function BlogNewsletter({
     onSubmit: formAction,
     isSubmitting,
     error: state.error,
-    placeholder: t('placeholder'),
-    submitLabel: t('submit'),
-    submittingLabel: t('submitting'),
+    placeholder: t("placeholder"),
+    submitLabel: t("submit"),
+    submittingLabel: t("submitting"),
     variant,
     turnstileToken,
     onTurnstileSuccess: handleTurnstileSuccess,
@@ -293,28 +290,28 @@ export function BlogNewsletter({
 
   const commonProps = {
     className,
-    title: t('title'),
-    description: t('description'),
+    title: t("title"),
+    description: t("description"),
     success: state.success,
-    successMessage: t('success'),
+    successMessage: t("success"),
     formProps,
   };
 
-  if (variant === 'compact') return <CompactVariant {...commonProps} />;
-  if (variant === 'inline') return <InlineVariant {...commonProps} />;
+  if (variant === "compact") return <CompactVariant {...commonProps} />;
+  if (variant === "inline") return <InlineVariant {...commonProps} />;
 
   return (
-    <Card className={cn('overflow-hidden', className)}>
-      <CardHeader className='bg-muted/50'>
-        <CardTitle className='flex items-center gap-2 text-lg'>
-          <Mail className='h-5 w-5' />
-          {t('title')}
+    <Card className={cn("overflow-hidden", className)}>
+      <CardHeader className="bg-muted/50">
+        <CardTitle className="flex items-center gap-2 text-lg">
+          <Mail className="h-5 w-5" />
+          {t("title")}
         </CardTitle>
-        <CardDescription>{t('description')}</CardDescription>
+        <CardDescription>{t("description")}</CardDescription>
       </CardHeader>
-      <CardContent className='pt-6'>
+      <CardContent className="pt-6">
         {state.success ? (
-          <SuccessMessage message={t('success')} />
+          <SuccessMessage message={t("success")} />
         ) : (
           <NewsletterForm {...formProps} />
         )}

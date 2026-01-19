@@ -3,14 +3,14 @@
  * Resend email service utilities
  */
 
-import { sanitizePlainText } from '@/lib/security-validation';
+import { sanitizePlainText } from "@/lib/security-validation";
 import {
   emailTemplateDataSchema,
   productInquiryEmailDataSchema,
   type EmailTemplateData,
   type ProductInquiryEmailData,
-} from '@/lib/validations';
-import { SITE_CONFIG } from '@/config/paths/site-config';
+} from "@/lib/validations";
+import { SITE_CONFIG } from "@/config/paths/site-config";
 
 /**
  * 邮件配置常量
@@ -77,8 +77,8 @@ export class ResendUtils {
    */
   static getContactFormTags(): Array<{ name: string; value: string }> {
     return [
-      { name: 'type', value: 'contact-form' },
-      { name: 'source', value: 'website' },
+      { name: "type", value: "contact-form" },
+      { name: "source", value: "website" },
     ];
   }
 
@@ -88,8 +88,8 @@ export class ResendUtils {
    */
   static getConfirmationTags(): Array<{ name: string; value: string }> {
     return [
-      { name: 'type', value: 'confirmation' },
-      { name: 'source', value: 'website' },
+      { name: "type", value: "confirmation" },
+      { name: "source", value: "website" },
     ];
   }
 
@@ -136,7 +136,7 @@ export class ResendUtils {
    */
   static generateProductInquirySubject(data: ProductInquiryEmailData): string {
     const quantity =
-      typeof data.quantity === 'number'
+      typeof data.quantity === "number"
         ? data.quantity.toString()
         : data.quantity;
     return `Product Inquiry: ${data.productName} (Qty: ${quantity})`;
@@ -147,8 +147,8 @@ export class ResendUtils {
    */
   static getProductInquiryTags(): Array<{ name: string; value: string }> {
     return [
-      { name: 'type', value: 'product-inquiry' },
-      { name: 'source', value: 'website' },
+      { name: "type", value: "product-inquiry" },
+      { name: "source", value: "website" },
     ];
   }
 }

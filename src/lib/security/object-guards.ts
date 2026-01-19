@@ -172,7 +172,7 @@ export const safeDeepGet = <T extends object>(
   obj: T,
   path: string,
 ): unknown => {
-  const keys = path.split('.');
+  const keys = path.split(".");
   let current: unknown = obj;
 
   for (const key of keys) {
@@ -181,7 +181,7 @@ export const safeDeepGet = <T extends object>(
     }
 
     if (
-      typeof current === 'object' &&
+      typeof current === "object" &&
       hasOwn(current as Record<PropertyKey, unknown>, key)
     ) {
       // nosemgrep: object-injection-sink-dynamic-property -- 路径逐段校验后访问
@@ -222,7 +222,7 @@ export const createSafeProxy = <T extends object>(
 
   return new Proxy(obj, {
     get(target, prop) {
-      if (typeof prop === 'string' || typeof prop === 'symbol') {
+      if (typeof prop === "string" || typeof prop === "symbol") {
         if (keySet && !keySet.has(prop as keyof T)) {
           return undefined;
         }
@@ -240,7 +240,7 @@ export const createSafeProxy = <T extends object>(
         return false;
       }
 
-      if (typeof prop === 'string' || typeof prop === 'symbol') {
+      if (typeof prop === "string" || typeof prop === "symbol") {
         if (keySet && !keySet.has(prop as keyof T)) {
           return false;
         }
@@ -260,7 +260,7 @@ export const createSafeProxy = <T extends object>(
     },
 
     has(target, prop) {
-      if (typeof prop === 'string' || typeof prop === 'symbol') {
+      if (typeof prop === "string" || typeof prop === "symbol") {
         if (keySet && !keySet.has(prop as keyof T)) {
           return false;
         }
@@ -316,7 +316,7 @@ export const SafeAccess = {
       }
 
       if (
-        typeof current === 'object' &&
+        typeof current === "object" &&
         hasOwn(current as Record<PropertyKey, unknown>, key)
       ) {
         // nosemgrep: object-injection-sink-dynamic-property -- 路径逐段校验后访问

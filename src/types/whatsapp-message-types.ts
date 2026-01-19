@@ -5,8 +5,8 @@
  * including text, image, interactive, and other specialized message formats.
  */
 
-import type { ContactData, LocationData } from '@/types/whatsapp-base-types';
-import type { TemplateMessage } from '@/types/whatsapp-template-types';
+import type { ContactData, LocationData } from "@/types/whatsapp-base-types";
+import type { TemplateMessage } from "@/types/whatsapp-template-types";
 import {
   COUNT_TEN,
   COUNT_TRIPLE,
@@ -14,18 +14,18 @@ import {
   MAGIC_4096,
   ONE,
   ZERO,
-} from '@/constants';
+} from "@/constants";
 
 // Base Message Structure
 interface BaseMessage {
-  messaging_product: 'whatsapp';
-  recipient_type: 'individual';
+  messaging_product: "whatsapp";
+  recipient_type: "individual";
   to: string;
 }
 
 // Text Message Types
 export interface TextMessage extends BaseMessage {
-  type: 'text';
+  type: "text";
   text: {
     preview_url?: boolean;
     body: string;
@@ -34,7 +34,7 @@ export interface TextMessage extends BaseMessage {
 
 // Image Message Types
 export interface ImageMessage extends BaseMessage {
-  type: 'image';
+  type: "image";
   image: {
     id?: string;
     link?: string;
@@ -44,7 +44,7 @@ export interface ImageMessage extends BaseMessage {
 
 // Document Message Types
 export interface DocumentMessage extends BaseMessage {
-  type: 'document';
+  type: "document";
   document: {
     id?: string;
     link?: string;
@@ -55,7 +55,7 @@ export interface DocumentMessage extends BaseMessage {
 
 // Audio Message Types
 export interface AudioMessage extends BaseMessage {
-  type: 'audio';
+  type: "audio";
   audio: {
     id?: string;
     link?: string;
@@ -64,7 +64,7 @@ export interface AudioMessage extends BaseMessage {
 
 // Video Message Types
 export interface VideoMessage extends BaseMessage {
-  type: 'video';
+  type: "video";
   video: {
     id?: string;
     link?: string;
@@ -74,25 +74,25 @@ export interface VideoMessage extends BaseMessage {
 
 // Location Message Types
 export interface LocationMessage extends BaseMessage {
-  type: 'location';
+  type: "location";
   location: LocationData;
 }
 
 // Contacts Message Types
 export interface ContactsMessage extends BaseMessage {
-  type: 'contacts';
+  type: "contacts";
   contacts: ContactData[];
 }
 
 // Template Message Types
 export interface TemplateMessageRequest extends BaseMessage {
-  type: 'template';
+  type: "template";
   template: TemplateMessage;
 }
 
 // Interactive Message Types
 export interface InteractiveButton {
-  type: 'reply';
+  type: "reply";
   reply: {
     id: string;
     title: string;
@@ -111,7 +111,7 @@ export interface InteractiveListSection {
 }
 
 export interface InteractiveHeader {
-  type: 'text' | 'image' | 'document' | 'video';
+  type: "text" | "image" | "document" | "video";
   text?: string;
   image?: {
     id?: string;
@@ -146,9 +146,9 @@ export interface InteractiveListAction {
 }
 
 export interface InteractiveMessage extends BaseMessage {
-  type: 'interactive';
+  type: "interactive";
   interactive: {
-    type: 'button' | 'list';
+    type: "button" | "list";
     header?: InteractiveHeader;
     body: InteractiveBody;
     footer?: InteractiveFooter;
@@ -158,7 +158,7 @@ export interface InteractiveMessage extends BaseMessage {
 
 // Reaction Message Types
 export interface ReactionMessage extends BaseMessage {
-  type: 'reaction';
+  type: "reaction";
   reaction: {
     message_id: string;
     emoji: string;
@@ -167,7 +167,7 @@ export interface ReactionMessage extends BaseMessage {
 
 // Sticker Message Types
 export interface StickerMessage extends BaseMessage {
-  type: 'sticker';
+  type: "sticker";
   sticker: {
     id?: string;
     link?: string;
@@ -194,22 +194,22 @@ export type MediaMessage =
   | AudioMessage
   | VideoMessage
   | StickerMessage;
-export type InteractiveMessageType = 'button' | 'list';
+export type InteractiveMessageType = "button" | "list";
 
 // Message Builder Types
 export interface MessageBuilder {
   to: string;
-  type: WhatsAppOutgoingMessage['type'];
+  type: WhatsAppOutgoingMessage["type"];
 }
 
 export interface TextMessageBuilder extends MessageBuilder {
-  type: 'text';
+  type: "text";
   body: string;
   preview_url?: boolean;
 }
 
 export interface MediaMessageBuilder extends MessageBuilder {
-  type: 'image' | 'document' | 'audio' | 'video' | 'sticker';
+  type: "image" | "document" | "audio" | "video" | "sticker";
   media_id?: string;
   media_link?: string;
   caption?: string;
@@ -217,10 +217,10 @@ export interface MediaMessageBuilder extends MessageBuilder {
 }
 
 export interface InteractiveMessageBuilder extends MessageBuilder {
-  type: 'interactive';
+  type: "interactive";
   interactive_type: InteractiveMessageType;
-  header?: Omit<InteractiveHeader, 'type'> & {
-    type?: InteractiveHeader['type'];
+  header?: Omit<InteractiveHeader, "type"> & {
+    type?: InteractiveHeader["type"];
   };
   body: string;
   footer?: string;
@@ -233,93 +233,93 @@ export interface InteractiveMessageBuilder extends MessageBuilder {
 export function isTextMessage(
   message: WhatsAppOutgoingMessage,
 ): message is TextMessage {
-  return message.type === 'text';
+  return message.type === "text";
 }
 
 export function isImageMessage(
   message: WhatsAppOutgoingMessage,
 ): message is ImageMessage {
-  return message.type === 'image';
+  return message.type === "image";
 }
 
 export function isDocumentMessage(
   message: WhatsAppOutgoingMessage,
 ): message is DocumentMessage {
-  return message.type === 'document';
+  return message.type === "document";
 }
 
 export function isAudioMessage(
   message: WhatsAppOutgoingMessage,
 ): message is AudioMessage {
-  return message.type === 'audio';
+  return message.type === "audio";
 }
 
 export function isVideoMessage(
   message: WhatsAppOutgoingMessage,
 ): message is VideoMessage {
-  return message.type === 'video';
+  return message.type === "video";
 }
 
 export function isLocationMessage(
   message: WhatsAppOutgoingMessage,
 ): message is LocationMessage {
-  return message.type === 'location';
+  return message.type === "location";
 }
 
 export function isContactsMessage(
   message: WhatsAppOutgoingMessage,
 ): message is ContactsMessage {
-  return message.type === 'contacts';
+  return message.type === "contacts";
 }
 
 export function isTemplateMessage(
   message: WhatsAppOutgoingMessage,
 ): message is TemplateMessageRequest {
-  return message.type === 'template';
+  return message.type === "template";
 }
 
 export function isInteractiveMessage(
   message: WhatsAppOutgoingMessage,
 ): message is InteractiveMessage {
-  return message.type === 'interactive';
+  return message.type === "interactive";
 }
 
 export function isReactionMessage(
   message: WhatsAppOutgoingMessage,
 ): message is ReactionMessage {
-  return message.type === 'reaction';
+  return message.type === "reaction";
 }
 
 export function isStickerMessage(
   message: WhatsAppOutgoingMessage,
 ): message is StickerMessage {
-  return message.type === 'sticker';
+  return message.type === "sticker";
 }
 
 export function isMediaMessage(
   message: WhatsAppOutgoingMessage,
 ): message is MediaMessage {
-  return ['image', 'document', 'audio', 'video', 'sticker'].includes(
+  return ["image", "document", "audio", "video", "sticker"].includes(
     message.type,
   );
 }
 
 export function isButtonInteractive(
-  interactive: InteractiveMessage['interactive'],
-): interactive is InteractiveMessage['interactive'] & {
-  type: 'button';
+  interactive: InteractiveMessage["interactive"],
+): interactive is InteractiveMessage["interactive"] & {
+  type: "button";
   action: InteractiveButtonAction;
 } {
-  return interactive.type === 'button';
+  return interactive.type === "button";
 }
 
 export function isListInteractive(
-  interactive: InteractiveMessage['interactive'],
-): interactive is InteractiveMessage['interactive'] & {
-  type: 'list';
+  interactive: InteractiveMessage["interactive"],
+): interactive is InteractiveMessage["interactive"] & {
+  type: "list";
   action: InteractiveListAction;
 } {
-  return interactive.type === 'list';
+  return interactive.type === "list";
 }
 
 // Message Validation
@@ -336,11 +336,11 @@ export function validateTextMessage(
   const warnings: string[] = [];
 
   if (!message.text.body || message.text.body.trim().length === ZERO) {
-    errors.push('Text message body cannot be empty');
+    errors.push("Text message body cannot be empty");
   }
 
   if (message.text.body && message.text.body.length > MAGIC_4096) {
-    errors.push('Text message body cannot exceed MAGIC_4096 characters');
+    errors.push("Text message body cannot exceed MAGIC_4096 characters");
   }
 
   return { isValid: errors.length === ZERO, errors, warnings };
@@ -356,16 +356,16 @@ export function validateInteractiveMessage(
     !message.interactive.body.text ||
     message.interactive.body.text.trim().length === ZERO
   ) {
-    errors.push('Interactive message body cannot be empty');
+    errors.push("Interactive message body cannot be empty");
   }
 
-  if (message.interactive.type === 'button') {
+  if (message.interactive.type === "button") {
     const action = message.interactive.action as InteractiveButtonAction;
     if (!action.buttons || action.buttons.length === ZERO) {
-      errors.push('Button interactive message must have at least one button');
+      errors.push("Button interactive message must have at least one button");
     } else if (action.buttons.length > COUNT_TRIPLE) {
       errors.push(
-        'Button interactive message cannot have more than COUNT_TRIPLE buttons',
+        "Button interactive message cannot have more than COUNT_TRIPLE buttons",
       );
     }
 
@@ -381,18 +381,18 @@ export function validateInteractiveMessage(
     });
   }
 
-  if (message.interactive.type === 'list') {
+  if (message.interactive.type === "list") {
     const action = message.interactive.action as InteractiveListAction;
     if (!action.sections || action.sections.length === ZERO) {
-      errors.push('List interactive message must have at least one section');
+      errors.push("List interactive message must have at least one section");
     } else if (action.sections.length > COUNT_TEN) {
       errors.push(
-        'List interactive message cannot have more than COUNT_TEN sections',
+        "List interactive message cannot have more than COUNT_TEN sections",
       );
     }
 
     if (!action.button) {
-      errors.push('List interactive message must have a button text');
+      errors.push("List interactive message must have a button text");
     }
 
     action.sections?.forEach((section, sectionIndex) => {
@@ -419,28 +419,28 @@ export function validateInteractiveMessage(
 
 // Constants
 export const MESSAGE_TYPES = [
-  'text',
-  'image',
-  'document',
-  'audio',
-  'video',
-  'location',
-  'contacts',
-  'template',
-  'interactive',
-  'reaction',
-  'sticker',
+  "text",
+  "image",
+  "document",
+  "audio",
+  "video",
+  "location",
+  "contacts",
+  "template",
+  "interactive",
+  "reaction",
+  "sticker",
 ] as const;
 
 export const MEDIA_MESSAGE_TYPES = [
-  'image',
-  'document',
-  'audio',
-  'video',
-  'sticker',
+  "image",
+  "document",
+  "audio",
+  "video",
+  "sticker",
 ] as const;
 
-export const INTERACTIVE_TYPES = ['button', 'list'] as const;
+export const INTERACTIVE_TYPES = ["button", "list"] as const;
 
 // Export commonly used types with shorter names
 export type {

@@ -8,7 +8,7 @@
  *
  * 依赖: macOS sips (用于 ICO→PNG 转换) + sharp (用于图像处理)
  */
-import { execSync } from 'node:child_process';
+import { execSync } from "node:child_process";
 import {
   copyFileSync,
   existsSync,
@@ -16,18 +16,18 @@ import {
   statSync,
   unlinkSync,
   writeFileSync,
-} from 'node:fs';
-import { dirname, join } from 'node:path';
-import { fileURLToPath } from 'node:url';
-import sharp from 'sharp';
+} from "node:fs";
+import { dirname, join } from "node:path";
+import { fileURLToPath } from "node:url";
+import sharp from "sharp";
 
 const __dirname = dirname(fileURLToPath(import.meta.url));
-const projectRoot = join(__dirname, '..');
+const projectRoot = join(__dirname, "..");
 
-const INPUT_FAVICON = join(projectRoot, 'src/app/favicon.ico');
-const BACKUP_FAVICON = join(projectRoot, 'src/app/favicon.ico.backup');
-const OUTPUT_FAVICON = join(projectRoot, 'src/app/favicon.ico');
-const TEMP_PNG = '/tmp/favicon-source-temp.png';
+const INPUT_FAVICON = join(projectRoot, "src/app/favicon.ico");
+const BACKUP_FAVICON = join(projectRoot, "src/app/favicon.ico.backup");
+const OUTPUT_FAVICON = join(projectRoot, "src/app/favicon.ico");
+const TEMP_PNG = "/tmp/favicon-source-temp.png";
 
 /**
  * 创建 ICO 文件（使用 PNG 格式的图像数据）
@@ -63,8 +63,8 @@ function createIcoFile(images) {
 }
 
 async function main() {
-  console.log('📦 P2-1 Phase 2: Favicon 压缩');
-  console.log('');
+  console.log("📦 P2-1 Phase 2: Favicon 压缩");
+  console.log("");
 
   // 确保原始文件存在
   if (!existsSync(INPUT_FAVICON)) {
@@ -86,13 +86,13 @@ async function main() {
   }
 
   // 使用 sips (macOS) 将 ICO 转换为 PNG
-  console.log('🔄 使用 sips 转换 ICO → PNG...');
+  console.log("🔄 使用 sips 转换 ICO → PNG...");
   try {
     execSync(`sips -s format png "${BACKUP_FAVICON}" --out "${TEMP_PNG}"`, {
-      stdio: 'pipe',
+      stdio: "pipe",
     });
   } catch (err) {
-    throw new Error('sips 转换失败 (需要 macOS 环境)');
+    throw new Error("sips 转换失败 (需要 macOS 环境)");
   }
 
   // 检查转换结果
@@ -109,7 +109,7 @@ async function main() {
     const pngBuffer = await sharp(TEMP_PNG)
       .resize(size, size, {
         kernel: sharp.kernel.lanczos3,
-        fit: 'contain',
+        fit: "contain",
         background: { r: 0, g: 0, b: 0, alpha: 0 },
       })
       .png({
@@ -146,7 +146,7 @@ async function main() {
   const savings = originalSize - newSize;
   const savingsPercent = ((savings / originalSize) * 100).toFixed(1);
 
-  console.log('');
+  console.log("");
   console.log(`✅ 优化完成!`);
   console.log(
     `📊 新文件大小: ${newSize.toLocaleString()} bytes (${(newSize / 1024).toFixed(1)} KB)`,
@@ -156,12 +156,12 @@ async function main() {
   );
 
   if (newSize > 10240) {
-    console.log('');
+    console.log("");
     console.log(`⚠️  注意: 文件仍大于 10KB，但已显著减小`);
   }
 }
 
 main().catch((err) => {
-  console.error('❌ 错误:', err.message);
+  console.error("❌ 错误:", err.message);
   process.exit(1);
 });

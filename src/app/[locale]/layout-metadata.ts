@@ -1,6 +1,6 @@
-import type { Metadata } from 'next';
-import { SITE_CONFIG } from '@/config/paths';
-import { ONE } from '@/constants';
+import type { Metadata } from "next";
+import { SITE_CONFIG } from "@/config/paths";
+import { ONE } from "@/constants";
 
 /**
  * Locale layout metadata (base only).
@@ -30,16 +30,16 @@ export async function generateLocaleMetadata({
       index: true,
       follow: true,
       googleBot: {
-        'index': true,
-        'follow': true,
-        'max-video-preview': -ONE,
-        'max-image-preview': 'large',
-        'max-snippet': -ONE,
+        index: true,
+        follow: true,
+        "max-video-preview": -ONE,
+        "max-image-preview": "large",
+        "max-snippet": -ONE,
       },
     },
     verification: {
-      google: process.env['GOOGLE_SITE_VERIFICATION'],
-      yandex: process.env['YANDEX_VERIFICATION'],
+      google: process.env["GOOGLE_SITE_VERIFICATION"],
+      yandex: process.env["YANDEX_VERIFICATION"],
     },
   };
 }

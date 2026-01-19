@@ -8,7 +8,7 @@ export {
   CookieConsentProvider,
   useCookieConsent,
   useCookieConsentOptional,
-} from '@/lib/cookie-consent/context';
+} from "@/lib/cookie-consent/context";
 
 export {
   clearConsent,
@@ -16,7 +16,7 @@ export {
   createRejectAllConsent,
   loadConsent,
   saveConsent,
-} from '@/lib/cookie-consent/storage';
+} from "@/lib/cookie-consent/storage";
 
 export {
   CONSENT_STORAGE_KEY,
@@ -28,4 +28,4 @@ export {
   type CookieConsentContextValue,
   type CookieConsentState,
   type StoredConsent,
-} from '@/lib/cookie-consent/types';
+} from "@/lib/cookie-consent/types";

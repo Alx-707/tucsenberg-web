@@ -13,55 +13,52 @@
  * - label-edge-cases.test.tsx - Edge cases tests
  */
 
-import React from 'react';
-import { render, screen } from '@testing-library/react';
-import userEvent from '@testing-library/user-event';
-import { beforeEach, describe, expect, it, vi } from 'vitest';
-import { Label } from '@/components/ui/label';
+import React from "react";
+import { render, screen } from "@testing-library/react";
+import userEvent from "@testing-library/user-event";
+import { beforeEach, describe, expect, it, vi } from "vitest";
+import { Label } from "@/components/ui/label";
 
-describe('Label Events & States Tests - Index', () => {
+describe("Label Events & States Tests - Index", () => {
   let user: ReturnType<typeof userEvent.setup>;
 
   beforeEach(() => {
     user = userEvent.setup();
   });
 
-  describe('Basic Event Handling', () => {
-    it('handles click events', async () => {
+  describe("Basic Event Handling", () => {
+    it("handles click events", async () => {
       const handleClick = vi.fn();
       render(
-        <Label
-          onClick={handleClick}
-          data-testid='clickable-label'
-        >
+        <Label onClick={handleClick} data-testid="clickable-label">
           Clickable Label
         </Label>,
       );
 
-      const label = screen.getByTestId('clickable-label');
+      const label = screen.getByTestId("clickable-label");
       await user.click(label);
 
       expect(handleClick).toHaveBeenCalledTimes(1);
     });
 
-    it('handles double click events', async () => {
+    it("handles double click events", async () => {
       const handleDoubleClick = vi.fn();
       render(
         <Label
           onDoubleClick={handleDoubleClick}
-          data-testid='double-click-label'
+          data-testid="double-click-label"
         >
           Double Click Label
         </Label>,
       );
 
-      const label = screen.getByTestId('double-click-label');
+      const label = screen.getByTestId("double-click-label");
       await user.dblClick(label);
 
       expect(handleDoubleClick).toHaveBeenCalledTimes(1);
     });
 
-    it('handles mouse events', async () => {
+    it("handles mouse events", async () => {
       const handleMouseEnter = vi.fn();
       const handleMouseLeave = vi.fn();
 
@@ -69,13 +66,13 @@ describe('Label Events & States Tests - Index', () => {
         <Label
           onMouseEnter={handleMouseEnter}
           onMouseLeave={handleMouseLeave}
-          data-testid='mouse-events-label'
+          data-testid="mouse-events-label"
         >
           Mouse Events Label
         </Label>,
       );
 
-      const label = screen.getByTestId('mouse-events-label');
+      const label = screen.getByTestId("mouse-events-label");
 
       await user.hover(label);
       expect(handleMouseEnter).toHaveBeenCalled();
@@ -84,7 +81,7 @@ describe('Label Events & States Tests - Index', () => {
       expect(handleMouseLeave).toHaveBeenCalled();
     });
 
-    it('handles focus events', async () => {
+    it("handles focus events", async () => {
       const handleFocus = vi.fn();
       const handleBlur = vi.fn();
 
@@ -93,13 +90,13 @@ describe('Label Events & States Tests - Index', () => {
           tabIndex={0}
           onFocus={handleFocus}
           onBlur={handleBlur}
-          data-testid='focus-label'
+          data-testid="focus-label"
         >
           Focus Label
         </Label>,
       );
 
-      const label = screen.getByTestId('focus-label');
+      const label = screen.getByTestId("focus-label");
 
       await user.click(label);
       expect(handleFocus).toHaveBeenCalled();
@@ -108,34 +105,27 @@ describe('Label Events & States Tests - Index', () => {
       expect(handleBlur).toHaveBeenCalled();
     });
 
-    it('handles event with associated input', async () => {
+    it("handles event with associated input", async () => {
       const handleLabelClick = vi.fn();
       const handleInputFocus = vi.fn();
 
       render(
         <div>
-          <Label
-            htmlFor='event-input'
-            onClick={handleLabelClick}
-          >
+          <Label htmlFor="event-input" onClick={handleLabelClick}>
             Event Label
           </Label>
-          <input
-            id='event-input'
-            type='text'
-            onFocus={handleInputFocus}
-          />
+          <input id="event-input" type="text" onFocus={handleInputFocus} />
         </div>,
       );
 
-      const label = screen.getByText('Event Label');
+      const label = screen.getByText("Event Label");
       await user.click(label);
 
       expect(handleLabelClick).toHaveBeenCalled();
       expect(handleInputFocus).toHaveBeenCalled();
     });
 
-    it('prevents event propagation when needed', async () => {
+    it("prevents event propagation when needed", async () => {
       const parentClick = vi.fn();
       const labelClick = vi.fn((_e: React.MouseEvent) => {
         _e.stopPropagation();
@@ -143,28 +133,25 @@ describe('Label Events & States Tests - Index', () => {
 
       render(
         <div onClick={parentClick}>
-          <Label
-            onClick={labelClick}
-            data-testid='stop-propagation'
-          >
+          <Label onClick={labelClick} data-testid="stop-propagation">
             Stop Propagation
           </Label>
         </div>,
       );
 
-      const label = screen.getByTestId('stop-propagation');
+      const label = screen.getByTestId("stop-propagation");
       await user.click(label);
 
       expect(labelClick).toHaveBeenCalled();
       expect(parentClick).not.toHaveBeenCalled();
     });
 
-    it('handles custom event handlers', async () => {
+    it("handles custom event handlers", async () => {
       const customHandler = vi.fn();
 
       render(
         <Label
-          data-testid='custom-event'
+          data-testid="custom-event"
           onClick={(e: any) => {
             customHandler(e.type, e.target);
           }}
@@ -173,43 +160,36 @@ describe('Label Events & States Tests - Index', () => {
         </Label>,
       );
 
-      const label = screen.getByTestId('custom-event');
+      const label = screen.getByTestId("custom-event");
       await user.click(label);
 
-      expect(customHandler).toHaveBeenCalledWith('click', label);
+      expect(customHandler).toHaveBeenCalledWith("click", label);
     });
   });
 
-  describe('Basic State Management', () => {
-    it('handles disabled state correctly', () => {
-      render(<Label data-testid='disabled-label'>Disabled Label</Label>);
+  describe("Basic State Management", () => {
+    it("handles disabled state correctly", () => {
+      render(<Label data-testid="disabled-label">Disabled Label</Label>);
 
-      const label = screen.getByTestId('disabled-label');
+      const label = screen.getByTestId("disabled-label");
       expect(label).toHaveClass(
-        'peer-disabled:cursor-not-allowed',
-        'peer-disabled:opacity-50',
+        "peer-disabled:cursor-not-allowed",
+        "peer-disabled:opacity-50",
       );
     });
 
-    it('disables associated input when label is disabled', async () => {
+    it("disables associated input when label is disabled", async () => {
       render(
         <div>
-          <Label
-            htmlFor='disabled-input'
-            data-testid='disabled-label'
-          >
+          <Label htmlFor="disabled-input" data-testid="disabled-label">
             Disabled Input Label
           </Label>
-          <input
-            id='disabled-input'
-            type='text'
-            disabled
-          />
+          <input id="disabled-input" type="text" disabled />
         </div>,
       );
 
-      const label = screen.getByTestId('disabled-label');
-      const input = screen.getByRole('textbox');
+      const label = screen.getByTestId("disabled-label");
+      const input = screen.getByRole("textbox");
 
       expect(input).toBeDisabled();
 
@@ -218,11 +198,11 @@ describe('Label Events & States Tests - Index', () => {
       expect(input).not.toHaveFocus();
     });
 
-    it('handles conditional disabled state', () => {
+    it("handles conditional disabled state", () => {
       const ConditionalLabel = ({ isDisabled }: { isDisabled: boolean }) => (
         <Label
-          className={isDisabled ? 'cursor-not-allowed opacity-50' : ''}
-          data-testid='conditional-disabled'
+          className={isDisabled ? "cursor-not-allowed opacity-50" : ""}
+          data-testid="conditional-disabled"
         >
           Conditional Label
         </Label>
@@ -230,147 +210,135 @@ describe('Label Events & States Tests - Index', () => {
 
       const { rerender } = render(<ConditionalLabel isDisabled={false} />);
 
-      let label = screen.getByTestId('conditional-disabled');
-      expect(label).not.toHaveClass('opacity-50');
+      let label = screen.getByTestId("conditional-disabled");
+      expect(label).not.toHaveClass("opacity-50");
 
       rerender(<ConditionalLabel isDisabled={true} />);
-      label = screen.getByTestId('conditional-disabled');
-      expect(label).toHaveClass('opacity-50');
+      label = screen.getByTestId("conditional-disabled");
+      expect(label).toHaveClass("opacity-50");
     });
 
-    it('handles form context disabled state', () => {
+    it("handles form context disabled state", () => {
       render(
         <form>
           <fieldset disabled>
-            <Label
-              htmlFor='form-input'
-              data-testid='form-label'
-            >
+            <Label htmlFor="form-input" data-testid="form-label">
               Form Label
             </Label>
-            <input
-              id='form-input'
-              type='text'
-            />
+            <input id="form-input" type="text" />
           </fieldset>
         </form>,
       );
 
-      const label = screen.getByTestId('form-label');
-      const input = screen.getByRole('textbox');
+      const label = screen.getByTestId("form-label");
+      const input = screen.getByRole("textbox");
 
       expect(input).toBeDisabled();
-      expect(label).toHaveClass('peer-disabled:cursor-not-allowed');
+      expect(label).toHaveClass("peer-disabled:cursor-not-allowed");
     });
   });
 
-  describe('Basic Responsive Behavior', () => {
-    it('maintains consistent styling across screen sizes', () => {
+  describe("Basic Responsive Behavior", () => {
+    it("maintains consistent styling across screen sizes", () => {
       render(
         <Label
-          className='text-sm md:text-base lg:text-lg'
-          data-testid='responsive-label'
+          className="text-sm md:text-base lg:text-lg"
+          data-testid="responsive-label"
         >
           Responsive Label
         </Label>,
       );
 
-      const label = screen.getByTestId('responsive-label');
-      expect(label).toHaveClass('text-sm', 'md:text-base', 'lg:text-lg');
+      const label = screen.getByTestId("responsive-label");
+      expect(label).toHaveClass("text-sm", "md:text-base", "lg:text-lg");
     });
 
-    it('handles responsive spacing', () => {
+    it("handles responsive spacing", () => {
       render(
-        <Label
-          className='p-2 md:p-4 lg:p-6'
-          data-testid='spacing-label'
-        >
+        <Label className="p-2 md:p-4 lg:p-6" data-testid="spacing-label">
           Spacing Label
         </Label>,
       );
 
-      const label = screen.getByTestId('spacing-label');
-      expect(label).toHaveClass('p-2', 'md:p-4', 'lg:p-6');
+      const label = screen.getByTestId("spacing-label");
+      expect(label).toHaveClass("p-2", "md:p-4", "lg:p-6");
     });
 
-    it('handles mobile touch targets', () => {
+    it("handles mobile touch targets", () => {
       render(
         <Label
-          className='flex min-h-[44px] min-w-[44px] items-center'
-          data-testid='touch-target'
+          className="flex min-h-[44px] min-w-[44px] items-center"
+          data-testid="touch-target"
         >
           Touch
         </Label>,
       );
 
-      const label = screen.getByTestId('touch-target');
-      expect(label).toHaveClass('min-h-[44px]', 'min-w-[44px]');
+      const label = screen.getByTestId("touch-target");
+      expect(label).toHaveClass("min-h-[44px]", "min-w-[44px]");
     });
 
-    it('supports dark mode variants', () => {
+    it("supports dark mode variants", () => {
       render(
         <Label
-          className='text-gray-900 dark:text-gray-100'
-          data-testid='dark-mode'
+          className="text-gray-900 dark:text-gray-100"
+          data-testid="dark-mode"
         >
           Dark Mode Label
         </Label>,
       );
 
-      const label = screen.getByTestId('dark-mode');
-      expect(label).toHaveClass('text-gray-900', 'dark:text-gray-100');
+      const label = screen.getByTestId("dark-mode");
+      expect(label).toHaveClass("text-gray-900", "dark:text-gray-100");
     });
 
-    it('adapts to container constraints', () => {
+    it("adapts to container constraints", () => {
       render(
-        <div style={{ width: '200px' }}>
-          <Label
-            className='w-full truncate'
-            data-testid='constrained-label'
-          >
+        <div style={{ width: "200px" }}>
+          <Label className="w-full truncate" data-testid="constrained-label">
             Very long label text that should be truncated
           </Label>
         </div>,
       );
 
-      const label = screen.getByTestId('constrained-label');
-      expect(label).toHaveClass('w-full', 'truncate');
+      const label = screen.getByTestId("constrained-label");
+      expect(label).toHaveClass("w-full", "truncate");
     });
   });
 
-  describe('Basic Edge Cases', () => {
-    it('renders empty label', () => {
-      render(<Label data-testid='empty-label'></Label>);
+  describe("Basic Edge Cases", () => {
+    it("renders empty label", () => {
+      render(<Label data-testid="empty-label"></Label>);
 
-      const label = screen.getByTestId('empty-label');
+      const label = screen.getByTestId("empty-label");
       expect(label).toBeInTheDocument();
       expect(label).toBeEmptyDOMElement();
     });
 
-    it('handles very long text content', () => {
-      const longText = 'A'.repeat(100);
-      render(<Label data-testid='long-text'>{longText}</Label>);
+    it("handles very long text content", () => {
+      const longText = "A".repeat(100);
+      render(<Label data-testid="long-text">{longText}</Label>);
 
-      const label = screen.getByTestId('long-text');
+      const label = screen.getByTestId("long-text");
       expect(label).toHaveTextContent(longText);
     });
 
-    it('handles special characters and unicode', () => {
-      const specialText = '🚀 Special chars: @#$%^&*()_+';
+    it("handles special characters and unicode", () => {
+      const specialText = "🚀 Special chars: @#$%^&*()_+";
       render(<Label>{specialText}</Label>);
 
       const label = screen.getByText(specialText);
       expect(label).toHaveTextContent(specialText);
     });
 
-    it('handles rapid state changes', async () => {
+    it("handles rapid state changes", async () => {
       const StateChangingLabel = () => {
         const [count, setCount] = React.useState(0);
 
         return (
           <Label
             onClick={() => setCount((c) => c + 1)}
-            data-testid='state-changing'
+            data-testid="state-changing"
           >
             Count: {count}
           </Label>
@@ -379,29 +347,29 @@ describe('Label Events & States Tests - Index', () => {
 
       render(<StateChangingLabel />);
 
-      const label = screen.getByTestId('state-changing');
+      const label = screen.getByTestId("state-changing");
 
       // Rapidly click multiple times
       for (let i = 0; i < 5; i++) {
         await user.click(label);
       }
 
-      expect(label).toHaveTextContent('Count: 5');
+      expect(label).toHaveTextContent("Count: 5");
     });
 
-    it('handles null and undefined props gracefully', () => {
+    it("handles null and undefined props gracefully", () => {
       render(
         <Label
           className={undefined}
           style={null as any}
           onClick={undefined}
-          data-testid='null-props'
+          data-testid="null-props"
         >
           Null Props
         </Label>,
       );
 
-      const label = screen.getByTestId('null-props');
+      const label = screen.getByTestId("null-props");
       expect(label).toBeInTheDocument();
     });
   });

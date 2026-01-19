@@ -1,7 +1,7 @@
-'use client';
+"use client";
 
-import { useOptimistic } from 'react';
-import { type FormSubmissionStatus } from '@/lib/validations';
+import { useOptimistic } from "react";
+import { type FormSubmissionStatus } from "@/lib/validations";
 
 /**
  * 乐观更新状态类型
@@ -13,8 +13,8 @@ export interface OptimisticFormState {
 }
 
 const initialOptimisticState: OptimisticFormState = {
-  status: 'idle' as FormSubmissionStatus,
-  message: '',
+  status: "idle" as FormSubmissionStatus,
+  message: "",
   timestamp: 0,
 };
 
@@ -35,10 +35,10 @@ function optimisticReducer(
     nextState.message = currentState.message;
   }
 
-  if ('status' in optimisticValue) {
+  if ("status" in optimisticValue) {
     nextState.status = optimisticValue.status;
   }
-  if ('message' in optimisticValue && optimisticValue.message !== undefined) {
+  if ("message" in optimisticValue && optimisticValue.message !== undefined) {
     nextState.message = optimisticValue.message;
   }
 

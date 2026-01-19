@@ -5,14 +5,14 @@
  * Provides singleton management and environment-aware client selection.
  */
 
-import { logger } from '@/lib/logger';
+import { logger } from "@/lib/logger";
 import type {
   WhatsAppClient,
   WhatsAppClientConfig,
   WhatsAppEnvironment,
-} from '@/lib/whatsapp/client-interface';
-import { MockWhatsAppClient } from '@/lib/whatsapp/mock-client';
-import { RealWhatsAppClient } from '@/lib/whatsapp/real-client';
+} from "@/lib/whatsapp/client-interface";
+import { MockWhatsAppClient } from "@/lib/whatsapp/mock-client";
+import { RealWhatsAppClient } from "@/lib/whatsapp/real-client";
 
 /**
  * Determine current environment for client selection
@@ -22,17 +22,17 @@ function detectEnvironment(): WhatsAppEnvironment {
   const vercelEnv = process.env.VERCEL_ENV;
 
   // Production: only when NODE_ENV is production AND Vercel env is production
-  if (nodeEnv === 'production' && vercelEnv === 'production') {
-    return 'production';
+  if (nodeEnv === "production" && vercelEnv === "production") {
+    return "production";
   }
 
   // Test environment
-  if (nodeEnv === 'test') {
-    return 'test';
+  if (nodeEnv === "test") {
+    return "test";
   }
 
   // Development or preview deployments
-  return 'development';
+  return "development";
 }
 
 /**
@@ -49,9 +49,9 @@ function hasValidCredentials(): boolean {
  */
 function getClientConfig(): WhatsAppClientConfig {
   return {
-    accessToken: process.env.WHATSAPP_ACCESS_TOKEN || '',
-    phoneNumberId: process.env.WHATSAPP_PHONE_NUMBER_ID || '',
-    apiVersion: 'v18.0',
+    accessToken: process.env.WHATSAPP_ACCESS_TOKEN || "",
+    phoneNumberId: process.env.WHATSAPP_PHONE_NUMBER_ID || "",
+    apiVersion: "v18.0",
   };
 }
 
@@ -75,12 +75,12 @@ export function createWhatsAppClient(
   );
 
   // Production requires real credentials
-  if (environment === 'production') {
+  if (environment === "production") {
     if (!hasCredentials) {
       logger.error(
-        '[WhatsAppClientFactory] Production requires valid WhatsApp credentials',
+        "[WhatsAppClientFactory] Production requires valid WhatsApp credentials",
       );
-      throw new Error('WhatsApp credentials not configured for production');
+      throw new Error("WhatsApp credentials not configured for production");
     }
     return new RealWhatsAppClient(getClientConfig());
   }
@@ -88,13 +88,13 @@ export function createWhatsAppClient(
   // Development/test: use mock if no credentials, real if credentials exist
   if (hasCredentials) {
     logger.info(
-      '[WhatsAppClientFactory] Using real client in non-production (credentials available)',
+      "[WhatsAppClientFactory] Using real client in non-production (credentials available)",
     );
     return new RealWhatsAppClient(getClientConfig());
   }
 
   logger.info(
-    '[WhatsAppClientFactory] Using mock client (no credentials configured)',
+    "[WhatsAppClientFactory] Using mock client (no credentials configured)",
   );
   return new MockWhatsAppClient();
 }
@@ -119,7 +119,7 @@ export function getWhatsAppClient(): WhatsAppClient {
  */
 export function resetWhatsAppClient(): void {
   clientInstance = null;
-  logger.info('[WhatsAppClientFactory] Client instance reset');
+  logger.info("[WhatsAppClientFactory] Client instance reset");
 }
 
 /**
@@ -127,7 +127,7 @@ export function resetWhatsAppClient(): void {
  */
 export function isMockClient(): boolean {
   const client = getWhatsAppClient();
-  return client.getClientInfo().type === 'mock';
+  return client.getClientInfo().type === "mock";
 }
 
 /**
@@ -135,7 +135,7 @@ export function isMockClient(): boolean {
  */
 export function getClientEnvironmentInfo(): {
   environment: WhatsAppEnvironment;
-  clientType: 'real' | 'mock';
+  clientType: "real" | "mock";
   hasCredentials: boolean;
 } {
   const environment = detectEnvironment();

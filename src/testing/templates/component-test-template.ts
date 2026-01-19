@@ -6,9 +6,9 @@
  * @author ThemeToggle测试优化项目
  */
 
-import '@testing-library/jest-dom';
-import React from 'react';
-import { fireEvent } from '@testing-library/react';
+import "@testing-library/jest-dom";
+import React from "react";
+import { fireEvent } from "@testing-library/react";
 
 // 测试常量定义
 const TEST_CONSTANTS = {
@@ -63,14 +63,14 @@ describe('${this.template.componentName} Component', () => {
   beforeEach(() => {
     vi.clearAllMocks();
     vi.useFakeTimers();
-    ${typeof this.template.mockSetup === 'function' ? '// 调用mockSetup()' : ''}
+    ${typeof this.template.mockSetup === "function" ? "// 调用mockSetup()" : ""}
   });
 
   afterEach(() => {
     vi.runOnlyPendingTimers();
     vi.useRealTimers();
     vi.restoreAllMocks();
-    ${typeof this.template.mockCleanup === 'function' ? '// 调用mockCleanup()' : ''}
+    ${typeof this.template.mockCleanup === "function" ? "// 调用mockCleanup()" : ""}
   });
 
   // 基础渲染测试
@@ -142,11 +142,11 @@ describe('${this.template.componentName} Component', () => {
   generateTestCase(
     description: string,
     category:
-      | 'rendering'
-      | 'functionality'
-      | 'state'
-      | 'edge'
-      | 'accessibility',
+      | "rendering"
+      | "functionality"
+      | "state"
+      | "edge"
+      | "accessibility",
   ): string {
     const templates = {
       rendering: `

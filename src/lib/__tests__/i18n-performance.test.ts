@@ -11,7 +11,7 @@
  * - i18n-performance-monitor.test.ts - 性能监控测试
  */
 
-import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
+import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 // 导入需要测试的模块
 import {
   evaluatePerformance,
@@ -20,21 +20,21 @@ import {
   I18nPerformanceMonitor,
   preloadTranslations,
   TranslationCache,
-} from '../i18n-performance';
+} from "../i18n-performance";
 
 // 简化Mock数据 - 匹配测试期望
 const mockEnTranslations = {
-  common: { hello: 'Hello' },
-  navigation: { home: 'Home' },
+  common: { hello: "Hello" },
+  navigation: { home: "Home" },
 };
 
 const mockZhTranslations = {
-  common: { hello: '你好' },
-  navigation: { home: '首页' },
+  common: { hello: "你好" },
+  navigation: { home: "首页" },
 };
 
 // Mock React cache
-vi.mock('react', () => ({
+vi.mock("react", () => ({
   cache: (fn: (..._args: unknown[]) => unknown) => fn,
 }));
 
@@ -49,13 +49,13 @@ const { mockGetCachedMessages, mockGetCachedTranslations } = vi.hoisted(() => {
 });
 
 // Mock i18n-performance模块
-vi.mock('../i18n-performance', async (importOriginal) => {
-  const actual = await importOriginal<typeof import('../i18n-performance')>();
+vi.mock("../i18n-performance", async (importOriginal) => {
+  const actual = await importOriginal<typeof import("../i18n-performance")>();
 
   // 设置Mock实现
   mockGetCachedMessages.mockImplementation(async (locale: string) => {
-    if (locale === 'en') return mockEnTranslations;
-    if (locale === 'zh') return mockZhTranslations;
+    if (locale === "en") return mockEnTranslations;
+    if (locale === "zh") return mockZhTranslations;
     return {};
   });
 
@@ -76,24 +76,24 @@ vi.mock('../i18n-performance', async (importOriginal) => {
   };
 });
 
-describe('I18n Performance - Main Integration Tests', () => {
+describe("I18n Performance - Main Integration Tests", () => {
   beforeEach(() => {
     vi.clearAllMocks();
     vi.useFakeTimers();
     // Reset singleton instance
-    Reflect.set(TranslationCache, 'instance', undefined);
+    Reflect.set(TranslationCache, "instance", undefined);
     I18nPerformanceMonitor.reset();
 
     // 重新设置Mock实现
     mockGetCachedMessages.mockImplementation(async (locale: string) => {
-      if (locale === 'en') return mockEnTranslations;
-      if (locale === 'zh') return mockZhTranslations;
+      if (locale === "en") return mockEnTranslations;
+      if (locale === "zh") return mockZhTranslations;
 
       // 对于无效的locale，模拟console.error调用并返回空对象
-      if (locale === 'invalid-locale') {
+      if (locale === "invalid-locale") {
         console.error(
           `Failed to load messages for locale ${locale}:`,
-          new Error('Mock error'),
+          new Error("Mock error"),
         );
         return {};
       }
@@ -116,8 +116,8 @@ describe('I18n Performance - Main Integration Tests', () => {
     vi.useRealTimers();
   });
 
-  describe('核心函数导出验证', () => {
-    it('should export all required functions', () => {
+  describe("核心函数导出验证", () => {
+    it("should export all required functions", () => {
       expect(getCachedMessages).toBeDefined();
       expect(getCachedTranslations).toBeDefined();
       expect(preloadTranslations).toBeDefined();
@@ -127,56 +127,56 @@ describe('I18n Performance - Main Integration Tests', () => {
     });
   });
 
-  describe('基本功能集成测试', () => {
-    it('should load and cache messages for locale', async () => {
-      const messages = await getCachedMessages('en');
+  describe("基本功能集成测试", () => {
+    it("should load and cache messages for locale", async () => {
+      const messages = await getCachedMessages("en");
 
       expect(messages).toEqual({
-        common: { hello: 'Hello' },
-        navigation: { home: 'Home' },
+        common: { hello: "Hello" },
+        navigation: { home: "Home" },
       });
     });
 
-    it('should return cached messages on subsequent calls', async () => {
-      const messages1 = await getCachedMessages('en');
-      const messages2 = await getCachedMessages('en');
+    it("should return cached messages on subsequent calls", async () => {
+      const messages1 = await getCachedMessages("en");
+      const messages2 = await getCachedMessages("en");
 
       expect(messages1).toBe(messages2);
     });
 
-    it('should get all translations for locale', async () => {
-      const translations = await getCachedTranslations('en');
+    it("should get all translations for locale", async () => {
+      const translations = await getCachedTranslations("en");
 
       expect(translations).toEqual({
-        common: { hello: 'Hello' },
-        navigation: { home: 'Home' },
+        common: { hello: "Hello" },
+        navigation: { home: "Home" },
       });
     });
 
-    it('should get specific namespace translations', async () => {
-      const translations = await getCachedTranslations('en', 'common');
+    it("should get specific namespace translations", async () => {
+      const translations = await getCachedTranslations("en", "common");
 
-      expect(translations).toEqual({ hello: 'Hello' });
+      expect(translations).toEqual({ hello: "Hello" });
     });
 
-    it('should preload translations for multiple locales', async () => {
-      await preloadTranslations(['en', 'zh']);
+    it("should preload translations for multiple locales", async () => {
+      await preloadTranslations(["en", "zh"]);
 
       // Verify both locales are loaded by checking cache
       const cache = TranslationCache.getInstance();
-      const enMessages = cache.get('messages-en');
-      const zhMessages = cache.get('messages-zh');
+      const enMessages = cache.get("messages-en");
+      const zhMessages = cache.get("messages-zh");
 
       expect(enMessages).toBeDefined();
       expect(zhMessages).toBeDefined();
     });
   });
 
-  describe('真实使用场景测试', () => {
-    it('should work with real-world usage pattern', async () => {
+  describe("真实使用场景测试", () => {
+    it("should work with real-world usage pattern", async () => {
       // Simulate loading translations
       const _startTime = Date.now();
-      const messages = await getCachedMessages('en');
+      const messages = await getCachedMessages("en");
       const loadTime = Date.now() - _startTime;
 
       // Record performance metrics
@@ -191,8 +191,8 @@ describe('I18n Performance - Main Integration Tests', () => {
       expect(evaluation.grade).toMatch(/[A-F]/);
     });
 
-    it('should handle cache warming scenario', async () => {
-      const locales = ['en', 'zh'];
+    it("should handle cache warming scenario", async () => {
+      const locales = ["en", "zh"];
 
       // Preload translations
       await preloadTranslations(locales);
@@ -204,12 +204,12 @@ describe('I18n Performance - Main Integration Tests', () => {
       }
     });
 
-    it('should handle error scenarios gracefully', async () => {
+    it("should handle error scenarios gracefully", async () => {
       const consoleSpy = vi
-        .spyOn(console, 'error')
+        .spyOn(console, "error")
         .mockImplementation(() => {});
 
-      const messages = await getCachedMessages('invalid-locale');
+      const messages = await getCachedMessages("invalid-locale");
 
       expect(messages).toEqual({});
       expect(consoleSpy).toHaveBeenCalled();
@@ -217,13 +217,13 @@ describe('I18n Performance - Main Integration Tests', () => {
       consoleSpy.mockRestore();
     });
 
-    it('should maintain performance under load', async () => {
+    it("should maintain performance under load", async () => {
       const promises = [];
 
       // Simulate concurrent requests
       for (let i = 0; i < 50; i++) {
-        promises.push(getCachedMessages('en'));
-        promises.push(getCachedTranslations('zh', 'common'));
+        promises.push(getCachedMessages("en"));
+        promises.push(getCachedTranslations("zh", "common"));
       }
 
       const results = await Promise.all(promises);
@@ -235,13 +235,13 @@ describe('I18n Performance - Main Integration Tests', () => {
       });
     });
 
-    it('should integrate with performance monitoring', async () => {
+    it("should integrate with performance monitoring", async () => {
       // Load some translations and record metrics
-      await getCachedMessages('en');
+      await getCachedMessages("en");
       I18nPerformanceMonitor.recordLoadTime(50);
       I18nPerformanceMonitor.recordCacheHit();
 
-      await getCachedMessages('zh');
+      await getCachedMessages("zh");
       I18nPerformanceMonitor.recordLoadTime(75);
       I18nPerformanceMonitor.recordCacheHit();
 
@@ -252,27 +252,27 @@ describe('I18n Performance - Main Integration Tests', () => {
     });
   });
 
-  describe('错误处理和边界情况', () => {
-    it('should handle empty locale array in preload', async () => {
+  describe("错误处理和边界情况", () => {
+    it("should handle empty locale array in preload", async () => {
       await expect(preloadTranslations([])).resolves.toBeUndefined();
     });
 
-    it('should return empty object for non-existent namespace', async () => {
-      const translations = await getCachedTranslations('en', 'non-existent');
+    it("should return empty object for non-existent namespace", async () => {
+      const translations = await getCachedTranslations("en", "non-existent");
 
       expect(translations).toEqual({});
     });
 
-    it('should handle missing locale gracefully', async () => {
+    it("should handle missing locale gracefully", async () => {
       const consoleSpy = vi
-        .spyOn(console, 'error')
+        .spyOn(console, "error")
         .mockImplementation(() => {});
 
-      const messages = await getCachedMessages('invalid-locale');
+      const messages = await getCachedMessages("invalid-locale");
 
       expect(messages).toEqual({});
       expect(consoleSpy).toHaveBeenCalledWith(
-        'Failed to load messages for locale invalid-locale:',
+        "Failed to load messages for locale invalid-locale:",
         expect.any(Error),
       );
 

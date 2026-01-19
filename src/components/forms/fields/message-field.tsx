@@ -1,5 +1,5 @@
-import { Label } from '@/components/ui/label';
-import { Textarea } from '@/components/ui/textarea';
+import { Label } from "@/components/ui/label";
+import { Textarea } from "@/components/ui/textarea";
 
 interface MessageFieldProps {
   t: (_key: string) => string;
@@ -8,21 +8,21 @@ interface MessageFieldProps {
 
 export function MessageField({ t, isPending }: MessageFieldProps) {
   return (
-    <div className='space-y-2'>
+    <div className="space-y-2">
       <Label
-        htmlFor='message'
+        htmlFor="message"
         className="after:ml-0.5 after:text-red-500 after:content-['*']"
       >
-        {t('message')}
+        {t("message")}
       </Label>
       <Textarea
-        id='message'
-        name='message'
-        placeholder={t('messagePlaceholder')}
+        id="message"
+        name="message"
+        placeholder={t("messagePlaceholder")}
         disabled={isPending}
         required
         rows={4}
-        aria-describedby='message-error'
+        aria-describedby="message-error"
       />
     </div>
   );

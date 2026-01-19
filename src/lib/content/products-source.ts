@@ -69,6 +69,10 @@ function assignObjectFields(detail: ProductDetail, metadata: ProductMetadata): v
   if (metadata.featured !== undefined) detail.featured = metadata.featured;
   if (metadata.seo !== undefined) detail.seo = metadata.seo;
   if (metadata.specs !== undefined) detail.specs = metadata.specs;
+  // Tucsenberg Glass specific fields
+  if (metadata.applicationCategory !== undefined)
+    detail.applicationCategory = metadata.applicationCategory;
+  if (metadata.productLine !== undefined) detail.productLine = metadata.productLine;
 }
 
 /**

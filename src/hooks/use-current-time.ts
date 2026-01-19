@@ -7,7 +7,7 @@
  * @see https://react.dev/learn/keeping-components-pure#detecting-impure-calculations-with-strict-mode
  */
 
-import { useEffect, useState } from 'react';
+import { useEffect, useState } from "react";
 
 const DEFAULT_INTERVAL = 1000; // 1 second
 

@@ -1,17 +1,17 @@
-import React from 'react';
-import { vi } from 'vitest';
+import React from "react";
+import { vi } from "vitest";
 
 // Use vi.hoisted to ensure mocks are set up before imports
 const mocks = vi.hoisted(() => ({
   // Mock next-themes
   mockSetTheme: vi.fn(),
-  mockTheme: 'light',
-  mockSystemTheme: 'light',
-  mockResolvedTheme: 'light',
+  mockTheme: "light",
+  mockSystemTheme: "light",
+  mockResolvedTheme: "light",
 
   // Mock useThemeToggle hook
   mockUseThemeToggle: {
-    theme: 'light',
+    theme: "light",
     isOpen: false,
     setIsOpen: vi.fn(),
     supportsViewTransitions: true,
@@ -20,10 +20,10 @@ const mocks = vi.hoisted(() => ({
     handleThemeChange: vi.fn(),
     handleKeyDown: vi.fn(),
     ariaAttributes: {
-      'aria-label': '主题切换',
-      'aria-expanded': 'false',
-      'aria-haspopup': 'menu',
-      'aria-current': 'light',
+      "aria-label": "主题切换",
+      "aria-expanded": "false",
+      "aria-haspopup": "menu",
+      "aria-current": "light",
     },
   },
 }));
@@ -44,7 +44,7 @@ export {
   mockUseThemeToggle,
 };
 
-vi.mock('next-themes', () => ({
+vi.mock("next-themes", () => ({
   useTheme: vi.fn(() => ({
     theme: mocks.mockTheme,
     setTheme: mocks.mockSetTheme,
@@ -53,12 +53,12 @@ vi.mock('next-themes', () => ({
   })),
 }));
 
-vi.mock('@/hooks/use-theme-toggle', () => ({
+vi.mock("@/hooks/use-theme-toggle", () => ({
   useThemeToggle: vi.fn(() => mocks.mockUseThemeToggle),
 }));
 
 // Mock UI components
-vi.mock('@/components/ui/dropdown-menu', () => ({
+vi.mock("@/components/ui/dropdown-menu", () => ({
   DropdownMenu: ({
     children,
     open,
@@ -69,7 +69,7 @@ vi.mock('@/components/ui/dropdown-menu', () => ({
     onOpenChange?: (open: boolean) => void;
   }) => (
     <div
-      data-testid='dropdown-menu'
+      data-testid="dropdown-menu"
       data-open={open}
       onClick={() => onOpenChange?.(!open)}
     >
@@ -90,7 +90,7 @@ vi.mock('@/components/ui/dropdown-menu', () => ({
     [key: string]: any;
   }) => (
     <div
-      data-testid='dropdown-content'
+      data-testid="dropdown-content"
       data-align={align}
       className={className}
       role={role}
@@ -111,15 +111,15 @@ vi.mock('@/components/ui/dropdown-menu', () => ({
     if (asChild && React.isValidElement(children)) {
       // When asChild is true, clone children and add data-slot attribute
       return React.cloneElement(children, {
-        'data-slot': 'dropdown-menu-trigger',
+        "data-slot": "dropdown-menu-trigger",
         ...props,
         ...(children.props as Record<string, unknown>),
       } as React.Attributes);
     }
     return (
       <div
-        data-testid='dropdown-trigger'
-        data-slot='dropdown-menu-trigger'
+        data-testid="dropdown-trigger"
+        data-slot="dropdown-menu-trigger"
         {...props}
       >
         {children}
@@ -153,7 +153,7 @@ vi.mock('@/components/ui/dropdown-menu', () => ({
   ),
 }));
 
-vi.mock('@/components/ui/button', () => ({
+vi.mock("@/components/ui/button", () => ({
   Button: ({
     children,
     asChild,
@@ -172,18 +172,18 @@ vi.mock('@/components/ui/button', () => ({
     if (asChild && React.isValidElement(children)) {
       // When asChild is true, clone children and add button props
       return React.cloneElement(children, {
-        'data-slot': 'button',
-        'data-variant': variant,
-        'data-size': size,
-        'className': className,
+        "data-slot": "button",
+        "data-variant": variant,
+        "data-size": size,
+        className: className,
         ...props,
         ...(children.props as Record<string, unknown>),
       } as React.Attributes);
     }
     return (
       <button
-        data-testid='theme-button'
-        data-slot='button'
+        data-testid="theme-button"
+        data-slot="button"
         data-variant={variant}
         data-size={size}
         className={className}
@@ -196,7 +196,7 @@ vi.mock('@/components/ui/button', () => ({
 }));
 
 // Mock Lucide icons
-vi.mock('lucide-react', () => ({
+vi.mock("lucide-react", () => ({
   Sun: ({
     className,
     ...props
@@ -204,11 +204,7 @@ vi.mock('lucide-react', () => ({
     className?: string;
     [key: string]: any;
   }) => (
-    <span
-      data-testid='sun-icon'
-      className={className}
-      {...props}
-    >
+    <span data-testid="sun-icon" className={className} {...props}>
       ☀️
     </span>
   ),
@@ -219,11 +215,7 @@ vi.mock('lucide-react', () => ({
     className?: string;
     [key: string]: any;
   }) => (
-    <span
-      data-testid='moon-icon'
-      className={className}
-      {...props}
-    >
+    <span data-testid="moon-icon" className={className} {...props}>
       🌙
     </span>
   ),
@@ -234,17 +226,13 @@ vi.mock('lucide-react', () => ({
     className?: string;
     [key: string]: any;
   }) => (
-    <span
-      data-testid='monitor-icon'
-      className={className}
-      {...props}
-    >
+    <span data-testid="monitor-icon" className={className} {...props}>
       🖥️
     </span>
   ),
 }));
 
-vi.mock('@/components/theme/theme-menu-item', () => ({
+vi.mock("@/components/theme/theme-menu-item", () => ({
   ThemeMenuItem: ({
     theme,
     currentTheme,
@@ -276,7 +264,7 @@ vi.mock('@/components/theme/theme-menu-item', () => ({
         aria-label={ariaLabel}
         onClick={onClick}
         onKeyDown={onKeyDown}
-        role='menuitem'
+        role="menuitem"
         {...props}
       >
         {Icon && <Icon data-testid={`${theme}-icon`} />}
@@ -289,7 +277,7 @@ vi.mock('@/components/theme/theme-menu-item', () => ({
 // Mock View Transitions API
 export const mockStartViewTransition = vi.fn();
 if (!document.startViewTransition) {
-  Object.defineProperty(document, 'startViewTransition', {
+  Object.defineProperty(document, "startViewTransition", {
     value: mockStartViewTransition,
     configurable: true,
     writable: true,
@@ -344,7 +332,7 @@ export function setupThemeToggleTest() {
 
   // Reset useThemeToggle mock to default values
   Object.assign(mocks.mockUseThemeToggle, {
-    theme: 'light',
+    theme: "light",
     isOpen: false,
     setIsOpen: vi.fn(),
     supportsViewTransitions: true,
@@ -353,12 +341,12 @@ export function setupThemeToggleTest() {
     handleThemeChange: vi.fn(),
     handleKeyDown: vi.fn(),
     ariaAttributes: {
-      'aria-label': '主题切换按钮，当前主题：light',
-      'aria-expanded': 'false',
-      'aria-haspopup': 'menu',
-      'role': 'button',
-      'type': 'button',
-      'data-state': 'closed',
+      "aria-label": "主题切换按钮，当前主题：light",
+      "aria-expanded": "false",
+      "aria-haspopup": "menu",
+      role: "button",
+      type: "button",
+      "data-state": "closed",
     },
   });
 }

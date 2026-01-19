@@ -1,4 +1,4 @@
-import { NextResponse } from 'next/server';
+import { NextResponse } from "next/server";
 
 /**
  * Health check endpoint used by monitoring and cron jobs.
@@ -8,12 +8,12 @@ import { NextResponse } from 'next/server';
  */
 export function GET() {
   return NextResponse.json(
-    { status: 'ok' },
+    { status: "ok" },
     {
       status: 200,
       headers: {
         // Health checks should not be cached by intermediaries.
-        'cache-control': 'no-store',
+        "cache-control": "no-store",
       },
     },
   );

@@ -5,15 +5,15 @@
  * 提供各种类型的WhatsApp入站消息类型定义
  */
 
-import type { WhatsAppMessage } from '@/types/whatsapp-base-types';
-import type { MessageContext } from '@/types/whatsapp-webhook-base';
+import type { WhatsAppMessage } from "@/types/whatsapp-base-types";
+import type { MessageContext } from "@/types/whatsapp-webhook-base";
 
 /**
  * 入站文本消息
  * Incoming text message
  */
 export interface IncomingTextMessage extends WhatsAppMessage {
-  type: 'text';
+  type: "text";
   text: {
     body: string;
   };
@@ -25,7 +25,7 @@ export interface IncomingTextMessage extends WhatsAppMessage {
  * Incoming image message
  */
 export interface IncomingImageMessage extends WhatsAppMessage {
-  type: 'image';
+  type: "image";
   image: {
     id: string;
     mime_type: string;
@@ -40,7 +40,7 @@ export interface IncomingImageMessage extends WhatsAppMessage {
  * Incoming document message
  */
 export interface IncomingDocumentMessage extends WhatsAppMessage {
-  type: 'document';
+  type: "document";
   document: {
     id: string;
     filename: string;
@@ -56,7 +56,7 @@ export interface IncomingDocumentMessage extends WhatsAppMessage {
  * Incoming audio message
  */
 export interface IncomingAudioMessage extends WhatsAppMessage {
-  type: 'audio';
+  type: "audio";
   audio: {
     id: string;
     mime_type: string;
@@ -71,7 +71,7 @@ export interface IncomingAudioMessage extends WhatsAppMessage {
  * Incoming video message
  */
 export interface IncomingVideoMessage extends WhatsAppMessage {
-  type: 'video';
+  type: "video";
   video: {
     id: string;
     mime_type: string;
@@ -86,7 +86,7 @@ export interface IncomingVideoMessage extends WhatsAppMessage {
  * Incoming location message
  */
 export interface IncomingLocationMessage extends WhatsAppMessage {
-  type: 'location';
+  type: "location";
   location: {
     latitude: number;
     longitude: number;
@@ -101,7 +101,7 @@ export interface IncomingLocationMessage extends WhatsAppMessage {
  * Incoming contacts message
  */
 export interface IncomingContactsMessage extends WhatsAppMessage {
-  type: 'contacts';
+  type: "contacts";
   contacts: Array<{
     name: {
       formatted_name: string;
@@ -148,9 +148,9 @@ export interface IncomingContactsMessage extends WhatsAppMessage {
  * Incoming interactive message
  */
 export interface IncomingInteractiveMessage extends WhatsAppMessage {
-  type: 'interactive';
+  type: "interactive";
   interactive: {
-    type: 'button_reply' | 'list_reply';
+    type: "button_reply" | "list_reply";
     button_reply?: {
       id: string;
       title: string;
@@ -169,7 +169,7 @@ export interface IncomingInteractiveMessage extends WhatsAppMessage {
  * Incoming reaction message
  */
 export interface IncomingReactionMessage extends WhatsAppMessage {
-  type: 'reaction';
+  type: "reaction";
   reaction: {
     message_id: string;
     emoji: string;
@@ -182,7 +182,7 @@ export interface IncomingReactionMessage extends WhatsAppMessage {
  * Incoming sticker message
  */
 export interface IncomingStickerMessage extends WhatsAppMessage {
-  type: 'sticker';
+  type: "sticker";
   sticker: {
     id: string;
     mime_type: string;
@@ -197,7 +197,7 @@ export interface IncomingStickerMessage extends WhatsAppMessage {
  * Incoming order message
  */
 export interface IncomingOrderMessage extends WhatsAppMessage {
-  type: 'order';
+  type: "order";
   order: {
     catalog_id: string;
     product_items: Array<{
@@ -216,12 +216,12 @@ export interface IncomingOrderMessage extends WhatsAppMessage {
  * Incoming system message
  */
 export interface IncomingSystemMessage extends WhatsAppMessage {
-  type: 'system';
+  type: "system";
   system: {
     body: string;
     new_wa_id?: string;
     wa_id?: string;
-    type: 'customer_changed_number' | 'customer_identity_changed';
+    type: "customer_changed_number" | "customer_identity_changed";
     customer?: string;
   };
   context?: MessageContext;
@@ -232,7 +232,7 @@ export interface IncomingSystemMessage extends WhatsAppMessage {
  * Incoming button message
  */
 export interface IncomingButtonMessage extends WhatsAppMessage {
-  type: 'button';
+  type: "button";
   button: {
     text: string;
     payload: string;
@@ -245,7 +245,7 @@ export interface IncomingButtonMessage extends WhatsAppMessage {
  * Incoming template message reply
  */
 export interface IncomingTemplateReply extends WhatsAppMessage {
-  type: 'template_reply';
+  type: "template_reply";
   template_reply: {
     template_name: string;
     template_id: string;
@@ -280,34 +280,34 @@ export type IncomingWhatsAppMessage =
  * Message type constants
  */
 export const INCOMING_MESSAGE_TYPES = [
-  'text',
-  'image',
-  'document',
-  'audio',
-  'video',
-  'location',
-  'contacts',
-  'interactive',
-  'reaction',
-  'sticker',
-  'order',
-  'system',
-  'button',
-  'template_reply',
+  "text",
+  "image",
+  "document",
+  "audio",
+  "video",
+  "location",
+  "contacts",
+  "interactive",
+  "reaction",
+  "sticker",
+  "order",
+  "system",
+  "button",
+  "template_reply",
 ] as const;
 
 export const MEDIA_MESSAGE_TYPES = [
-  'image',
-  'document',
-  'audio',
-  'video',
-  'sticker',
+  "image",
+  "document",
+  "audio",
+  "video",
+  "sticker",
 ] as const;
 
 export const INTERACTIVE_MESSAGE_TYPES = [
-  'interactive',
-  'button',
-  'template_reply',
+  "interactive",
+  "button",
+  "template_reply",
 ] as const;
 
 /**
@@ -325,85 +325,85 @@ export type InteractiveMessageType = (typeof INTERACTIVE_MESSAGE_TYPES)[number];
 export function isTextMessage(
   message: IncomingWhatsAppMessage,
 ): message is IncomingTextMessage {
-  return message.type === 'text';
+  return message.type === "text";
 }
 
 export function isImageMessage(
   message: IncomingWhatsAppMessage,
 ): message is IncomingImageMessage {
-  return message.type === 'image';
+  return message.type === "image";
 }
 
 export function isDocumentMessage(
   message: IncomingWhatsAppMessage,
 ): message is IncomingDocumentMessage {
-  return message.type === 'document';
+  return message.type === "document";
 }
 
 export function isAudioMessage(
   message: IncomingWhatsAppMessage,
 ): message is IncomingAudioMessage {
-  return message.type === 'audio';
+  return message.type === "audio";
 }
 
 export function isVideoMessage(
   message: IncomingWhatsAppMessage,
 ): message is IncomingVideoMessage {
-  return message.type === 'video';
+  return message.type === "video";
 }
 
 export function isLocationMessage(
   message: IncomingWhatsAppMessage,
 ): message is IncomingLocationMessage {
-  return message.type === 'location';
+  return message.type === "location";
 }
 
 export function isContactsMessage(
   message: IncomingWhatsAppMessage,
 ): message is IncomingContactsMessage {
-  return message.type === 'contacts';
+  return message.type === "contacts";
 }
 
 export function isInteractiveMessage(
   message: IncomingWhatsAppMessage,
 ): message is IncomingInteractiveMessage {
-  return message.type === 'interactive';
+  return message.type === "interactive";
 }
 
 export function isReactionMessage(
   message: IncomingWhatsAppMessage,
 ): message is IncomingReactionMessage {
-  return message.type === 'reaction';
+  return message.type === "reaction";
 }
 
 export function isStickerMessage(
   message: IncomingWhatsAppMessage,
 ): message is IncomingStickerMessage {
-  return message.type === 'sticker';
+  return message.type === "sticker";
 }
 
 export function isOrderMessage(
   message: IncomingWhatsAppMessage,
 ): message is IncomingOrderMessage {
-  return message.type === 'order';
+  return message.type === "order";
 }
 
 export function isSystemMessage(
   message: IncomingWhatsAppMessage,
 ): message is IncomingSystemMessage {
-  return message.type === 'system';
+  return message.type === "system";
 }
 
 export function isButtonMessage(
   message: IncomingWhatsAppMessage,
 ): message is IncomingButtonMessage {
-  return message.type === 'button';
+  return message.type === "button";
 }
 
 export function isTemplateReply(
   message: IncomingWhatsAppMessage,
 ): message is IncomingTemplateReply {
-  return message.type === 'template_reply';
+  return message.type === "template_reply";
 }
 
 export function isMediaMessage(
@@ -433,11 +433,11 @@ export function isInteractiveMessageType(
  */
 function getMediaMessageText(message: IncomingWhatsAppMessage): string | null {
   switch (message.type) {
-    case 'image':
+    case "image":
       return message.image.caption ?? null;
-    case 'document':
+    case "document":
       return message.document.caption ?? null;
-    case 'video':
+    case "video":
       return message.video.caption ?? null;
     default:
       return null;
@@ -450,7 +450,7 @@ function getMediaMessageText(message: IncomingWhatsAppMessage): string | null {
 function getInteractiveMessageText(
   message: IncomingWhatsAppMessage,
 ): string | null {
-  if (message.type !== 'interactive') return null;
+  if (message.type !== "interactive") return null;
   return (
     message.interactive.button_reply?.title ||
     message.interactive.list_reply?.title ||
@@ -466,19 +466,19 @@ export function getMessageText(
   message: IncomingWhatsAppMessage,
 ): string | null {
   switch (message.type) {
-    case 'text':
+    case "text":
       return message.text.body;
-    case 'image':
-    case 'document':
-    case 'video':
+    case "image":
+    case "document":
+    case "video":
       return getMediaMessageText(message);
-    case 'interactive':
+    case "interactive":
       return getInteractiveMessageText(message);
-    case 'button':
+    case "button":
       return message.button.text;
-    case 'template_reply':
+    case "template_reply":
       return message.template_reply.button_text;
-    case 'system':
+    case "system":
       return message.system.body;
     default:
       return null;
@@ -492,15 +492,15 @@ export function getMessageMediaId(
   }
 
   switch (message.type) {
-    case 'image':
+    case "image":
       return message.image.id;
-    case 'document':
+    case "document":
       return message.document.id;
-    case 'audio':
+    case "audio":
       return message.audio.id;
-    case 'video':
+    case "video":
       return message.video.id;
-    case 'sticker':
+    case "sticker":
       return message.sticker.id;
     default:
       return null;

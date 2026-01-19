@@ -8,15 +8,15 @@ export type {
   ScreenReaderConfig,
   ColorSchemePreference,
   WCAGLevel,
-} from '@/lib/accessibility-types';
+} from "@/lib/accessibility-types";
 
-export { THEME_ANNOUNCEMENTS, KEYBOARD_KEYS } from '@/lib/accessibility-types';
+export { THEME_ANNOUNCEMENTS, KEYBOARD_KEYS } from "@/lib/accessibility-types";
 
 // 导出管理器类
-export { AccessibilityManager } from '@/lib/accessibility-manager';
+export { AccessibilityManager } from "@/lib/accessibility-manager";
 
 // 导出工具函数
-export { AccessibilityUtils } from '@/lib/accessibility-utils';
+export { AccessibilityUtils } from "@/lib/accessibility-utils";
 
 // 导出Hook和便捷函数
 export {
@@ -24,4 +24,4 @@ export {
   accessibilityManager,
   announceThemeChange,
   announceSwitching,
-} from '@/lib/accessibility-hooks';
+} from "@/lib/accessibility-hooks";

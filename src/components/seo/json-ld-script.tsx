@@ -1,5 +1,5 @@
-import 'server-only';
-import { generateJSONLD } from '@/lib/structured-data';
+import "server-only";
+import { generateJSONLD } from "@/lib/structured-data";
 
 interface JsonLdScriptProps {
   readonly data: unknown;
@@ -27,7 +27,7 @@ export function JsonLdScript({ data }: JsonLdScriptProps) {
 
   return (
     <script
-      type='application/ld+json'
+      type="application/ld+json"
       dangerouslySetInnerHTML={{
         __html: jsonLd,
       }}

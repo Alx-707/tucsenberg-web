@@ -1,19 +1,19 @@
-'use client';
+"use client";
 
-import { useCallback, useRef, useSyncExternalStore } from 'react';
-import dynamic from 'next/dynamic';
-import { requestIdleCallback } from '@/lib/idle-callback';
+import { useCallback, useRef, useSyncExternalStore } from "react";
+import dynamic from "next/dynamic";
+import { requestIdleCallback } from "@/lib/idle-callback";
 
 // 懒加载 Turnstile 组件（进入视口或空闲时）
 const DynamicTurnstile = dynamic(
   () =>
-    import('@/components/security/turnstile').then((m) => m.TurnstileWidget),
+    import("@/components/security/turnstile").then((m) => m.TurnstileWidget),
   {
     ssr: false,
     loading: () => (
       <div
-        className='h-12 w-full animate-pulse rounded-md bg-muted'
-        aria-hidden='true'
+        className="h-12 w-full animate-pulse rounded-md bg-muted"
+        aria-hidden="true"
       />
     ),
   },
@@ -41,7 +41,7 @@ function useLazyRender(containerRef: React.RefObject<HTMLDivElement | null>) {
       // 设置观察器
       const el = containerRef.current;
       if (
-        typeof IntersectionObserver !== 'undefined' &&
+        typeof IntersectionObserver !== "undefined" &&
         el &&
         !shouldRenderRef.current
       ) {
@@ -56,7 +56,7 @@ function useLazyRender(containerRef: React.RefObject<HTMLDivElement | null>) {
               }
             }
           },
-          { rootMargin: '200px' },
+          { rootMargin: "200px" },
         );
         io.observe(el);
 
@@ -105,25 +105,22 @@ export function LazyTurnstile({
   const shouldRender = useLazyRender(containerRef);
 
   return (
-    <div
-      className='space-y-2'
-      ref={containerRef}
-    >
+    <div className="space-y-2" ref={containerRef}>
       {shouldRender ? (
         <DynamicTurnstile
           onSuccess={onSuccess}
           onError={onError}
           onExpire={onExpire}
           onLoad={onLoad}
-          className='w-full'
-          action='contact_form'
-          theme='auto'
-          size='normal'
+          className="w-full"
+          action="contact_form"
+          theme="auto"
+          size="normal"
         />
       ) : (
         <div
-          className='h-12 w-full animate-pulse rounded-md bg-muted'
-          aria-hidden='true'
+          className="h-12 w-full animate-pulse rounded-md bg-muted"
+          aria-hidden="true"
         />
       )}
     </div>

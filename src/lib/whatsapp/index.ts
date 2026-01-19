@@ -11,11 +11,11 @@ export type {
   WhatsAppClientConfig,
   WhatsAppClientInfo,
   WhatsAppEnvironment,
-} from '@/lib/whatsapp/client-interface';
+} from "@/lib/whatsapp/client-interface";
 
 // Client implementations
-export { MockWhatsAppClient } from '@/lib/whatsapp/mock-client';
-export { RealWhatsAppClient } from '@/lib/whatsapp/real-client';
+export { MockWhatsAppClient } from "@/lib/whatsapp/mock-client";
+export { RealWhatsAppClient } from "@/lib/whatsapp/real-client";
 
 // Factory and utilities
 export {
@@ -24,4 +24,4 @@ export {
   resetWhatsAppClient,
   isMockClient,
   getClientEnvironmentInfo,
-} from '@/lib/whatsapp/client-factory';
+} from "@/lib/whatsapp/client-factory";

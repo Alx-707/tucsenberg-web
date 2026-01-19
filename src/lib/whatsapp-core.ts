@@ -8,10 +8,10 @@
 import type {
   SendMessageRequest,
   WhatsAppServiceResponse,
-} from '@/types/whatsapp';
-import { WhatsAppUtils } from '@/lib/whatsapp-utils';
-import { getWhatsAppClient } from '@/lib/whatsapp/client-factory';
-import type { WhatsAppClient } from '@/lib/whatsapp/client-interface';
+} from "@/types/whatsapp";
+import { WhatsAppUtils } from "@/lib/whatsapp-utils";
+import { getWhatsAppClient } from "@/lib/whatsapp/client-factory";
+import type { WhatsAppClient } from "@/lib/whatsapp/client-interface";
 
 /**
  * WhatsApp Core Service
@@ -97,7 +97,7 @@ export class WhatsAppService {
 
   uploadMedia(
     file: Buffer | Blob,
-    type: 'image' | 'document' | 'audio' | 'video' | 'sticker',
+    type: "image" | "document" | "audio" | "video" | "sticker",
     filename?: string,
   ): Promise<string | null> {
     return this.client.uploadMedia(file, type, filename);

@@ -1,7 +1,7 @@
-'use client';
+"use client";
 
-import { useEffect, useRef, useState } from 'react';
-import type { TrustStat } from '@/components/trust/trust-types';
+import { useEffect, useRef, useState } from "react";
+import type { TrustStat } from "@/components/trust/trust-types";
 
 function useAnimatedCounter(
   target: number,
@@ -67,16 +67,13 @@ export function AnimatedStatItem({ stat }: AnimatedStatItemProps) {
 
   const displayValue =
     stat.numericValue !== undefined
-      ? `${animatedValue}${stat.suffix ?? ''}`
+      ? `${animatedValue}${stat.suffix ?? ""}`
       : stat.value;
 
   return (
-    <div
-      ref={elementRef}
-      className='text-center'
-    >
-      <div className='mb-2 text-4xl font-bold text-primary'>{displayValue}</div>
-      <div className='text-sm text-muted-foreground'>{stat.label}</div>
+    <div ref={elementRef} className="text-center">
+      <div className="mb-2 text-4xl font-bold text-primary">{displayValue}</div>
+      <div className="text-sm text-muted-foreground">{stat.label}</div>
     </div>
   );
 }

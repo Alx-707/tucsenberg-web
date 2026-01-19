@@ -6,7 +6,7 @@
  * @see https://react.dev/reference/react-dom/hooks
  */
 
-import type { Context, ReactNode, TransitionFunction } from 'react';
+import type { Context, ReactNode, TransitionFunction } from "react";
 
 // ============================================================================
 // useActionState Hook Types
@@ -284,10 +284,10 @@ export function isPromise<T>(value: unknown): value is Promise<T> {
  */
 export function isContext<T>(value: unknown): value is Context<T> {
   return (
-    typeof value === 'object' &&
+    typeof value === "object" &&
     value !== null &&
-    '$$typeof' in value &&
-    '_currentValue' in value
+    "$$typeof" in value &&
+    "_currentValue" in value
   );
 }
 

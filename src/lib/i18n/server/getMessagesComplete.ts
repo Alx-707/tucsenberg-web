@@ -1,4 +1,4 @@
-import { loadCompleteMessages } from '@/lib/load-messages';
+import { loadCompleteMessages } from "@/lib/load-messages";
 
 /**
  * Get complete translation messages for a locale.
@@ -19,7 +19,7 @@ import { loadCompleteMessages } from '@/lib/load-messages';
  * @returns Promise resolving to complete translation messages object
  */
 export function getMessagesComplete(
-  locale: 'en' | 'zh',
+  locale: "en" | "zh",
 ): Promise<Record<string, unknown>> {
   return loadCompleteMessages(locale);
 }

@@ -3,8 +3,8 @@
  * 提供统一的vi.hoisted Mock配置模式，确保所有测试使用一致的Mock方式
  */
 
-import React from 'react';
-import { vi } from 'vitest';
+import React from "react";
+import { vi } from "vitest";
 
 // Mock组件的类型定义
 interface MockDropdownMenuProps {
@@ -54,7 +54,7 @@ export const createReactHooksMock = () => {
         mockSetState,
       ]),
       useEffect: mockUseEffect.mockImplementation((effect, _deps) => {
-        if (typeof effect === 'function') {
+        if (typeof effect === "function") {
           const cleanup = effect();
           return cleanup;
         }
@@ -91,7 +91,7 @@ export const createWindowMock = () => {
     const mockMatchMedia = vi.fn();
     const mockMediaQueryList = {
       matches: false,
-      media: '',
+      media: "",
       onchange: null,
       addListener: vi.fn(),
       removeListener: vi.fn(),
@@ -108,16 +108,16 @@ export const createWindowMock = () => {
       dispatchEvent: mockDispatchEvent,
       matchMedia: mockMatchMedia,
       location: {
-        href: 'http://localhost:3000',
-        origin: 'http://localhost:3000',
-        pathname: '/',
-        search: '',
-        hash: '',
+        href: "http://localhost:3000",
+        origin: "http://localhost:3000",
+        pathname: "/",
+        search: "",
+        hash: "",
       },
       navigator: {
-        userAgent: 'Test Browser',
-        language: 'en-US',
-        languages: ['en-US', 'en'],
+        userAgent: "Test Browser",
+        language: "en-US",
+        languages: ["en-US", "en"],
       },
       document: {
         documentElement: {
@@ -226,7 +226,7 @@ export const createBrowserAPIMock = () => {
 
     // matchMedia Mock
     const mockMatchMedia = vi.fn().mockImplementation((query: string) => ({
-      matches: !query.includes('(prefers-reduced-motion: reduce)'),
+      matches: !query.includes("(prefers-reduced-motion: reduce)"),
       media: query,
       onchange: null,
       addListener: vi.fn(),
@@ -245,9 +245,9 @@ export const createBrowserAPIMock = () => {
       canGoBack: true,
       canGoForward: false,
       currentEntry: {
-        url: 'http://localhost:3000/',
-        key: 'test-key',
-        id: 'test-id',
+        url: "http://localhost:3000/",
+        key: "test-key",
+        id: "test-id",
         index: 0,
         sameDocument: true,
       },
@@ -287,7 +287,7 @@ export const createUIComponentMock = () => {
       onOpenChange,
     }: MockDropdownMenuProps) => (
       <div
-        data-testid='dropdown-menu'
+        data-testid="dropdown-menu"
         data-open={open}
         onClick={() => onOpenChange?.(!open)}
       >
@@ -300,11 +300,7 @@ export const createUIComponentMock = () => {
       align,
       ...props
     }: MockDropdownMenuContentProps) => (
-      <div
-        data-testid='dropdown-content'
-        data-align={align}
-        {...props}
-      >
+      <div data-testid="dropdown-content" data-align={align} {...props}>
         {children}
       </div>
     );
@@ -312,13 +308,13 @@ export const createUIComponentMock = () => {
     const DropdownMenuTrigger = ({
       children,
     }: MockDropdownMenuTriggerProps) => (
-      <div data-testid='dropdown-trigger'>{children}</div>
+      <div data-testid="dropdown-trigger">{children}</div>
     );
 
     // Button组件Mock
     const Button = ({ children, variant, size, ...props }: MockButtonProps) => (
       <button
-        data-testid='theme-button'
+        data-testid="theme-button"
         data-variant={variant}
         data-size={size}
         {...props}
@@ -330,29 +326,17 @@ export const createUIComponentMock = () => {
     // Icon组件Mock
     const Icons = {
       Sun: ({ className, ...props }: MockIconProps) => (
-        <span
-          data-testid='sun-icon'
-          className={className}
-          {...props}
-        >
+        <span data-testid="sun-icon" className={className} {...props}>
           ☀️
         </span>
       ),
       Moon: ({ className, ...props }: MockIconProps) => (
-        <span
-          data-testid='moon-icon'
-          className={className}
-          {...props}
-        >
+        <span data-testid="moon-icon" className={className} {...props}>
           🌙
         </span>
       ),
       Monitor: ({ className, ...props }: MockIconProps) => (
-        <span
-          data-testid='monitor-icon'
-          className={className}
-          {...props}
-        >
+        <span data-testid="monitor-icon" className={className} {...props}>
           🖥️
         </span>
       ),
@@ -380,10 +364,10 @@ export const createNextJSMock = () => {
       back: vi.fn(),
       forward: vi.fn(),
       refresh: vi.fn(),
-      pathname: '/',
+      pathname: "/",
       query: {},
-      asPath: '/',
-      route: '/',
+      asPath: "/",
+      route: "/",
       events: {
         on: vi.fn(),
         off: vi.fn(),
@@ -393,7 +377,7 @@ export const createNextJSMock = () => {
 
     const mockUseRouter = vi.fn(() => mockRouter);
     const mockUseSearchParams = vi.fn(() => new URLSearchParams());
-    const mockUsePathname = vi.fn(() => '/');
+    const mockUsePathname = vi.fn(() => "/");
     const mockUseParams = vi.fn(() => ({}));
 
     return {
@@ -429,7 +413,7 @@ export const createTestUtils = () => {
      */
     simulateUserInteraction: async (
       element: HTMLElement,
-      action: 'click' | 'focus' | 'blur',
+      action: "click" | "focus" | "blur",
     ) => {
       const event = new Event(action, { bubbles: true });
       element.dispatchEvent(event);

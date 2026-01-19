@@ -1,10 +1,10 @@
-'use client';
+"use client";
 
-import dynamic from 'next/dynamic';
-import { useIdleRender } from '@/hooks/use-idle-render';
+import dynamic from "next/dynamic";
+import { useIdleRender } from "@/hooks/use-idle-render";
 
 const Toaster = dynamic(
-  () => import('@/components/ui/toaster').then((mod) => mod.Toaster),
+  () => import("@/components/ui/toaster").then((mod) => mod.Toaster),
   { ssr: false, loading: () => null },
 );
 

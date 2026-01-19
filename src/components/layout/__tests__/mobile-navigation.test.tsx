@@ -1,29 +1,25 @@
-import React from 'react';
-import { screen, waitFor } from '@testing-library/react';
-import userEvent from '@testing-library/user-event';
-import { beforeEach, describe, expect, it, vi } from 'vitest';
+import React from "react";
+import { screen, waitFor } from "@testing-library/react";
+import userEvent from "@testing-library/user-event";
+import { beforeEach, describe, expect, it, vi } from "vitest";
 import {
   MobileMenuButton,
   MobileNavigation,
-} from '@/components/layout/mobile-navigation';
-import { createMockTranslations, renderWithIntl } from '@/test/utils';
+} from "@/components/layout/mobile-navigation";
+import { createMockTranslations, renderWithIntl } from "@/test/utils";
 
 // Mock next-intl
 // Note: 使用集中的 mock 翻译函数,无需在此定义具体翻译
-vi.mock('next-intl', () => ({
+vi.mock("next-intl", () => ({
   NextIntlClientProvider: ({ children }: { children: React.ReactNode }) =>
     children,
   useTranslations: vi.fn(() => createMockTranslations()),
 }));
 
 // Mock i18n routing
-vi.mock('@/i18n/routing', () => ({
-  Link: ({ children, href, onClick, ...props }: React.ComponentProps<'a'>) => (
-    <a
-      href={href}
-      onClick={onClick}
-      {...props}
-    >
+vi.mock("@/i18n/routing", () => ({
+  Link: ({ children, href, onClick, ...props }: React.ComponentProps<"a">) => (
+    <a href={href} onClick={onClick} {...props}>
       {children}
     </a>
   ),
@@ -35,26 +31,26 @@ vi.mock('@/i18n/routing', () => ({
     refresh: vi.fn(),
     prefetch: vi.fn(),
   })),
-  usePathname: vi.fn(() => '/'),
+  usePathname: vi.fn(() => "/"),
 }));
 
 // Mock navigation data
-vi.mock('@/lib/navigation', () => {
+vi.mock("@/lib/navigation", () => {
   const mockItems = [
-    { key: 'home', href: '/', translationKey: 'navigation.home' },
-    { key: 'about', href: '/about', translationKey: 'navigation.about' },
+    { key: "home", href: "/", translationKey: "navigation.home" },
+    { key: "about", href: "/about", translationKey: "navigation.about" },
     {
-      key: 'services',
-      href: '/services',
-      translationKey: 'navigation.services',
+      key: "services",
+      href: "/services",
+      translationKey: "navigation.services",
     },
     {
-      key: 'products',
-      href: '/products',
-      translationKey: 'navigation.products',
+      key: "products",
+      href: "/products",
+      translationKey: "navigation.products",
     },
-    { key: 'blog', href: '/blog', translationKey: 'navigation.blog' },
-    { key: 'contact', href: '/contact', translationKey: 'navigation.contact' },
+    { key: "blog", href: "/blog", translationKey: "navigation.blog" },
+    { key: "contact", href: "/contact", translationKey: "navigation.contact" },
   ];
 
   return {
@@ -64,16 +60,16 @@ vi.mock('@/lib/navigation', () => {
       return currentPath === itemPath;
     }),
     NAVIGATION_ARIA: {
-      mobileNav: 'Mobile navigation',
-      mobileToggle: 'Toggle mobile menu',
-      mobileMenu: 'Mobile menu',
-      mobileMenuButton: 'Toggle mobile menu',
+      mobileNav: "Mobile navigation",
+      mobileToggle: "Toggle mobile menu",
+      mobileMenu: "Mobile menu",
+      mobileMenuButton: "Toggle mobile menu",
     },
   };
 });
 
 // Mock UI components with proper state management
-vi.mock('@/components/ui/sheet', () => {
+vi.mock("@/components/ui/sheet", () => {
   return {
     Sheet: ({
       children,
@@ -87,12 +83,12 @@ vi.mock('@/components/ui/sheet', () => {
       // Create a simple mock that passes the state through
       return (
         <div
-          data-testid='sheet'
+          data-testid="sheet"
           data-open={open?.toString()}
           onClick={() => onOpenChange?.(false)}
         >
           {React.Children.map(children, (child) => {
-            if (React.isValidElement(child) && child.type === 'SheetTrigger') {
+            if (React.isValidElement(child) && child.type === "SheetTrigger") {
               // Pass the state to SheetTrigger
               return React.cloneElement(
                 child as React.ReactElement,
@@ -120,22 +116,22 @@ vi.mock('@/components/ui/sheet', () => {
       onEscapeKeyDown?: () => void;
     }) => (
       <div
-        data-testid='sheet-content'
+        data-testid="sheet-content"
         data-side={side}
         id={id}
-        onKeyDown={(e) => e.key === 'Escape' && onEscapeKeyDown?.()}
+        onKeyDown={(e) => e.key === "Escape" && onEscapeKeyDown?.()}
       >
         {children}
       </div>
     ),
-    SheetHeader: ({ children }: React.ComponentProps<'div'>) => (
-      <div data-testid='sheet-header'>{children}</div>
+    SheetHeader: ({ children }: React.ComponentProps<"div">) => (
+      <div data-testid="sheet-header">{children}</div>
     ),
-    SheetTitle: ({ children }: React.ComponentProps<'div'>) => (
-      <h2 data-testid='sheet-title'>{children}</h2>
+    SheetTitle: ({ children }: React.ComponentProps<"div">) => (
+      <h2 data-testid="sheet-title">{children}</h2>
     ),
-    SheetDescription: ({ children }: React.ComponentProps<'div'>) => (
-      <p data-testid='sheet-description'>{children}</p>
+    SheetDescription: ({ children }: React.ComponentProps<"div">) => (
+      <p data-testid="sheet-description">{children}</p>
     ),
     SheetTrigger: ({
       children,
@@ -152,10 +148,10 @@ vi.mock('@/components/ui/sheet', () => {
         // When asChild is true, we need to clone the child and add our test id and click handler
         const child = React.Children.only(children);
         return React.cloneElement(child, {
-          'data-testid': 'sheet-trigger',
-          'aria-expanded': __sheetOpen ? 'true' : 'false',
-          'data-state': __sheetOpen ? 'open' : 'closed',
-          'onClick': (e: Event) => {
+          "data-testid": "sheet-trigger",
+          "aria-expanded": __sheetOpen ? "true" : "false",
+          "data-state": __sheetOpen ? "open" : "closed",
+          onClick: (e: Event) => {
             if (React.isValidElement(child) && (child as any).props.onClick) {
               (child as any).props.onClick(e);
             }
@@ -166,9 +162,9 @@ vi.mock('@/components/ui/sheet', () => {
       }
       return (
         <div
-          data-testid='sheet-trigger'
-          aria-expanded={__sheetOpen ? 'true' : 'false'}
-          data-state={__sheetOpen ? 'open' : 'closed'}
+          data-testid="sheet-trigger"
+          aria-expanded={__sheetOpen ? "true" : "false"}
+          data-state={__sheetOpen ? "open" : "closed"}
           onClick={() => __onOpenChange?.(!__sheetOpen)}
         >
           {children}
@@ -178,231 +174,225 @@ vi.mock('@/components/ui/sheet', () => {
   };
 });
 
-vi.mock('@/components/ui/button', () => ({
-  Button: ({ children, onClick, ...props }: React.ComponentProps<'button'>) => (
-    <button
-      onClick={onClick}
-      {...props}
-    >
+vi.mock("@/components/ui/button", () => ({
+  Button: ({ children, onClick, ...props }: React.ComponentProps<"button">) => (
+    <button onClick={onClick} {...props}>
       {children}
     </button>
   ),
 }));
 
-vi.mock('@/components/ui/separator', () => ({
-  Separator: ({ className }: React.ComponentProps<'div'>) => (
-    <hr
-      data-testid='separator'
-      className={className}
-    />
+vi.mock("@/components/ui/separator", () => ({
+  Separator: ({ className }: React.ComponentProps<"div">) => (
+    <hr data-testid="separator" className={className} />
   ),
 }));
 
 // Mock Lucide icons
-vi.mock('lucide-react', () => ({
-  Menu: () => <span data-testid='menu-icon'>☰</span>,
-  X: () => <span data-testid='close-icon'>✕</span>,
-  Globe: () => <span data-testid='globe-icon'>🌐</span>,
-  Check: () => <span data-testid='check-icon'>✓</span>,
+vi.mock("lucide-react", () => ({
+  Menu: () => <span data-testid="menu-icon">☰</span>,
+  X: () => <span data-testid="close-icon">✕</span>,
+  Globe: () => <span data-testid="globe-icon">🌐</span>,
+  Check: () => <span data-testid="check-icon">✓</span>,
 }));
 
-describe('MobileNavigation Component', () => {
+describe("MobileNavigation Component", () => {
   const user = userEvent.setup();
 
   beforeEach(() => {
     vi.clearAllMocks();
   });
 
-  describe('Basic Rendering', () => {
-    it('renders mobile navigation trigger', () => {
+  describe("Basic Rendering", () => {
+    it("renders mobile navigation trigger", () => {
       renderWithIntl(<MobileNavigation />);
 
-      expect(screen.getByRole('button', { name: /menu/i })).toBeInTheDocument();
-      expect(screen.getByTestId('menu-icon')).toBeInTheDocument();
+      expect(screen.getByRole("button", { name: /menu/i })).toBeInTheDocument();
+      expect(screen.getByTestId("menu-icon")).toBeInTheDocument();
     });
 
-    it('is visible only on mobile screens', () => {
+    it("is visible only on mobile screens", () => {
       renderWithIntl(<MobileNavigation />);
 
-      const container = screen.getByTestId('sheet').parentElement;
+      const container = screen.getByTestId("sheet").parentElement;
       // Should have mobile-only classes
-      expect(container).toHaveClass('header-mobile-only');
+      expect(container).toHaveClass("header-mobile-only");
     });
 
-    it('applies custom className when provided', () => {
-      const customClass = 'custom-mobile-nav';
+    it("applies custom className when provided", () => {
+      const customClass = "custom-mobile-nav";
       renderWithIntl(<MobileNavigation className={customClass} />);
 
-      const container = screen.getByTestId('sheet');
+      const container = screen.getByTestId("sheet");
       expect(container).toBeInTheDocument();
     });
   });
 
-  describe('Menu Toggle Functionality', () => {
-    it('opens menu when trigger is clicked', async () => {
+  describe("Menu Toggle Functionality", () => {
+    it("opens menu when trigger is clicked", async () => {
       renderWithIntl(<MobileNavigation />);
 
-      const trigger = screen.getByRole('button', { name: /menu/i });
+      const trigger = screen.getByRole("button", { name: /menu/i });
 
       // Initially should be closed
-      expect(trigger).toHaveAttribute('aria-expanded', 'false');
+      expect(trigger).toHaveAttribute("aria-expanded", "false");
 
       // Click should be possible (we can't easily test state change in this mock setup)
       await user.click(trigger);
       expect(trigger).toBeInTheDocument(); // Basic interaction test
     });
 
-    it('shows navigation content when open', async () => {
+    it("shows navigation content when open", async () => {
       renderWithIntl(<MobileNavigation />);
 
-      const trigger = screen.getByRole('button', { name: /menu/i });
+      const trigger = screen.getByRole("button", { name: /menu/i });
       await user.click(trigger);
 
       // Should show sheet content
-      expect(screen.getByTestId('sheet-content')).toBeInTheDocument();
-      expect(screen.getByTestId('sheet-header')).toBeInTheDocument();
+      expect(screen.getByTestId("sheet-content")).toBeInTheDocument();
+      expect(screen.getByTestId("sheet-header")).toBeInTheDocument();
     });
 
-    it('closes menu when clicking outside', async () => {
+    it("closes menu when clicking outside", async () => {
       renderWithIntl(<MobileNavigation />);
 
-      const trigger = screen.getByRole('button', { name: /menu/i });
+      const trigger = screen.getByRole("button", { name: /menu/i });
       await user.click(trigger);
 
       // Click on sheet to close
-      const sheet = screen.getByTestId('sheet');
+      const sheet = screen.getByTestId("sheet");
       await user.click(sheet);
 
       // Should close the menu
-      expect(sheet).toHaveAttribute('data-open', 'false');
+      expect(sheet).toHaveAttribute("data-open", "false");
     });
   });
 
-  describe('Navigation Items', () => {
-    it('displays all navigation items when open', async () => {
+  describe("Navigation Items", () => {
+    it("displays all navigation items when open", async () => {
       renderWithIntl(<MobileNavigation />);
 
-      const trigger = screen.getByRole('button', { name: /menu/i });
+      const trigger = screen.getByRole("button", { name: /menu/i });
       await user.click(trigger);
 
       // Should show all navigation links
-      expect(screen.getByText('Home')).toBeInTheDocument();
-      expect(screen.getByText('About')).toBeInTheDocument();
-      expect(screen.getByText('Services')).toBeInTheDocument();
-      expect(screen.getByText('Products')).toBeInTheDocument();
-      expect(screen.getByText('Blog')).toBeInTheDocument();
-      expect(screen.getByText('Contact')).toBeInTheDocument();
+      expect(screen.getByText("Home")).toBeInTheDocument();
+      expect(screen.getByText("About")).toBeInTheDocument();
+      expect(screen.getByText("Services")).toBeInTheDocument();
+      expect(screen.getByText("Products")).toBeInTheDocument();
+      expect(screen.getByText("Blog")).toBeInTheDocument();
+      expect(screen.getByText("Contact")).toBeInTheDocument();
     });
 
-    it('closes menu when navigation item is clicked', async () => {
+    it("closes menu when navigation item is clicked", async () => {
       renderWithIntl(<MobileNavigation />);
 
-      const trigger = screen.getByRole('button', { name: /menu/i });
+      const trigger = screen.getByRole("button", { name: /menu/i });
       await user.click(trigger);
 
       // Click on a navigation item
-      const homeLink = screen.getByText('Home');
+      const homeLink = screen.getByText("Home");
       await user.click(homeLink);
 
       // Menu should close
       await waitFor(() => {
-        const sheet = screen.getByTestId('sheet');
-        expect(sheet).toHaveAttribute('data-open', 'false');
+        const sheet = screen.getByTestId("sheet");
+        expect(sheet).toHaveAttribute("data-open", "false");
       });
     });
 
-    it('highlights active navigation item', async () => {
+    it("highlights active navigation item", async () => {
       // 使用vi.mocked来获取Mock函数的类型安全访问
       const { isActivePath } =
-        await vi.importMock<typeof import('@/lib/navigation')>(
-          '@/lib/navigation',
+        await vi.importMock<typeof import("@/lib/navigation")>(
+          "@/lib/navigation",
         );
       vi.mocked(isActivePath).mockImplementation(
         (_currentPath: string, itemPath: string) => {
-          return itemPath === '/';
+          return itemPath === "/";
         },
       );
 
       renderWithIntl(<MobileNavigation />);
 
-      const trigger = screen.getByRole('button', { name: /menu/i });
+      const trigger = screen.getByRole("button", { name: /menu/i });
       await user.click(trigger);
 
-      const homeLink = screen.getByText('Home').closest('a');
-      expect(homeLink).toHaveAttribute('aria-current', 'page');
+      const homeLink = screen.getByText("Home").closest("a");
+      expect(homeLink).toHaveAttribute("aria-current", "page");
     });
   });
 
-  describe('Accessibility', () => {
-    it('has proper button attributes', () => {
+  describe("Accessibility", () => {
+    it("has proper button attributes", () => {
       renderWithIntl(<MobileNavigation />);
 
-      const button = screen.getByRole('button', { name: /menu/i });
-      expect(button).toHaveAttribute('aria-label');
+      const button = screen.getByRole("button", { name: /menu/i });
+      expect(button).toHaveAttribute("aria-label");
     });
 
-    it('manages focus properly when opening', async () => {
+    it("manages focus properly when opening", async () => {
       renderWithIntl(<MobileNavigation />);
 
-      const trigger = screen.getByRole('button', { name: /menu/i });
+      const trigger = screen.getByRole("button", { name: /menu/i });
       await user.click(trigger);
 
       // Focus should be managed properly
-      expect(screen.getByTestId('sheet-content')).toBeInTheDocument();
+      expect(screen.getByTestId("sheet-content")).toBeInTheDocument();
     });
 
-    it('supports keyboard navigation', async () => {
+    it("supports keyboard navigation", async () => {
       renderWithIntl(<MobileNavigation />);
 
-      const trigger = screen.getByRole('button', { name: /menu/i });
+      const trigger = screen.getByRole("button", { name: /menu/i });
       trigger.focus();
 
       // Should be focusable
       expect(trigger).toHaveFocus();
 
       // Enter should be handled (we can't easily test state change in this mock setup)
-      await user.keyboard('{Enter}');
+      await user.keyboard("{Enter}");
       expect(trigger).toBeInTheDocument(); // Basic keyboard interaction test
     });
 
-    it('supports escape key to close menu', async () => {
+    it("supports escape key to close menu", async () => {
       renderWithIntl(<MobileNavigation />);
 
-      const trigger = screen.getByRole('button', { name: /menu/i });
+      const trigger = screen.getByRole("button", { name: /menu/i });
       await user.click(trigger);
 
       // Escape should close menu
-      await user.keyboard('{Escape}');
+      await user.keyboard("{Escape}");
 
       await waitFor(() => {
-        const sheet = screen.getByTestId('sheet');
-        expect(sheet).toHaveAttribute('data-open', 'false');
+        const sheet = screen.getByTestId("sheet");
+        expect(sheet).toHaveAttribute("data-open", "false");
       });
     });
   });
 
-  describe('Responsive Behavior', () => {
-    it('is hidden on desktop screens', () => {
+  describe("Responsive Behavior", () => {
+    it("is hidden on desktop screens", () => {
       renderWithIntl(<MobileNavigation />);
 
-      const container = screen.getByTestId('sheet').parentElement;
-      expect(container).toHaveClass('header-mobile-only');
+      const container = screen.getByTestId("sheet").parentElement;
+      expect(container).toHaveClass("header-mobile-only");
     });
 
-    it('adapts to different screen orientations', () => {
+    it("adapts to different screen orientations", () => {
       renderWithIntl(<MobileNavigation />);
 
       // Should render consistently regardless of orientation
-      expect(screen.getByTestId('sheet')).toBeInTheDocument();
+      expect(screen.getByTestId("sheet")).toBeInTheDocument();
     });
   });
 
-  describe('Animation and Transitions', () => {
-    it('handles state transitions smoothly', async () => {
+  describe("Animation and Transitions", () => {
+    it("handles state transitions smoothly", async () => {
       renderWithIntl(<MobileNavigation />);
 
-      const trigger = screen.getByRole('button', { name: /menu/i });
-      const sheet = screen.getByTestId('sheet');
+      const trigger = screen.getByRole("button", { name: /menu/i });
+      const sheet = screen.getByTestId("sheet");
 
       // Should render consistently
       expect(trigger).toBeInTheDocument();
@@ -414,51 +404,51 @@ describe('MobileNavigation Component', () => {
     });
   });
 
-  describe('Route Change Behavior', () => {
-    it('closes menu when pathname changes', async () => {
+  describe("Route Change Behavior", () => {
+    it("closes menu when pathname changes", async () => {
       const { rerender } = renderWithIntl(<MobileNavigation />);
 
-      const trigger = screen.getByRole('button', { name: /menu/i });
+      const trigger = screen.getByRole("button", { name: /menu/i });
       await user.click(trigger);
 
       // Simulate pathname change by re-rendering with different mock
       const mockUsePathname = vi.mocked(
-        await vi.importMock<typeof import('next/navigation')>(
-          'next/navigation',
+        await vi.importMock<typeof import("next/navigation")>(
+          "next/navigation",
         ),
       ).usePathname;
-      mockUsePathname.mockReturnValue('/about');
+      mockUsePathname.mockReturnValue("/about");
 
       rerender(<MobileNavigation />);
 
       // Menu should be closed after pathname change
-      const sheet = screen.getByTestId('sheet');
-      expect(sheet).toHaveAttribute('data-open', 'false');
+      const sheet = screen.getByTestId("sheet");
+      expect(sheet).toHaveAttribute("data-open", "false");
     });
 
-    it('handles multiple pathname changes correctly', async () => {
+    it("handles multiple pathname changes correctly", async () => {
       const { rerender } = renderWithIntl(<MobileNavigation />);
 
       // Test multiple route changes
       const mockUsePathname = vi.mocked(
-        await vi.importMock<typeof import('next/navigation')>(
-          'next/navigation',
+        await vi.importMock<typeof import("next/navigation")>(
+          "next/navigation",
         ),
       ).usePathname;
 
-      mockUsePathname.mockReturnValue('/contact');
+      mockUsePathname.mockReturnValue("/contact");
       rerender(<MobileNavigation />);
 
-      mockUsePathname.mockReturnValue('/blog');
+      mockUsePathname.mockReturnValue("/blog");
       rerender(<MobileNavigation />);
 
       // Should still render correctly
-      expect(screen.getByTestId('sheet')).toBeInTheDocument();
+      expect(screen.getByTestId("sheet")).toBeInTheDocument();
     });
   });
 
-  describe('Error Handling', () => {
-    it('handles missing translations gracefully', () => {
+  describe("Error Handling", () => {
+    it("handles missing translations gracefully", () => {
       const mockUseTranslations = vi.mocked(
         vi.fn(() => (key: string) => `missing.${key}`),
       );
@@ -467,32 +457,32 @@ describe('MobileNavigation Component', () => {
       renderWithIntl(<MobileNavigation />);
 
       // Should still render even with missing translations
-      expect(screen.getByTestId('sheet')).toBeInTheDocument();
+      expect(screen.getByTestId("sheet")).toBeInTheDocument();
     });
 
-    it('handles navigation data errors gracefully', () => {
+    it("handles navigation data errors gracefully", () => {
       // Mock empty navigation data
-      vi.doMock('@/lib/navigation', () => ({
+      vi.doMock("@/lib/navigation", () => ({
         mobileNavigation: [],
         isActivePath: vi.fn(() => false),
         NAVIGATION_ARIA: {
-          mobileMenuButton: 'Menu',
-          mobileMenu: 'Navigation',
+          mobileMenuButton: "Menu",
+          mobileMenu: "Navigation",
         },
       }));
 
       renderWithIntl(<MobileNavigation />);
 
       // Should render without navigation items
-      expect(screen.getByTestId('sheet')).toBeInTheDocument();
+      expect(screen.getByTestId("sheet")).toBeInTheDocument();
     });
   });
 
-  describe('Edge Cases', () => {
-    it('handles rapid open/close interactions', async () => {
+  describe("Edge Cases", () => {
+    it("handles rapid open/close interactions", async () => {
       renderWithIntl(<MobileNavigation />);
 
-      const trigger = screen.getByRole('button', { name: /menu/i });
+      const trigger = screen.getByRole("button", { name: /menu/i });
 
       // Rapid clicks
       await user.click(trigger);
@@ -503,44 +493,36 @@ describe('MobileNavigation Component', () => {
       expect(trigger).toBeInTheDocument();
     });
 
-    it('handles custom className prop correctly', () => {
-      const customClass = 'custom-mobile-nav-test';
+    it("handles custom className prop correctly", () => {
+      const customClass = "custom-mobile-nav-test";
       renderWithIntl(<MobileNavigation className={customClass} />);
 
-      const container = screen.getByTestId('sheet').parentElement;
+      const container = screen.getByTestId("sheet").parentElement;
       expect(container).toHaveClass(customClass);
     });
 
-    it('maintains accessibility attributes during state changes', async () => {
+    it("maintains accessibility attributes during state changes", async () => {
       // Test the MobileMenuButton component directly to verify aria-expanded behavior
       const mockOnClick = vi.fn();
       const { rerender } = renderWithIntl(
-        <MobileMenuButton
-          isOpen={false}
-          onClick={mockOnClick}
-        />,
+        <MobileMenuButton isOpen={false} onClick={mockOnClick} />,
       );
 
-      let button = screen.getByRole('button', { name: /menu/i });
+      let button = screen.getByRole("button", { name: /menu/i });
 
       // Check initial state
-      expect(button).toHaveAttribute('aria-expanded', 'false');
-      expect(button).toHaveAttribute('data-state', 'closed');
+      expect(button).toHaveAttribute("aria-expanded", "false");
+      expect(button).toHaveAttribute("data-state", "closed");
 
       // Simulate state change by re-rendering with isOpen=true
-      rerender(
-        <MobileMenuButton
-          isOpen={true}
-          onClick={mockOnClick}
-        />,
-      );
+      rerender(<MobileMenuButton isOpen={true} onClick={mockOnClick} />);
 
       // Re-query the button after re-render to get updated element
-      button = screen.getByRole('button', { name: /menu/i });
+      button = screen.getByRole("button", { name: /menu/i });
 
       // Check after state change
-      expect(button).toHaveAttribute('aria-expanded', 'true');
-      expect(button).toHaveAttribute('data-state', 'open');
+      expect(button).toHaveAttribute("aria-expanded", "true");
+      expect(button).toHaveAttribute("data-state", "open");
 
       // Test click functionality
       await user.click(button);
@@ -549,143 +531,133 @@ describe('MobileNavigation Component', () => {
   });
 });
 
-describe('MobileLanguageSwitcher Integration', () => {
+describe("MobileLanguageSwitcher Integration", () => {
   const user = userEvent.setup();
 
   beforeEach(() => {
     vi.clearAllMocks();
   });
 
-  it('renders language options in mobile menu', async () => {
+  it("renders language options in mobile menu", async () => {
     renderWithIntl(<MobileNavigation />);
 
-    const trigger = screen.getByRole('button', { name: /menu/i });
+    const trigger = screen.getByRole("button", { name: /menu/i });
     await user.click(trigger);
 
     // Should show language section
-    expect(screen.getByText('Language')).toBeInTheDocument();
-    expect(screen.getByText('English')).toBeInTheDocument();
-    expect(screen.getByText('简体中文')).toBeInTheDocument();
+    expect(screen.getByText("Language")).toBeInTheDocument();
+    expect(screen.getByText("English")).toBeInTheDocument();
+    expect(screen.getByText("简体中文")).toBeInTheDocument();
   });
 
-  it('detects current locale from document.documentElement.lang', async () => {
+  it("detects current locale from document.documentElement.lang", async () => {
     // Mock document.documentElement.lang as 'zh'
-    Object.defineProperty(document.documentElement, 'lang', {
-      value: 'zh',
+    Object.defineProperty(document.documentElement, "lang", {
+      value: "zh",
       writable: true,
       configurable: true,
     });
 
     renderWithIntl(<MobileNavigation />);
 
-    const trigger = screen.getByRole('button', { name: /menu/i });
+    const trigger = screen.getByRole("button", { name: /menu/i });
     await user.click(trigger);
 
     // Chinese should be marked as active (has check icon)
-    const chineseLink = screen.getByText('简体中文').closest('a');
-    expect(chineseLink).toHaveClass('bg-accent');
+    const chineseLink = screen.getByText("简体中文").closest("a");
+    expect(chineseLink).toHaveClass("bg-accent");
 
     // Reset
-    Object.defineProperty(document.documentElement, 'lang', {
-      value: 'en',
+    Object.defineProperty(document.documentElement, "lang", {
+      value: "en",
       writable: true,
       configurable: true,
     });
   });
 
-  it('defaults to English when document.documentElement.lang is not zh', async () => {
-    Object.defineProperty(document.documentElement, 'lang', {
-      value: 'en',
+  it("defaults to English when document.documentElement.lang is not zh", async () => {
+    Object.defineProperty(document.documentElement, "lang", {
+      value: "en",
       writable: true,
       configurable: true,
     });
 
     renderWithIntl(<MobileNavigation />);
 
-    const trigger = screen.getByRole('button', { name: /menu/i });
+    const trigger = screen.getByRole("button", { name: /menu/i });
     await user.click(trigger);
 
     // English should be marked as active
-    const englishLink = screen.getByText('English').closest('a');
-    expect(englishLink).toHaveClass('bg-accent');
+    const englishLink = screen.getByText("English").closest("a");
+    expect(englishLink).toHaveClass("bg-accent");
   });
 
-  it('closes menu when language link is clicked', async () => {
+  it("closes menu when language link is clicked", async () => {
     renderWithIntl(<MobileNavigation />);
 
-    const trigger = screen.getByRole('button', { name: /menu/i });
+    const trigger = screen.getByRole("button", { name: /menu/i });
     await user.click(trigger);
 
     // Click on a language link
-    const chineseLink = screen.getByText('简体中文');
+    const chineseLink = screen.getByText("简体中文");
     await user.click(chineseLink);
 
     // Menu should close
     await waitFor(() => {
-      const sheet = screen.getByTestId('sheet');
-      expect(sheet).toHaveAttribute('data-open', 'false');
+      const sheet = screen.getByTestId("sheet");
+      expect(sheet).toHaveAttribute("data-open", "false");
     });
   });
 
-  it('shows check icon for active language', async () => {
-    Object.defineProperty(document.documentElement, 'lang', {
-      value: 'en',
+  it("shows check icon for active language", async () => {
+    Object.defineProperty(document.documentElement, "lang", {
+      value: "en",
       writable: true,
       configurable: true,
     });
 
     renderWithIntl(<MobileNavigation />);
 
-    const trigger = screen.getByRole('button', { name: /menu/i });
+    const trigger = screen.getByRole("button", { name: /menu/i });
     await user.click(trigger);
 
     // Check icon should be visible for English
-    const englishLink = screen.getByText('English').closest('a');
+    const englishLink = screen.getByText("English").closest("a");
     expect(
       englishLink?.querySelector('[data-testid="check-icon"]'),
     ).toBeInTheDocument();
   });
 });
 
-describe('MobileMenuButton Component', () => {
+describe("MobileMenuButton Component", () => {
   const user = userEvent.setup();
 
   beforeEach(() => {
     vi.clearAllMocks();
   });
 
-  describe('Basic Rendering', () => {
-    it('renders with closed state', () => {
+  describe("Basic Rendering", () => {
+    it("renders with closed state", () => {
       const mockOnClick = vi.fn();
-      renderWithIntl(
-        <MobileMenuButton
-          isOpen={false}
-          onClick={mockOnClick}
-        />,
-      );
+      renderWithIntl(<MobileMenuButton isOpen={false} onClick={mockOnClick} />);
 
-      expect(screen.getByRole('button', { name: /menu/i })).toBeInTheDocument();
-      expect(screen.getByTestId('menu-icon')).toBeInTheDocument();
-      expect(screen.queryByTestId('close-icon')).not.toBeInTheDocument();
+      expect(screen.getByRole("button", { name: /menu/i })).toBeInTheDocument();
+      expect(screen.getByTestId("menu-icon")).toBeInTheDocument();
+      expect(screen.queryByTestId("close-icon")).not.toBeInTheDocument();
     });
 
-    it('renders with open state', () => {
+    it("renders with open state", () => {
       const mockOnClick = vi.fn();
-      renderWithIntl(
-        <MobileMenuButton
-          isOpen={true}
-          onClick={mockOnClick}
-        />,
-      );
+      renderWithIntl(<MobileMenuButton isOpen={true} onClick={mockOnClick} />);
 
-      expect(screen.getByRole('button', { name: /menu/i })).toBeInTheDocument();
-      expect(screen.getByTestId('close-icon')).toBeInTheDocument();
-      expect(screen.queryByTestId('menu-icon')).not.toBeInTheDocument();
+      expect(screen.getByRole("button", { name: /menu/i })).toBeInTheDocument();
+      expect(screen.getByTestId("close-icon")).toBeInTheDocument();
+      expect(screen.queryByTestId("menu-icon")).not.toBeInTheDocument();
     });
 
-    it('applies custom className', () => {
+    it("applies custom className", () => {
       const mockOnClick = vi.fn();
-      const customClass = 'custom-menu-button';
+      const customClass = "custom-menu-button";
       renderWithIntl(
         <MobileMenuButton
           isOpen={false}
@@ -694,156 +666,105 @@ describe('MobileMenuButton Component', () => {
         />,
       );
 
-      const button = screen.getByRole('button', { name: /menu/i });
+      const button = screen.getByRole("button", { name: /menu/i });
       expect(button).toHaveClass(customClass);
     });
   });
 
-  describe('Interaction', () => {
-    it('calls onClick when clicked', async () => {
+  describe("Interaction", () => {
+    it("calls onClick when clicked", async () => {
       const mockOnClick = vi.fn();
-      renderWithIntl(
-        <MobileMenuButton
-          isOpen={false}
-          onClick={mockOnClick}
-        />,
-      );
+      renderWithIntl(<MobileMenuButton isOpen={false} onClick={mockOnClick} />);
 
-      const button = screen.getByRole('button', { name: /menu/i });
+      const button = screen.getByRole("button", { name: /menu/i });
       await user.click(button);
 
       expect(mockOnClick).toHaveBeenCalledTimes(1);
     });
 
-    it('handles keyboard interaction', async () => {
+    it("handles keyboard interaction", async () => {
       const mockOnClick = vi.fn();
-      renderWithIntl(
-        <MobileMenuButton
-          isOpen={false}
-          onClick={mockOnClick}
-        />,
-      );
+      renderWithIntl(<MobileMenuButton isOpen={false} onClick={mockOnClick} />);
 
-      const button = screen.getByRole('button', { name: /menu/i });
+      const button = screen.getByRole("button", { name: /menu/i });
       button.focus();
 
-      await user.keyboard('{Enter}');
+      await user.keyboard("{Enter}");
       expect(mockOnClick).toHaveBeenCalledTimes(1);
 
-      await user.keyboard(' ');
+      await user.keyboard(" ");
       expect(mockOnClick).toHaveBeenCalledTimes(2);
     });
   });
 
-  describe('Accessibility', () => {
-    it('has proper ARIA attributes when closed', () => {
+  describe("Accessibility", () => {
+    it("has proper ARIA attributes when closed", () => {
       const mockOnClick = vi.fn();
-      renderWithIntl(
-        <MobileMenuButton
-          isOpen={false}
-          onClick={mockOnClick}
-        />,
-      );
+      renderWithIntl(<MobileMenuButton isOpen={false} onClick={mockOnClick} />);
 
-      const button = screen.getByRole('button', { name: /menu/i });
-      expect(button).toHaveAttribute('aria-expanded', 'false');
-      expect(button).toHaveAttribute('aria-label');
+      const button = screen.getByRole("button", { name: /menu/i });
+      expect(button).toHaveAttribute("aria-expanded", "false");
+      expect(button).toHaveAttribute("aria-label");
     });
 
-    it('has proper ARIA attributes when open', () => {
+    it("has proper ARIA attributes when open", () => {
       const mockOnClick = vi.fn();
-      renderWithIntl(
-        <MobileMenuButton
-          isOpen={true}
-          onClick={mockOnClick}
-        />,
-      );
+      renderWithIntl(<MobileMenuButton isOpen={true} onClick={mockOnClick} />);
 
-      const button = screen.getByRole('button', { name: /menu/i });
-      expect(button).toHaveAttribute('aria-expanded', 'true');
-      expect(button).toHaveAttribute('aria-label');
+      const button = screen.getByRole("button", { name: /menu/i });
+      expect(button).toHaveAttribute("aria-expanded", "true");
+      expect(button).toHaveAttribute("aria-label");
     });
 
-    it('provides screen reader text for both states', () => {
+    it("provides screen reader text for both states", () => {
       const mockOnClick = vi.fn();
 
       // Test closed state
       const { rerender } = renderWithIntl(
-        <MobileMenuButton
-          isOpen={false}
-          onClick={mockOnClick}
-        />,
+        <MobileMenuButton isOpen={false} onClick={mockOnClick} />,
       );
 
-      expect(screen.getByText('Open navigation menu')).toBeInTheDocument();
+      expect(screen.getByText("Open navigation menu")).toBeInTheDocument();
 
       // Test open state
-      rerender(
-        <MobileMenuButton
-          isOpen={true}
-          onClick={mockOnClick}
-        />,
-      );
-      expect(screen.getByText('Close navigation menu')).toBeInTheDocument();
+      rerender(<MobileMenuButton isOpen={true} onClick={mockOnClick} />);
+      expect(screen.getByText("Close navigation menu")).toBeInTheDocument();
     });
   });
 
-  describe('Visual States', () => {
-    it('shows correct icon for closed state', () => {
+  describe("Visual States", () => {
+    it("shows correct icon for closed state", () => {
       const mockOnClick = vi.fn();
-      renderWithIntl(
-        <MobileMenuButton
-          isOpen={false}
-          onClick={mockOnClick}
-        />,
-      );
+      renderWithIntl(<MobileMenuButton isOpen={false} onClick={mockOnClick} />);
 
-      expect(screen.getByTestId('menu-icon')).toBeInTheDocument();
-      expect(screen.queryByTestId('close-icon')).not.toBeInTheDocument();
+      expect(screen.getByTestId("menu-icon")).toBeInTheDocument();
+      expect(screen.queryByTestId("close-icon")).not.toBeInTheDocument();
     });
 
-    it('shows correct icon for open state', () => {
+    it("shows correct icon for open state", () => {
       const mockOnClick = vi.fn();
-      renderWithIntl(
-        <MobileMenuButton
-          isOpen={true}
-          onClick={mockOnClick}
-        />,
-      );
+      renderWithIntl(<MobileMenuButton isOpen={true} onClick={mockOnClick} />);
 
-      expect(screen.getByTestId('close-icon')).toBeInTheDocument();
-      expect(screen.queryByTestId('menu-icon')).not.toBeInTheDocument();
+      expect(screen.getByTestId("close-icon")).toBeInTheDocument();
+      expect(screen.queryByTestId("menu-icon")).not.toBeInTheDocument();
     });
 
-    it('toggles icons correctly', () => {
+    it("toggles icons correctly", () => {
       const mockOnClick = vi.fn();
       const { rerender } = renderWithIntl(
-        <MobileMenuButton
-          isOpen={false}
-          onClick={mockOnClick}
-        />,
+        <MobileMenuButton isOpen={false} onClick={mockOnClick} />,
       );
 
       // Initially closed
-      expect(screen.getByTestId('menu-icon')).toBeInTheDocument();
+      expect(screen.getByTestId("menu-icon")).toBeInTheDocument();
 
       // Change to open
-      rerender(
-        <MobileMenuButton
-          isOpen={true}
-          onClick={mockOnClick}
-        />,
-      );
-      expect(screen.getByTestId('close-icon')).toBeInTheDocument();
+      rerender(<MobileMenuButton isOpen={true} onClick={mockOnClick} />);
+      expect(screen.getByTestId("close-icon")).toBeInTheDocument();
 
       // Change back to closed
-      rerender(
-        <MobileMenuButton
-          isOpen={false}
-          onClick={mockOnClick}
-        />,
-      );
-      expect(screen.getByTestId('menu-icon')).toBeInTheDocument();
+      rerender(<MobileMenuButton isOpen={false} onClick={mockOnClick} />);
+      expect(screen.getByTestId("menu-icon")).toBeInTheDocument();
     });
   });
 });

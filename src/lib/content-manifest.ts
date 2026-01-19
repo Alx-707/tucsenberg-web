@@ -5,12 +5,12 @@
  * Uses static import from generated TypeScript file - no runtime fs dependency.
  */
 
-import type { ContentType, Locale } from '@/types/content.types';
+import type { ContentType, Locale } from "@/types/content.types";
 import {
   CONTENT_MANIFEST,
   type ContentEntry,
   type ContentManifest,
-} from './content-manifest.generated';
+} from "./content-manifest.generated";
 
 export type { ContentEntry, ContentManifest };
 

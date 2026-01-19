@@ -1,17 +1,17 @@
-import type { Metadata } from 'next';
-import { extractHeroMessages } from '@/lib/i18n/extract-hero-messages';
-import { loadCriticalMessages } from '@/lib/load-messages';
-import { generateMetadataForPath, type Locale } from '@/lib/seo-metadata';
-import { BelowTheFoldClient } from '@/components/home/below-the-fold.client';
-import { HeroSectionStatic } from '@/components/home/hero-section';
-import { routing } from '@/i18n/routing';
+import type { Metadata } from "next";
+import { extractHeroMessages } from "@/lib/i18n/extract-hero-messages";
+import { loadCriticalMessages } from "@/lib/load-messages";
+import { generateMetadataForPath, type Locale } from "@/lib/seo-metadata";
+import { BelowTheFoldClient } from "@/components/home/below-the-fold.client";
+import { HeroSectionStatic } from "@/components/home/hero-section";
+import { routing } from "@/i18n/routing";
 
 export function generateStaticParams() {
   return routing.locales.map((locale) => ({ locale }));
 }
 
 interface HomePageProps {
-  params: Promise<{ locale: 'en' | 'zh' }>;
+  params: Promise<{ locale: "en" | "zh" }>;
 }
 
 export async function generateMetadata({
@@ -20,8 +20,8 @@ export async function generateMetadata({
   const { locale } = await params;
   return generateMetadataForPath({
     locale: locale as Locale,
-    pageType: 'home',
-    path: '',
+    pageType: "home",
+    path: "",
   });
 }
 
@@ -42,7 +42,7 @@ type TranslationMessages = Record<string, TranslationValue>;
  *   保证在预渲染和运行时行为一致、可缓存。
  */
 async function getHomeHeroMessages(
-  locale: 'en' | 'zh',
+  locale: "en" | "zh",
 ): Promise<TranslationMessages> {
   const messages = await loadCriticalMessages(locale);
   return extractHeroMessages(messages) as TranslationMessages;
@@ -58,12 +58,12 @@ export default async function Home({ params }: HomePageProps) {
   const heroNs = await getHomeHeroMessages(locale);
 
   // 实验开关：中文首帧系统字体 + 600 权重（A/B）
-  const zhFast = process.env.NEXT_PUBLIC_FAST_LCP_ZH === '1' && locale === 'zh';
+  const zhFast = process.env.NEXT_PUBLIC_FAST_LCP_ZH === "1" && locale === "zh";
 
   return (
     <div
-      className='min-h-screen bg-background text-foreground'
-      data-fast-lcp-zh={zhFast ? '1' : undefined}
+      className="min-h-screen bg-background text-foreground"
+      data-fast-lcp-zh={zhFast ? "1" : undefined}
     >
       {/* LCP-critical: render statically from compile-time messages */}
       <HeroSectionStatic messages={heroNs} />

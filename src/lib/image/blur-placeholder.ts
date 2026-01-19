@@ -38,7 +38,7 @@ const SHIMMER_SVG_TEMPLATE = `
 `;
 
 /** Static shimmer placeholder encoded as data URL */
-export const SHIMMER_BLUR_DATA_URL = `data:image/svg+xml;base64,${Buffer.from(SHIMMER_SVG_TEMPLATE.trim()).toString('base64')}`;
+export const SHIMMER_BLUR_DATA_URL = `data:image/svg+xml;base64,${Buffer.from(SHIMMER_SVG_TEMPLATE.trim()).toString("base64")}`;
 
 /**
  * Neutral gray blur placeholder for product/blog images.
@@ -51,13 +51,13 @@ const NEUTRAL_SVG = `
 `;
 
 /** Static neutral gray placeholder */
-export const NEUTRAL_BLUR_DATA_URL = `data:image/svg+xml;base64,${Buffer.from(NEUTRAL_SVG.trim()).toString('base64')}`;
+export const NEUTRAL_BLUR_DATA_URL = `data:image/svg+xml;base64,${Buffer.from(NEUTRAL_SVG.trim()).toString("base64")}`;
 
 /**
  * Image placeholder configuration for Next.js Image component.
  */
 export interface BlurPlaceholderConfig {
-  placeholder: 'blur';
+  placeholder: "blur";
   blurDataURL: string;
 }
 
@@ -77,11 +77,11 @@ export interface BlurPlaceholderConfig {
  * ```
  */
 export function getBlurPlaceholder(
-  variant: 'shimmer' | 'neutral' = 'neutral',
+  variant: "shimmer" | "neutral" = "neutral",
 ): BlurPlaceholderConfig {
   return {
-    placeholder: 'blur',
+    placeholder: "blur",
     blurDataURL:
-      variant === 'shimmer' ? SHIMMER_BLUR_DATA_URL : NEUTRAL_BLUR_DATA_URL,
+      variant === "shimmer" ? SHIMMER_BLUR_DATA_URL : NEUTRAL_BLUR_DATA_URL,
   };
 }

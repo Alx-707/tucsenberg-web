@@ -1,14 +1,14 @@
-import path from 'path';
-import type { NextConfig } from 'next';
-import bundleAnalyzer from '@next/bundle-analyzer';
-import createMDX from '@next/mdx';
-import createNextIntlPlugin from 'next-intl/plugin';
-import { getSecurityHeaders } from './src/config/security';
+import path from "path";
+import type { NextConfig } from "next";
+import bundleAnalyzer from "@next/bundle-analyzer";
+import createMDX from "@next/mdx";
+import createNextIntlPlugin from "next-intl/plugin";
+import { getSecurityHeaders } from "./src/config/security";
 
-const withNextIntl = createNextIntlPlugin('./src/i18n/request.ts');
+const withNextIntl = createNextIntlPlugin("./src/i18n/request.ts");
 
 const withBundleAnalyzer = bundleAnalyzer({
-  enabled: process.env['ANALYZE'] === 'true',
+  enabled: process.env["ANALYZE"] === "true",
 });
 
 const withMDX = createMDX({
@@ -29,12 +29,12 @@ const nextConfig: NextConfig = {
   turbopack: {
     root: __dirname,
     resolveAlias: {
-      '@content': path.resolve(__dirname, 'content'),
+      "@content": path.resolve(__dirname, "content"),
     },
   },
 
   // Configure pageExtensions to include markdown and MDX files
-  pageExtensions: ['js', 'jsx', 'md', 'mdx', 'ts', 'tsx'],
+  pageExtensions: ["js", "jsx", "md", "mdx", "ts", "tsx"],
 
   // Enable source maps for better error tracking
   productionBrowserSourceMaps: true,
@@ -49,13 +49,13 @@ const nextConfig: NextConfig = {
     remotePatterns: [
       {
         // Unsplash: High-quality stock photos for blog/marketing content
-        protocol: 'https',
-        hostname: 'images.unsplash.com',
+        protocol: "https",
+        hostname: "images.unsplash.com",
       },
       {
         // Placeholder.com: Development/testing placeholder images
-        protocol: 'https',
-        hostname: 'via.placeholder.com',
+        protocol: "https",
+        hostname: "via.placeholder.com",
       },
     ],
   },
@@ -65,16 +65,16 @@ const nextConfig: NextConfig = {
     // 生产环境移除 console 语句，但保留 error 和 warn 级别
     // 这有助于减少生产环境的包大小并避免潜在的信息泄露
     removeConsole:
-      process.env.NODE_ENV === 'production'
+      process.env.NODE_ENV === "production"
         ? {
-            exclude: ['error', 'warn'], // 保留 console.error 和 console.warn
+            exclude: ["error", "warn"], // 保留 console.error 和 console.warn
           }
         : false, // 开发环境保留所有 console 语句
   },
 
   // Performance optimizations
   experimental: {
-    optimizePackageImports: ['lucide-react', '@radix-ui/react-icons'],
+    optimizePackageImports: ["lucide-react", "@radix-ui/react-icons"],
     // Next.js 16 已移除 testProxy 配置 - 使用 next/experimental/testing/server 替代
     // 旧配置: testProxy: process.env.CI === 'true',
     // 新方式: 在测试文件中使用 unstable_doesProxyMatch() 和相关 API
@@ -96,9 +96,9 @@ const nextConfig: NextConfig = {
     // Path alias configuration for @/ -> src/
     config.resolve.alias = {
       ...config.resolve.alias,
-      '@': path.resolve(__dirname, 'src'),
-      '@messages': path.resolve(__dirname, 'messages'),
-      '@content': path.resolve(__dirname, 'content'),
+      "@": path.resolve(__dirname, "src"),
+      "@messages": path.resolve(__dirname, "messages"),
+      "@content": path.resolve(__dirname, "content"),
     };
 
     // 服务端将部分重型依赖标记为 external，避免捆绑到通用 chunk 触发初始化顺序问题
@@ -108,7 +108,7 @@ const nextConfig: NextConfig = {
       // 尤其是 airtable 等 SDK
       // 说明：commonjs 形式 external 不会影响运行时 require/import
       (config.externals ||= [] as unknown[]).push({
-        airtable: 'commonjs airtable',
+        airtable: "commonjs airtable",
       });
     }
 
@@ -123,15 +123,15 @@ const nextConfig: NextConfig = {
     const securityHeaders = getSecurityHeaders();
     // Prefer CSP from middleware (with nonce). Remove CSP here to avoid duplication/conflicts.
     const headersNoCSP = securityHeaders.filter(
-      (h) => h.key !== 'Content-Security-Policy',
+      (h) => h.key !== "Content-Security-Policy",
     );
 
     // CDN 缓存策略（H-001 LCP 优化）
     // 为静态资源设置长期缓存，提升性能和 LCP
     const cdnCacheHeaders = [
       {
-        key: 'Cache-Control',
-        value: 'public, max-age=31536000, immutable',
+        key: "Cache-Control",
+        value: "public, max-age=31536000, immutable",
       },
     ];
 
@@ -140,14 +140,14 @@ const nextConfig: NextConfig = {
       ...(headersNoCSP.length > 0
         ? [
             {
-              source: '/:path*',
+              source: "/:path*",
               headers: headersNoCSP,
             },
           ]
         : []),
       // CDN 缓存策略应用到静态资源
       {
-        source: '/:all*(svg|jpg|jpeg|png|webp|woff|woff2|ttf|otf)',
+        source: "/:all*(svg|jpg|jpeg|png|webp|woff|woff2|ttf|otf)",
         headers: cdnCacheHeaders,
       },
     ];

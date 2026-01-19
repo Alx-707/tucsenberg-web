@@ -7,36 +7,36 @@
 import type {
   AccountInfoRequest,
   AppSettingsRequest,
-} from '@/types/whatsapp-api-requests/account-app-requests';
+} from "@/types/whatsapp-api-requests/account-app-requests";
 import type {
   BatchRequest,
   BusinessProfileUpdateRequest,
-} from '@/types/whatsapp-api-requests/batch-business-requests';
+} from "@/types/whatsapp-api-requests/batch-business-requests";
 import type {
   AnalyticsRequest,
   MediaUploadRequest,
-} from '@/types/whatsapp-api-requests/media-analytics-requests';
+} from "@/types/whatsapp-api-requests/media-analytics-requests";
 import type {
   GroupMessageRequest,
   MessageForwardRequest,
   MessageReactionRequest,
-} from '@/types/whatsapp-api-requests/message-actions-requests';
-import type { SendMessageRequest } from '@/types/whatsapp-api-requests/message-requests';
+} from "@/types/whatsapp-api-requests/message-actions-requests";
+import type { SendMessageRequest } from "@/types/whatsapp-api-requests/message-requests";
 import type {
   MessageMarkRequest,
   PhoneNumberRegistrationRequest,
   PhoneNumberVerificationRequest,
   WebhookSubscriptionRequest,
-} from '@/types/whatsapp-api-requests/phone-webhook-requests';
+} from "@/types/whatsapp-api-requests/phone-webhook-requests";
 import type {
   TemplateCreateRequest,
   TemplateDeleteRequest,
   TemplateStatusUpdateRequest,
-} from '@/types/whatsapp-api-requests/template-requests';
+} from "@/types/whatsapp-api-requests/template-requests";
 import type {
   QualityRatingRequest,
   UserBlockRequest,
-} from '@/types/whatsapp-api-requests/user-quality-requests';
+} from "@/types/whatsapp-api-requests/user-quality-requests";
 
 /**
  * 请求选项
@@ -56,7 +56,7 @@ export interface ApiRequestOptions {
  * Generic API request wrapper
  */
 export interface ApiRequest<T = unknown> {
-  method: 'GET' | 'POST' | 'PUT' | 'DELETE';
+  method: "GET" | "POST" | "PUT" | "DELETE";
   endpoint: string;
   data?: T;
   params?: Record<string, string | number | boolean>;
@@ -97,11 +97,11 @@ export function isSendMessageRequest(
 ): request is SendMessageRequest {
   return Boolean(
     request &&
-    typeof request === 'object' &&
-    (request as Record<string, unknown>).messaging_product === 'whatsapp' &&
-    (request as Record<string, unknown>).recipient_type === 'individual' &&
-    typeof (request as Record<string, unknown>).to === 'string' &&
-    typeof (request as Record<string, unknown>).type === 'string',
+    typeof request === "object" &&
+    (request as Record<string, unknown>).messaging_product === "whatsapp" &&
+    (request as Record<string, unknown>).recipient_type === "individual" &&
+    typeof (request as Record<string, unknown>).to === "string" &&
+    typeof (request as Record<string, unknown>).type === "string",
   );
 }
 
@@ -110,10 +110,10 @@ export function isMediaUploadRequest(
 ): request is MediaUploadRequest {
   return Boolean(
     request &&
-    typeof request === 'object' &&
-    (request as Record<string, unknown>).messaging_product === 'whatsapp' &&
+    typeof request === "object" &&
+    (request as Record<string, unknown>).messaging_product === "whatsapp" &&
     (request as Record<string, unknown>).file &&
-    typeof (request as Record<string, unknown>).type === 'string',
+    typeof (request as Record<string, unknown>).type === "string",
   );
 }
 
@@ -122,17 +122,17 @@ export function isAnalyticsRequest(
 ): request is AnalyticsRequest {
   return Boolean(
     request &&
-    typeof request === 'object' &&
-    typeof (request as Record<string, unknown>).start === 'string' &&
-    typeof (request as Record<string, unknown>).end === 'string' &&
-    typeof (request as Record<string, unknown>).granularity === 'string',
+    typeof request === "object" &&
+    typeof (request as Record<string, unknown>).start === "string" &&
+    typeof (request as Record<string, unknown>).end === "string" &&
+    typeof (request as Record<string, unknown>).granularity === "string",
   );
 }
 
 export function isBatchRequest(request: unknown): request is BatchRequest {
   return Boolean(
     request &&
-    typeof request === 'object' &&
+    typeof request === "object" &&
     Array.isArray((request as Record<string, unknown>).requests),
   );
 }

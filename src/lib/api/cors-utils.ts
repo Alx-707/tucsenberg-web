@@ -5,8 +5,8 @@
  * using the allowlist-based configuration.
  */
 
-import { NextRequest, NextResponse } from 'next/server';
-import { CORS_CONFIG, isAllowedOrigin, isSameOrigin } from '@/config/cors';
+import { NextRequest, NextResponse } from "next/server";
+import { CORS_CONFIG, isAllowedOrigin, isSameOrigin } from "@/config/cors";
 
 interface CorsOptions {
   additionalMethods?: string[];
@@ -26,8 +26,8 @@ export function getCorsHeaders(
   options: CorsOptions = {},
 ): Record<string, string> {
   const { additionalMethods = [], additionalHeaders = [] } = options;
-  const origin = request.headers.get('origin');
-  const host = request.headers.get('host');
+  const origin = request.headers.get("origin");
+  const host = request.headers.get("host");
 
   const sameOrigin = isSameOrigin(origin, host);
   const allowedOrigin = isAllowedOrigin(origin);
@@ -40,13 +40,13 @@ export function getCorsHeaders(
   const headers = [...CORS_CONFIG.allowedHeaders, ...additionalHeaders];
 
   const responseHeaders: Record<string, string> = {
-    'Access-Control-Allow-Methods': methods.join(', '),
-    'Access-Control-Allow-Headers': headers.join(', '),
-    'Access-Control-Max-Age': String(CORS_CONFIG.maxAge),
+    "Access-Control-Allow-Methods": methods.join(", "),
+    "Access-Control-Allow-Headers": headers.join(", "),
+    "Access-Control-Max-Age": String(CORS_CONFIG.maxAge),
   };
 
   if (origin && allowedOrigin) {
-    responseHeaders['Access-Control-Allow-Origin'] = origin;
+    responseHeaders["Access-Control-Allow-Origin"] = origin;
   }
 
   return responseHeaders;

@@ -5,7 +5,7 @@
  * 提供翻译质量验证、语言特定检查和上下文相关性验证功能
  */
 
-import type { Locale } from '@/types/i18n';
+import type { Locale } from "@/types/i18n";
 
 /**
  * 验证阈值常量
@@ -25,15 +25,15 @@ export const VALIDATION_THRESHOLDS = {
  */
 export interface QualityIssue {
   type:
-    | 'missing'
-    | 'placeholder'
-    | 'length'
-    | 'grammar'
-    | 'language'
-    | 'context'
-    | 'accuracy'
-    | 'terminology';
-  severity: 'low' | 'medium' | 'high' | 'critical';
+    | "missing"
+    | "placeholder"
+    | "length"
+    | "grammar"
+    | "language"
+    | "context"
+    | "accuracy"
+    | "terminology";
+  severity: "low" | "medium" | "high" | "critical";
   message: string;
   suggestion?: string;
 }
@@ -65,17 +65,17 @@ export class TranslationValidators {
     let penalty = 0;
 
     // 检查空翻译（包括只有空白字符和无意义字符的情况）
-    const cleanedText = translatedText?.trim().replace(/[_\s\n\r\t]+/g, '');
+    const cleanedText = translatedText?.trim().replace(/[_\s\n\r\t]+/g, "");
     if (
       !translatedText ||
-      translatedText.trim() === '' ||
+      translatedText.trim() === "" ||
       cleanedText.length <= 2
     ) {
       issues.push({
-        type: 'missing',
-        severity: 'high',
-        message: 'Translation is empty',
-        suggestion: 'Provide a translation for the text',
+        type: "missing",
+        severity: "high",
+        message: "Translation is empty",
+        suggestion: "Provide a translation for the text",
       });
       penalty += VALIDATION_THRESHOLDS.EMPTY_TRANSLATION_PENALTY;
     }
@@ -86,10 +86,10 @@ export class TranslationValidators {
 
     if (originalPlaceholders.length !== translatedPlaceholders.length) {
       issues.push({
-        type: 'placeholder',
-        severity: 'high',
-        message: 'Placeholder count mismatch',
-        suggestion: 'Ensure all placeholders are preserved in translation',
+        type: "placeholder",
+        severity: "high",
+        message: "Placeholder count mismatch",
+        suggestion: "Ensure all placeholders are preserved in translation",
       });
       penalty += VALIDATION_THRESHOLDS.PLACEHOLDER_MISMATCH_PENALTY;
     }
@@ -101,10 +101,10 @@ export class TranslationValidators {
 
     if (missingPlaceholders.length > 0) {
       issues.push({
-        type: 'placeholder',
-        severity: 'high',
-        message: `Missing placeholders: ${missingPlaceholders.join(', ')}`,
-        suggestion: 'Include all required placeholders in the translation',
+        type: "placeholder",
+        severity: "high",
+        message: `Missing placeholders: ${missingPlaceholders.join(", ")}`,
+        suggestion: "Include all required placeholders in the translation",
       });
     }
 
@@ -113,10 +113,10 @@ export class TranslationValidators {
       const lengthRatio = translatedText.length / originalText.length;
       if (lengthRatio > 3.0 || lengthRatio < 0.3) {
         issues.push({
-          type: 'length',
-          severity: 'medium',
-          message: 'Translation length seems unusual',
-          suggestion: 'Review translation for completeness and accuracy',
+          type: "length",
+          severity: "medium",
+          message: "Translation length seems unusual",
+          suggestion: "Review translation for completeness and accuracy",
         });
         penalty += VALIDATION_THRESHOLDS.LENGTH_RATIO_PENALTY;
       }
@@ -136,25 +136,25 @@ export class TranslationValidators {
     const issues: QualityIssue[] = [];
     let penalty = 0;
 
-    if (locale === 'zh') {
+    if (locale === "zh") {
       // 检查繁体字在简体中文中的使用
       if (this.containsTraditionalChinese(translatedText)) {
         issues.push({
-          type: 'language',
-          severity: 'medium',
-          message: 'Contains traditional Chinese characters',
-          suggestion: 'Use simplified Chinese characters for zh locale',
+          type: "language",
+          severity: "medium",
+          message: "Contains traditional Chinese characters",
+          suggestion: "Use simplified Chinese characters for zh locale",
         });
         penalty += VALIDATION_THRESHOLDS.LANGUAGE_PENALTY;
       }
-    } else if (locale === 'en') {
+    } else if (locale === "en") {
       // 检查英语语法问题
       if (this.hasGrammarIssues(translatedText)) {
         issues.push({
-          type: 'grammar',
-          severity: 'medium',
-          message: 'Potential grammar issues detected',
-          suggestion: 'Review grammar and sentence structure',
+          type: "grammar",
+          severity: "medium",
+          message: "Potential grammar issues detected",
+          suggestion: "Review grammar and sentence structure",
         });
         penalty += VALIDATION_THRESHOLDS.GRAMMAR_PENALTY;
       }
@@ -191,18 +191,18 @@ export class TranslationValidators {
     // 检查相似度
     if (similarity < 0.3) {
       issues.push({
-        type: 'accuracy' as const,
-        severity: 'high',
-        message: 'AI translation significantly differs from human reference',
-        suggestion: 'Review translation accuracy against human reference',
+        type: "accuracy" as const,
+        severity: "high",
+        message: "AI translation significantly differs from human reference",
+        suggestion: "Review translation accuracy against human reference",
       });
       penalty += 25;
     } else if (similarity < 0.7) {
       issues.push({
-        type: 'accuracy' as const,
-        severity: 'medium',
-        message: 'AI translation moderately differs from human reference',
-        suggestion: 'Consider aligning with human translation style',
+        type: "accuracy" as const,
+        severity: "medium",
+        message: "AI translation moderately differs from human reference",
+        suggestion: "Consider aligning with human translation style",
       });
       penalty += 15;
     }
@@ -216,10 +216,10 @@ export class TranslationValidators {
 
     if (missingTerms.length > 0) {
       issues.push({
-        type: 'terminology' as const,
-        severity: 'medium',
-        message: `Missing key terms from human reference: ${missingTerms.join(', ')}`,
-        suggestion: 'Include important terminology from human reference',
+        type: "terminology" as const,
+        severity: "medium",
+        message: `Missing key terms from human reference: ${missingTerms.join(", ")}`,
+        suggestion: "Include important terminology from human reference",
       });
       penalty += missingTerms.length * 5;
     }
@@ -239,27 +239,27 @@ export class TranslationValidators {
 
     // 检查错误上下文
     if (
-      translationKey.includes('error') &&
+      translationKey.includes("error") &&
       !this.containsErrorTerms(translatedText)
     ) {
       issues.push({
-        type: 'context',
-        severity: 'medium',
-        message: 'Error context not reflected in translation',
-        suggestion: 'Include appropriate error terminology',
+        type: "context",
+        severity: "medium",
+        message: "Error context not reflected in translation",
+        suggestion: "Include appropriate error terminology",
       });
     }
 
     // 检查成功上下文
     if (
-      translationKey.includes('success') &&
+      translationKey.includes("success") &&
       !this.containsSuccessTerms(translatedText)
     ) {
       issues.push({
-        type: 'context',
-        severity: 'medium',
-        message: 'Success context not reflected in translation',
-        suggestion: 'Include appropriate success terminology',
+        type: "context",
+        severity: "medium",
+        message: "Success context not reflected in translation",
+        suggestion: "Include appropriate success terminology",
       });
     }
 

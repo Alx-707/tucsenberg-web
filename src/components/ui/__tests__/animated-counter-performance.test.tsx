@@ -2,13 +2,13 @@
  * @vitest-environment jsdom
  */
 
-import React from 'react';
-import { act, render, screen } from '@testing-library/react';
-import { beforeEach, describe, expect, it, vi } from 'vitest';
-import { AnimatedCounter } from '@/components/ui/animated-counter';
+import React from "react";
+import { act, render, screen } from "@testing-library/react";
+import { beforeEach, describe, expect, it, vi } from "vitest";
+import { AnimatedCounter } from "@/components/ui/animated-counter";
 
 // Mock the useIntersectionObserver hook
-vi.mock('@/hooks/use-intersection-observer', () => ({
+vi.mock("@/hooks/use-intersection-observer", () => ({
   useIntersectionObserver: vi.fn(() => ({
     ref: vi.fn(),
     isVisible: true, // Always visible for testing
@@ -17,7 +17,7 @@ vi.mock('@/hooks/use-intersection-observer', () => ({
 }));
 
 // Mock AccessibilityUtils
-vi.mock('@/lib/accessibility-utils', () => ({
+vi.mock("@/lib/accessibility-utils", () => ({
   AccessibilityUtils: {
     prefersReducedMotion: vi.fn(() => false),
   },
@@ -52,7 +52,7 @@ const { mockGetTime, mockScheduleFrame, mockCancelFrame, timeRef } = vi.hoisted(
   },
 );
 
-vi.mock('@/components/ui/animated-counter-helpers', () => ({
+vi.mock("@/components/ui/animated-counter-helpers", () => ({
   animationUtils: {
     getTime: mockGetTime,
     scheduleFrame: mockScheduleFrame,
@@ -79,14 +79,14 @@ const advanceTime = (ms: number) => {
 
   act(() => {
     callbacks.forEach((callback) => {
-      if (typeof callback === 'function') {
+      if (typeof callback === "function") {
         callback(currentTime);
       }
     });
   });
 };
 
-describe('AnimatedCounter - Performance & Refs', () => {
+describe("AnimatedCounter - Performance & Refs", () => {
   beforeEach(() => {
     vi.clearAllMocks();
     animationFrameCallbacks = [];
@@ -113,24 +113,19 @@ describe('AnimatedCounter - Performance & Refs', () => {
     });
   });
 
-  describe('Ref Handling', () => {
-    it('forwards ref correctly', () => {
+  describe("Ref Handling", () => {
+    it("forwards ref correctly", () => {
       const ref = React.createRef<HTMLSpanElement>();
       render(
-        <AnimatedCounter
-          to={100}
-          ref={ref}
-          autoStart={true}
-          duration={0}
-        />,
+        <AnimatedCounter to={100} ref={ref} autoStart={true} duration={0} />,
       );
 
       advanceTime(0); // Trigger animation completion
       expect(ref.current).toBeInstanceOf(HTMLSpanElement);
-      expect(ref.current).toHaveTextContent('100');
+      expect(ref.current).toHaveTextContent("100");
     });
 
-    it('supports callback refs', () => {
+    it("supports callback refs", () => {
       let refElement: HTMLSpanElement | null = null;
       const callbackRef = (element: HTMLSpanElement | null) => {
         refElement = element;
@@ -147,74 +142,44 @@ describe('AnimatedCounter - Performance & Refs', () => {
 
       advanceTime(0); // Trigger animation completion
       expect(refElement).toBeInstanceOf(HTMLSpanElement);
-      expect(refElement).toHaveTextContent('100');
+      expect(refElement).toHaveTextContent("100");
     });
 
-    it('handles ref changes', () => {
+    it("handles ref changes", () => {
       const ref1 = React.createRef<HTMLSpanElement>();
       const ref2 = React.createRef<HTMLSpanElement>();
 
-      const { rerender } = render(
-        <AnimatedCounter
-          to={100}
-          ref={ref1}
-        />,
-      );
+      const { rerender } = render(<AnimatedCounter to={100} ref={ref1} />);
 
       expect(ref1.current).toBeInstanceOf(HTMLSpanElement);
 
-      rerender(
-        <AnimatedCounter
-          to={100}
-          ref={ref2}
-        />,
-      );
+      rerender(<AnimatedCounter to={100} ref={ref2} />);
 
       expect(ref2.current).toBeInstanceOf(HTMLSpanElement);
     });
 
-    it('handles null ref', () => {
+    it("handles null ref", () => {
       expect(() => {
-        render(
-          <AnimatedCounter
-            to={100}
-            ref={null}
-          />,
-        );
+        render(<AnimatedCounter to={100} ref={null} />);
       }).not.toThrow();
     });
 
-    it('ref persists through value changes', () => {
+    it("ref persists through value changes", () => {
       const ref = React.createRef<HTMLSpanElement>();
-      const { rerender } = render(
-        <AnimatedCounter
-          to={100}
-          ref={ref}
-        />,
-      );
+      const { rerender } = render(<AnimatedCounter to={100} ref={ref} />);
 
       const initialElement = ref.current;
       expect(initialElement).toBeInstanceOf(HTMLSpanElement);
 
-      rerender(
-        <AnimatedCounter
-          to={200}
-          ref={ref}
-        />,
-      );
+      rerender(<AnimatedCounter to={200} ref={ref} />);
 
       // Ref should still point to a valid element (may be different due to key-based reset)
       expect(ref.current).toBeInstanceOf(HTMLSpanElement);
     });
 
-    it('allows access to DOM methods through ref', () => {
+    it("allows access to DOM methods through ref", () => {
       const ref = React.createRef<HTMLSpanElement>();
-      render(
-        <AnimatedCounter
-          to={100}
-          ref={ref}
-        />,
-      );
+      render(<AnimatedCounter to={100} ref={ref} />);
 
       expect(ref.current?.focus).toBeDefined();
       expect(ref.current?.blur).toBeDefined();
@@ -222,26 +187,16 @@ describe('AnimatedCounter - Performance & Refs', () => {
     });
   });
 
-  describe('Performance', () => {
-    it('uses requestAnimationFrame for smooth animation', () => {
-      render(
-        <AnimatedCounter
-          to={100}
-          duration={1000}
-          autoStart={true}
-        />,
-      );
+  describe("Performance", () => {
+    it("uses requestAnimationFrame for smooth animation", () => {
+      render(<AnimatedCounter to={100} duration={1000} autoStart={true} />);
 
       expect(mockScheduleFrame).toHaveBeenCalled();
     });
 
-    it('cancels animation frame on unmount', () => {
+    it("cancels animation frame on unmount", () => {
       const { unmount } = render(
-        <AnimatedCounter
-          to={100}
-          duration={1000}
-          autoStart={true}
-        />,
+        <AnimatedCounter to={100} duration={1000} autoStart={true} />,
       );
 
       // Start animation first
@@ -254,18 +209,13 @@ describe('AnimatedCounter - Performance & Refs', () => {
       expect(mockScheduleFrame).toHaveBeenCalled();
     });
 
-    it('does not create memory leaks with multiple instances', () => {
+    it("does not create memory leaks with multiple instances", () => {
       const instances = [];
 
       // Create multiple instances
       for (let i = 0; i < 10; i++) {
         instances.push(
-          render(
-            <AnimatedCounter
-              to={100 + i}
-              autoStart={true}
-            />,
-          ),
+          render(<AnimatedCounter to={100 + i} autoStart={true} />),
         );
       }
 
@@ -279,24 +229,15 @@ describe('AnimatedCounter - Performance & Refs', () => {
       expect(instances.length).toBe(10);
     });
 
-    it('efficiently handles rapid value changes', () => {
-      const { rerender } = render(
-        <AnimatedCounter
-          to={0}
-          duration={1000}
-        />,
-      );
+    it("efficiently handles rapid value changes", () => {
+      const { rerender } = render(<AnimatedCounter to={0} duration={1000} />);
 
       const initialCallCount = mockScheduleFrame.mock.calls.length;
 
       // Rapidly change values
       for (let i = 1; i <= 10; i++) {
         rerender(
-          <AnimatedCounter
-            to={i * 10}
-            duration={1000}
-            autoStart={true}
-          />,
+          <AnimatedCounter to={i * 10} duration={1000} autoStart={true} />,
         );
       }
 
@@ -305,46 +246,28 @@ describe('AnimatedCounter - Performance & Refs', () => {
       expect(finalCallCount - initialCallCount).toBeLessThan(20);
     });
 
-    it('optimizes by not animating when value does not change', () => {
+    it("optimizes by not animating when value does not change", () => {
       const { rerender } = render(
-        <AnimatedCounter
-          to={100}
-          autoStart={true}
-        />,
+        <AnimatedCounter to={100} autoStart={true} />,
       );
 
       const initialCallCount = mockScheduleFrame.mock.calls.length;
 
       // Re-render with same value
-      rerender(
-        <AnimatedCounter
-          to={100}
-          autoStart={true}
-        />,
-      );
+      rerender(<AnimatedCounter to={100} autoStart={true} />);
 
       // Should not trigger new animation
       const finalCallCount = mockScheduleFrame.mock.calls.length;
       expect(finalCallCount).toBe(initialCallCount);
     });
 
-    it('handles high-frequency updates efficiently', () => {
-      const { rerender } = render(
-        <AnimatedCounter
-          to={0}
-          duration={100}
-        />,
-      );
+    it("handles high-frequency updates efficiently", () => {
+      const { rerender } = render(<AnimatedCounter to={0} duration={100} />);
 
       // Simulate high-frequency updates
       const _startTime = performance.now();
       for (let i = 0; i < 100; i++) {
-        rerender(
-          <AnimatedCounter
-            to={i}
-            duration={100}
-          />,
-        );
+        rerender(<AnimatedCounter to={i} duration={100} />);
       }
       const endTime = performance.now();
 
@@ -354,13 +277,9 @@ describe('AnimatedCounter - Performance & Refs', () => {
       expect(endTime - _startTime).toBeLessThan(threshold);
     });
 
-    it('cleans up properly on component unmount', () => {
+    it("cleans up properly on component unmount", () => {
       const { unmount } = render(
-        <AnimatedCounter
-          to={100}
-          duration={1000}
-          autoStart={true}
-        />,
+        <AnimatedCounter to={100} duration={1000} autoStart={true} />,
       );
 
       // Start animation
@@ -373,17 +292,12 @@ describe('AnimatedCounter - Performance & Refs', () => {
       expect(mockScheduleFrame).toHaveBeenCalled();
     });
 
-    it('does not cause excessive re-renders', () => {
+    it("does not cause excessive re-renders", () => {
       let renderCount = 0;
 
       const TestComponent = () => {
         renderCount++;
-        return (
-          <AnimatedCounter
-            to={100}
-            duration={1000}
-          />
-        );
+        return <AnimatedCounter to={100} duration={1000} />;
       };
 
       render(<TestComponent />);
@@ -395,25 +309,25 @@ describe('AnimatedCounter - Performance & Refs', () => {
       expect(renderCount).toBeLessThan(5);
     });
 
-    it('handles concurrent animations without interference', () => {
+    it("handles concurrent animations without interference", () => {
       render(
         <div>
           <AnimatedCounter
             to={100}
             duration={1000}
-            data-testid='counter-1'
+            data-testid="counter-1"
             autoStart={true}
           />
           <AnimatedCounter
             to={200}
             duration={1500}
-            data-testid='counter-2'
+            data-testid="counter-2"
             autoStart={true}
           />
           <AnimatedCounter
             to={300}
             duration={2000}
-            data-testid='counter-3'
+            data-testid="counter-3"
             autoStart={true}
           />
         </div>,
@@ -422,25 +336,19 @@ describe('AnimatedCounter - Performance & Refs', () => {
       // Each should have its own animation
       expect(mockScheduleFrame).toHaveBeenCalledTimes(3);
 
-      const counter1 = screen.getByTestId('counter-1');
-      const counter2 = screen.getByTestId('counter-2');
-      const counter3 = screen.getByTestId('counter-3');
+      const counter1 = screen.getByTestId("counter-1");
+      const counter2 = screen.getByTestId("counter-2");
+      const counter3 = screen.getByTestId("counter-3");
 
       expect(counter1).toBeInTheDocument();
       expect(counter2).toBeInTheDocument();
       expect(counter3).toBeInTheDocument();
     });
 
-    it('efficiently handles animation state updates', () => {
-      render(
-        <AnimatedCounter
-          to={100}
-          duration={1000}
-          autoStart={true}
-        />,
-      );
+    it("efficiently handles animation state updates", () => {
+      render(<AnimatedCounter to={100} duration={1000} autoStart={true} />);
 
-      const counter = screen.getByRole('status');
+      const counter = screen.getByRole("status");
 
       // Simulate multiple animation frames
       for (let i = 0; i < 10; i++) {
@@ -451,20 +359,14 @@ describe('AnimatedCounter - Performance & Refs', () => {
       expect(counter).toBeInTheDocument();
     });
 
-    it('handles animation completion efficiently', () => {
-      render(
-        <AnimatedCounter
-          to={100}
-          duration={1000}
-          autoStart={true}
-        />,
-      );
+    it("handles animation completion efficiently", () => {
+      render(<AnimatedCounter to={100} duration={1000} autoStart={true} />);
 
       // Complete animation
       advanceTime(1000);
 
-      const counter = screen.getByRole('status');
-      expect(counter).toHaveTextContent('100');
+      const counter = screen.getByRole("status");
+      expect(counter).toHaveTextContent("100");
 
       // Should stop requesting animation frames after completion
       const callCountAfterCompletion = mockScheduleFrame.mock.calls.length;
@@ -478,7 +380,7 @@ describe('AnimatedCounter - Performance & Refs', () => {
       );
     });
 
-    it('optimizes formatter calls during animation', () => {
+    it("optimizes formatter calls during animation", () => {
       const formatterSpy = vi.fn((to: number) => to.toString());
       render(
         <AnimatedCounter
@@ -497,27 +399,22 @@ describe('AnimatedCounter - Performance & Refs', () => {
       expect(formatterSpy.mock.calls.length).toBeLessThan(100);
     });
 
-    it('handles browser tab visibility changes', () => {
-      render(
-        <AnimatedCounter
-          to={100}
-          duration={1000}
-        />,
-      );
+    it("handles browser tab visibility changes", () => {
+      render(<AnimatedCounter to={100} duration={1000} />);
 
       // Simulate tab becoming hidden
-      Object.defineProperty(document, 'hidden', {
+      Object.defineProperty(document, "hidden", {
         writable: true,
         value: true,
       });
 
       // Should continue to work when tab becomes visible again
-      Object.defineProperty(document, 'hidden', {
+      Object.defineProperty(document, "hidden", {
         writable: true,
         value: false,
       });
 
-      const counter = screen.getByRole('status');
+      const counter = screen.getByRole("status");
       expect(counter).toBeInTheDocument();
     });
   });

@@ -12,15 +12,15 @@ import type {
   ServiceEnvironment,
   WhatsAppConfig,
   WhatsAppServiceOptions,
-} from '@/types/whatsapp-service-config';
-import type { WhatsAppError } from '@/types/whatsapp-service-errors';
+} from "@/types/whatsapp-service-config";
+import type { WhatsAppError } from "@/types/whatsapp-service-errors";
 import type {
   ServiceHealth,
   ServiceMetrics,
   ServiceStatus,
   WhatsAppServiceEvent,
-} from '@/types/whatsapp-service-monitoring';
-import { PERCENTAGE_FULL, ZERO } from '@/constants';
+} from "@/types/whatsapp-service-monitoring";
+import { PERCENTAGE_FULL, ZERO } from "@/constants";
 
 // ==================== Main Service Interface ====================
 
@@ -211,7 +211,7 @@ export interface WhatsAppServiceInterface {
  */
 export interface ApiRequest {
   /** Request method */
-  method: 'GET' | 'POST' | 'PUT' | 'DELETE';
+  method: "GET" | "POST" | "PUT" | "DELETE";
   /** Request endpoint */
   endpoint: string;
   /** Request headers */
@@ -380,17 +380,17 @@ export interface PluginManager {
 export function isWhatsAppService(
   obj: unknown,
 ): obj is WhatsAppServiceInterface {
-  if (!obj || typeof obj !== 'object') return false;
+  if (!obj || typeof obj !== "object") return false;
 
   const service = obj as Partial<WhatsAppServiceInterface>;
 
   return Boolean(
-    typeof service.initialize === 'function' &&
-    typeof service.getStatus === 'function' &&
-    typeof service.getHealth === 'function' &&
-    typeof service.sendMessage === 'function' &&
-    typeof service.on === 'function' &&
-    typeof service.off === 'function',
+    typeof service.initialize === "function" &&
+    typeof service.getStatus === "function" &&
+    typeof service.getHealth === "function" &&
+    typeof service.sendMessage === "function" &&
+    typeof service.on === "function" &&
+    typeof service.off === "function",
   );
 }
 
@@ -403,15 +403,15 @@ export function createDefaultServiceStatus(): ServiceStatus {
     isConnected: false,
     lastActivity: Date.now(),
     health: {
-      status: 'healthy',
+      status: "healthy",
       lastCheck: Date.now(),
       responseTime: ZERO,
       errorRate: ZERO,
       uptime: PERCENTAGE_FULL,
       details: {
-        api: 'available',
-        webhook: 'not_configured',
-        phoneNumber: 'unverified',
+        api: "available",
+        webhook: "not_configured",
+        phoneNumber: "unverified",
       },
     },
     metrics: {
@@ -426,8 +426,8 @@ export function createDefaultServiceStatus(): ServiceStatus {
       lastReset: Date.now(),
     },
     config: {
-      phoneNumberId: '',
-      apiVersion: 'v18.0',
+      phoneNumberId: "",
+      apiVersion: "v18.0",
       webhookConfigured: false,
     },
   };

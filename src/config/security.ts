@@ -1,5 +1,5 @@
-import { COUNT_PAIR, MAGIC_16 } from '../constants/count';
-import { ZERO } from '../constants/magic-numbers';
+import { COUNT_PAIR, MAGIC_16 } from "../constants/count";
+import { ZERO } from "../constants/magic-numbers";
 
 export type SecurityHeader = {
   key: string;
@@ -15,74 +15,74 @@ export type SecurityHeader = {
  * Content Security Policy configuration
  */
 export function generateCSP(nonce?: string): string {
-  const isDevelopment = process.env.NODE_ENV === 'development';
-  const isProduction = process.env.NODE_ENV === 'production';
+  const isDevelopment = process.env.NODE_ENV === "development";
+  const isProduction = process.env.NODE_ENV === "production";
   const configuredReportUri = process.env.CSP_REPORT_URI?.trim();
   const reportUri =
     configuredReportUri && configuredReportUri.length > ZERO
       ? configuredReportUri
-      : '/api/csp-report';
+      : "/api/csp-report";
 
   // Base CSP directives
   const cspDirectives = {
-    'default-src': ["'self'"],
-    'script-src': [
+    "default-src": ["'self'"],
+    "script-src": [
       "'self'",
       // Allow inline scripts with nonce in production, unsafe-inline in development
       ...(isDevelopment ? ["'unsafe-inline'", "'unsafe-eval'"] : []),
       ...(nonce ? [`'nonce-${nonce}'`] : []),
       // Vercel Analytics
-      'https://va.vercel-scripts.com',
+      "https://va.vercel-scripts.com",
       // Cloudflare Turnstile
-      'https://challenges.cloudflare.com',
+      "https://challenges.cloudflare.com",
       // Google Analytics (if enabled)
-      'https://www.googletagmanager.com',
-      'https://www.google-analytics.com',
+      "https://www.googletagmanager.com",
+      "https://www.google-analytics.com",
     ],
-    'style-src': [
+    "style-src": [
       "'self'",
       // Allow unsafe-inline for Tailwind CSS (required for both dev and prod)
       "'unsafe-inline'",
       ...(nonce ? [`'nonce-${nonce}'`] : []),
-      'https://fonts.googleapis.com',
+      "https://fonts.googleapis.com",
     ],
-    'img-src': [
+    "img-src": [
       "'self'",
-      'data:',
-      'https:',
+      "data:",
+      "https:",
       // Vercel Analytics
-      'https://va.vercel-scripts.com',
+      "https://va.vercel-scripts.com",
       // External image sources
-      'https://images.unsplash.com',
-      'https://via.placeholder.com',
+      "https://images.unsplash.com",
+      "https://via.placeholder.com",
       // Google Analytics
-      'https://www.google-analytics.com',
-      'https://www.googletagmanager.com',
+      "https://www.google-analytics.com",
+      "https://www.googletagmanager.com",
     ],
-    'font-src': ["'self'", 'data:', 'https://fonts.gstatic.com'],
-    'connect-src': [
+    "font-src": ["'self'", "data:", "https://fonts.gstatic.com"],
+    "connect-src": [
       "'self'",
       // Vercel Analytics
-      'https://vitals.vercel-insights.com',
+      "https://vitals.vercel-insights.com",
       // API endpoints
-      ...(isDevelopment ? ['http://localhost:*', 'ws://localhost:*'] : []),
+      ...(isDevelopment ? ["http://localhost:*", "ws://localhost:*"] : []),
       // External APIs
-      'https://api.resend.com',
+      "https://api.resend.com",
       // Google Analytics
-      'https://www.google-analytics.com',
-      'https://analytics.google.com',
-      'https://region1.google-analytics.com',
+      "https://www.google-analytics.com",
+      "https://analytics.google.com",
+      "https://region1.google-analytics.com",
     ],
-    'frame-src': [
+    "frame-src": [
       // Cloudflare Turnstile (removed 'none' - conflicts with allowlist)
-      'https://challenges.cloudflare.com',
+      "https://challenges.cloudflare.com",
     ],
-    'object-src': ["'none'"],
-    'base-uri': ["'self'"],
-    'form-action': ["'self'"],
-    'frame-ancestors': ["'none'"],
-    'report-uri': [reportUri],
-    'upgrade-insecure-requests': isProduction ? [] : undefined,
+    "object-src": ["'none'"],
+    "base-uri": ["'self'"],
+    "form-action": ["'self'"],
+    "frame-ancestors": ["'none'"],
+    "report-uri": [reportUri],
+    "upgrade-insecure-requests": isProduction ? [] : undefined,
   };
 
   // Convert directives to CSP string
@@ -90,17 +90,17 @@ export function generateCSP(nonce?: string): string {
     .filter(([, value]) => value !== undefined)
     .map(([key, value]) => {
       if (Array.isArray(value) && value.length > ZERO) {
-        return `${key} ${value.join(' ')}`;
+        return `${key} ${value.join(" ")}`;
       }
       return key;
     })
-    .join('; ');
+    .join("; ");
 }
 
 /**
  * Security headers configuration
  */
-const SECURITY_HEADERS_DISABLED_FLAG = 'false';
+const SECURITY_HEADERS_DISABLED_FLAG = "false";
 
 export function isSecurityHeadersEnabled(testMode = false): boolean {
   if (testMode) {
@@ -109,7 +109,7 @@ export function isSecurityHeadersEnabled(testMode = false): boolean {
     );
   }
 
-  if (process.env.NODE_ENV === 'test') {
+  if (process.env.NODE_ENV === "test") {
     return (
       process.env.SECURITY_HEADERS_ENABLED !== SECURITY_HEADERS_DISABLED_FLAG
     );
@@ -132,29 +132,29 @@ export function getSecurityHeaders(
 
   const securityConfig = getSecurityConfig(testMode);
   const cspHeaderKey = securityConfig.cspReportOnly
-    ? 'Content-Security-Policy-Report-Only'
-    : 'Content-Security-Policy';
+    ? "Content-Security-Policy-Report-Only"
+    : "Content-Security-Policy";
 
   return [
     // Prevent clickjacking
     {
-      key: 'X-Frame-Options',
-      value: 'DENY',
+      key: "X-Frame-Options",
+      value: "DENY",
     },
     // Prevent MIME type sniffing
     {
-      key: 'X-Content-Type-Options',
-      value: 'nosniff',
+      key: "X-Content-Type-Options",
+      value: "nosniff",
     },
     // Referrer policy
     {
-      key: 'Referrer-Policy',
-      value: 'strict-origin-when-cross-origin',
+      key: "Referrer-Policy",
+      value: "strict-origin-when-cross-origin",
     },
     // HSTS (HTTP Strict Transport Security)
     {
-      key: 'Strict-Transport-Security',
-      value: 'max-age=63072000; includeSubDomains; preload',
+      key: "Strict-Transport-Security",
+      value: "max-age=63072000; includeSubDomains; preload",
     },
     // Content Security Policy (enforced or report-only based on security mode)
     {
@@ -163,28 +163,28 @@ export function getSecurityHeaders(
     },
     // Permissions Policy (formerly Feature Policy)
     {
-      key: 'Permissions-Policy',
+      key: "Permissions-Policy",
       value: [
-        'camera=()',
-        'microphone=()',
-        'geolocation=()',
-        'interest-cohort=()',
-        'payment=()',
-        'usb=()',
-      ].join(', '),
+        "camera=()",
+        "microphone=()",
+        "geolocation=()",
+        "interest-cohort=()",
+        "payment=()",
+        "usb=()",
+      ].join(", "),
     },
     // Cross-Origin policies
     {
-      key: 'Cross-Origin-Embedder-Policy',
-      value: 'unsafe-none', // Changed from require-corp for compatibility
+      key: "Cross-Origin-Embedder-Policy",
+      value: "unsafe-none", // Changed from require-corp for compatibility
     },
     {
-      key: 'Cross-Origin-Opener-Policy',
-      value: 'same-origin',
+      key: "Cross-Origin-Opener-Policy",
+      value: "same-origin",
     },
     {
-      key: 'Cross-Origin-Resource-Policy',
-      value: 'cross-origin',
+      key: "Cross-Origin-Resource-Policy",
+      value: "cross-origin",
     },
   ];
 }
@@ -201,25 +201,25 @@ const NONCE_BYTE_LENGTH = MAGIC_16; // 16 bytes = 128 bits = 32 hex characters
 const NONCE_HEX_PAD = COUNT_PAIR;
 
 export function generateNonce(): string {
-  if (typeof crypto !== 'undefined' && crypto.randomUUID) {
+  if (typeof crypto !== "undefined" && crypto.randomUUID) {
     // randomUUID returns 36 chars with hyphens, removing hyphens gives 32 hex chars
     // Use full 32 chars for 128-bit entropy
-    return crypto.randomUUID().replace(/-/g, '');
+    return crypto.randomUUID().replace(/-/g, "");
   }
 
   if (
-    typeof crypto !== 'undefined' &&
-    typeof crypto.getRandomValues === 'function'
+    typeof crypto !== "undefined" &&
+    typeof crypto.getRandomValues === "function"
   ) {
     const bytes = new Uint8Array(NONCE_BYTE_LENGTH);
     crypto.getRandomValues(bytes);
     // Convert to hex: 16 bytes = 32 hex characters = 128 bits
     return Array.from(bytes, (value) =>
-      value.toString(MAGIC_16).padStart(NONCE_HEX_PAD, '0'),
-    ).join('');
+      value.toString(MAGIC_16).padStart(NONCE_HEX_PAD, "0"),
+    ).join("");
   }
 
-  throw new Error('Secure nonce generation unavailable');
+  throw new Error("Secure nonce generation unavailable");
 }
 
 /**
@@ -231,7 +231,7 @@ export const SECURITY_MODES = {
     enforceHTTPS: true,
     strictTransportSecurity: true,
     contentTypeOptions: true,
-    frameOptions: 'DENY',
+    frameOptions: "DENY",
     xssProtection: true,
   },
   moderate: {
@@ -239,7 +239,7 @@ export const SECURITY_MODES = {
     enforceHTTPS: true,
     strictTransportSecurity: true,
     contentTypeOptions: true,
-    frameOptions: 'SAMEORIGIN',
+    frameOptions: "SAMEORIGIN",
     xssProtection: true,
   },
   relaxed: {
@@ -247,7 +247,7 @@ export const SECURITY_MODES = {
     enforceHTTPS: false,
     strictTransportSecurity: false,
     contentTypeOptions: true,
-    frameOptions: 'SAMEORIGIN',
+    frameOptions: "SAMEORIGIN",
     xssProtection: false,
   },
 } as const;
@@ -258,19 +258,19 @@ export const SECURITY_MODES = {
 export function getSecurityConfig(testMode = false) {
   // Use process.env directly in tests to avoid env validation issues
   const rawMode =
-    (testMode || process.env.NODE_ENV === 'test'
+    (testMode || process.env.NODE_ENV === "test"
       ? process.env.NEXT_PUBLIC_SECURITY_MODE
-      : process.env.NEXT_PUBLIC_SECURITY_MODE) || 'strict';
+      : process.env.NEXT_PUBLIC_SECURITY_MODE) || "strict";
 
   const mode =
-    rawMode === 'moderate' || rawMode === 'relaxed' ? rawMode : 'strict';
+    rawMode === "moderate" || rawMode === "relaxed" ? rawMode : "strict";
 
   switch (mode) {
-    case 'moderate':
+    case "moderate":
       return SECURITY_MODES.moderate;
-    case 'relaxed':
+    case "relaxed":
       return SECURITY_MODES.relaxed;
-    case 'strict':
+    case "strict":
     default:
       return SECURITY_MODES.strict;
   }
@@ -288,19 +288,19 @@ export function isValidNonce(nonce: string): boolean {
  * CSP report endpoint handler type
  */
 export interface CSPReport {
-  'csp-report': {
-    'document-uri': string;
-    'referrer': string;
-    'violated-directive': string;
-    'effective-directive': string;
-    'original-policy': string;
-    'disposition': string;
-    'blocked-uri': string;
-    'line-number': number;
-    'column-number': number;
-    'source-file': string;
-    'status-code': number;
-    'script-sample': string;
+  "csp-report": {
+    "document-uri": string;
+    referrer: string;
+    "violated-directive": string;
+    "effective-directive": string;
+    "original-policy": string;
+    disposition: string;
+    "blocked-uri": string;
+    "line-number": number;
+    "column-number": number;
+    "source-file": string;
+    "status-code": number;
+    "script-sample": string;
   };
 }
 

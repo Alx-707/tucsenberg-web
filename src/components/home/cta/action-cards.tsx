@@ -1,14 +1,14 @@
-import type React from 'react';
-import { ArrowRight, ExternalLink } from 'lucide-react';
-import { cn } from '@/lib/utils';
-import { Button } from '@/components/ui/button';
+import type React from "react";
+import { ArrowRight, ExternalLink } from "lucide-react";
+import { cn } from "@/lib/utils";
+import { Button } from "@/components/ui/button";
 import {
   Card,
   CardContent,
   CardDescription,
   CardHeader,
   CardTitle,
-} from '@/components/ui/card';
+} from "@/components/ui/card";
 
 // UI常量
 const UI_CONSTANTS = {
@@ -30,50 +30,50 @@ interface ActionCardsProps {
 
 export function ActionCards({ t, actions }: ActionCardsProps) {
   return (
-    <div className='grid gap-6 sm:grid-cols-3'>
+    <div className="grid gap-6 sm:grid-cols-3">
       {actions.map((action, index) => {
         const Icon = action.icon;
         return (
           <Card
             key={index}
             className={cn(
-              'group transition-all hover:shadow-lg',
+              "group transition-all hover:shadow-lg",
               action.primary
-                ? 'border-primary/20 bg-primary/5 hover:shadow-primary/10'
-                : 'hover:shadow-primary/5',
+                ? "border-primary/20 bg-primary/5 hover:shadow-primary/10"
+                : "hover:shadow-primary/5",
             )}
             style={{
               transitionDuration: `${UI_CONSTANTS.ANIMATION_DURATION}ms`,
             }}
           >
-            <CardHeader className='text-center'>
-              <div className='mx-auto mb-2 flex h-12 w-12 items-center justify-center rounded-lg bg-primary/10'>
-                <Icon className='h-6 w-6 text-primary' />
+            <CardHeader className="text-center">
+              <div className="mx-auto mb-2 flex h-12 w-12 items-center justify-center rounded-lg bg-primary/10">
+                <Icon className="h-6 w-6 text-primary" />
               </div>
-              <CardTitle className='text-lg'>{action.title}</CardTitle>
+              <CardTitle className="text-lg">{action.title}</CardTitle>
               <CardDescription>{action.description}</CardDescription>
             </CardHeader>
-            <CardContent className='text-center'>
+            <CardContent className="text-center">
               <Button
-                variant={action.primary ? 'default' : 'outline'}
-                className='w-full group-hover:shadow-sm'
+                variant={action.primary ? "default" : "outline"}
+                className="w-full group-hover:shadow-sm"
                 asChild
               >
                 <a
                   href={action.href}
                   {...(action.external && {
-                    target: '_blank',
-                    rel: 'noopener noreferrer',
+                    target: "_blank",
+                    rel: "noopener noreferrer",
                   })}
-                  className='flex items-center justify-center gap-2'
+                  className="flex items-center justify-center gap-2"
                 >
                   {action.primary
-                    ? t('buttons.getStarted')
-                    : t('buttons.learnMore')}
+                    ? t("buttons.getStarted")
+                    : t("buttons.learnMore")}
                   {action.external ? (
-                    <ExternalLink className='h-4 w-4' />
+                    <ExternalLink className="h-4 w-4" />
                   ) : (
-                    <ArrowRight className='h-4 w-4' />
+                    <ArrowRight className="h-4 w-4" />
                   )}
                 </a>
               </Button>

@@ -1,9 +1,9 @@
-import type { ProductSummary } from '@/types/content.types';
-import { cn } from '@/lib/utils';
+import type { ProductSummary } from "@/types/content.types";
+import { cn } from "@/lib/utils";
 import {
   ProductCard,
   type ProductCardLabels,
-} from '@/components/products/product-card';
+} from "@/components/products/product-card";
 
 export interface ProductGridProps {
   products: ProductSummary[];
@@ -31,24 +31,24 @@ export interface ProductGridProps {
 
 // Static column class getters to avoid object injection
 function getSmColumnClass(sm: 1 | 2): string {
-  if (sm === 1) return 'sm:grid-cols-1';
-  return 'sm:grid-cols-2';
+  if (sm === 1) return "sm:grid-cols-1";
+  return "sm:grid-cols-2";
 }
 
 function getMdColumnClass(md: 2 | 3): string {
-  if (md === 2) return 'md:grid-cols-2';
-  return 'md:grid-cols-3';
+  if (md === 2) return "md:grid-cols-2";
+  return "md:grid-cols-3";
 }
 
 function getLgColumnClass(lg: 3 | 4): string {
-  if (lg === 3) return 'lg:grid-cols-3';
-  return 'lg:grid-cols-4';
+  if (lg === 3) return "lg:grid-cols-3";
+  return "lg:grid-cols-4";
 }
 
 function getGapClass(gap: 4 | 6 | 8): string {
-  if (gap === 4) return 'gap-4';
-  if (gap === 6) return 'gap-6';
-  return 'gap-8';
+  if (gap === 4) return "gap-4";
+  if (gap === 6) return "gap-6";
+  return "gap-8";
 }
 
 /**
@@ -59,7 +59,7 @@ function getGapClass(gap: 4 | 6 | 8): string {
  */
 export function ProductGrid({
   products,
-  linkPrefix = '/products',
+  linkPrefix = "/products",
   sm = 1,
   md = 2,
   lg = 3,
@@ -75,7 +75,7 @@ export function ProductGrid({
   }
 
   const gridClasses = cn(
-    'grid grid-cols-1',
+    "grid grid-cols-1",
     getSmColumnClass(sm),
     getMdColumnClass(md),
     getLgColumnClass(lg),

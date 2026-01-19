@@ -6,7 +6,7 @@
  * in-memory store with warning for local development.
  */
 
-import { logger } from '@/lib/logger';
+import { logger } from "@/lib/logger";
 import {
   COUNT_FIVE,
   COUNT_PAIR,
@@ -15,7 +15,7 @@ import {
   MINUTE_MS,
   ONE,
   ZERO,
-} from '@/constants';
+} from "@/constants";
 
 // Rate limit configuration per endpoint
 export const RATE_LIMIT_PRESETS = {
@@ -71,8 +71,8 @@ class MemoryRateLimitStore implements RateLimitStore {
   private warnAboutMemoryStore(): void {
     if (!this.warned) {
       logger.warn(
-        '[Rate Limit] Using in-memory store. Rate limits will not persist across serverless instances. ' +
-          'Configure UPSTASH_REDIS_REST_URL or KV_REST_API_URL for distributed rate limiting.',
+        "[Rate Limit] Using in-memory store. Rate limits will not persist across serverless instances. " +
+          "Configure UPSTASH_REDIS_REST_URL or KV_REST_API_URL for distributed rate limiting.",
       );
       this.warned = true;
     }
@@ -135,7 +135,7 @@ class RedisRateLimitStore implements RateLimitStore {
   private token: string;
 
   constructor(url: string, token: string) {
-    this.baseUrl = url.replace(/\/$/, '');
+    this.baseUrl = url.replace(/\/$/, "");
     this.token = token;
   }
 
@@ -144,16 +144,16 @@ class RedisRateLimitStore implements RateLimitStore {
   ): Promise<T | null> {
     try {
       const response = await fetch(`${this.baseUrl}`, {
-        method: 'POST',
+        method: "POST",
         headers: {
-          'Authorization': `Bearer ${this.token}`,
-          'Content-Type': 'application/json',
+          Authorization: `Bearer ${this.token}`,
+          "Content-Type": "application/json",
         },
         body: JSON.stringify(commands),
       });
 
       if (!response.ok) {
-        logger.error('[Rate Limit] Redis command failed', {
+        logger.error("[Rate Limit] Redis command failed", {
           status: response.status,
         });
         return null;
@@ -162,13 +162,13 @@ class RedisRateLimitStore implements RateLimitStore {
       const data = (await response.json()) as { result: T };
       return data.result;
     } catch (error) {
-      logger.error('[Rate Limit] Redis connection error', { error });
+      logger.error("[Rate Limit] Redis connection error", { error });
       return null;
     }
   }
 
   async get(key: string): Promise<RateLimitEntry | null> {
-    const result = await this.redisCommand<string | null>(['GET', key]);
+    const result = await this.redisCommand<string | null>(["GET", key]);
     if (!result) return null;
 
     try {
@@ -181,10 +181,10 @@ class RedisRateLimitStore implements RateLimitStore {
   async set(key: string, entry: RateLimitEntry, ttlMs: number): Promise<void> {
     const ttlSeconds = Math.ceil(ttlMs / MINUTE_MS) * (MINUTE_MS / 1000);
     await this.redisCommand([
-      'SET',
+      "SET",
       key,
       JSON.stringify(entry),
-      'PX',
+      "PX",
       Math.ceil(ttlSeconds * 1000),
     ]);
   }
@@ -220,7 +220,7 @@ class KVRateLimitStore implements RateLimitStore {
   private token: string;
 
   constructor(url: string, token: string) {
-    this.baseUrl = url.replace(/\/$/, '');
+    this.baseUrl = url.replace(/\/$/, "");
     this.token = token;
   }
 
@@ -233,14 +233,14 @@ class KVRateLimitStore implements RateLimitStore {
       const response = await fetch(`${this.baseUrl}${path}`, {
         method,
         headers: {
-          'Authorization': `Bearer ${this.token}`,
-          'Content-Type': 'application/json',
+          Authorization: `Bearer ${this.token}`,
+          "Content-Type": "application/json",
         },
         ...(body ? { body: JSON.stringify(body) } : {}),
       });
 
       if (!response.ok) {
-        logger.error('[Rate Limit] KV command failed', {
+        logger.error("[Rate Limit] KV command failed", {
           status: response.status,
         });
         return null;
@@ -248,14 +248,14 @@ class KVRateLimitStore implements RateLimitStore {
 
       return response.json() as Promise<T>;
     } catch (error) {
-      logger.error('[Rate Limit] KV connection error', { error });
+      logger.error("[Rate Limit] KV connection error", { error });
       return null;
     }
   }
 
   async get(key: string): Promise<RateLimitEntry | null> {
     const result = await this.kvCommand<{ result: string | null }>(
-      'GET',
+      "GET",
       `/get/${key}`,
     );
     if (!result?.result) return null;
@@ -269,7 +269,7 @@ class KVRateLimitStore implements RateLimitStore {
 
   async set(key: string, entry: RateLimitEntry, ttlMs: number): Promise<void> {
     const ttlSeconds = Math.ceil(ttlMs / 1000);
-    await this.kvCommand('POST', `/set/${key}`, {
+    await this.kvCommand("POST", `/set/${key}`, {
       value: JSON.stringify(entry),
       ex: ttlSeconds,
     });
@@ -306,7 +306,7 @@ function createRateLimitStore(): RateLimitStore {
   const upstashToken = process.env.UPSTASH_REDIS_REST_TOKEN;
 
   if (upstashUrl && upstashToken) {
-    logger.info('[Rate Limit] Using Upstash Redis store');
+    logger.info("[Rate Limit] Using Upstash Redis store");
     return new RedisRateLimitStore(upstashUrl, upstashToken);
   }
 
@@ -314,7 +314,7 @@ function createRateLimitStore(): RateLimitStore {
   const kvToken = process.env.KV_REST_API_TOKEN;
 
   if (kvUrl && kvToken) {
-    logger.info('[Rate Limit] Using Vercel KV store');
+    logger.info("[Rate Limit] Using Vercel KV store");
     return new KVRateLimitStore(kvUrl, kvToken);
   }
 
@@ -338,19 +338,19 @@ function getRateLimitConfig(preset: RateLimitPreset): {
   windowMs: number;
 } {
   switch (preset) {
-    case 'contact':
+    case "contact":
       return RATE_LIMIT_PRESETS.contact;
-    case 'inquiry':
+    case "inquiry":
       return RATE_LIMIT_PRESETS.inquiry;
-    case 'subscribe':
+    case "subscribe":
       return RATE_LIMIT_PRESETS.subscribe;
-    case 'whatsapp':
+    case "whatsapp":
       return RATE_LIMIT_PRESETS.whatsapp;
-    case 'csp':
+    case "csp":
       return RATE_LIMIT_PRESETS.csp;
-    case 'cacheInvalidate':
+    case "cacheInvalidate":
       return RATE_LIMIT_PRESETS.cacheInvalidate;
-    case 'cacheInvalidatePreAuth':
+    case "cacheInvalidatePreAuth":
       return RATE_LIMIT_PRESETS.cacheInvalidatePreAuth;
     default: {
       // Exhaustive check - TypeScript will error if a case is missing
@@ -384,7 +384,7 @@ export async function checkDistributedRateLimit(
       retryAfter: allowed ? null : Math.ceil((resetTime - now) / 1000),
     };
   } catch (error) {
-    logger.error('[Rate Limit] Check failed, allowing request (fail-open)', {
+    logger.error("[Rate Limit] Check failed, allowing request (fail-open)", {
       error,
     });
     return {
@@ -431,7 +431,7 @@ export async function getRateLimitStatus(
       retryAfter: allowed ? null : Math.ceil((entry.resetTime - now) / 1000),
     };
   } catch (error) {
-    logger.error('[Rate Limit] Status check failed (fail-open)', { error });
+    logger.error("[Rate Limit] Status check failed (fail-open)", { error });
     return {
       allowed: true,
       remaining: config.maxRequests,
@@ -447,11 +447,11 @@ export async function getRateLimitStatus(
  */
 export function createRateLimitHeaders(result: RateLimitResult): Headers {
   const headers = new Headers();
-  headers.set('X-RateLimit-Remaining', String(result.remaining));
-  headers.set('X-RateLimit-Reset', String(result.resetTime));
+  headers.set("X-RateLimit-Remaining", String(result.remaining));
+  headers.set("X-RateLimit-Reset", String(result.resetTime));
 
   if (result.retryAfter !== null) {
-    headers.set('Retry-After', String(result.retryAfter));
+    headers.set("Retry-After", String(result.retryAfter));
   }
 
   return headers;

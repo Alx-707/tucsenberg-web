@@ -8,7 +8,7 @@
 export type HeroMessages = Record<string, unknown>;
 
 function isRecord(value: unknown): value is Record<string, unknown> {
-  return typeof value === 'object' && value !== null;
+  return typeof value === "object" && value !== null;
 }
 
 export function extractHeroMessages(
@@ -22,7 +22,7 @@ export function extractHeroMessages(
 
   // 从 home 中安全获取 hero 命名空间
   const heroCandidate: unknown =
-    home && 'hero' in home ? (home as Record<string, unknown>).hero : undefined;
+    home && "hero" in home ? (home as Record<string, unknown>).hero : undefined;
   const hero = isRecord(heroCandidate)
     ? (heroCandidate as Record<string, unknown>)
     : {};

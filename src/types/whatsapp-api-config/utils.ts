@@ -7,19 +7,19 @@ import {
   API_VERSIONS,
   MEDIA_TYPES,
   MESSAGE_TYPES,
-} from '@/types/whatsapp-api-config/constants';
-import { DEFAULT_API_CONFIG } from '@/types/whatsapp-api-config/defaults';
+} from "@/types/whatsapp-api-config/constants";
+import { DEFAULT_API_CONFIG } from "@/types/whatsapp-api-config/defaults";
 import {
   ERROR_CODE_MESSAGES,
   RETRYABLE_ERROR_CODES,
-} from '@/types/whatsapp-api-config/errors';
-import type { ApiConfig } from '@/types/whatsapp-api-config/interfaces';
+} from "@/types/whatsapp-api-config/errors";
+import type { ApiConfig } from "@/types/whatsapp-api-config/interfaces";
 import type {
   ApiVersion,
   ErrorCode,
   MediaType,
   MessageType,
-} from '@/types/whatsapp-api-config/types';
+} from "@/types/whatsapp-api-config/types";
 
 /**
  * 配置工具函数
@@ -63,10 +63,10 @@ export const ConfigUtils = {
    */
   getDefaultHeaders(config: ApiConfig): Record<string, string> {
     return {
-      'Authorization': `Bearer ${config.accessToken}`,
-      'Content-Type': 'application/json',
-      'Accept': 'application/json',
-      'User-Agent': config.userAgent || DEFAULT_API_CONFIG.userAgent!,
+      Authorization: `Bearer ${config.accessToken}`,
+      "Content-Type": "application/json",
+      Accept: "application/json",
+      "User-Agent": config.userAgent || DEFAULT_API_CONFIG.userAgent!,
     };
   },
 
@@ -84,7 +84,7 @@ export const ConfigUtils = {
    */
   getErrorMessage(errorCode: number): string {
     const message = ERROR_CODE_MESSAGE_MAP.get(errorCode);
-    return message ?? 'Unknown error';
+    return message ?? "Unknown error";
   },
 
   /**

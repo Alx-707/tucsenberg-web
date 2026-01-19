@@ -22,27 +22,27 @@
  * @see src/lib/cache/cache-tags.ts - Cache tag naming conventions
  */
 
-import { readFile } from 'fs/promises';
-import { join } from 'path';
-import { unstable_cache } from 'next/cache';
-import { i18nTags } from '@/lib/cache/cache-tags';
-import { logger } from '@/lib/logger';
-import { mergeObjects } from '@/lib/merge-objects';
-import { MONITORING_INTERVALS } from '@/constants/performance-constants';
-import { routing } from '@/i18n/routing';
+import { readFile } from "fs/promises";
+import { join } from "path";
+import { unstable_cache } from "next/cache";
+import { i18nTags } from "@/lib/cache/cache-tags";
+import { logger } from "@/lib/logger";
+import { mergeObjects } from "@/lib/merge-objects";
+import { MONITORING_INTERVALS } from "@/constants/performance-constants";
+import { routing } from "@/i18n/routing";
 
 /**
  * Detect CI/E2E environment to bypass caching.
  * Prevents empty object {} from being cached when translation files are missing.
  */
 const isCiLikeEnvironment =
-  process.env.CI === 'true' || process.env.PLAYWRIGHT_TEST === 'true';
+  process.env.CI === "true" || process.env.PLAYWRIGHT_TEST === "true";
 
 const I18N_CACHE_REVALIDATE_DEFAULT_SECONDS =
   MONITORING_INTERVALS.CACHE_CLEANUP;
 
 function getRevalidateTime(): number {
-  return process.env.NODE_ENV === 'development'
+  return process.env.NODE_ENV === "development"
     ? 1
     : I18N_CACHE_REVALIDATE_DEFAULT_SECONDS;
 }
@@ -50,14 +50,14 @@ function getRevalidateTime(): number {
 /**
  * Supported locale types
  */
-type Locale = 'en' | 'zh';
+type Locale = "en" | "zh";
 
 /**
  * Translation message structure
  */
 type Messages = Record<string, unknown>;
 
-type MessageType = 'critical' | 'deferred';
+type MessageType = "critical" | "deferred";
 
 /**
  * Internal helper: load messages from the source /messages directory.
@@ -67,9 +67,9 @@ async function loadMessagesFromSource(
   locale: Locale,
   type: MessageType,
 ): Promise<Messages> {
-  const filePath = join(process.cwd(), 'messages', locale, `${type}.json`);
+  const filePath = join(process.cwd(), "messages", locale, `${type}.json`);
   // eslint-disable-next-line security/detect-non-literal-fs-filename -- locale is sanitized
-  const content = await readFile(filePath, 'utf-8');
+  const content = await readFile(filePath, "utf-8");
   return JSON.parse(content) as Messages;
 }
 
@@ -82,13 +82,13 @@ async function loadMessagesFromPublic(
 ): Promise<Messages> {
   const filePath = join(
     process.cwd(),
-    'public',
-    'messages',
+    "public",
+    "messages",
     locale,
     `${type}.json`,
   );
   // eslint-disable-next-line security/detect-non-literal-fs-filename -- locale is sanitized
-  const content = await readFile(filePath, 'utf-8');
+  const content = await readFile(filePath, "utf-8");
   return JSON.parse(content) as Messages;
 }
 
@@ -97,7 +97,7 @@ async function loadMessagesFromPublic(
  * Falls back to routing.defaultLocale when input is not in the whitelist.
  */
 function sanitizeLocale(input: string): Locale {
-  const allowed = ['en', 'zh'] as const;
+  const allowed = ["en", "zh"] as const;
   return (allowed as readonly string[]).includes(input)
     ? (input as Locale)
     : (routing.defaultLocale as Locale);
@@ -161,7 +161,7 @@ async function fetchMessagesWithFallback(
     const revalidate = getRevalidateTime();
     const response = await fetch(url, {
       next: { revalidate },
-      cache: 'force-cache',
+      cache: "force-cache",
     });
 
     if (!response.ok) {
@@ -182,16 +182,16 @@ async function fetchMessagesWithFallback(
  */
 async function loadCriticalMessagesCore(locale: Locale): Promise<Messages> {
   const safeLocale = sanitizeLocale(locale as string);
-  const isBuildTime = process.env.NEXT_PHASE === 'phase-production-build';
-  const isDevelopment = process.env.NODE_ENV === 'development';
+  const isBuildTime = process.env.NEXT_PHASE === "phase-production-build";
+  const isDevelopment = process.env.NODE_ENV === "development";
 
   // Build/dev/CI/E2E: direct file read, production: HTTP fetch with fallback.
   // CI/E2E intentionally avoid Next.js fetch caching to prevent stale message payloads
   // (e.g. when .next/cache is restored from a previous run).
   const messages =
     isBuildTime || isDevelopment || isCiLikeEnvironment
-      ? await loadMessagesWithFallback(safeLocale, 'critical')
-      : await fetchMessagesWithFallback(safeLocale, 'critical');
+      ? await loadMessagesWithFallback(safeLocale, "critical")
+      : await fetchMessagesWithFallback(safeLocale, "critical");
 
   return messages;
 }
@@ -201,15 +201,15 @@ async function loadCriticalMessagesCore(locale: Locale): Promise<Messages> {
  */
 async function loadDeferredMessagesCore(locale: Locale): Promise<Messages> {
   const safeLocale = sanitizeLocale(locale as string);
-  const isBuildTime = process.env.NEXT_PHASE === 'phase-production-build';
-  const isDevelopment = process.env.NODE_ENV === 'development';
+  const isBuildTime = process.env.NEXT_PHASE === "phase-production-build";
+  const isDevelopment = process.env.NODE_ENV === "development";
 
   // Build/dev/CI/E2E: direct file read, production: HTTP fetch with fallback.
   // CI/E2E intentionally avoid Next.js fetch caching to prevent stale message payloads.
   const messages =
     isBuildTime || isDevelopment || isCiLikeEnvironment
-      ? await loadMessagesWithFallback(safeLocale, 'deferred')
-      : await fetchMessagesWithFallback(safeLocale, 'deferred');
+      ? await loadMessagesWithFallback(safeLocale, "deferred")
+      : await fetchMessagesWithFallback(safeLocale, "deferred");
 
   return messages;
 }
@@ -222,7 +222,7 @@ async function loadDeferredMessagesCore(locale: Locale): Promise<Messages> {
 function createCriticalMessagesCached(locale: Locale) {
   return unstable_cache(
     () => loadCriticalMessagesCore(locale),
-    ['i18n-critical', locale],
+    ["i18n-critical", locale],
     {
       revalidate: getRevalidateTime(),
       tags: [i18nTags.critical(locale), i18nTags.all()],
@@ -238,7 +238,7 @@ function createCriticalMessagesCached(locale: Locale) {
 function createDeferredMessagesCached(locale: Locale) {
   return unstable_cache(
     () => loadDeferredMessagesCore(locale),
-    ['i18n-deferred', locale],
+    ["i18n-deferred", locale],
     {
       revalidate: getRevalidateTime(),
       tags: [i18nTags.deferred(locale), i18nTags.all()],
@@ -310,13 +310,13 @@ export function preloadDeferredMessages(locale: Locale): void {
  * Load complete translation messages (critical + deferred combined)
  */
 export async function loadCompleteMessages(locale: Locale): Promise<Messages> {
-  const isBuildTime = process.env.NEXT_PHASE === 'phase-production-build';
+  const isBuildTime = process.env.NEXT_PHASE === "phase-production-build";
   const [critical, deferred] = await Promise.all([
     isBuildTime
-      ? loadMessagesFromSource(locale, 'critical')
+      ? loadMessagesFromSource(locale, "critical")
       : loadCriticalMessages(locale),
     isBuildTime
-      ? loadMessagesFromSource(locale, 'deferred')
+      ? loadMessagesFromSource(locale, "deferred")
       : loadDeferredMessages(locale),
   ]);
 
@@ -328,12 +328,12 @@ export async function loadCompleteMessages(locale: Locale): Promise<Messages> {
 
   // Debug output during build (when I18N_DEBUG_BUILD=1)
   if (
-    process.env.I18N_DEBUG_BUILD === '1' &&
-    process.env.NEXT_PHASE === 'phase-production-build'
+    process.env.I18N_DEBUG_BUILD === "1" &&
+    process.env.NEXT_PHASE === "phase-production-build"
   ) {
     const topLevelKeys = Object.keys(merged);
     // eslint-disable-next-line no-console -- intentional debug output
-    console.error('[i18n-debug] loadCompleteMessages snapshot', {
+    console.error("[i18n-debug] loadCompleteMessages snapshot", {
       locale,
       topLevelKeys,
       criticalKeys: Object.keys(critical ?? {}),

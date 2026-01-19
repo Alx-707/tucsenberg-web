@@ -4,10 +4,10 @@ import {
   screen,
   waitFor,
   within,
-} from '@testing-library/react';
-import { ThemeProvider } from 'next-themes';
-import { beforeEach, describe, expect, it } from 'vitest';
-import { ThemeSwitcher as ThemeToggle } from '@/components/ui/theme-switcher';
+} from "@testing-library/react";
+import { ThemeProvider } from "next-themes";
+import { beforeEach, describe, expect, it } from "vitest";
+import { ThemeSwitcher as ThemeToggle } from "@/components/ui/theme-switcher";
 
 /**
  * 主题切换组件浏览器测试
@@ -21,21 +21,21 @@ import { ThemeSwitcher as ThemeToggle } from '@/components/ui/theme-switcher';
 // 浏览器测试工具函数
 const browserTestUtils = {
   resizeWindow: (width: number, height: number) => {
-    Object.defineProperty(window, 'innerWidth', {
+    Object.defineProperty(window, "innerWidth", {
       writable: true,
       configurable: true,
       value: width,
     });
-    Object.defineProperty(window, 'innerHeight', {
+    Object.defineProperty(window, "innerHeight", {
       writable: true,
       configurable: true,
       value: height,
     });
-    window.dispatchEvent(new Event('resize'));
+    window.dispatchEvent(new Event("resize"));
   },
 
   mockMediaQuery: (query: string, matches: boolean) => {
-    Object.defineProperty(window, 'matchMedia', {
+    Object.defineProperty(window, "matchMedia", {
       writable: true,
       value: (q: string) => ({
         matches: q === query ? matches : false,
@@ -60,7 +60,7 @@ const browserTestUtils = {
   ) => {
     // 简化的触摸事件模拟，避免复杂的 Touch 对象构造
     const event = new Event(type, { bubbles: true, cancelable: true });
-    Object.defineProperty(event, 'touches', {
+    Object.defineProperty(event, "touches", {
       value: touches.map((touch) => ({
         clientX: touch.clientX,
         clientY: touch.clientY,
@@ -75,9 +75,9 @@ const browserTestUtils = {
 
 // Mock next-themes for browser testing
 const mockSetTheme = vi.fn();
-const mockTheme = vi.fn(() => 'light');
+const mockTheme = vi.fn(() => "light");
 
-vi.mock('next-themes', () => ({
+vi.mock("next-themes", () => ({
   ThemeProvider: ({ children }: { children?: React.ReactNode }) => (
     <div>{children}</div>
   ),
@@ -92,7 +92,7 @@ vi.mock('next-themes', () => ({
 const mockHandleThemeChange = vi.fn();
 const mockSetIsOpen = vi.fn();
 
-vi.mock('@/hooks/use-theme-toggle', () => ({
+vi.mock("@/hooks/use-theme-toggle", () => ({
   useThemeToggle: () => ({
     theme: mockTheme(),
     isOpen: false,
@@ -103,34 +103,34 @@ vi.mock('@/hooks/use-theme-toggle', () => ({
     handleThemeChange: mockHandleThemeChange,
     handleKeyDown: vi.fn(),
     ariaAttributes: {
-      'aria-label': '主题切换按钮',
+      "aria-label": "主题切换按钮",
     },
     themeOptions: [
-      { value: 'light', label: '浅色', icon: 'Sun' },
-      { value: 'dark', label: '深色', icon: 'Moon' },
-      { value: 'system', label: '系统', icon: 'Monitor' },
+      { value: "light", label: "浅色", icon: "Sun" },
+      { value: "dark", label: "深色", icon: "Moon" },
+      { value: "system", label: "系统", icon: "Monitor" },
     ],
   }),
 }));
 
 const getSystemThemeButton = () =>
-  within(screen.getByTestId('theme-toggle')).getByRole('button', {
+  within(screen.getByTestId("theme-toggle")).getByRole("button", {
     name: /system theme/i,
   });
 
-describe('ThemeToggle Browser Tests', () => {
+describe("ThemeToggle Browser Tests", () => {
   beforeEach(() => {
     vi.clearAllMocks();
-    mockTheme.mockReturnValue('light');
+    mockTheme.mockReturnValue("light");
     mockHandleThemeChange.mockClear();
     mockSetIsOpen.mockClear();
 
     // Mock document.removeEventListener for memory leak tests
-    vi.spyOn(document, 'removeEventListener');
+    vi.spyOn(document, "removeEventListener");
   });
 
-  describe('Visual Interactions', () => {
-    it('should handle smooth theme transition animations', async () => {
+  describe("Visual Interactions", () => {
+    it("should handle smooth theme transition animations", async () => {
       render(
         <ThemeProvider>
           <ThemeToggle />
@@ -159,9 +159,9 @@ describe('ThemeToggle Browser Tests', () => {
       expect(toggleButton).not.toBeDisabled();
     });
 
-    it('should respond to system theme changes', async () => {
+    it("should respond to system theme changes", async () => {
       // 模拟系统主题为深色模式
-      browserTestUtils.mockMediaQuery('(prefers-color-scheme: dark)', true);
+      browserTestUtils.mockMediaQuery("(prefers-color-scheme: dark)", true);
 
       render(
         <ThemeProvider>
@@ -176,7 +176,7 @@ describe('ThemeToggle Browser Tests', () => {
       });
     });
 
-    it('should handle rapid theme switching without performance issues', async () => {
+    it("should handle rapid theme switching without performance issues", async () => {
       render(
         <ThemeProvider>
           <ThemeToggle />
@@ -205,8 +205,8 @@ describe('ThemeToggle Browser Tests', () => {
     });
   });
 
-  describe('Responsive Behavior', () => {
-    it('should adapt to different screen sizes', async () => {
+  describe("Responsive Behavior", () => {
+    it("should adapt to different screen sizes", async () => {
       render(
         <ThemeProvider>
           <ThemeToggle />
@@ -235,7 +235,7 @@ describe('ThemeToggle Browser Tests', () => {
       });
     });
 
-    it('should handle touch interactions on mobile devices', async () => {
+    it("should handle touch interactions on mobile devices", async () => {
       // 模拟移动设备环境
       browserTestUtils.resizeWindow(375, 667);
 
@@ -248,7 +248,7 @@ describe('ThemeToggle Browser Tests', () => {
       const toggleButton = getSystemThemeButton();
 
       // 模拟触摸事件
-      const touchEvent = browserTestUtils.createTouchEvent('touchstart', [
+      const touchEvent = browserTestUtils.createTouchEvent("touchstart", [
         { clientX: 100, clientY: 100 },
       ]);
 
@@ -261,8 +261,8 @@ describe('ThemeToggle Browser Tests', () => {
     });
   });
 
-  describe('Performance Monitoring', () => {
-    it('should not cause memory leaks during theme switching', async () => {
+  describe("Performance Monitoring", () => {
+    it("should not cause memory leaks during theme switching", async () => {
       const { unmount } = render(
         <ThemeProvider>
           <ThemeToggle />
@@ -287,7 +287,7 @@ describe('ThemeToggle Browser Tests', () => {
       );
     });
 
-    it('should maintain accessibility during animations', async () => {
+    it("should maintain accessibility during animations", async () => {
       render(
         <ThemeProvider>
           <ThemeToggle />
@@ -305,17 +305,17 @@ describe('ThemeToggle Browser Tests', () => {
       // 在动画过程中验证可访问性保持
       await waitFor(() => {
         expect(toggleButton).toBeInTheDocument();
-        expect(toggleButton).not.toHaveAttribute('aria-disabled');
+        expect(toggleButton).not.toHaveAttribute("aria-disabled");
       });
     });
   });
 
-  describe('Browser Compatibility', () => {
-    it('should work with different user agents', async () => {
+  describe("Browser Compatibility", () => {
+    it("should work with different user agents", async () => {
       // 简化测试，只测试一个用户代理
-      Object.defineProperty(navigator, 'userAgent', {
+      Object.defineProperty(navigator, "userAgent", {
         writable: true,
-        value: 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36',
+        value: "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36",
       });
 
       render(

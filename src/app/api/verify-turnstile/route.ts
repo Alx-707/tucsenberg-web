@@ -1,12 +1,12 @@
-import { NextRequest, NextResponse } from 'next/server';
-import { getApiMessages, type ApiMessages } from '@/lib/api/get-request-locale';
-import { safeParseJson } from '@/lib/api/safe-parse-json';
-import { env } from '@/lib/env';
-import { logger, sanitizeIP } from '@/lib/logger';
+import { NextRequest, NextResponse } from "next/server";
+import { getApiMessages, type ApiMessages } from "@/lib/api/get-request-locale";
+import { safeParseJson } from "@/lib/api/safe-parse-json";
+import { env } from "@/lib/env";
+import { logger, sanitizeIP } from "@/lib/logger";
 import {
   getFullClientIPChain,
   verifyTurnstileDetailed,
-} from '@/app/api/contact/contact-api-utils';
+} from "@/app/api/contact/contact-api-utils";
 
 /**
  * Request body interface for Turnstile verification.
@@ -31,7 +31,7 @@ function validateRequestBody(
     return NextResponse.json(
       {
         success: false,
-        error: 'Missing token',
+        error: "Missing token",
         message: messages.turnstile.missingToken,
       },
       { status: 400 },
@@ -53,7 +53,7 @@ function createVerificationErrorResponse(
   return NextResponse.json(
     {
       success: false,
-      error: 'Verification failed',
+      error: "Verification failed",
       message: messages.turnstile.verificationFailed,
       ...(verificationResult.errorCodes
         ? { errorCodes: verificationResult.errorCodes }
@@ -71,14 +71,14 @@ function createNetworkErrorResponse(
   clientIP: string,
   messages: ApiMessages,
 ) {
-  logger.error('Turnstile verification request failed', {
+  logger.error("Turnstile verification request failed", {
     error: verifyError,
     clientIP: sanitizeIP(clientIP),
   });
   return NextResponse.json(
     {
       success: false,
-      error: 'Verification request failed',
+      error: "Verification request failed",
       message: messages.turnstile.networkError,
     },
     { status: 500 },
@@ -93,7 +93,7 @@ function checkTurnstileConfigured(messages: ApiMessages): NextResponse | null {
     return NextResponse.json(
       {
         success: false,
-        error: 'Turnstile not configured',
+        error: "Turnstile not configured",
         message: messages.turnstile.notConfigured,
       },
       { status: 500 },
@@ -118,7 +118,7 @@ export async function POST(request: NextRequest) {
 
     const parsedBody = await safeParseJson<TurnstileVerificationRequest>(
       request,
-      { route: '/api/verify-turnstile' },
+      { route: "/api/verify-turnstile" },
     );
     if (!parsedBody.ok) {
       return NextResponse.json(
@@ -156,11 +156,11 @@ export async function POST(request: NextRequest) {
       { status: 200 },
     );
   } catch (error) {
-    logger.error('Error verifying Turnstile token', { error: error as Error });
+    logger.error("Error verifying Turnstile token", { error: error as Error });
     return NextResponse.json(
       {
         success: false,
-        error: 'Internal server error',
+        error: "Internal server error",
         message: messages.serverError,
       },
       { status: 500 },
@@ -176,7 +176,7 @@ export function GET() {
 
   return NextResponse.json(
     {
-      status: 'Turnstile verification endpoint active',
+      status: "Turnstile verification endpoint active",
       configured: isConfigured,
       timestamp: new Date().toISOString(),
     },
@@ -191,9 +191,9 @@ export function OPTIONS() {
   return new NextResponse(null, {
     status: 200,
     headers: {
-      'Allow': 'POST, GET, OPTIONS',
-      'Access-Control-Allow-Methods': 'POST, GET, OPTIONS',
-      'Access-Control-Allow-Headers': 'Content-Type',
+      Allow: "POST, GET, OPTIONS",
+      "Access-Control-Allow-Methods": "POST, GET, OPTIONS",
+      "Access-Control-Allow-Headers": "Content-Type",
     },
   });
 }

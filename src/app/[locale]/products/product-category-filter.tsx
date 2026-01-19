@@ -1,6 +1,6 @@
-import Link from 'next/link';
-import { cn } from '@/lib/utils';
-import { Badge } from '@/components/ui/badge';
+import Link from "next/link";
+import { cn } from "@/lib/utils";
+import { Badge } from "@/components/ui/badge";
 
 export interface ProductCategoryFilterProps {
   categories: string[];
@@ -25,17 +25,17 @@ export function ProductCategoryFilter({
 }: ProductCategoryFilterProps) {
   return (
     <nav
-      className={cn('flex flex-wrap gap-2', className)}
-      aria-label='Product categories'
+      className={cn("flex flex-wrap gap-2", className)}
+      aria-label="Product categories"
     >
       {/* All Categories */}
       <Link
         href={pathname}
-        className='rounded-full focus:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2'
+        className="rounded-full focus:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2"
       >
         <Badge
-          variant={currentCategory === undefined ? 'default' : 'outline'}
-          className='cursor-pointer transition-colors hover:bg-primary/90'
+          variant={currentCategory === undefined ? "default" : "outline"}
+          className="cursor-pointer transition-colors hover:bg-primary/90"
         >
           {allCategoriesLabel}
         </Badge>
@@ -46,11 +46,11 @@ export function ProductCategoryFilter({
         <Link
           key={category}
           href={`${pathname}?category=${encodeURIComponent(category)}`}
-          className='rounded-full focus:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2'
+          className="rounded-full focus:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2"
         >
           <Badge
-            variant={currentCategory === category ? 'default' : 'outline'}
-            className='cursor-pointer transition-colors hover:bg-primary/90'
+            variant={currentCategory === category ? "default" : "outline"}
+            className="cursor-pointer transition-colors hover:bg-primary/90"
           >
             {category}
           </Badge>

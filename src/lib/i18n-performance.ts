@@ -1,4 +1,4 @@
-import { cache } from 'react';
+import { cache } from "react";
 import {
   ANIMATION_DURATION_SLOW,
   COUNT_FIVE,
@@ -10,12 +10,12 @@ import {
   PERCENTAGE_FULL,
   PERCENTAGE_HALF,
   ZERO,
-} from '@/constants';
+} from "@/constants";
 import {
   CACHE_DURATIONS,
   CACHE_LIMITS,
   PERFORMANCE_THRESHOLDS,
-} from '@/constants/i18n-constants';
+} from "@/constants/i18n-constants";
 
 /**
  * 缓存项接口
@@ -96,7 +96,7 @@ export class TranslationCache {
 
 // 获取基础 URL（用于 fetch）
 function getBaseUrl(): string {
-  if (typeof window !== 'undefined') {
+  if (typeof window !== "undefined") {
     return window.location.origin;
   }
   if (process.env.VERCEL_URL) {
@@ -129,12 +129,12 @@ export const getCachedMessages = cache(
       const response = (await fetch(url, {
         next: { revalidate: 3600 },
       } as unknown as RequestInit)) as Response;
-      if (!response || typeof response.ok !== 'boolean' || !response.ok) {
-        throw new Error('bad status');
+      if (!response || typeof response.ok !== "boolean" || !response.ok) {
+        throw new Error("bad status");
       }
       const parsed = (await response.json()) as unknown;
       messages =
-        parsed && typeof parsed === 'object'
+        parsed && typeof parsed === "object"
           ? (parsed as Record<string, unknown>)
           : {};
     } catch {
@@ -154,7 +154,7 @@ export const getCachedTranslations = cache(
     const messages = await getCachedMessages(locale);
 
     if (namespace) {
-      if (messages && typeof messages === 'object') {
+      if (messages && typeof messages === "object") {
         const entry = Object.entries(messages as Record<string, unknown>).find(
           ([k]) => k === namespace,
         );
@@ -299,7 +299,7 @@ function getPerformanceScore(
     good: number;
     acceptable: number;
   } | null;
-  if (!safeTargets || typeof safeTargets !== 'object') {
+  if (!safeTargets || typeof safeTargets !== "object") {
     return PERFORMANCE_THRESHOLDS.POOR;
   }
 
@@ -317,9 +317,9 @@ function getPerformanceScore(
 }
 
 function getGrade(score: number): string {
-  if (score >= PERFORMANCE_THRESHOLDS.EXCELLENT - COUNT_FIVE) return 'A';
-  if (score >= PERFORMANCE_THRESHOLDS.GOOD) return 'B';
-  if (score >= PERFORMANCE_THRESHOLDS.GOOD - COUNT_TEN) return 'C';
-  if (score >= PERFORMANCE_THRESHOLDS.FAIR) return 'D';
-  return 'F';
+  if (score >= PERFORMANCE_THRESHOLDS.EXCELLENT - COUNT_FIVE) return "A";
+  if (score >= PERFORMANCE_THRESHOLDS.GOOD) return "B";
+  if (score >= PERFORMANCE_THRESHOLDS.GOOD - COUNT_TEN) return "C";
+  if (score >= PERFORMANCE_THRESHOLDS.FAIR) return "D";
+  return "F";
 }

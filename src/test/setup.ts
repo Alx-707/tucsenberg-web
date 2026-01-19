@@ -5,22 +5,22 @@
 
 /* eslint-disable max-lines-per-function, max-lines */
 
-import { afterEach, beforeEach, vi } from 'vitest';
-import '@testing-library/jest-dom/vitest';
-import React from 'react';
+import { afterEach, beforeEach, vi } from "vitest";
+import "@testing-library/jest-dom/vitest";
+import React from "react";
 // 扩展 Vitest 的 expect 断言
-import type { TestingLibraryMatchers } from '@testing-library/jest-dom/matchers';
+import type { TestingLibraryMatchers } from "@testing-library/jest-dom/matchers";
 
 // Mock CSS imports to avoid PostCSS processing in tests
-vi.mock('@/app/globals.css', () => ({ default: {} }));
+vi.mock("@/app/globals.css", () => ({ default: {} }));
 
 // Mock server-only to prevent import errors in test environment
-vi.mock('server-only', () => ({}));
+vi.mock("server-only", () => ({}));
 
 // Mock MDX importers to prevent Vite from resolving @content imports in test environment
 // This is necessary because @content/* paths reference actual MDX files that may not exist
 // or should not be loaded during unit/integration tests
-vi.mock('@/lib/mdx-importers.generated', () => ({
+vi.mock("@/lib/mdx-importers.generated", () => ({
   postImporters: {
     en: {},
     zh: {},
@@ -36,11 +36,11 @@ vi.mock('@/lib/mdx-importers.generated', () => ({
 }));
 
 // Mock next/font/local for local font loading (P2-1 Phase 3: Geist Sans Latin subset)
-vi.mock('next/font/local', () => ({
+vi.mock("next/font/local", () => ({
   default: vi.fn(() => ({
-    variable: '--font-geist-sans',
-    className: 'geist-sans-subset',
-    style: { fontFamily: 'Geist Sans Latin' },
+    variable: "--font-geist-sans",
+    className: "geist-sans-subset",
+    style: { fontFamily: "Geist Sans Latin" },
   })),
 }));
 
@@ -71,7 +71,7 @@ vi.mock('next/font/local', () => ({
 // - If a test needs real network, set VITEST_USE_REAL_MESSAGES=true in that test
 (() => {
   // Minimal Response polyfill if not available
-  const hasNativeResponse = typeof (globalThis as any).Response !== 'undefined';
+  const hasNativeResponse = typeof (globalThis as any).Response !== "undefined";
   const SimpleResponse: any = hasNativeResponse
     ? (globalThis as any).Response
     : class SimpleResponse {
@@ -83,20 +83,20 @@ vi.mock('next/font/local', () => ({
           body: string,
           init: { status: number; headers?: Record<string, string> },
         ) {
-          this._body = body ?? '{}';
+          this._body = body ?? "{}";
           this.status = init.status;
           this.ok = this.status >= 200 && this.status < 300;
           this.headers = new Map(Object.entries(init.headers || {}));
         }
         async json() {
           try {
-            return JSON.parse(this._body || '{}');
+            return JSON.parse(this._body || "{}");
           } catch {
             return {};
           }
         }
         async text() {
-          return this._body || '';
+          return this._body || "";
         }
       };
 
@@ -106,53 +106,53 @@ vi.mock('next/font/local', () => ({
 
   const mockFetch = vi.fn(async (input: any, init?: any) => {
     // Normalize URL
-    let url = '';
+    let url = "";
     try {
       url =
-        typeof input === 'string'
+        typeof input === "string"
           ? input
           : input && input.url
             ? (input.url as string)
             : String(input);
     } catch {
-      url = '';
+      url = "";
     }
 
     // Stable mock for externalized messages under public/messages/*
-    if (!process.env.VITEST_USE_REAL_MESSAGES && url.includes('/messages/')) {
+    if (!process.env.VITEST_USE_REAL_MESSAGES && url.includes("/messages/")) {
       const body = JSON.stringify({});
       return new SimpleResponse(body, {
         status: 200,
-        headers: { 'content-type': 'application/json' },
+        headers: { "content-type": "application/json" },
       }) as Response;
     }
 
     // Fallback to original fetch if available
-    if (typeof OriginalFetch === 'function') {
+    if (typeof OriginalFetch === "function") {
       return OriginalFetch(input, init);
     }
 
     // Final fallback: return empty JSON
     return new SimpleResponse(JSON.stringify({}), {
       status: 200,
-      headers: { 'content-type': 'application/json' },
+      headers: { "content-type": "application/json" },
     }) as Response;
   });
 
   // Publish polyfills if missing
-  if (typeof (globalThis as any).Response === 'undefined') {
+  if (typeof (globalThis as any).Response === "undefined") {
     (globalThis as any).Response = SimpleResponse;
   }
-  if (typeof (globalThis as any).Headers === 'undefined') {
+  if (typeof (globalThis as any).Headers === "undefined") {
     // Minimal Headers no-op polyfill to satisfy type checks
     (globalThis as any).Headers = class {};
   }
 
   // Set global fetch to our mocked version to ensure stability in unit tests
-  vi.stubGlobal('fetch', mockFetch);
+  vi.stubGlobal("fetch", mockFetch);
 })();
 
-declare module 'vitest' {
+declare module "vitest" {
   // eslint-disable-next-line @typescript-eslint/no-empty-object-type
   interface Assertion<T = any> extends TestingLibraryMatchers<T, void> {}
   // eslint-disable-next-line @typescript-eslint/no-empty-object-type
@@ -163,12 +163,12 @@ declare module 'vitest' {
 }
 
 // Mock Next.js router
-vi.mock('next/router', () => ({
+vi.mock("next/router", () => ({
   useRouter: vi.fn(() => ({
-    route: '/',
-    pathname: '/',
+    route: "/",
+    pathname: "/",
     query: {},
-    asPath: '/',
+    asPath: "/",
     push: vi.fn(),
     pop: vi.fn(),
     reload: vi.fn(),
@@ -185,7 +185,7 @@ vi.mock('next/router', () => ({
 }));
 
 // Mock Next.js navigation (App Router)
-vi.mock('next/navigation', () => ({
+vi.mock("next/navigation", () => ({
   useRouter: vi.fn(() => ({
     push: vi.fn(),
     replace: vi.fn(),
@@ -195,7 +195,7 @@ vi.mock('next/navigation', () => ({
     refresh: vi.fn(),
   })),
   useSearchParams: vi.fn(() => new URLSearchParams()),
-  usePathname: vi.fn(() => '/'),
+  usePathname: vi.fn(() => "/"),
   useParams: vi.fn(() => ({})),
   redirect: vi.fn(),
   permanentRedirect: vi.fn(),
@@ -206,7 +206,7 @@ vi.mock('next/navigation', () => ({
 // - cacheLife() and cacheTag() are no-ops in test environment
 // - unstable_cache passes through the function for testing
 // - revalidatePath and revalidateTag are no-ops in tests
-vi.mock('next/cache', () => ({
+vi.mock("next/cache", () => ({
   cacheLife: vi.fn(() => undefined),
   cacheTag: vi.fn(() => undefined),
   unstable_cache: vi.fn((fn) => fn),
@@ -221,11 +221,11 @@ vi.mock('next/cache', () => ({
 // - Unit tests generally assert handlers/state rather than real navigation
 //   so we neutralize navigation side-effects in the test environment.
 // Window navigation stubs
-Object.defineProperty(window, 'open', { value: vi.fn(), configurable: true });
+Object.defineProperty(window, "open", { value: vi.fn(), configurable: true });
 try {
-  const locDesc = Object.getOwnPropertyDescriptor(window, 'location');
+  const locDesc = Object.getOwnPropertyDescriptor(window, "location");
   if (!locDesc || locDesc.configurable) {
-    Object.defineProperty(window, 'location', {
+    Object.defineProperty(window, "location", {
       value: {
         ...window.location,
         assign: vi.fn(),
@@ -240,10 +240,10 @@ try {
 
 // Anchor click: dispatch click event without performing navigation
 const _anchorClick = HTMLAnchorElement.prototype.click;
-vi.spyOn(HTMLAnchorElement.prototype as any, 'click').mockImplementation(
+vi.spyOn(HTMLAnchorElement.prototype as any, "click").mockImplementation(
   function anchorClickMock(this: HTMLAnchorElement) {
     // Fire a cancellable click event so user handlers still run
-    const evt = new MouseEvent('click', { bubbles: true, cancelable: true });
+    const evt = new MouseEvent("click", { bubbles: true, cancelable: true });
     this.dispatchEvent(evt);
     // Do not call the original click to avoid jsdom navigation
   },
@@ -251,37 +251,37 @@ vi.spyOn(HTMLAnchorElement.prototype as any, 'click').mockImplementation(
 
 // Mock lucide-react icons - 返回真正的React元素而不是字符串
 // Browser Mode（BROWSER_TEST=true）下跳过此 Mock，避免 v4 Browser 手动 mock 解析冲突
-if (process.env.BROWSER_TEST !== 'true') {
+if (process.env.BROWSER_TEST !== "true") {
   const _MockIcon = vi.fn(({ className, ...props }: any) =>
-    React.createElement('svg', {
-      'className': className || '',
-      'data-testid': 'mock-icon',
-      'width': '24',
-      'height': '24',
-      'viewBox': '0 0 24 24',
-      'fill': 'none',
-      'stroke': 'currentColor',
-      'strokeWidth': '2',
-      'strokeLinecap': 'round',
-      'strokeLinejoin': 'round',
+    React.createElement("svg", {
+      className: className || "",
+      "data-testid": "mock-icon",
+      width: "24",
+      height: "24",
+      viewBox: "0 0 24 24",
+      fill: "none",
+      stroke: "currentColor",
+      strokeWidth: "2",
+      strokeLinecap: "round",
+      strokeLinejoin: "round",
       ...props,
     }),
   );
 
-  vi.mock('lucide-react', () => {
+  vi.mock("lucide-react", () => {
     // 在 factory 内定义 MockIcon，避免 Vitest v4 hoist 导致的未定义错误
     const MockIcon = ({ className, ...props }: any) =>
-      React.createElement('svg', {
-        'className': className || '',
-        'data-testid': 'mock-icon',
-        'width': '24',
-        'height': '24',
-        'viewBox': '0 0 24 24',
-        'fill': 'none',
-        'stroke': 'currentColor',
-        'strokeWidth': '2',
-        'strokeLinecap': 'round',
-        'strokeLinejoin': 'round',
+      React.createElement("svg", {
+        className: className || "",
+        "data-testid": "mock-icon",
+        width: "24",
+        height: "24",
+        viewBox: "0 0 24 24",
+        fill: "none",
+        stroke: "currentColor",
+        strokeWidth: "2",
+        strokeLinecap: "round",
+        strokeLinejoin: "round",
         ...props,
       });
     return {
@@ -1271,7 +1271,7 @@ const createMockZodObject = () => {
   return mockObject;
 };
 
-vi.mock('zod', () => ({
+vi.mock("zod", () => ({
   z: {
     string: vi.fn(() => createMockZodString()),
     number: vi.fn(() => createMockZodNumber()),
@@ -1309,8 +1309,8 @@ vi.mock('zod', () => ({
   },
   ZodError: class MockZodError extends Error {
     constructor(issues: any[]) {
-      super('Validation error');
-      this.name = 'ZodError';
+      super("Validation error");
+      this.name = "ZodError";
       this.issues = issues;
     }
     issues: any[];
@@ -1318,27 +1318,27 @@ vi.mock('zod', () => ({
     flatten = vi.fn();
   },
   ZodIssueCode: {
-    invalid_type: 'invalid_type',
-    invalid_literal: 'invalid_literal',
-    custom: 'custom',
-    invalid_union: 'invalid_union',
-    invalid_union_discriminator: 'invalid_union_discriminator',
-    invalid_enum_value: 'invalid_enum_value',
-    unrecognized_keys: 'unrecognized_keys',
-    invalid_arguments: 'invalid_arguments',
-    invalid_return_type: 'invalid_return_type',
-    invalid_date: 'invalid_date',
-    invalid_string: 'invalid_string',
-    too_small: 'too_small',
-    too_big: 'too_big',
-    invalid_intersection_types: 'invalid_intersection_types',
-    not_multiple_of: 'not_multiple_of',
-    not_finite: 'not_finite',
+    invalid_type: "invalid_type",
+    invalid_literal: "invalid_literal",
+    custom: "custom",
+    invalid_union: "invalid_union",
+    invalid_union_discriminator: "invalid_union_discriminator",
+    invalid_enum_value: "invalid_enum_value",
+    unrecognized_keys: "unrecognized_keys",
+    invalid_arguments: "invalid_arguments",
+    invalid_return_type: "invalid_return_type",
+    invalid_date: "invalid_date",
+    invalid_string: "invalid_string",
+    too_small: "too_small",
+    too_big: "too_big",
+    invalid_intersection_types: "invalid_intersection_types",
+    not_multiple_of: "not_multiple_of",
+    not_finite: "not_finite",
   },
 }));
 
 // Mock app constants - 使用importOriginal保留所有原始常量
-vi.mock('@/constants/app-constants', async (importOriginal) => {
+vi.mock("@/constants/app-constants", async (importOriginal) => {
   const actual = (await importOriginal()) as Record<string, unknown>;
   return {
     ...actual,
@@ -1347,7 +1347,7 @@ vi.mock('@/constants/app-constants', async (importOriginal) => {
 });
 
 // Mock unified constants entry point - 使用importOriginal保留所有原始常量
-vi.mock('@/constants', async (importOriginal) => {
+vi.mock("@/constants", async (importOriginal) => {
   const actual = (await importOriginal()) as Record<string, unknown>;
   return {
     ...actual,
@@ -1356,7 +1356,7 @@ vi.mock('@/constants', async (importOriginal) => {
 });
 
 // Mock i18n constants - 使用importOriginal保留所有原始常量
-vi.mock('@/constants/i18n-constants', async (importOriginal) => {
+vi.mock("@/constants/i18n-constants", async (importOriginal) => {
   const actual = (await importOriginal()) as Record<string, unknown>;
   return {
     ...actual,
@@ -1366,20 +1366,20 @@ vi.mock('@/constants/i18n-constants', async (importOriginal) => {
 
 // Mock next-intl - 提供实际的翻译映射和基础 Provider
 const mockTranslations: Record<string, string> = {
-  'navigation.home': 'Home',
-  'navigation.about': 'About',
-  'navigation.services': 'Services',
-  'navigation.products': 'Products',
-  'navigation.blog': 'Blog',
-  'navigation.contact': 'Contact',
+  "navigation.home": "Home",
+  "navigation.about": "About",
+  "navigation.services": "Services",
+  "navigation.products": "Products",
+  "navigation.blog": "Blog",
+  "navigation.contact": "Contact",
 };
 
-vi.mock('next-intl', () => ({
+vi.mock("next-intl", () => ({
   useTranslations: vi.fn(() => (key: string) => {
     const safeTranslations = new Map(Object.entries(mockTranslations));
     return safeTranslations.get(key) || key;
   }),
-  useLocale: vi.fn(() => 'en'),
+  useLocale: vi.fn(() => "en"),
   useMessages: vi.fn(() => ({})),
   useFormatter: vi.fn(() => ({
     dateTime: vi.fn(),
@@ -1397,9 +1397,9 @@ vi.mock('next-intl', () => ({
 }));
 
 // Mock next-intl/server
-vi.mock('next-intl/server', () => ({
+vi.mock("next-intl/server", () => ({
   getTranslations: vi.fn(() => (key: string) => key),
-  getLocale: vi.fn(() => 'en'),
+  getLocale: vi.fn(() => "en"),
   getMessages: vi.fn(() => ({})),
   getFormatter: vi.fn(() => ({
     dateTime: vi.fn(),
@@ -1412,23 +1412,23 @@ vi.mock('next-intl/server', () => ({
 }));
 
 // Mock @/i18n/routing - 提供完整的路由Mock配置
-vi.mock('@/i18n/routing', () => ({
+vi.mock("@/i18n/routing", () => ({
   // Minimal routing config for tests
   routing: {
-    locales: ['en', 'zh'],
-    defaultLocale: 'en',
+    locales: ["en", "zh"],
+    defaultLocale: "en",
     pathnames: {
-      '/': '/',
-      '/about': '/about',
-      '/contact': '/contact',
-      '/products': '/products',
-      '/blog': '/blog',
-      '/faq': '/faq',
-      '/privacy': '/privacy',
+      "/": "/",
+      "/about": "/about",
+      "/contact": "/contact",
+      "/products": "/products",
+      "/blog": "/blog",
+      "/faq": "/faq",
+      "/privacy": "/privacy",
     },
   },
   Link: ({ children, href, ...props }: any) =>
-    React.createElement('a', { href, ...props }, children),
+    React.createElement("a", { href, ...props }, children),
   useRouter: vi.fn(() => ({
     push: vi.fn(),
     replace: vi.fn(),
@@ -1437,19 +1437,19 @@ vi.mock('@/i18n/routing', () => ({
     refresh: vi.fn(),
     prefetch: vi.fn(),
   })),
-  usePathname: vi.fn(() => '/'),
+  usePathname: vi.fn(() => "/"),
   redirect: vi.fn(),
   permanentRedirect: vi.fn(),
 }));
 
 // Mock next-themes
-vi.mock('next-themes', () => ({
+vi.mock("next-themes", () => ({
   useTheme: vi.fn(() => ({
-    theme: 'light',
+    theme: "light",
     setTheme: vi.fn(),
-    resolvedTheme: 'light',
-    themes: ['light', 'dark', 'system'],
-    systemTheme: 'light',
+    resolvedTheme: "light",
+    themes: ["light", "dark", "system"],
+    systemTheme: "light",
   })),
   ThemeProvider: ({ children }: { children: React.ReactNode }) => children,
 }));
@@ -1457,8 +1457,8 @@ vi.mock('next-themes', () => ({
 // Mock environment variables - use Object.defineProperty for read-only properties
 try {
   if (!process.env.NODE_ENV) {
-    Object.defineProperty(process.env, 'NODE_ENV', {
-      value: 'test',
+    Object.defineProperty(process.env, "NODE_ENV", {
+      value: "test",
       writable: false,
       enumerable: true,
       configurable: true,
@@ -1469,7 +1469,7 @@ try {
 }
 
 // Enhanced matchMedia mock for accessibility testing
-Object.defineProperty(window, 'matchMedia', {
+Object.defineProperty(window, "matchMedia", {
   writable: true,
   value: vi.fn().mockImplementation((query: string) => ({
     matches: false,
@@ -1593,8 +1593,8 @@ const MockPerformanceObserver = vi.fn().mockImplementation((_callback) => ({
 }));
 
 // 添加静态属性
-Object.defineProperty(MockPerformanceObserver, 'supportedEntryTypes', {
-  value: ['navigation', 'resource', 'measure', 'mark'],
+Object.defineProperty(MockPerformanceObserver, "supportedEntryTypes", {
+  value: ["navigation", "resource", "measure", "mark"],
   writable: false,
   enumerable: true,
   configurable: true,
@@ -1604,64 +1604,64 @@ globalThis.PerformanceObserver =
   MockPerformanceObserver as unknown as typeof PerformanceObserver;
 
 // Mock environment variables - 使用vi.stubEnv而不是直接修改process.env
-vi.stubEnv('NODE_ENV', 'test');
-vi.stubEnv('NEXT_PUBLIC_BASE_URL', 'https://example.com');
-vi.stubEnv('NEXT_PUBLIC_VERCEL_URL', 'example.vercel.app');
+vi.stubEnv("NODE_ENV", "test");
+vi.stubEnv("NEXT_PUBLIC_BASE_URL", "https://example.com");
+vi.stubEnv("NEXT_PUBLIC_VERCEL_URL", "example.vercel.app");
 
 // Mock server-side environment variables for API testing
-vi.stubEnv('TURNSTILE_SECRET_KEY', 'test-secret-key');
-vi.stubEnv('RESEND_API_KEY', 'test-resend-key');
-vi.stubEnv('AIRTABLE_API_KEY', 'test-airtable-key');
-vi.stubEnv('AIRTABLE_BASE_ID', 'test-base-id');
-vi.stubEnv('AIRTABLE_TABLE_NAME', 'test-table');
-vi.stubEnv('EMAIL_FROM', 'test@example.com');
-vi.stubEnv('EMAIL_REPLY_TO', 'reply@example.com');
-vi.stubEnv('CSP_REPORT_URI', 'https://example.com/csp-report');
-vi.stubEnv('ADMIN_TOKEN', 'test-admin-token');
+vi.stubEnv("TURNSTILE_SECRET_KEY", "test-secret-key");
+vi.stubEnv("RESEND_API_KEY", "test-resend-key");
+vi.stubEnv("AIRTABLE_API_KEY", "test-airtable-key");
+vi.stubEnv("AIRTABLE_BASE_ID", "test-base-id");
+vi.stubEnv("AIRTABLE_TABLE_NAME", "test-table");
+vi.stubEnv("EMAIL_FROM", "test@example.com");
+vi.stubEnv("EMAIL_REPLY_TO", "reply@example.com");
+vi.stubEnv("CSP_REPORT_URI", "https://example.com/csp-report");
+vi.stubEnv("ADMIN_TOKEN", "test-admin-token");
 
 // Mock @t3-oss/env-nextjs to prevent server-side environment variable access errors
-vi.mock('@t3-oss/env-nextjs', () => ({
+vi.mock("@t3-oss/env-nextjs", () => ({
   createEnv: vi.fn(() => ({
-    NODE_ENV: 'test',
-    TURNSTILE_SECRET_KEY: 'test-secret-key',
-    RESEND_API_KEY: 'test-resend-key',
-    AIRTABLE_API_KEY: 'test-airtable-key',
-    AIRTABLE_BASE_ID: 'test-base-id',
-    AIRTABLE_TABLE_NAME: 'test-table',
-    EMAIL_FROM: 'test@example.com',
-    EMAIL_REPLY_TO: 'reply@example.com',
-    CSP_REPORT_URI: 'https://example.com/csp-report',
-    ADMIN_TOKEN: 'test-admin-token',
-    NEXT_PUBLIC_BASE_URL: 'https://example.com',
-    NEXT_PUBLIC_VERCEL_URL: 'example.vercel.app',
-    WHATSAPP_ACCESS_TOKEN: 'test-whatsapp-token',
-    WHATSAPP_PHONE_NUMBER_ID: 'test-phone-id',
-    WHATSAPP_BUSINESS_ACCOUNT_ID: 'test-business-id',
-    WHATSAPP_WEBHOOK_VERIFY_TOKEN: 'test-webhook-token',
+    NODE_ENV: "test",
+    TURNSTILE_SECRET_KEY: "test-secret-key",
+    RESEND_API_KEY: "test-resend-key",
+    AIRTABLE_API_KEY: "test-airtable-key",
+    AIRTABLE_BASE_ID: "test-base-id",
+    AIRTABLE_TABLE_NAME: "test-table",
+    EMAIL_FROM: "test@example.com",
+    EMAIL_REPLY_TO: "reply@example.com",
+    CSP_REPORT_URI: "https://example.com/csp-report",
+    ADMIN_TOKEN: "test-admin-token",
+    NEXT_PUBLIC_BASE_URL: "https://example.com",
+    NEXT_PUBLIC_VERCEL_URL: "example.vercel.app",
+    WHATSAPP_ACCESS_TOKEN: "test-whatsapp-token",
+    WHATSAPP_PHONE_NUMBER_ID: "test-phone-id",
+    WHATSAPP_BUSINESS_ACCOUNT_ID: "test-business-id",
+    WHATSAPP_WEBHOOK_VERIFY_TOKEN: "test-webhook-token",
   })),
 }));
 
 // Mock the env module directly
-vi.mock('@/lib/env', () => {
+vi.mock("@/lib/env", () => {
   const mockEnv = {
-    NODE_ENV: 'test',
-    TURNSTILE_SECRET_KEY: 'test-secret-key',
-    RESEND_API_KEY: 'test-resend-key',
-    AIRTABLE_API_KEY: 'test-airtable-key',
-    AIRTABLE_BASE_ID: 'test-base-id',
-    AIRTABLE_TABLE_NAME: 'test-table',
-    EMAIL_FROM: 'test@example.com',
-    EMAIL_REPLY_TO: 'reply@example.com',
-    CSP_REPORT_URI: 'https://example.com/csp-report',
-    ADMIN_TOKEN: 'test-admin-token',
-    NEXT_PUBLIC_BASE_URL: 'https://example.com',
-    NEXT_PUBLIC_VERCEL_URL: 'example.vercel.app',
-    NEXT_PUBLIC_TURNSTILE_SITE_KEY: 'test-site-key-12345',
+    NODE_ENV: "test",
+    TURNSTILE_SECRET_KEY: "test-secret-key",
+    RESEND_API_KEY: "test-resend-key",
+    AIRTABLE_API_KEY: "test-airtable-key",
+    AIRTABLE_BASE_ID: "test-base-id",
+    AIRTABLE_TABLE_NAME: "test-table",
+    EMAIL_FROM: "test@example.com",
+    EMAIL_REPLY_TO: "reply@example.com",
+    CSP_REPORT_URI: "https://example.com/csp-report",
+    ADMIN_TOKEN: "test-admin-token",
+    NEXT_PUBLIC_BASE_URL: "https://example.com",
+    NEXT_PUBLIC_VERCEL_URL: "example.vercel.app",
+    NEXT_PUBLIC_TURNSTILE_SITE_KEY: "test-site-key-12345",
     NEXT_PUBLIC_TEST_MODE: false,
-    WHATSAPP_ACCESS_TOKEN: 'test-whatsapp-token',
-    WHATSAPP_PHONE_NUMBER_ID: 'test-phone-id',
-    WHATSAPP_BUSINESS_ACCOUNT_ID: 'test-business-id',
-    WHATSAPP_WEBHOOK_VERIFY_TOKEN: 'test-webhook-token',
+    WHATSAPP_ACCESS_TOKEN: "test-whatsapp-token",
+    WHATSAPP_PHONE_NUMBER_ID: "test-phone-id",
+    WHATSAPP_BUSINESS_ACCOUNT_ID: "test-business-id",
+    WHATSAPP_WEBHOOK_VERIFY_TOKEN: "test-webhook-token",
   } as Record<string, string | boolean | number | undefined>;
 
   return {
@@ -1669,7 +1669,7 @@ vi.mock('@/lib/env', () => {
     getEnvVar: (key: string) => mockEnv[key],
     requireEnvVar: (key: string) => {
       const value = mockEnv[key];
-      if (!value || typeof value === 'boolean' || typeof value === 'number') {
+      if (!value || typeof value === "boolean" || typeof value === "number") {
         throw new Error(
           `Required environment variable ${key} is not set or is not a string`,
         );
@@ -1680,13 +1680,13 @@ vi.mock('@/lib/env', () => {
       isDevelopment: () => false,
       isProduction: () => false,
       isTest: () => true,
-      getWhatsAppToken: () => 'test-whatsapp-token',
-      getWhatsAppPhoneId: () => 'test-phone-id',
-      getTurnstileSecret: () => 'test-secret-key',
-      getTurnstileSiteKey: () => 'test-site-key',
-      getResendApiKey: () => 'test-resend-key',
-      getAirtableToken: () => 'test-airtable-key',
-      getAirtableBaseId: () => 'test-base-id',
+      getWhatsAppToken: () => "test-whatsapp-token",
+      getWhatsAppPhoneId: () => "test-phone-id",
+      getTurnstileSecret: () => "test-secret-key",
+      getTurnstileSiteKey: () => "test-site-key",
+      getResendApiKey: () => "test-resend-key",
+      getAirtableToken: () => "test-airtable-key",
+      getAirtableBaseId: () => "test-base-id",
     },
   };
 });
@@ -1725,23 +1725,23 @@ const createStorageMock = () => {
   };
 };
 
-Object.defineProperty(window, 'localStorage', {
+Object.defineProperty(window, "localStorage", {
   value: createStorageMock(),
 });
 
-Object.defineProperty(window, 'sessionStorage', {
+Object.defineProperty(window, "sessionStorage", {
   value: createStorageMock(),
 });
 
 // Mock CSS.supports for CSS feature detection
-Object.defineProperty(window, 'CSS', {
+Object.defineProperty(window, "CSS", {
   value: {
     supports: vi.fn().mockReturnValue(true),
   },
 });
 
 // Mock document.startViewTransition for theme transitions
-Object.defineProperty(document, 'startViewTransition', {
+Object.defineProperty(document, "startViewTransition", {
   value: vi.fn((callback?: () => void) => {
     callback?.();
     return Promise.resolve();
@@ -1750,10 +1750,10 @@ Object.defineProperty(document, 'startViewTransition', {
 });
 
 // Setup DOM container for React Testing Library
-if (typeof document !== 'undefined') {
+if (typeof document !== "undefined") {
   // Create a root container for React Testing Library
-  const container = document.createElement('div');
-  container.id = 'test-container';
+  const container = document.createElement("div");
+  container.id = "test-container";
   document.body.appendChild(container);
 }
 
@@ -1763,15 +1763,15 @@ beforeEach(() => {
   vi.clearAllMocks();
 
   // Set up environment variables for API tests
-  vi.stubEnv('ADMIN_API_TOKEN', 'test-admin-token');
+  vi.stubEnv("ADMIN_API_TOKEN", "test-admin-token");
 
   // Reset DOM - 安全的DOM重置
-  if (typeof document !== 'undefined' && document.body) {
+  if (typeof document !== "undefined" && document.body) {
     try {
       document.body.innerHTML = '<div id="test-container"></div>';
     } catch {
       // 如果DOM操作失败，创建新的body元素
-      const newBody = document.createElement('body');
+      const newBody = document.createElement("body");
       newBody.innerHTML = '<div id="test-container"></div>';
       if (document.documentElement) {
         document.documentElement.replaceChild(newBody, document.body);
@@ -1780,7 +1780,7 @@ beforeEach(() => {
   }
 
   // Reset localStorage (only if window is available)
-  if (typeof window !== 'undefined') {
+  if (typeof window !== "undefined") {
     if (window.localStorage) {
       window.localStorage.clear();
     }
@@ -1801,10 +1801,10 @@ const originalError = console.error;
 beforeEach(() => {
   console.error = (...args: unknown[]) => {
     if (
-      typeof args[0] === 'string' &&
-      (args[0].includes('Warning: ReactDOM.render is deprecated') ||
-        args[0].includes('Warning: React.createFactory() is deprecated') ||
-        args[0].includes('Warning: componentWillReceiveProps has been renamed'))
+      typeof args[0] === "string" &&
+      (args[0].includes("Warning: ReactDOM.render is deprecated") ||
+        args[0].includes("Warning: React.createFactory() is deprecated") ||
+        args[0].includes("Warning: componentWillReceiveProps has been renamed"))
     ) {
       return;
     }

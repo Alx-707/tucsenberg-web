@@ -3,18 +3,18 @@
  * 提供统一的Mock配置和测试工具
  */
 
-import { vi } from 'vitest';
+import { vi } from "vitest";
 import type {
   AirtableBaseLike,
   AirtableServicePrivate,
   AirtableTableLike,
-} from '@/types/test-types';
+} from "@/types/test-types";
 
 /**
  * 创建Mock的Airtable Base
  */
 export function createMockBase(
-  tableFactory: AirtableBaseLike['table'],
+  tableFactory: AirtableBaseLike["table"],
 ): AirtableBaseLike {
   return {
     table: tableFactory,
@@ -52,13 +52,13 @@ export function configureServiceForTesting(
  */
 export function createTestRecord(overrides: Record<string, unknown> = {}) {
   return {
-    id: 'rec123456789',
+    id: "rec123456789",
     fields: {
-      'Name': 'Test User',
-      'Email': 'test@example.com',
-      'Message': 'Test message',
-      'Status': 'pending',
-      'Created At': new Date().toISOString(),
+      Name: "Test User",
+      Email: "test@example.com",
+      Message: "Test message",
+      Status: "pending",
+      "Created At": new Date().toISOString(),
       ...overrides,
     },
     createdTime: new Date().toISOString(),
@@ -70,12 +70,12 @@ export function createTestRecord(overrides: Record<string, unknown> = {}) {
  */
 export function createTestContactData(overrides: Record<string, unknown> = {}) {
   return {
-    name: 'Test User',
-    email: 'test@example.com',
-    message: 'Test message',
-    subject: 'Test Subject',
-    phone: '+1234567890',
-    company: 'Test Company',
+    name: "Test User",
+    email: "test@example.com",
+    message: "Test message",
+    subject: "Test Subject",
+    phone: "+1234567890",
+    company: "Test Company",
     ...overrides,
   };
 }

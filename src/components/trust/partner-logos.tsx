@@ -1,6 +1,6 @@
-import Image from 'next/image';
-import { getBlurPlaceholder } from '@/lib/image';
-import { cn } from '@/lib/utils';
+import Image from "next/image";
+import { getBlurPlaceholder } from "@/lib/image";
+import { cn } from "@/lib/utils";
 
 export interface Partner {
   /** Unique identifier */
@@ -32,8 +32,8 @@ function PartnerLogoItem({ partner }: { partner: Partner }) {
       alt={partner.name}
       width={120}
       height={48}
-      className='h-12 max-w-[120px] object-contain grayscale transition-all hover:grayscale-0'
-      {...getBlurPlaceholder('neutral')}
+      className="h-12 max-w-[120px] object-contain grayscale transition-all hover:grayscale-0"
+      {...getBlurPlaceholder("neutral")}
     />
   );
 
@@ -41,9 +41,9 @@ function PartnerLogoItem({ partner }: { partner: Partner }) {
     return (
       <a
         href={partner.website}
-        target='_blank'
-        rel='noopener noreferrer'
-        className='flex items-center justify-center p-4'
+        target="_blank"
+        rel="noopener noreferrer"
+        className="flex items-center justify-center p-4"
         title={partner.name}
       >
         {LogoImage}
@@ -52,10 +52,7 @@ function PartnerLogoItem({ partner }: { partner: Partner }) {
   }
 
   return (
-    <div
-      className='flex items-center justify-center p-4'
-      title={partner.name}
-    >
+    <div className="flex items-center justify-center p-4" title={partner.name}>
       {LogoImage}
     </div>
   );
@@ -76,21 +73,18 @@ export function PartnerLogos({
   }
 
   return (
-    <section className={cn('bg-muted/30 py-12 md:py-16', className)}>
-      <div className='container mx-auto px-4'>
-        <div className='mb-10 text-center'>
-          <h2 className='mb-2 text-2xl font-bold'>{title}</h2>
+    <section className={cn("bg-muted/30 py-12 md:py-16", className)}>
+      <div className="container mx-auto px-4">
+        <div className="mb-10 text-center">
+          <h2 className="mb-2 text-2xl font-bold">{title}</h2>
           {subtitle !== undefined && (
-            <p className='text-muted-foreground'>{subtitle}</p>
+            <p className="text-muted-foreground">{subtitle}</p>
           )}
         </div>
 
-        <div className='flex flex-wrap items-center justify-center gap-8'>
+        <div className="flex flex-wrap items-center justify-center gap-8">
           {partners.map((partner) => (
-            <PartnerLogoItem
-              key={partner.id}
-              partner={partner}
-            />
+            <PartnerLogoItem key={partner.id} partner={partner} />
           ))}
         </div>
       </div>

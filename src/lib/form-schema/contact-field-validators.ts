@@ -1,10 +1,10 @@
-import { z } from 'zod';
+import { z } from "zod";
 import {
   CONTACT_FORM_VALIDATION_CONSTANTS,
   type ContactFormFieldConfig,
   type ContactFormFieldValidatorContext,
   type ContactFormFieldValidators,
-} from '@/config/contact-form-config';
+} from "@/config/contact-form-config";
 
 const applyOptionality = (
   schema: z.ZodTypeAny,
@@ -26,7 +26,7 @@ export function firstName({ field }: ContactFormFieldValidatorContext) {
     )
     .regex(
       /^[a-zA-Z\s\u4e00-\u9fff]+$/,
-      'First name can only contain letters and spaces',
+      "First name can only contain letters and spaces",
     );
 
   return applyOptionality(schema, field);
@@ -47,7 +47,7 @@ export function lastName({ field }: ContactFormFieldValidatorContext) {
     )
     .regex(
       /^[a-zA-Z\s\u4e00-\u9fff]+$/,
-      'Last name can only contain letters and spaces',
+      "Last name can only contain letters and spaces",
     );
 
   return applyOptionality(schema, field);
@@ -56,7 +56,7 @@ export function lastName({ field }: ContactFormFieldValidatorContext) {
 export function email({ field, config }: ContactFormFieldValidatorContext) {
   let schema = z
     .string()
-    .email('Please enter a valid email address')
+    .email("Please enter a valid email address")
     .max(
       CONTACT_FORM_VALIDATION_CONSTANTS.EMAIL_MAX_LENGTH,
       `Email must be less than ${CONTACT_FORM_VALIDATION_CONSTANTS.EMAIL_MAX_LENGTH} characters`,
@@ -66,10 +66,10 @@ export function email({ field, config }: ContactFormFieldValidatorContext) {
   const whitelist = config.validation.emailDomainWhitelist;
   if (whitelist.length > 0) {
     schema = schema.refine((value) => {
-      const domain = value.split('@').pop()?.toLowerCase();
+      const domain = value.split("@").pop()?.toLowerCase();
       if (!domain) return false;
       return whitelist.some((allowed) => allowed.toLowerCase() === domain);
-    }, 'Email domain is not allowed');
+    }, "Email domain is not allowed");
   }
 
   return applyOptionality(schema, field);
@@ -89,7 +89,7 @@ export function company({ field }: ContactFormFieldValidatorContext) {
       },
     )
     .refine((val) => /^[a-zA-Z0-9\s\u4e00-\u9fff&.,'-]+$/.test(val), {
-      message: 'Company name contains invalid characters',
+      message: "Company name contains invalid characters",
     });
 
   return applyOptionality(schema, field);
@@ -115,13 +115,13 @@ export function phone({ field }: ContactFormFieldValidatorContext) {
   const { PHONE_MAX_DIGITS } = CONTACT_FORM_VALIDATION_CONSTANTS;
   const schema = z.string().refine((value) => {
     if (!value) return true;
-    const normalized = value.replace(/[\s\-()]/g, '');
+    const normalized = value.replace(/[\s\-()]/g, "");
     if (!/^[+]?[0-9]+$/.test(normalized)) {
       return false;
     }
-    const digitsOnly = normalized.replace('+', '');
+    const digitsOnly = normalized.replace("+", "");
     return digitsOnly.length <= PHONE_MAX_DIGITS;
-  }, 'Please enter a valid phone number');
+  }, "Please enter a valid phone number");
 
   return applyOptionality(schema, field);
 }
@@ -142,7 +142,7 @@ export function subject({ field }: ContactFormFieldValidatorContext) {
 export function acceptPrivacy({ field }: ContactFormFieldValidatorContext) {
   const schema = z
     .boolean()
-    .refine((value) => value === true, 'You must accept the privacy policy');
+    .refine((value) => value === true, "You must accept the privacy policy");
 
   return applyOptionality(schema, field);
 }
@@ -157,7 +157,7 @@ export function website({ field }: ContactFormFieldValidatorContext) {
     .string()
     .max(
       CONTACT_FORM_VALIDATION_CONSTANTS.HONEYPOT_MAX_LENGTH,
-      'This field should be empty',
+      "This field should be empty",
     );
 
   return applyOptionality(schema, field);

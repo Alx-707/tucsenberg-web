@@ -13,6 +13,6 @@
  */
 
 module.exports = {
-  locales: ['en', 'zh'],
-  defaultLocale: 'en',
+  locales: ["en", "zh"],
+  defaultLocale: "en",
 };

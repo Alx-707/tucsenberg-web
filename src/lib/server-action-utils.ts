@@ -60,9 +60,9 @@ export function createErrorResult(
   error: string | ServerActionError,
   details?: string[],
 ): ServerActionResult<never> {
-  const errorMessage = typeof error === 'string' ? error : error.message;
+  const errorMessage = typeof error === "string" ? error : error.message;
   const errorDetails =
-    typeof error === 'string' ? details : error.details || details;
+    typeof error === "string" ? details : error.details || details;
 
   return {
     success: false,
@@ -96,10 +96,10 @@ export function createErrorResultWithLogging(
   logger?: { error: (message: string, meta?: unknown) => void },
 ): ServerActionResult<never> {
   const errorObj =
-    typeof error === 'string' ? { code: 'UNKNOWN', message: error } : error;
+    typeof error === "string" ? { code: "UNKNOWN", message: error } : error;
 
   if (logger) {
-    logger.error('Server Action error', {
+    logger.error("Server Action error", {
       code: errorObj.code,
       message: errorObj.message,
       details: details || errorObj.details,
@@ -130,8 +130,8 @@ export function createSuccessResultWithLogging<T>(
   };
 
   if (logger) {
-    logger.info('Server Action success', {
-      message: message || 'Operation completed successfully',
+    logger.info("Server Action success", {
+      message: message || "Operation completed successfully",
       timestamp: result.timestamp,
     });
   }
@@ -157,10 +157,10 @@ export function withErrorHandling<TInput, TOutput>(
       return await action(previousState, input);
     } catch (error) {
       const errorMessage =
-        error instanceof Error ? error.message : 'Unknown error occurred';
+        error instanceof Error ? error.message : "Unknown error occurred";
 
       return createErrorResult({
-        code: 'SERVER_ACTION_ERROR',
+        code: "SERVER_ACTION_ERROR",
         message: errorMessage,
         cause: error instanceof Error ? error : undefined,
       });
@@ -173,7 +173,7 @@ export function withErrorHandling<TInput, TOutput>(
  */
 export function getFormDataString(formData: FormData, key: string): string {
   const value = formData.get(key);
-  return typeof value === 'string' ? value.trim() : '';
+  return typeof value === "string" ? value.trim() : "";
 }
 
 /**
@@ -181,7 +181,7 @@ export function getFormDataString(formData: FormData, key: string): string {
  */
 export function getFormDataBoolean(formData: FormData, key: string): boolean {
   const value = formData.get(key);
-  return value === 'true' || value === 'on' || value === '1';
+  return value === "true" || value === "on" || value === "1";
 }
 
 /**
@@ -255,10 +255,10 @@ function setFieldValue<T extends Record<string, unknown>>(
     formData: FormData;
     key: string;
     value: string;
-    type?: 'string' | 'number' | 'boolean' | 'email';
+    type?: "string" | "number" | "boolean" | "email";
   },
 ): void {
-  if (context.type === 'boolean') {
+  if (context.type === "boolean") {
     // nosemgrep: object-injection-sink-dynamic-property — 键来自固定schema定义，已在遍历时限定，避免对象注入噪音
     (data as Record<string, unknown>)[context.key] = getFormDataBoolean(
       context.formData,
@@ -278,7 +278,7 @@ function validateSingleField(
   value: string,
   rules: {
     required?: boolean;
-    type?: 'string' | 'number' | 'boolean' | 'email';
+    type?: "string" | "number" | "boolean" | "email";
     minLength?: number;
     maxLength?: number;
     pattern?: RegExp;
@@ -299,7 +299,7 @@ function validateSingleField(
   }
 
   // 类型验证
-  if (rules.type === 'email' && value) {
+  if (rules.type === "email" && value) {
     const emailError = validateEmailField(key, value);
     if (emailError) fieldErrors.push(emailError);
   }
@@ -327,7 +327,7 @@ export function validateFormData<T extends Record<string, unknown>>(
     keyof T,
     {
       required?: boolean;
-      type?: 'string' | 'number' | 'boolean' | 'email';
+      type?: "string" | "number" | "boolean" | "email";
       minLength?: number;
       maxLength?: number;
       pattern?: RegExp;
@@ -350,7 +350,7 @@ export function validateFormData<T extends Record<string, unknown>>(
         formData: FormData;
         key: string;
         value: string;
-        type?: 'string' | 'number' | 'boolean' | 'email';
+        type?: "string" | "number" | "boolean" | "email";
       } = {
         formData,
         key,

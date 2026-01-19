@@ -120,26 +120,26 @@ export const FILE_SECURITY_CONSTANTS = {
 
   /** 允许的文件扩展名 */
   ALLOWED_EXTENSIONS: [
-    '.jpg',
-    '.jpeg',
-    '.png',
-    '.gif',
-    '.pdf',
-    '.txt',
-    '.md',
-    '.mdx',
+    ".jpg",
+    ".jpeg",
+    ".png",
+    ".gif",
+    ".pdf",
+    ".txt",
+    ".md",
+    ".mdx",
   ] as const,
 
   /** 禁止的文件扩展名 */
   FORBIDDEN_EXTENSIONS: [
-    '.exe',
-    '.bat',
-    '.cmd',
-    '.scr',
-    '.com',
-    '.pif',
-    '.vbs',
-    '.js',
+    ".exe",
+    ".bat",
+    ".cmd",
+    ".scr",
+    ".com",
+    ".pif",
+    ".vbs",
+    ".js",
   ] as const,
 
   /** 文件名最大长度 */
@@ -180,21 +180,21 @@ export const CSP_CONSTANTS = {
   SCRIPT_SRC_WHITELIST: [
     "'self'",
     "'unsafe-inline'", // 仅在必要时使用
-    'https://trusted-cdn.com',
+    "https://trusted-cdn.com",
   ] as const,
 
   /** 样式源白名单 */
   STYLE_SRC_WHITELIST: [
     "'self'",
     "'unsafe-inline'", // 仅在必要时使用
-    'https://fonts.googleapis.com',
+    "https://fonts.googleapis.com",
   ] as const,
 
   /** 图片源白名单 */
-  IMG_SRC_WHITELIST: ["'self'", 'data:', 'https:'] as const,
+  IMG_SRC_WHITELIST: ["'self'", "data:", "https:"] as const,
 
   /** 连接源白名单 */
-  CONNECT_SRC_WHITELIST: ["'self'", 'https://api.trusted-service.com'] as const,
+  CONNECT_SRC_WHITELIST: ["'self'", "https://api.trusted-service.com"] as const,
 } as const;
 
 // ==================== 安全头部常量 ====================
@@ -202,22 +202,22 @@ export const CSP_CONSTANTS = {
 /** 安全HTTP头部常量 */
 export const SECURITY_HEADERS_CONSTANTS = {
   /** X-Frame-Options 值 */
-  X_FRAME_OPTIONS: 'DENY',
+  X_FRAME_OPTIONS: "DENY",
 
   /** X-Content-Type-Options 值 */
-  X_CONTENT_TYPE_OPTIONS: 'nosniff',
+  X_CONTENT_TYPE_OPTIONS: "nosniff",
 
   /** X-XSS-Protection 值 */
-  X_XSS_PROTECTION: '1; mode=block',
+  X_XSS_PROTECTION: "1; mode=block",
 
   /** Referrer-Policy 值 */
-  REFERRER_POLICY: 'strict-origin-when-cross-origin',
+  REFERRER_POLICY: "strict-origin-when-cross-origin",
 
   /** Strict-Transport-Security 最大年龄 (秒) */
   HSTS_MAX_AGE: 31536000, // 1年
 
   /** Permissions-Policy 指令 */
-  PERMISSIONS_POLICY: 'geolocation=(), microphone=(), camera=()',
+  PERMISSIONS_POLICY: "geolocation=(), microphone=(), camera=()",
 } as const;
 
 // ==================== 导出所有安全常量 ====================

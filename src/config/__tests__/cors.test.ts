@@ -1,19 +1,19 @@
-import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
+import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 
 // Mock turnstile-config before importing cors module
-const mockGetAllowedTurnstileHosts = vi.fn(() => ['example.com', 'localhost']);
+const mockGetAllowedTurnstileHosts = vi.fn(() => ["example.com", "localhost"]);
 
-vi.mock('@/lib/security/turnstile-config', () => ({
+vi.mock("@/lib/security/turnstile-config", () => ({
   getAllowedTurnstileHosts: mockGetAllowedTurnstileHosts,
 }));
 
-vi.mock('@/lib/env', () => ({
+vi.mock("@/lib/env", () => ({
   env: {
-    NEXT_PUBLIC_BASE_URL: 'https://example.com',
+    NEXT_PUBLIC_BASE_URL: "https://example.com",
   },
 }));
 
-describe('CORS Configuration', () => {
+describe("CORS Configuration", () => {
   const originalEnv = process.env;
 
   beforeEach(() => {
@@ -27,158 +27,158 @@ describe('CORS Configuration', () => {
     vi.clearAllMocks();
   });
 
-  describe('getAllowedCorsOrigins', () => {
-    it('should use CORS_ALLOWED_ORIGINS env var when set', async () => {
+  describe("getAllowedCorsOrigins", () => {
+    it("should use CORS_ALLOWED_ORIGINS env var when set", async () => {
       process.env.CORS_ALLOWED_ORIGINS =
-        'https://custom1.com,https://custom2.com';
+        "https://custom1.com,https://custom2.com";
       vi.resetModules();
 
-      const { getAllowedCorsOrigins } = await import('../cors');
+      const { getAllowedCorsOrigins } = await import("../cors");
       const origins = getAllowedCorsOrigins();
 
-      expect(origins).toContain('https://custom1.com');
-      expect(origins).toContain('https://custom2.com');
+      expect(origins).toContain("https://custom1.com");
+      expect(origins).toContain("https://custom2.com");
     });
 
-    it('should derive origins from Turnstile hosts when env not set', async () => {
+    it("should derive origins from Turnstile hosts when env not set", async () => {
       vi.resetModules();
       mockGetAllowedTurnstileHosts.mockReturnValue([
-        'example.com',
-        'localhost',
+        "example.com",
+        "localhost",
       ]);
 
-      const { getAllowedCorsOrigins } = await import('../cors');
+      const { getAllowedCorsOrigins } = await import("../cors");
       const origins = getAllowedCorsOrigins();
 
-      expect(origins).toContain('https://example.com');
-      expect(origins).toContain('http://localhost:3000');
+      expect(origins).toContain("https://example.com");
+      expect(origins).toContain("http://localhost:3000");
     });
 
-    it('should trim and lowercase origins from env', async () => {
+    it("should trim and lowercase origins from env", async () => {
       process.env.CORS_ALLOWED_ORIGINS =
-        ' HTTPS://Example.COM , https://Other.com ';
+        " HTTPS://Example.COM , https://Other.com ";
       vi.resetModules();
 
-      const { getAllowedCorsOrigins } = await import('../cors');
+      const { getAllowedCorsOrigins } = await import("../cors");
       const origins = getAllowedCorsOrigins();
 
-      expect(origins).toContain('https://example.com');
-      expect(origins).toContain('https://other.com');
+      expect(origins).toContain("https://example.com");
+      expect(origins).toContain("https://other.com");
     });
 
-    it('should filter empty strings from env', async () => {
-      process.env.CORS_ALLOWED_ORIGINS = 'https://valid.com,,, ,';
+    it("should filter empty strings from env", async () => {
+      process.env.CORS_ALLOWED_ORIGINS = "https://valid.com,,, ,";
       vi.resetModules();
 
-      const { getAllowedCorsOrigins } = await import('../cors');
+      const { getAllowedCorsOrigins } = await import("../cors");
       const origins = getAllowedCorsOrigins();
 
-      expect(origins).toEqual(['https://valid.com']);
+      expect(origins).toEqual(["https://valid.com"]);
     });
   });
 
-  describe('isAllowedOrigin', () => {
-    it('should return false for null origin', async () => {
+  describe("isAllowedOrigin", () => {
+    it("should return false for null origin", async () => {
       vi.resetModules();
-      const { isAllowedOrigin } = await import('../cors');
+      const { isAllowedOrigin } = await import("../cors");
 
       expect(isAllowedOrigin(null)).toBe(false);
     });
 
-    it('should return true for allowed origin', async () => {
-      process.env.CORS_ALLOWED_ORIGINS = 'https://allowed.com';
+    it("should return true for allowed origin", async () => {
+      process.env.CORS_ALLOWED_ORIGINS = "https://allowed.com";
       vi.resetModules();
 
-      const { isAllowedOrigin } = await import('../cors');
+      const { isAllowedOrigin } = await import("../cors");
 
-      expect(isAllowedOrigin('https://allowed.com')).toBe(true);
+      expect(isAllowedOrigin("https://allowed.com")).toBe(true);
     });
 
-    it('should return false for disallowed origin', async () => {
-      process.env.CORS_ALLOWED_ORIGINS = 'https://allowed.com';
+    it("should return false for disallowed origin", async () => {
+      process.env.CORS_ALLOWED_ORIGINS = "https://allowed.com";
       vi.resetModules();
 
-      const { isAllowedOrigin } = await import('../cors');
+      const { isAllowedOrigin } = await import("../cors");
 
-      expect(isAllowedOrigin('https://evil.com')).toBe(false);
+      expect(isAllowedOrigin("https://evil.com")).toBe(false);
     });
 
-    it('should be case-insensitive', async () => {
-      process.env.CORS_ALLOWED_ORIGINS = 'https://allowed.com';
+    it("should be case-insensitive", async () => {
+      process.env.CORS_ALLOWED_ORIGINS = "https://allowed.com";
       vi.resetModules();
 
-      const { isAllowedOrigin } = await import('../cors');
+      const { isAllowedOrigin } = await import("../cors");
 
-      expect(isAllowedOrigin('HTTPS://ALLOWED.COM')).toBe(true);
+      expect(isAllowedOrigin("HTTPS://ALLOWED.COM")).toBe(true);
     });
   });
 
-  describe('isSameOrigin', () => {
-    it('should return true when origin is null (same-origin request)', async () => {
+  describe("isSameOrigin", () => {
+    it("should return true when origin is null (same-origin request)", async () => {
       vi.resetModules();
-      const { isSameOrigin } = await import('../cors');
+      const { isSameOrigin } = await import("../cors");
 
-      expect(isSameOrigin(null, 'example.com')).toBe(true);
+      expect(isSameOrigin(null, "example.com")).toBe(true);
     });
 
-    it('should return false when host is null', async () => {
+    it("should return false when host is null", async () => {
       vi.resetModules();
-      const { isSameOrigin } = await import('../cors');
+      const { isSameOrigin } = await import("../cors");
 
-      expect(isSameOrigin('https://example.com', null)).toBe(false);
+      expect(isSameOrigin("https://example.com", null)).toBe(false);
     });
 
-    it('should return true when origin hostname matches host', async () => {
+    it("should return true when origin hostname matches host", async () => {
       vi.resetModules();
-      const { isSameOrigin } = await import('../cors');
+      const { isSameOrigin } = await import("../cors");
 
-      expect(isSameOrigin('https://example.com', 'example.com')).toBe(true);
+      expect(isSameOrigin("https://example.com", "example.com")).toBe(true);
     });
 
-    it('should return true when host includes port', async () => {
+    it("should return true when host includes port", async () => {
       vi.resetModules();
-      const { isSameOrigin } = await import('../cors');
+      const { isSameOrigin } = await import("../cors");
 
-      expect(isSameOrigin('https://example.com', 'example.com:3000')).toBe(
+      expect(isSameOrigin("https://example.com", "example.com:3000")).toBe(
         true,
       );
     });
 
-    it('should return false when hostnames differ', async () => {
+    it("should return false when hostnames differ", async () => {
       vi.resetModules();
-      const { isSameOrigin } = await import('../cors');
+      const { isSameOrigin } = await import("../cors");
 
-      expect(isSameOrigin('https://other.com', 'example.com')).toBe(false);
+      expect(isSameOrigin("https://other.com", "example.com")).toBe(false);
     });
 
-    it('should return false for invalid origin URL', async () => {
+    it("should return false for invalid origin URL", async () => {
       vi.resetModules();
-      const { isSameOrigin } = await import('../cors');
+      const { isSameOrigin } = await import("../cors");
 
-      expect(isSameOrigin('not-a-url', 'example.com')).toBe(false);
+      expect(isSameOrigin("not-a-url", "example.com")).toBe(false);
     });
   });
 
-  describe('CORS_CONFIG', () => {
-    it('should have expected default methods', async () => {
+  describe("CORS_CONFIG", () => {
+    it("should have expected default methods", async () => {
       vi.resetModules();
-      const { CORS_CONFIG } = await import('../cors');
+      const { CORS_CONFIG } = await import("../cors");
 
-      expect(CORS_CONFIG.allowedMethods).toContain('POST');
-      expect(CORS_CONFIG.allowedMethods).toContain('OPTIONS');
+      expect(CORS_CONFIG.allowedMethods).toContain("POST");
+      expect(CORS_CONFIG.allowedMethods).toContain("OPTIONS");
     });
 
-    it('should have expected default headers', async () => {
+    it("should have expected default headers", async () => {
       vi.resetModules();
-      const { CORS_CONFIG } = await import('../cors');
+      const { CORS_CONFIG } = await import("../cors");
 
-      expect(CORS_CONFIG.allowedHeaders).toContain('Content-Type');
-      expect(CORS_CONFIG.allowedHeaders).toContain('Idempotency-Key');
+      expect(CORS_CONFIG.allowedHeaders).toContain("Content-Type");
+      expect(CORS_CONFIG.allowedHeaders).toContain("Idempotency-Key");
     });
 
-    it('should have maxAge set', async () => {
+    it("should have maxAge set", async () => {
       vi.resetModules();
-      const { CORS_CONFIG } = await import('../cors');
+      const { CORS_CONFIG } = await import("../cors");
 
       expect(CORS_CONFIG.maxAge).toBeGreaterThan(0);
     });

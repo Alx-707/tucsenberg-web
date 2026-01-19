@@ -1,5 +1,5 @@
-import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
-import { render } from '@/test/utils';
+import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
+import { render } from "@/test/utils";
 
 // Mock a simple accessible component
 const AccessibleButton = ({
@@ -19,7 +19,7 @@ const AccessibleButton = ({
 }) => {
   return (
     <button
-      data-testid='accessible-button'
+      data-testid="accessible-button"
       onClick={onClick}
       disabled={disabled}
       aria-label={ariaLabel}
@@ -34,105 +34,80 @@ const AccessibleButton = ({
 // Mock a form component with accessibility features
 const AccessibleForm = () => {
   return (
-    <form
-      data-testid='accessible-form'
-      role='form'
-      aria-label='Contact form'
-    >
+    <form data-testid="accessible-form" role="form" aria-label="Contact form">
       <div>
-        <label
-          htmlFor='name-input'
-          data-testid='name-label'
-        >
+        <label htmlFor="name-input" data-testid="name-label">
           Name *
         </label>
         <input
-          id='name-input'
-          data-testid='name-input'
-          type='text'
+          id="name-input"
+          data-testid="name-input"
+          type="text"
           required
-          aria-required='true'
-          aria-describedby='name-help'
+          aria-required="true"
+          aria-describedby="name-help"
         />
-        <div
-          id='name-help'
-          data-testid='name-help'
-        >
+        <div id="name-help" data-testid="name-help">
           Please enter your full name
         </div>
       </div>
 
       <div>
-        <label
-          htmlFor='email-input'
-          data-testid='email-label'
-        >
+        <label htmlFor="email-input" data-testid="email-label">
           Email *
         </label>
         <input
-          id='email-input'
-          data-testid='email-input'
-          type='email'
+          id="email-input"
+          data-testid="email-input"
+          type="email"
           required
-          aria-required='true'
-          aria-describedby='email-help'
-          aria-invalid='false'
+          aria-required="true"
+          aria-describedby="email-help"
+          aria-invalid="false"
         />
-        <div
-          id='email-help'
-          data-testid='email-help'
-        >
+        <div id="email-help" data-testid="email-help">
           We&apos;ll never share your email
         </div>
       </div>
 
-      <fieldset data-testid='preferences-fieldset'>
-        <legend data-testid='preferences-legend'>
+      <fieldset data-testid="preferences-fieldset">
+        <legend data-testid="preferences-legend">
           Communication Preferences
         </legend>
         <div>
           <input
-            id='newsletter'
-            data-testid='newsletter-checkbox'
-            type='checkbox'
-            name='preferences'
-            value='newsletter'
+            id="newsletter"
+            data-testid="newsletter-checkbox"
+            type="checkbox"
+            name="preferences"
+            value="newsletter"
           />
-          <label
-            htmlFor='newsletter'
-            data-testid='newsletter-label'
-          >
+          <label htmlFor="newsletter" data-testid="newsletter-label">
             Subscribe to newsletter
           </label>
         </div>
         <div>
           <input
-            id='updates'
-            data-testid='updates-checkbox'
-            type='checkbox'
-            name='preferences'
-            value='updates'
+            id="updates"
+            data-testid="updates-checkbox"
+            type="checkbox"
+            name="preferences"
+            value="updates"
           />
-          <label
-            htmlFor='updates'
-            data-testid='updates-label'
-          >
+          <label htmlFor="updates" data-testid="updates-label">
             Receive product updates
           </label>
         </div>
       </fieldset>
 
-      <AccessibleButton
-        type='submit'
-        ariaLabel='Submit contact form'
-      >
+      <AccessibleButton type="submit" ariaLabel="Submit contact form">
         Submit
       </AccessibleButton>
     </form>
   );
 };
 
-describe('Accessibility Tests', () => {
+describe("Accessibility Tests", () => {
   beforeEach(() => {
     vi.clearAllMocks();
   });
@@ -141,55 +116,55 @@ describe('Accessibility Tests', () => {
     vi.restoreAllMocks();
   });
 
-  describe('AccessibleButton Component', () => {
-    it('should render with proper semantic markup', () => {
+  describe("AccessibleButton Component", () => {
+    it("should render with proper semantic markup", () => {
       render(<AccessibleButton>Click me</AccessibleButton>);
 
       const button = document.querySelector(
         '[data-testid="accessible-button"]',
       );
       expect(button).toBeInTheDocument();
-      expect(button?.tagName.toLowerCase()).toBe('button');
-      expect(button).toHaveTextContent('Click me');
+      expect(button?.tagName.toLowerCase()).toBe("button");
+      expect(button).toHaveTextContent("Click me");
     });
 
-    it('should support ARIA labels', () => {
-      render(<AccessibleButton ariaLabel='Close dialog'>×</AccessibleButton>);
+    it("should support ARIA labels", () => {
+      render(<AccessibleButton ariaLabel="Close dialog">×</AccessibleButton>);
 
       const button = document.querySelector(
         '[data-testid="accessible-button"]',
       );
-      expect(button).toHaveAttribute('aria-label', 'Close dialog');
+      expect(button).toHaveAttribute("aria-label", "Close dialog");
     });
 
-    it('should support ARIA descriptions', () => {
+    it("should support ARIA descriptions", () => {
       render(
         <div>
-          <AccessibleButton ariaDescribedBy='help-text'>Save</AccessibleButton>
-          <div id='help-text'>This will save your changes permanently</div>
+          <AccessibleButton ariaDescribedBy="help-text">Save</AccessibleButton>
+          <div id="help-text">This will save your changes permanently</div>
         </div>,
       );
 
       const button = document.querySelector(
         '[data-testid="accessible-button"]',
       );
-      expect(button).toHaveAttribute('aria-describedby', 'help-text');
+      expect(button).toHaveAttribute("aria-describedby", "help-text");
 
-      const helpText = document.getElementById('help-text');
+      const helpText = document.getElementById("help-text");
       expect(helpText).toBeInTheDocument();
     });
 
-    it('should handle disabled state correctly', () => {
+    it("should handle disabled state correctly", () => {
       render(<AccessibleButton disabled>Disabled Button</AccessibleButton>);
 
       const button = document.querySelector(
         '[data-testid="accessible-button"]',
       );
       expect(button).toBeDisabled();
-      expect(button).toHaveAttribute('disabled');
+      expect(button).toHaveAttribute("disabled");
     });
 
-    it('should be keyboard accessible', () => {
+    it("should be keyboard accessible", () => {
       const mockClick = vi.fn();
       render(
         <AccessibleButton onClick={mockClick}>Clickable</AccessibleButton>,
@@ -204,53 +179,53 @@ describe('Accessibility Tests', () => {
       expect(document.activeElement).toBe(button);
 
       // Should respond to Enter key
-      button.dispatchEvent(new KeyboardEvent('keydown', { key: 'Enter' }));
+      button.dispatchEvent(new KeyboardEvent("keydown", { key: "Enter" }));
 
       // Should respond to Space key
-      button.dispatchEvent(new KeyboardEvent('keydown', { key: ' ' }));
+      button.dispatchEvent(new KeyboardEvent("keydown", { key: " " }));
     });
   });
 
-  describe('AccessibleForm Component', () => {
-    it('should render with proper form semantics', () => {
+  describe("AccessibleForm Component", () => {
+    it("should render with proper form semantics", () => {
       render(<AccessibleForm />);
 
       const form = document.querySelector('[data-testid="accessible-form"]');
       expect(form).toBeInTheDocument();
-      expect(form?.tagName.toLowerCase()).toBe('form');
-      expect(form).toHaveAttribute('role', 'form');
-      expect(form).toHaveAttribute('aria-label', 'Contact form');
+      expect(form?.tagName.toLowerCase()).toBe("form");
+      expect(form).toHaveAttribute("role", "form");
+      expect(form).toHaveAttribute("aria-label", "Contact form");
     });
 
-    it('should have properly associated labels and inputs', () => {
+    it("should have properly associated labels and inputs", () => {
       render(<AccessibleForm />);
 
       // Name field
       const nameLabel = document.querySelector('[data-testid="name-label"]');
       const nameInput = document.querySelector('[data-testid="name-input"]');
-      expect(nameLabel).toHaveAttribute('for', 'name-input');
-      expect(nameInput).toHaveAttribute('id', 'name-input');
+      expect(nameLabel).toHaveAttribute("for", "name-input");
+      expect(nameInput).toHaveAttribute("id", "name-input");
 
       // Email field
       const emailLabel = document.querySelector('[data-testid="email-label"]');
       const emailInput = document.querySelector('[data-testid="email-input"]');
-      expect(emailLabel).toHaveAttribute('for', 'email-input');
-      expect(emailInput).toHaveAttribute('id', 'email-input');
+      expect(emailLabel).toHaveAttribute("for", "email-input");
+      expect(emailInput).toHaveAttribute("id", "email-input");
     });
 
-    it('should have proper ARIA attributes for required fields', () => {
+    it("should have proper ARIA attributes for required fields", () => {
       render(<AccessibleForm />);
 
       const nameInput = document.querySelector('[data-testid="name-input"]');
       const emailInput = document.querySelector('[data-testid="email-input"]');
 
-      expect(nameInput).toHaveAttribute('aria-required', 'true');
-      expect(nameInput).toHaveAttribute('required');
-      expect(emailInput).toHaveAttribute('aria-required', 'true');
-      expect(emailInput).toHaveAttribute('required');
+      expect(nameInput).toHaveAttribute("aria-required", "true");
+      expect(nameInput).toHaveAttribute("required");
+      expect(emailInput).toHaveAttribute("aria-required", "true");
+      expect(emailInput).toHaveAttribute("required");
     });
 
-    it('should have help text properly associated with inputs', () => {
+    it("should have help text properly associated with inputs", () => {
       render(<AccessibleForm />);
 
       const nameInput = document.querySelector('[data-testid="name-input"]');
@@ -258,13 +233,13 @@ describe('Accessibility Tests', () => {
       const emailInput = document.querySelector('[data-testid="email-input"]');
       const emailHelp = document.querySelector('[data-testid="email-help"]');
 
-      expect(nameInput).toHaveAttribute('aria-describedby', 'name-help');
-      expect(nameHelp).toHaveAttribute('id', 'name-help');
-      expect(emailInput).toHaveAttribute('aria-describedby', 'email-help');
-      expect(emailHelp).toHaveAttribute('id', 'email-help');
+      expect(nameInput).toHaveAttribute("aria-describedby", "name-help");
+      expect(nameHelp).toHaveAttribute("id", "name-help");
+      expect(emailInput).toHaveAttribute("aria-describedby", "email-help");
+      expect(emailHelp).toHaveAttribute("id", "email-help");
     });
 
-    it('should use fieldset and legend for grouped controls', () => {
+    it("should use fieldset and legend for grouped controls", () => {
       render(<AccessibleForm />);
 
       const fieldset = document.querySelector(
@@ -274,12 +249,12 @@ describe('Accessibility Tests', () => {
         '[data-testid="preferences-legend"]',
       );
 
-      expect(fieldset?.tagName.toLowerCase()).toBe('fieldset');
-      expect(legend?.tagName.toLowerCase()).toBe('legend');
-      expect(legend).toHaveTextContent('Communication Preferences');
+      expect(fieldset?.tagName.toLowerCase()).toBe("fieldset");
+      expect(legend?.tagName.toLowerCase()).toBe("legend");
+      expect(legend).toHaveTextContent("Communication Preferences");
     });
 
-    it('should have properly associated checkbox labels', () => {
+    it("should have properly associated checkbox labels", () => {
       render(<AccessibleForm />);
 
       const newsletterCheckbox = document.querySelector(
@@ -295,13 +270,13 @@ describe('Accessibility Tests', () => {
         '[data-testid="updates-label"]',
       );
 
-      expect(newsletterCheckbox).toHaveAttribute('id', 'newsletter');
-      expect(newsletterLabel).toHaveAttribute('for', 'newsletter');
-      expect(updatesCheckbox).toHaveAttribute('id', 'updates');
-      expect(updatesLabel).toHaveAttribute('for', 'updates');
+      expect(newsletterCheckbox).toHaveAttribute("id", "newsletter");
+      expect(newsletterLabel).toHaveAttribute("for", "newsletter");
+      expect(updatesCheckbox).toHaveAttribute("id", "updates");
+      expect(updatesLabel).toHaveAttribute("for", "updates");
     });
 
-    it('should support keyboard navigation', () => {
+    it("should support keyboard navigation", () => {
       render(<AccessibleForm />);
 
       const nameInput = document.querySelector(
@@ -326,8 +301,8 @@ describe('Accessibility Tests', () => {
     });
   });
 
-  describe('Color Contrast and Visual Accessibility', () => {
-    it('should not rely solely on color for information', () => {
+  describe("Color Contrast and Visual Accessibility", () => {
+    it("should not rely solely on color for information", () => {
       // This test would typically check that error states, required fields,
       // and other important information are conveyed through multiple means
       render(<AccessibleForm />);
@@ -336,11 +311,11 @@ describe('Accessibility Tests', () => {
       const emailLabel = document.querySelector('[data-testid="email-label"]');
 
       // Required fields should be marked with text, not just color
-      expect(nameLabel).toHaveTextContent('*');
-      expect(emailLabel).toHaveTextContent('*');
+      expect(nameLabel).toHaveTextContent("*");
+      expect(emailLabel).toHaveTextContent("*");
     });
 
-    it('should provide sufficient context for screen readers', () => {
+    it("should provide sufficient context for screen readers", () => {
       render(<AccessibleForm />);
 
       const form = document.querySelector('[data-testid="accessible-form"]');
@@ -348,16 +323,16 @@ describe('Accessibility Tests', () => {
       const emailHelp = document.querySelector('[data-testid="email-help"]');
 
       // Form should have a descriptive label
-      expect(form).toHaveAttribute('aria-label');
+      expect(form).toHaveAttribute("aria-label");
 
       // Help text should provide clear guidance
-      expect(nameHelp).toHaveTextContent('Please enter your full name');
+      expect(nameHelp).toHaveTextContent("Please enter your full name");
       expect(emailHelp).toHaveTextContent("We'll never share your email");
     });
   });
 
-  describe('Focus Management', () => {
-    it('should maintain logical tab order', () => {
+  describe("Focus Management", () => {
+    it("should maintain logical tab order", () => {
       render(<AccessibleForm />);
 
       const nameInput = document.querySelector(
@@ -392,7 +367,7 @@ describe('Accessibility Tests', () => {
       });
     });
 
-    it('should handle focus states appropriately', () => {
+    it("should handle focus states appropriately", () => {
       render(<AccessibleForm />);
 
       const nameInput = document.querySelector(

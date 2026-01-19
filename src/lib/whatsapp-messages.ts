@@ -9,14 +9,14 @@ import type {
   SendMessageRequest,
   TextMessage,
   WhatsAppServiceResponse,
-} from '@/types/whatsapp';
-import { logger } from '@/lib/logger';
+} from "@/types/whatsapp";
+import { logger } from "@/lib/logger";
 
 /**
  * WhatsApp 消息发送类
  */
 export class WhatsAppMessageService {
-  private readonly baseUrl = 'https://graph.facebook.com/v18.0';
+  private readonly baseUrl = "https://graph.facebook.com/v18.0";
   private readonly accessToken: string;
   private readonly phoneNumberId: string;
 
@@ -35,10 +35,10 @@ export class WhatsAppMessageService {
       const response = await fetch(
         `${this.baseUrl}/${this.phoneNumberId}/messages`,
         {
-          method: 'POST',
+          method: "POST",
           headers: {
-            'Authorization': `Bearer ${this.accessToken}`,
-            'Content-Type': 'application/json',
+            Authorization: `Bearer ${this.accessToken}`,
+            "Content-Type": "application/json",
           },
           body: JSON.stringify(message),
         },
@@ -48,7 +48,7 @@ export class WhatsAppMessageService {
 
       if (!response.ok) {
         const error = data as { error?: { message?: string } };
-        throw new Error(error.error?.message || 'Failed to send message');
+        throw new Error(error.error?.message || "Failed to send message");
       }
 
       return {
@@ -57,13 +57,13 @@ export class WhatsAppMessageService {
       };
     } catch (error) {
       logger.error(
-        'WhatsApp API Error',
+        "WhatsApp API Error",
         {},
         error instanceof Error ? error : new Error(String(error)),
       );
       return {
         success: false,
-        error: error instanceof Error ? error.message : 'Unknown error',
+        error: error instanceof Error ? error.message : "Unknown error",
       };
     }
   }
@@ -77,10 +77,10 @@ export class WhatsAppMessageService {
     previewUrl: boolean = false,
   ): Promise<WhatsAppServiceResponse> {
     const message: TextMessage = {
-      messaging_product: 'whatsapp',
-      recipient_type: 'individual',
+      messaging_product: "whatsapp",
+      recipient_type: "individual",
       to,
-      type: 'text',
+      type: "text",
       text: {
         body: text,
         preview_url: previewUrl,
@@ -98,7 +98,7 @@ export class WhatsAppMessageService {
     imageUrl: string,
     caption?: string,
   ): Promise<WhatsAppServiceResponse> {
-    const imagePayload: ImageMessage['image'] = {
+    const imagePayload: ImageMessage["image"] = {
       link: imageUrl,
     };
 
@@ -107,10 +107,10 @@ export class WhatsAppMessageService {
     }
 
     const message: ImageMessage = {
-      messaging_product: 'whatsapp',
-      recipient_type: 'individual',
+      messaging_product: "whatsapp",
+      recipient_type: "individual",
       to,
-      type: 'image',
+      type: "image",
       image: imagePayload,
     };
 
@@ -127,20 +127,20 @@ export class WhatsAppMessageService {
     parameters?: string[];
   }): Promise<WhatsAppServiceResponse> {
     const { to, templateName, languageCode, parameters } = args;
-    const template: NonNullable<SendMessageRequest['template']> = {
+    const template: NonNullable<SendMessageRequest["template"]> = {
       name: templateName,
       language: {
         code: languageCode,
-        policy: 'deterministic',
+        policy: "deterministic",
       },
     };
 
     if (parameters && parameters.length > 0) {
       template.components = [
         {
-          type: 'body',
+          type: "body",
           parameters: parameters.map((param) => ({
-            type: 'text',
+            type: "text",
             text: param,
           })),
         },
@@ -148,10 +148,10 @@ export class WhatsAppMessageService {
     }
 
     const message: SendMessageRequest = {
-      messaging_product: 'whatsapp',
-      recipient_type: 'individual',
+      messaging_product: "whatsapp",
+      recipient_type: "individual",
       to,
-      type: 'template',
+      type: "template",
       template,
     };
 
@@ -169,14 +169,14 @@ export class WhatsAppMessageService {
     footerText?: string;
   }): Promise<WhatsAppServiceResponse> {
     const { to, bodyText, buttons, headerText, footerText } = args;
-    const interactive: InteractiveMessage['interactive'] = {
-      type: 'button',
+    const interactive: InteractiveMessage["interactive"] = {
+      type: "button",
       body: {
         text: bodyText,
       },
       action: {
         buttons: buttons.map((button) => ({
-          type: 'reply',
+          type: "reply",
           reply: {
             id: button.id,
             title: button.title,
@@ -187,7 +187,7 @@ export class WhatsAppMessageService {
 
     if (headerText) {
       interactive.header = {
-        type: 'text',
+        type: "text",
         text: headerText,
       };
     }
@@ -199,10 +199,10 @@ export class WhatsAppMessageService {
     }
 
     const message: InteractiveMessage = {
-      messaging_product: 'whatsapp',
-      recipient_type: 'individual',
+      messaging_product: "whatsapp",
+      recipient_type: "individual",
       to,
-      type: 'interactive',
+      type: "interactive",
       interactive,
     };
 
@@ -223,15 +223,15 @@ export class WhatsAppMessageService {
     options?: { headerText?: string; footerText?: string };
   }): Promise<WhatsAppServiceResponse> {
     const { to, bodyText, buttonText, sections, options } = args;
-    const interactive: InteractiveMessage['interactive'] = {
-      type: 'list',
+    const interactive: InteractiveMessage["interactive"] = {
+      type: "list",
       body: {
         text: bodyText,
       },
       action: {
         button: buttonText,
         sections: sections.map((section) => ({
-          title: section.title || '',
+          title: section.title || "",
           rows: section.rows,
         })),
       },
@@ -239,7 +239,7 @@ export class WhatsAppMessageService {
 
     if (options?.headerText) {
       interactive.header = {
-        type: 'text',
+        type: "text",
         text: options.headerText,
       };
     }
@@ -251,10 +251,10 @@ export class WhatsAppMessageService {
     }
 
     const message: InteractiveMessage = {
-      messaging_product: 'whatsapp',
-      recipient_type: 'individual',
+      messaging_product: "whatsapp",
+      recipient_type: "individual",
       to,
-      type: 'interactive',
+      type: "interactive",
       interactive,
     };
 

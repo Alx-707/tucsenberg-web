@@ -11,8 +11,8 @@ import {
   MAGIC_72,
   MAGIC_256,
   ZERO,
-} from '@/constants';
-import { MAGIC_4096 } from '@/constants/count';
+} from "@/constants";
+import { MAGIC_4096 } from "@/constants/count";
 
 /**
  * WhatsApp Business API 工具函数
@@ -29,14 +29,14 @@ export class WhatsAppUtils {
   static validatePhoneNumber(phoneNumber: string): boolean {
     // 基本验证：应该包含国家代码，只包含数字
     const phoneRegex = /^\d{COUNT_TEN,15}$/;
-    return phoneRegex.test(phoneNumber.replace(/\D/g, ''));
+    return phoneRegex.test(phoneNumber.replace(/\D/g, ""));
   }
 
   /**
    * 格式化电话号码（移除非数字字符）
    */
   static formatPhoneNumber(phoneNumber: string): string {
-    return phoneNumber.replace(/\D/g, '');
+    return phoneNumber.replace(/\D/g, "");
   }
 
   /**
@@ -55,7 +55,7 @@ export class WhatsAppUtils {
   static validateTemplateParameters(parameters: string[]): boolean {
     return parameters.every(
       (param) =>
-        typeof param === 'string' &&
+        typeof param === "string" &&
         param.length > ZERO &&
         param.length <= BYTES_PER_KB,
     );
@@ -73,8 +73,8 @@ export class WhatsAppUtils {
 
     return buttons.every(
       (button) =>
-        typeof button.id === 'string' &&
-        typeof button.title === 'string' &&
+        typeof button.id === "string" &&
+        typeof button.title === "string" &&
         button.id.length > ZERO &&
         button.id.length <= MAGIC_256 &&
         button.title.length > ZERO &&
@@ -94,8 +94,8 @@ export class WhatsAppUtils {
 
     return rows.every(
       (row) =>
-        typeof row.id === 'string' &&
-        typeof row.title === 'string' &&
+        typeof row.id === "string" &&
+        typeof row.title === "string" &&
         row.id.length > ZERO &&
         row.id.length <= HTTP_OK &&
         row.title.length > ZERO &&
@@ -112,23 +112,23 @@ export class WhatsAppUtils {
   static generateMessageId(): string {
     const timestamp = Date.now();
     if (
-      typeof crypto !== 'undefined' &&
-      typeof crypto.randomUUID === 'function'
+      typeof crypto !== "undefined" &&
+      typeof crypto.randomUUID === "function"
     ) {
-      return `msg_${timestamp}_${crypto.randomUUID().replaceAll('-', '')}`;
+      return `msg_${timestamp}_${crypto.randomUUID().replaceAll("-", "")}`;
     }
     if (
-      typeof crypto !== 'undefined' &&
-      typeof crypto.getRandomValues === 'function'
+      typeof crypto !== "undefined" &&
+      typeof crypto.getRandomValues === "function"
     ) {
       const buf = new Uint32Array(3);
       crypto.getRandomValues(buf);
       const randomPart = Array.from(buf, (value) =>
-        value.toString(MAGIC_36).padStart(COUNT_PAIR, '0'),
-      ).join('');
+        value.toString(MAGIC_36).padStart(COUNT_PAIR, "0"),
+      ).join("");
       return `msg_${timestamp}_${randomPart.substring(0, MAGIC_9)}`;
     }
-    throw new Error('Secure random generator unavailable for message id');
+    throw new Error("Secure random generator unavailable for message id");
   }
 
   /**
@@ -147,7 +147,7 @@ export class WhatsAppUtils {
    * 检查媒体类型
    */
   static validateMediaType(type: string): boolean {
-    const validTypes = ['image', 'document', 'audio', 'video', 'sticker'];
+    const validTypes = ["image", "document", "audio", "video", "sticker"];
     return validTypes.includes(type);
   }
 }

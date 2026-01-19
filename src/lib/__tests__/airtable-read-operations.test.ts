@@ -8,17 +8,17 @@
  * - 空结果处理
  */
 
-import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
+import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 import type {
   AirtableBaseLike,
   AirtableServicePrivate,
   DynamicImportModule,
-} from '@/types/test-types';
-import type { AirtableService as AirtableServiceType } from '../airtable/service';
+} from "@/types/test-types";
+import type { AirtableService as AirtableServiceType } from "../airtable/service";
 import {
   configureServiceForTesting,
   createMockBase,
-} from './mocks/airtable-test-helpers';
+} from "./mocks/airtable-test-helpers";
 
 // Mock Airtable
 const mockCreate = vi.fn();
@@ -32,12 +32,12 @@ const mockDestroy = vi.fn();
 
 // Mock record with get method
 const createMockRecord = (data: Record<string, unknown>) => ({
-  id: data.id || 'rec123456',
+  id: data.id || "rec123456",
   fields: data.fields || {},
-  createdTime: data.createdTime || '2023-01-01T00:00:00Z',
+  createdTime: data.createdTime || "2023-01-01T00:00:00Z",
   get: vi.fn((field: string) => {
-    if (field === 'Created Time')
-      return data.createdTime || '2023-01-01T00:00:00Z';
+    if (field === "Created Time")
+      return data.createdTime || "2023-01-01T00:00:00Z";
     return (data.fields as Record<string, unknown>)?.[field];
   }),
 });
@@ -49,9 +49,9 @@ const mockTable = vi.fn().mockReturnValue({
   destroy: mockDestroy,
 });
 
-const tableFactory: AirtableBaseLike['table'] = (_name) => {
+const tableFactory: AirtableBaseLike["table"] = (_name) => {
   // Parameter renamed with underscore to indicate it's intentionally unused
-  return mockTable() as ReturnType<AirtableBaseLike['table']>;
+  return mockTable() as ReturnType<AirtableBaseLike["table"]>;
 };
 
 const mockBase = vi.fn(() => createMockBase(tableFactory));
@@ -60,7 +60,7 @@ const mockConfigure = vi.fn();
 const setServiceReady = (service: unknown) =>
   configureServiceForTesting(service as any, createMockBase(tableFactory));
 
-vi.mock('airtable', () => ({
+vi.mock("airtable", () => ({
   default: {
     configure: mockConfigure,
     base: mockBase,
@@ -68,22 +68,22 @@ vi.mock('airtable', () => ({
 }));
 
 // Use TypeScript Mock modules to bypass Vite's special handling
-vi.mock('@/../env.mjs', async () => {
-  const mockEnv = await import('./mocks/airtable-env');
+vi.mock("@/../env.mjs", async () => {
+  const mockEnv = await import("./mocks/airtable-env");
   return mockEnv;
 });
 
-vi.mock('./logger', async () => {
-  const mockLogger = await import('./mocks/logger');
+vi.mock("./logger", async () => {
+  const mockLogger = await import("./mocks/logger");
   return mockLogger;
 });
 
-vi.mock('./validations', async () => {
-  const mockValidations = await import('./mocks/airtable-validations');
+vi.mock("./validations", async () => {
+  const mockValidations = await import("./mocks/airtable-validations");
   return mockValidations;
 });
 
-describe('Airtable Service - Read Operations Tests', () => {
+describe("Airtable Service - Read Operations Tests", () => {
   let AirtableServiceClass: typeof AirtableServiceType;
 
   beforeEach(async () => {
@@ -106,7 +106,7 @@ describe('Airtable Service - Read Operations Tests', () => {
     mockConfigure.mockClear();
 
     // Dynamically import the module to ensure fresh instance
-    const module = (await import('../airtable')) as DynamicImportModule;
+    const module = (await import("../airtable")) as DynamicImportModule;
     AirtableServiceClass = module.AirtableService as typeof AirtableServiceType;
   });
 
@@ -114,8 +114,8 @@ describe('Airtable Service - Read Operations Tests', () => {
     vi.clearAllMocks();
   });
 
-  describe('获取联系人记录', () => {
-    it('should retrieve contact records successfully', async () => {
+  describe("获取联系人记录", () => {
+    it("should retrieve contact records successfully", async () => {
       const service = new AirtableServiceClass();
 
       // Override service configuration to make it ready
@@ -123,9 +123,9 @@ describe('Airtable Service - Read Operations Tests', () => {
 
       const mockRecords = [
         createMockRecord({
-          id: 'rec123456',
-          fields: { 'First Name': 'John', 'Last Name': 'Doe' },
-          createdTime: '2023-01-01T00:00:00Z',
+          id: "rec123456",
+          fields: { "First Name": "John", "Last Name": "Doe" },
+          createdTime: "2023-01-01T00:00:00Z",
         }),
       ];
 
@@ -137,14 +137,14 @@ describe('Airtable Service - Read Operations Tests', () => {
       const expectedRecords = mockRecords.map((record) => ({
         id: record.id,
         fields: record.fields,
-        createdTime: record.get('Created Time'),
+        createdTime: record.get("Created Time"),
       }));
 
       expect(result).toEqual(expectedRecords);
       expect(mockSelect).toHaveBeenCalled();
     });
 
-    it('should handle query options', async () => {
+    it("should handle query options", async () => {
       const service = new AirtableServiceClass();
 
       // Override service configuration to make it ready
@@ -152,7 +152,7 @@ describe('Airtable Service - Read Operations Tests', () => {
 
       const options = {
         maxRecords: 10,
-        sort: [{ field: 'Created Time', direction: 'desc' as const }],
+        sort: [{ field: "Created Time", direction: "desc" as const }],
       };
 
       mockSelectAll.mockResolvedValue([]);
@@ -162,7 +162,7 @@ describe('Airtable Service - Read Operations Tests', () => {
       expect(mockSelect).toHaveBeenCalledWith(options);
     });
 
-    it('should throw error when service is not configured', async () => {
+    it("should throw error when service is not configured", async () => {
       const service = new AirtableServiceClass();
 
       // Ensure service is not configured
@@ -170,23 +170,23 @@ describe('Airtable Service - Read Operations Tests', () => {
       (service as unknown as AirtableServicePrivate).base = null;
 
       await expect(service.getContacts()).rejects.toThrow(
-        'Failed to fetch contact records',
+        "Failed to fetch contact records",
       );
     });
 
-    it('should handle retrieval errors gracefully', async () => {
+    it("should handle retrieval errors gracefully", async () => {
       const service = new AirtableServiceClass();
 
       setServiceReady(service);
 
-      mockSelectAll.mockRejectedValue(new Error('Retrieval failed'));
+      mockSelectAll.mockRejectedValue(new Error("Retrieval failed"));
 
       await expect(service.getContacts()).rejects.toThrow(
-        'Failed to fetch contact records',
+        "Failed to fetch contact records",
       );
     });
 
-    it('should handle empty results', async () => {
+    it("should handle empty results", async () => {
       const service = new AirtableServiceClass();
 
       setServiceReady(service);
@@ -198,7 +198,7 @@ describe('Airtable Service - Read Operations Tests', () => {
       expect(result).toEqual([]);
     });
 
-    it('should handle complex query options', async () => {
+    it("should handle complex query options", async () => {
       const service = new AirtableServiceClass();
 
       setServiceReady(service);
@@ -206,19 +206,19 @@ describe('Airtable Service - Read Operations Tests', () => {
       const complexOptions = {
         maxRecords: 50,
         sort: [
-          { field: 'Created Time', direction: 'desc' as const },
-          { field: 'First Name', direction: 'asc' as const },
+          { field: "Created Time", direction: "desc" as const },
+          { field: "First Name", direction: "asc" as const },
         ],
         filterByFormula: "AND({Status} = 'New', {Email} != '')",
-        fields: ['First Name', 'Last Name', 'Email', 'Company'],
+        fields: ["First Name", "Last Name", "Email", "Company"],
       };
 
       // Service only supports maxRecords, sort, and filterByFormula
       const expectedOptions = {
         maxRecords: 50,
         sort: [
-          { field: 'Created Time', direction: 'desc' as const },
-          { field: 'First Name', direction: 'asc' as const },
+          { field: "Created Time", direction: "desc" as const },
+          { field: "First Name", direction: "asc" as const },
         ],
         filterByFormula: "AND({Status} = 'New', {Email} != '')",
       };
@@ -230,7 +230,7 @@ describe('Airtable Service - Read Operations Tests', () => {
       expect(mockSelect).toHaveBeenCalledWith(expectedOptions);
     });
 
-    it('should handle large result sets', async () => {
+    it("should handle large result sets", async () => {
       const service = new AirtableServiceClass();
 
       setServiceReady(service);
@@ -238,13 +238,13 @@ describe('Airtable Service - Read Operations Tests', () => {
       // Create a large mock dataset
       const largeDataset = Array.from({ length: 1000 }, (_, index) =>
         createMockRecord({
-          id: `rec${index.toString().padStart(6, '0')}`,
+          id: `rec${index.toString().padStart(6, "0")}`,
           fields: {
-            'First Name': `User${index}`,
-            'Last Name': `Test${index}`,
-            'Email': `user${index}@example.com`,
+            "First Name": `User${index}`,
+            "Last Name": `Test${index}`,
+            Email: `user${index}@example.com`,
           },
-          createdTime: '2023-01-01T00:00:00Z',
+          createdTime: "2023-01-01T00:00:00Z",
         }),
       );
 
@@ -258,13 +258,13 @@ describe('Airtable Service - Read Operations Tests', () => {
       expect(first).toBeDefined();
       expect(last).toBeDefined();
       if (!first || !last) {
-        throw new Error('分页数据生成失败，无法继续断言');
+        throw new Error("分页数据生成失败，无法继续断言");
       }
-      expect(first.fields['First Name']).toBe('User0');
-      expect(last.fields['First Name']).toBe('User999');
+      expect(first.fields["First Name"]).toBe("User0");
+      expect(last.fields["First Name"]).toBe("User999");
     });
 
-    it('should handle pagination options', async () => {
+    it("should handle pagination options", async () => {
       const service = new AirtableServiceClass();
 
       setServiceReady(service);
@@ -272,7 +272,7 @@ describe('Airtable Service - Read Operations Tests', () => {
       const paginationOptions = {
         maxRecords: 100,
         pageSize: 20,
-        offset: 'recABC123',
+        offset: "recABC123",
       };
 
       // Service only supports maxRecords
@@ -287,37 +287,37 @@ describe('Airtable Service - Read Operations Tests', () => {
       expect(mockSelect).toHaveBeenCalledWith(expectedOptions);
     });
 
-    it('should handle network timeout during retrieval', async () => {
+    it("should handle network timeout during retrieval", async () => {
       const service = new AirtableServiceClass();
 
       setServiceReady(service);
 
-      const timeoutError = new Error('Request timeout');
-      timeoutError.name = 'TimeoutError';
+      const timeoutError = new Error("Request timeout");
+      timeoutError.name = "TimeoutError";
 
       mockSelectAll.mockRejectedValue(timeoutError);
 
       await expect(service.getContacts()).rejects.toThrow(
-        'Failed to fetch contact records',
+        "Failed to fetch contact records",
       );
     });
 
-    it('should handle API rate limiting during retrieval', async () => {
+    it("should handle API rate limiting during retrieval", async () => {
       const service = new AirtableServiceClass();
 
       setServiceReady(service);
 
-      const rateLimitError = new Error('Rate limit exceeded');
-      rateLimitError.name = 'RateLimitError';
+      const rateLimitError = new Error("Rate limit exceeded");
+      rateLimitError.name = "RateLimitError";
 
       mockSelectAll.mockRejectedValue(rateLimitError);
 
       await expect(service.getContacts()).rejects.toThrow(
-        'Failed to fetch contact records',
+        "Failed to fetch contact records",
       );
     });
 
-    it('should handle malformed response data', async () => {
+    it("should handle malformed response data", async () => {
       const service = new AirtableServiceClass();
 
       setServiceReady(service);
@@ -326,13 +326,13 @@ describe('Airtable Service - Read Operations Tests', () => {
       const malformedData = [
         createMockRecord({
           // Missing id field - but createMockRecord will provide default
-          fields: { 'First Name': 'John' },
-          createdTime: '2023-01-01T00:00:00Z',
+          fields: { "First Name": "John" },
+          createdTime: "2023-01-01T00:00:00Z",
         }),
         createMockRecord({
-          id: 'rec123456',
+          id: "rec123456",
           // Missing fields property - but createMockRecord will provide default
-          createdTime: '2023-01-01T00:00:00Z',
+          createdTime: "2023-01-01T00:00:00Z",
         }),
       ];
 
@@ -344,19 +344,19 @@ describe('Airtable Service - Read Operations Tests', () => {
       const expectedRecords = malformedData.map((record) => ({
         id: record.id,
         fields: record.fields,
-        createdTime: record.get('Created Time'),
+        createdTime: record.get("Created Time"),
       }));
 
       expect(result).toEqual(expectedRecords);
     });
 
-    it('should handle view-based queries', async () => {
+    it("should handle view-based queries", async () => {
       const service = new AirtableServiceClass();
 
       setServiceReady(service);
 
       const viewOptions = {
-        view: 'Grid view',
+        view: "Grid view",
         maxRecords: 25,
       };
 

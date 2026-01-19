@@ -1,9 +1,9 @@
-'use client';
+"use client";
 
-import { Suspense } from 'react';
-import { CookieConsentProvider } from '@/lib/cookie-consent';
-import { LazyCookieBanner } from '@/components/cookie/lazy-cookie-banner';
-import { EnterpriseAnalyticsIsland } from '@/components/monitoring/enterprise-analytics-island';
+import { Suspense } from "react";
+import { CookieConsentProvider } from "@/lib/cookie-consent";
+import { LazyCookieBanner } from "@/components/cookie/lazy-cookie-banner";
+import { EnterpriseAnalyticsIsland } from "@/components/monitoring/enterprise-analytics-island";
 
 /**
  * Cookie Consent Island
@@ -16,7 +16,7 @@ import { EnterpriseAnalyticsIsland } from '@/components/monitoring/enterprise-an
  * - EnterpriseAnalyticsIsland: conditionally loads analytics based on consent
  */
 export function CookieConsentIsland() {
-  const isProd = process.env.NODE_ENV === 'production';
+  const isProd = process.env.NODE_ENV === "production";
 
   return (
     <CookieConsentProvider>

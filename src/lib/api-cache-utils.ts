@@ -1,4 +1,4 @@
-import { NextResponse } from 'next/server';
+import { NextResponse } from "next/server";
 
 type JsonResponseInit = Parameters<typeof NextResponse.json>[1];
 
@@ -25,19 +25,19 @@ export function createCacheHeaders({
   staleWhileRevalidate = maxAge * 2,
   isPrivate = false,
 }: CacheControlOptions): Record<string, string> {
-  const visibility = isPrivate ? 'private' : 'public';
+  const visibility = isPrivate ? "private" : "public";
 
   const cacheControl = [
     visibility,
     `max-age=${maxAge}`,
     `s-maxage=${maxAge}`,
     `stale-while-revalidate=${staleWhileRevalidate}`,
-  ].join(', ');
+  ].join(", ");
 
   return {
-    'Cache-Control': cacheControl,
-    'CDN-Cache-Control': `${visibility}, s-maxage=${maxAge}`,
-    'Vercel-CDN-Cache-Control': `${visibility}, s-maxage=${maxAge}`,
+    "Cache-Control": cacheControl,
+    "CDN-Cache-Control": `${visibility}, s-maxage=${maxAge}`,
+    "Vercel-CDN-Cache-Control": `${visibility}, s-maxage=${maxAge}`,
   };
 }
 

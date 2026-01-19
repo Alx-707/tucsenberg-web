@@ -1,4 +1,4 @@
-import { Label } from '@/components/ui/label';
+import { Label } from "@/components/ui/label";
 
 /**
  * Checkbox fields component - React 19 Native Form Version
@@ -13,40 +13,37 @@ interface CheckboxFieldsProps {
 
 export function CheckboxFields({ t, isPending }: CheckboxFieldsProps) {
   return (
-    <div className='space-y-4'>
-      <div className='space-y-2'>
-        <div className='flex items-center space-x-2'>
+    <div className="space-y-4">
+      <div className="space-y-2">
+        <div className="flex items-center space-x-2">
           <input
-            id='acceptPrivacy'
-            name='acceptPrivacy'
-            type='checkbox'
+            id="acceptPrivacy"
+            name="acceptPrivacy"
+            type="checkbox"
             disabled={isPending}
             required
-            className='h-4 w-4 rounded border border-input'
+            className="h-4 w-4 rounded border border-input"
           />
           <Label
-            htmlFor='acceptPrivacy'
+            htmlFor="acceptPrivacy"
             className="text-sm after:ml-0.5 after:text-red-500 after:content-['*']"
           >
-            {t('acceptPrivacy')}
+            {t("acceptPrivacy")}
           </Label>
         </div>
       </div>
 
-      <div className='space-y-2'>
-        <div className='flex items-center space-x-2'>
+      <div className="space-y-2">
+        <div className="flex items-center space-x-2">
           <input
-            id='marketingConsent'
-            name='marketingConsent'
-            type='checkbox'
+            id="marketingConsent"
+            name="marketingConsent"
+            type="checkbox"
             disabled={isPending}
-            className='h-4 w-4 rounded border border-input'
+            className="h-4 w-4 rounded border border-input"
           />
-          <Label
-            htmlFor='marketingConsent'
-            className='text-sm'
-          >
-            {t('marketingConsent')}
+          <Label htmlFor="marketingConsent" className="text-sm">
+            {t("marketingConsent")}
           </Label>
         </div>
       </div>

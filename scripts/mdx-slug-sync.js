@@ -13,11 +13,11 @@
  * @module scripts/mdx-slug-sync
  */
 
-const fs = require('fs');
-const path = require('path');
-const matter = require('gray-matter');
-const yaml = require('js-yaml');
-const { glob } = require('glob');
+const fs = require("fs");
+const path = require("path");
+const matter = require("gray-matter");
+const yaml = require("js-yaml");
+const { glob } = require("glob");
 
 // Configure gray-matter to use js-yaml 4.x compatible API
 const matterOptions = {
@@ -83,10 +83,10 @@ const matterOptions = {
  * @returns {string} Canonical key for pairing (POSIX style path)
  */
 function buildKey(rootDir, filePath, collection, locale) {
-  const localeRoot = path.join(rootDir, 'content', collection, locale);
+  const localeRoot = path.join(rootDir, "content", collection, locale);
   const relative = path.relative(localeRoot, filePath);
   // Normalize to POSIX style for consistent keys across platforms
-  const normalizedRelative = relative.replace(/\\/g, '/');
+  const normalizedRelative = relative.replace(/\\/g, "/");
   return `${collection}/${normalizedRelative}`;
 }
 
@@ -98,13 +98,13 @@ function buildKey(rootDir, filePath, collection, locale) {
  */
 function parseFrontmatter(filePath) {
   try {
-    const content = fs.readFileSync(filePath, 'utf-8');
+    const content = fs.readFileSync(filePath, "utf-8");
     const { data } = matter(content, matterOptions);
 
-    if (!data || typeof data.slug !== 'string') {
+    if (!data || typeof data.slug !== "string") {
       return {
         slug: null,
-        error: 'frontmatter.slug is missing or not a string',
+        error: "frontmatter.slug is missing or not a string",
       };
     }
 
@@ -128,17 +128,17 @@ function collectPairs(rootDir, collection, baseLocale, targetLocale) {
   // Use **/*.mdx to support nested subdirectories
   const basePattern = path.join(
     rootDir,
-    'content',
+    "content",
     collection,
     baseLocale,
-    '**/*.mdx',
+    "**/*.mdx",
   );
   const targetPattern = path.join(
     rootDir,
-    'content',
+    "content",
     collection,
     targetLocale,
-    '**/*.mdx',
+    "**/*.mdx",
   );
 
   const baseFiles = glob.sync(basePattern);
@@ -189,7 +189,7 @@ function validateCollectionPair(rootDir, collection, baseLocale, targetLocale) {
       const missingLocale = !basePath ? baseLocale : targetLocale;
       const existingPath = basePath || targetPath;
       issues.push({
-        type: 'missing_pair',
+        type: "missing_pair",
         collection,
         baseLocale,
         targetLocale,
@@ -207,13 +207,13 @@ function validateCollectionPair(rootDir, collection, baseLocale, targetLocale) {
     // Check for parse errors
     if (baseResult.error || targetResult.error) {
       issues.push({
-        type: 'parse_error',
+        type: "parse_error",
         collection,
         baseLocale,
         targetLocale,
         basePath,
         targetPath,
-        message: 'Failed to parse frontmatter.slug',
+        message: "Failed to parse frontmatter.slug",
         error: baseResult.error || targetResult.error,
       });
       continue;
@@ -222,7 +222,7 @@ function validateCollectionPair(rootDir, collection, baseLocale, targetLocale) {
     // Check for slug mismatch
     if (baseResult.slug !== targetResult.slug) {
       issues.push({
-        type: 'slug_mismatch',
+        type: "slug_mismatch",
         collection,
         baseLocale,
         targetLocale,
@@ -251,8 +251,8 @@ function validateCollectionPair(rootDir, collection, baseLocale, targetLocale) {
 function validateMdxSlugSync(options) {
   const {
     rootDir,
-    collections = ['posts', 'pages', 'products'],
-    locales = ['en', 'zh'],
+    collections = ["posts", "pages", "products"],
+    locales = ["en", "zh"],
     baseLocale = locales[0],
   } = options;
 
@@ -281,9 +281,9 @@ function validateMdxSlugSync(options) {
   const stats = {
     totalFiles,
     totalPairs,
-    missingPairs: allIssues.filter((i) => i.type === 'missing_pair').length,
-    slugMismatches: allIssues.filter((i) => i.type === 'slug_mismatch').length,
-    parseErrors: allIssues.filter((i) => i.type === 'parse_error').length,
+    missingPairs: allIssues.filter((i) => i.type === "missing_pair").length,
+    slugMismatches: allIssues.filter((i) => i.type === "slug_mismatch").length,
+    parseErrors: allIssues.filter((i) => i.type === "parse_error").length,
   };
 
   return {

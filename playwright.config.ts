@@ -1,26 +1,26 @@
-import { defineConfig, devices } from '@playwright/test';
-import { config } from 'dotenv';
+import { defineConfig, devices } from "@playwright/test";
+import { config } from "dotenv";
 
 // 加载测试环境配置
-config({ path: '.env.test' });
+config({ path: ".env.test" });
 
 /**
  * @see https://playwright.dev/docs/test-configuration
  */
 const isCI = Boolean(process.env.CI);
-const isDaily = process.env.CI_DAILY === 'true';
+const isDaily = process.env.CI_DAILY === "true";
 
-const supportedLocales = (process.env.NEXT_PUBLIC_SUPPORTED_LOCALES || 'en')
-  .split(',')
+const supportedLocales = (process.env.NEXT_PUBLIC_SUPPORTED_LOCALES || "en")
+  .split(",")
   .map((locale) => locale.trim())
   .filter(Boolean);
 const defaultLocale =
-  process.env.NEXT_PUBLIC_DEFAULT_LOCALE?.trim() || supportedLocales[0] || 'en';
+  process.env.NEXT_PUBLIC_DEFAULT_LOCALE?.trim() || supportedLocales[0] || "en";
 
 const ensureLocaleInUrl = (input: string): string => {
   try {
     const url = new URL(input);
-    const segments = url.pathname.split('/').filter(Boolean);
+    const segments = url.pathname.split("/").filter(Boolean);
     const firstSegment = segments[0];
     const lastSegment =
       segments.length > 0 ? segments[segments.length - 1] : undefined;
@@ -29,13 +29,13 @@ const ensureLocaleInUrl = (input: string): string => {
       (lastSegment ? supportedLocales.includes(lastSegment) : false);
 
     if (!hasLocale) {
-      url.pathname = `${url.pathname.replace(/\/$/, '')}/${defaultLocale}`;
+      url.pathname = `${url.pathname.replace(/\/$/, "")}/${defaultLocale}`;
     }
 
-    const normalizedPath = url.pathname.replace(/\/$/, '');
+    const normalizedPath = url.pathname.replace(/\/$/, "");
     return `${url.origin}${normalizedPath}${url.search}${url.hash}`;
   } catch {
-    const trimmed = input.replace(/\/$/, '');
+    const trimmed = input.replace(/\/$/, "");
     const hasLocale = supportedLocales.some((locale) =>
       trimmed.endsWith(`/${locale}`),
     );
@@ -44,7 +44,7 @@ const ensureLocaleInUrl = (input: string): string => {
 };
 
 const resolvedBaseUrl = ensureLocaleInUrl(
-  process.env.PLAYWRIGHT_BASE_URL || 'http://localhost:3000',
+  process.env.PLAYWRIGHT_BASE_URL || "http://localhost:3000",
 );
 
 // HTML reporter may start a local server and wait for Ctrl+C when open is enabled.
@@ -52,55 +52,55 @@ const resolvedBaseUrl = ensureLocaleInUrl(
 const isInteractiveTerminal = Boolean(
   process.stdout.isTTY && process.stdin.isTTY,
 );
-const htmlReportOpen: 'always' | 'never' | 'on-failure' =
-  isCI || !isInteractiveTerminal ? 'never' : 'on-failure';
+const htmlReportOpen: "always" | "never" | "on-failure" =
+  isCI || !isInteractiveTerminal ? "never" : "on-failure";
 
 // 基于是否为每日全量任务，动态裁剪浏览器矩阵，加速常规CI
 const baseProjects = [
   {
-    name: 'chromium',
-    use: { ...devices['Desktop Chrome'] },
+    name: "chromium",
+    use: { ...devices["Desktop Chrome"] },
   },
 ];
 
 const extendedProjects = [
   {
-    name: 'firefox',
-    use: { ...devices['Desktop Firefox'] },
+    name: "firefox",
+    use: { ...devices["Desktop Firefox"] },
   },
   {
-    name: 'webkit',
-    use: { ...devices['Desktop Safari'] },
+    name: "webkit",
+    use: { ...devices["Desktop Safari"] },
   },
   {
-    name: 'Mobile Chrome',
-    use: { ...devices['Pixel 5'] },
+    name: "Mobile Chrome",
+    use: { ...devices["Pixel 5"] },
   },
   {
-    name: 'Mobile Safari',
-    use: { ...devices['iPhone 12'] },
+    name: "Mobile Safari",
+    use: { ...devices["iPhone 12"] },
   },
 ];
 
 export default defineConfig({
-  testDir: './tests/e2e',
+  testDir: "./tests/e2e",
   /* Run tests in files in parallel */
   fullyParallel: true,
   /* Fail the build on CI if you accidentally left test.only in the source code. */
   forbidOnly: Boolean(process.env.CI),
   /* Retry on CI only */
-  retries: process.env.CI ? (process.env.CI_FLAKE_SAMPLING === '1' ? 0 : 2) : 0,
+  retries: process.env.CI ? (process.env.CI_FLAKE_SAMPLING === "1" ? 0 : 2) : 0,
   /* Opt out of parallel tests on CI. */
   // CI 上启用 2 个并发以降低整体时长；本地保持 4
   workers: isCI ? 2 : 4,
   /* Reporter to use. See https://playwright.dev/docs/test-reporters */
   reporter: [
     [
-      'html',
-      { outputFolder: 'reports/playwright-report', open: htmlReportOpen },
+      "html",
+      { outputFolder: "reports/playwright-report", open: htmlReportOpen },
     ],
-    ['json', { outputFile: 'reports/playwright-results.json' }],
-    ['junit', { outputFile: 'reports/playwright-results.xml' }],
+    ["json", { outputFile: "reports/playwright-results.json" }],
+    ["junit", { outputFile: "reports/playwright-results.xml" }],
   ],
   // 非每日任务时，排除调试/诊断类用例，进一步收敛耗时
   ...(isCI && !isDaily ? { grepInvert: /debug|diagnosis/i } : {}),
@@ -116,13 +116,13 @@ export default defineConfig({
     navigationTimeout: 30_000,
 
     /* Collect trace when retrying the failed test. See https://playwright.dev/docs/trace-viewer */
-    trace: 'on-first-retry',
+    trace: "on-first-retry",
 
     /* Take screenshot on failure */
-    screenshot: 'only-on-failure',
+    screenshot: "only-on-failure",
 
     /* Record video on failure */
-    video: 'retain-on-failure',
+    video: "retain-on-failure",
   },
 
   /* Configure projects for major browsers */
@@ -138,39 +138,39 @@ export default defineConfig({
           // 注意：必须使用 NODE_ENV=production 进行构建，否则 React 19 的某些内部 API
           // （如 captureOwnerStack）在 test 模式下不可用，会导致 sitemap.ts 预渲染失败
           // CI环境下构建由workflow显式执行，这里只启动服务器；本地开发时需要构建
-          command: process.env.CI ? 'pnpm start' : 'pnpm build && pnpm start',
-          url: 'http://localhost:3000',
+          command: process.env.CI ? "pnpm start" : "pnpm build && pnpm start",
+          url: "http://localhost:3000",
           reuseExistingServer: !process.env.CI,
           timeout: process.env.CI ? 60 * 1000 : 180 * 1000, // CI已构建,启动更快
           // 将关键测试环境变量直接注入到 Next.js 进程
           // NODE_ENV 必须为 production 以确保 React 19 正常工作
           env: {
-            NODE_ENV: 'production',
-            PLAYWRIGHT_TEST: 'true',
-            NEXT_PUBLIC_TEST_MODE: 'true',
-            NEXT_PUBLIC_BASE_URL: 'http://localhost:3000',
+            NODE_ENV: "production",
+            PLAYWRIGHT_TEST: "true",
+            NEXT_PUBLIC_TEST_MODE: "true",
+            NEXT_PUBLIC_BASE_URL: "http://localhost:3000",
 
             // Turnstile test keys (always pass mode)
             // See: https://developers.cloudflare.com/turnstile/reference/testing/
-            NEXT_PUBLIC_TURNSTILE_SITE_KEY: '1x00000000000000000000AA',
-            TURNSTILE_SECRET_KEY: '1x0000000000000000000000000000000AA',
-            NEXT_PUBLIC_TURNSTILE_ACTION: 'contact-form',
+            NEXT_PUBLIC_TURNSTILE_SITE_KEY: "1x00000000000000000000AA",
+            TURNSTILE_SECRET_KEY: "1x0000000000000000000000000000000AA",
+            NEXT_PUBLIC_TURNSTILE_ACTION: "contact-form",
 
-            NEXT_PUBLIC_DISABLE_REACT_SCAN: 'true',
-            NEXT_PUBLIC_DISABLE_DEV_TOOLS: 'true',
-            NEXT_PUBLIC_ENABLE_ANALYTICS: 'false',
-            NEXT_PUBLIC_ENABLE_ERROR_REPORTING: 'false',
-            NEXT_PUBLIC_ENABLE_PERFORMANCE_MONITORING: 'false',
-            NEXT_PUBLIC_SECURITY_MODE: 'relaxed',
-            SECURITY_HEADERS_ENABLED: 'false',
-            SKIP_ENV_VALIDATION: 'true',
+            NEXT_PUBLIC_DISABLE_REACT_SCAN: "true",
+            NEXT_PUBLIC_DISABLE_DEV_TOOLS: "true",
+            NEXT_PUBLIC_ENABLE_ANALYTICS: "false",
+            NEXT_PUBLIC_ENABLE_ERROR_REPORTING: "false",
+            NEXT_PUBLIC_ENABLE_PERFORMANCE_MONITORING: "false",
+            NEXT_PUBLIC_SECURITY_MODE: "relaxed",
+            SECURITY_HEADERS_ENABLED: "false",
+            SKIP_ENV_VALIDATION: "true",
           },
         },
       }),
 
   /* Global setup and teardown */
-  globalSetup: require.resolve('./tests/e2e/global-setup.ts'),
-  globalTeardown: require.resolve('./tests/e2e/global-teardown.ts'),
+  globalSetup: require.resolve("./tests/e2e/global-setup.ts"),
+  globalTeardown: require.resolve("./tests/e2e/global-teardown.ts"),
 
   /* Test timeout */
   timeout: 30 * 1000,
@@ -188,9 +188,9 @@ export default defineConfig({
       // threshold: 0.2 means pixels with <20% color difference are considered same
       threshold: 0.2,
       // Disable animations to ensure consistent screenshots
-      animations: 'disabled',
+      animations: "disabled",
       // Use CSS scale for consistent rendering across devices
-      scale: 'css',
+      scale: "css",
     },
     toMatchSnapshot: {
       maxDiffPixelRatio: 0.01,
@@ -198,10 +198,10 @@ export default defineConfig({
   },
 
   /* Snapshot configuration for visual regression tests */
-  snapshotDir: './tests/e2e/__snapshots__',
+  snapshotDir: "./tests/e2e/__snapshots__",
   snapshotPathTemplate:
-    '{snapshotDir}/{testFileDir}/{testFileName}-snapshots/{arg}-{projectName}{ext}',
+    "{snapshotDir}/{testFileDir}/{testFileName}-snapshots/{arg}-{projectName}{ext}",
 
   /* Output directory for test artifacts */
-  outputDir: 'test-results/',
+  outputDir: "test-results/",
 });

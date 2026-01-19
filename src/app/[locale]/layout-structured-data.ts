@@ -1,7 +1,7 @@
 import {
   generateLocalizedStructuredData,
   type Locale,
-} from '@/lib/structured-data';
+} from "@/lib/structured-data";
 
 /**
  * 页面结构化数据接口
@@ -21,12 +21,12 @@ export async function generatePageStructuredData(locale: Locale): Promise<{
 }> {
   const organizationData = await generateLocalizedStructuredData(
     locale,
-    'Organization',
+    "Organization",
     {},
   );
   const websiteData = await generateLocalizedStructuredData(
     locale,
-    'WebSite',
+    "WebSite",
     {},
   );
 

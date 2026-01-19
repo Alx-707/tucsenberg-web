@@ -1,5 +1,5 @@
-import { beforeEach, describe, expect, it, vi } from 'vitest';
-import { generatePageStructuredData } from '@/app/[locale]/layout-structured-data';
+import { beforeEach, describe, expect, it, vi } from "vitest";
+import { generatePageStructuredData } from "@/app/[locale]/layout-structured-data";
 
 // Mock配置 - 使用vi.hoisted确保Mock在模块导入前设置
 const { mockGenerateLocalizedStructuredData } = vi.hoisted(() => ({
@@ -7,162 +7,162 @@ const { mockGenerateLocalizedStructuredData } = vi.hoisted(() => ({
 }));
 
 // Mock外部依赖
-vi.mock('@/lib/structured-data', () => ({
+vi.mock("@/lib/structured-data", () => ({
   generateLocalizedStructuredData: mockGenerateLocalizedStructuredData,
 }));
 
-describe('Layout Structured Data Generation', () => {
+describe("Layout Structured Data Generation", () => {
   beforeEach(() => {
     vi.clearAllMocks();
 
     // 设置默认的Mock返回值 - 每次调用都重新设置
     mockGenerateLocalizedStructuredData.mockImplementation((_locale, type) => {
-      if (type === 'Organization') {
+      if (type === "Organization") {
         return Promise.resolve({
-          '@context': 'https://schema.org',
-          '@type': 'Organization',
-          'name': 'B2B Web Template',
-          'url': 'https://example.com',
+          "@context": "https://schema.org",
+          "@type": "Organization",
+          name: "B2B Web Template",
+          url: "https://example.com",
         });
-      } else if (type === 'WebSite') {
+      } else if (type === "WebSite") {
         return Promise.resolve({
-          '@context': 'https://schema.org',
-          '@type': 'WebSite',
-          'name': 'B2B Web Template',
-          'url': 'https://example.com',
+          "@context": "https://schema.org",
+          "@type": "WebSite",
+          name: "B2B Web Template",
+          url: "https://example.com",
         });
       }
       return Promise.resolve({});
     });
   });
 
-  describe('generatePageStructuredData函数', () => {
-    it('应该为英文locale生成组织和网站结构化数据', async () => {
-      const result = await generatePageStructuredData('en');
+  describe("generatePageStructuredData函数", () => {
+    it("应该为英文locale生成组织和网站结构化数据", async () => {
+      const result = await generatePageStructuredData("en");
 
       expect(mockGenerateLocalizedStructuredData).toHaveBeenCalledTimes(2);
       expect(mockGenerateLocalizedStructuredData).toHaveBeenNthCalledWith(
         1,
-        'en',
-        'Organization',
+        "en",
+        "Organization",
         {},
       );
       expect(mockGenerateLocalizedStructuredData).toHaveBeenNthCalledWith(
         2,
-        'en',
-        'WebSite',
+        "en",
+        "WebSite",
         {},
       );
 
-      expect(result).toHaveProperty('organizationData');
-      expect(result).toHaveProperty('websiteData');
+      expect(result).toHaveProperty("organizationData");
+      expect(result).toHaveProperty("websiteData");
     });
 
-    it('应该为中文locale生成结构化数据', async () => {
-      const result = await generatePageStructuredData('zh');
+    it("应该为中文locale生成结构化数据", async () => {
+      const result = await generatePageStructuredData("zh");
 
       expect(mockGenerateLocalizedStructuredData).toHaveBeenCalledTimes(2);
       expect(mockGenerateLocalizedStructuredData).toHaveBeenNthCalledWith(
         1,
-        'zh',
-        'Organization',
+        "zh",
+        "Organization",
         {},
       );
       expect(mockGenerateLocalizedStructuredData).toHaveBeenNthCalledWith(
         2,
-        'zh',
-        'WebSite',
+        "zh",
+        "WebSite",
         {},
       );
 
       expect(result).toBeDefined();
     });
 
-    it('应该返回正确的数据结构', async () => {
-      const result = await generatePageStructuredData('en');
+    it("应该返回正确的数据结构", async () => {
+      const result = await generatePageStructuredData("en");
 
       expect(result).toEqual({
         organizationData: {
-          '@context': 'https://schema.org',
-          '@type': 'Organization',
-          'name': 'B2B Web Template',
-          'url': 'https://example.com',
+          "@context": "https://schema.org",
+          "@type": "Organization",
+          name: "B2B Web Template",
+          url: "https://example.com",
         },
         websiteData: {
-          '@context': 'https://schema.org',
-          '@type': 'WebSite',
-          'name': 'B2B Web Template',
-          'url': 'https://example.com',
+          "@context": "https://schema.org",
+          "@type": "WebSite",
+          name: "B2B Web Template",
+          url: "https://example.com",
         },
       });
     });
   });
 
-  describe('结构化数据类型', () => {
-    it('应该生成Organization类型的结构化数据', async () => {
-      await generatePageStructuredData('en');
+  describe("结构化数据类型", () => {
+    it("应该生成Organization类型的结构化数据", async () => {
+      await generatePageStructuredData("en");
 
       expect(mockGenerateLocalizedStructuredData).toHaveBeenCalledWith(
-        'en',
-        'Organization',
+        "en",
+        "Organization",
         {},
       );
     });
 
-    it('应该生成WebSite类型的结构化数据', async () => {
-      await generatePageStructuredData('en');
+    it("应该生成WebSite类型的结构化数据", async () => {
+      await generatePageStructuredData("en");
 
       expect(mockGenerateLocalizedStructuredData).toHaveBeenCalledWith(
-        'en',
-        'WebSite',
+        "en",
+        "WebSite",
         {},
       );
     });
 
-    it('应该为两种类型传递空的配置对象', async () => {
-      await generatePageStructuredData('en');
+    it("应该为两种类型传递空的配置对象", async () => {
+      await generatePageStructuredData("en");
 
       // 验证两次调用都传递了空对象作为第三个参数
       expect(mockGenerateLocalizedStructuredData).toHaveBeenNthCalledWith(
         1,
-        'en',
-        'Organization',
+        "en",
+        "Organization",
         {},
       );
       expect(mockGenerateLocalizedStructuredData).toHaveBeenNthCalledWith(
         2,
-        'en',
-        'WebSite',
+        "en",
+        "WebSite",
         {},
       );
     });
   });
 
-  describe('异步处理', () => {
-    it('应该正确处理异步的结构化数据生成', async () => {
+  describe("异步处理", () => {
+    it("应该正确处理异步的结构化数据生成", async () => {
       // 模拟异步延迟
       mockGenerateLocalizedStructuredData.mockImplementation(
         (_locale, type) => {
-          if (type === 'Organization') {
+          if (type === "Organization") {
             return new Promise((resolve) =>
-              setTimeout(() => resolve({ type: 'Organization' }), 10),
+              setTimeout(() => resolve({ type: "Organization" }), 10),
             );
-          } else if (type === 'WebSite') {
+          } else if (type === "WebSite") {
             return new Promise((resolve) =>
-              setTimeout(() => resolve({ type: 'WebSite' }), 20),
+              setTimeout(() => resolve({ type: "WebSite" }), 20),
             );
           }
           return Promise.resolve({});
         },
       );
 
-      const result = await generatePageStructuredData('en');
+      const result = await generatePageStructuredData("en");
 
-      expect(result.organizationData).toEqual({ type: 'Organization' });
-      expect(result.websiteData).toEqual({ type: 'WebSite' });
+      expect(result.organizationData).toEqual({ type: "Organization" });
+      expect(result.websiteData).toEqual({ type: "WebSite" });
     });
 
-    it('应该并行处理两个结构化数据生成', async () => {
+    it("应该并行处理两个结构化数据生成", async () => {
       // 验证两个调用是并行的，而不是串行的
       let organizationStarted = false;
       let websiteStarted = false;
@@ -171,20 +171,20 @@ describe('Layout Structured Data Generation', () => {
 
       mockGenerateLocalizedStructuredData.mockImplementation(
         (_locale, type) => {
-          if (type === 'Organization') {
+          if (type === "Organization") {
             organizationStarted = true;
             return new Promise((resolve) => {
               setTimeout(() => {
                 organizationFinished = true;
-                resolve({ type: 'Organization' });
+                resolve({ type: "Organization" });
               }, 10);
             });
-          } else if (type === 'WebSite') {
+          } else if (type === "WebSite") {
             websiteStarted = true;
             return new Promise((resolve) => {
               setTimeout(() => {
                 websiteFinished = true;
-                resolve({ type: 'WebSite' });
+                resolve({ type: "WebSite" });
               }, 10);
             });
           }
@@ -192,7 +192,7 @@ describe('Layout Structured Data Generation', () => {
         },
       );
 
-      await generatePageStructuredData('en');
+      await generatePageStructuredData("en");
 
       // 验证两个调用都已开始和完成
       expect(organizationStarted).toBe(true);
@@ -202,114 +202,114 @@ describe('Layout Structured Data Generation', () => {
     });
   });
 
-  describe('错误处理', () => {
-    it('应该处理Organization数据生成失败', async () => {
+  describe("错误处理", () => {
+    it("应该处理Organization数据生成失败", async () => {
       mockGenerateLocalizedStructuredData.mockImplementation(
         (_locale, type) => {
-          if (type === 'Organization') {
-            return Promise.reject(new Error('Organization generation failed'));
-          } else if (type === 'WebSite') {
-            return Promise.resolve({ type: 'WebSite' });
+          if (type === "Organization") {
+            return Promise.reject(new Error("Organization generation failed"));
+          } else if (type === "WebSite") {
+            return Promise.resolve({ type: "WebSite" });
           }
           return Promise.resolve({});
         },
       );
 
-      await expect(generatePageStructuredData('en')).rejects.toThrow(
-        'Organization generation failed',
+      await expect(generatePageStructuredData("en")).rejects.toThrow(
+        "Organization generation failed",
       );
     });
 
-    it('应该处理WebSite数据生成失败', async () => {
+    it("应该处理WebSite数据生成失败", async () => {
       mockGenerateLocalizedStructuredData.mockImplementation(
         (_locale, type) => {
-          if (type === 'Organization') {
-            return Promise.resolve({ type: 'Organization' });
-          } else if (type === 'WebSite') {
-            return Promise.reject(new Error('WebSite generation failed'));
+          if (type === "Organization") {
+            return Promise.resolve({ type: "Organization" });
+          } else if (type === "WebSite") {
+            return Promise.reject(new Error("WebSite generation failed"));
           }
           return Promise.resolve({});
         },
       );
 
-      await expect(generatePageStructuredData('en')).rejects.toThrow(
-        'WebSite generation failed',
+      await expect(generatePageStructuredData("en")).rejects.toThrow(
+        "WebSite generation failed",
       );
     });
 
-    it('应该处理两个数据生成都失败的情况', async () => {
+    it("应该处理两个数据生成都失败的情况", async () => {
       mockGenerateLocalizedStructuredData.mockImplementation(() => {
-        return Promise.reject(new Error('Generation failed'));
+        return Promise.reject(new Error("Generation failed"));
       });
 
-      await expect(generatePageStructuredData('en')).rejects.toThrow(
-        'Generation failed',
+      await expect(generatePageStructuredData("en")).rejects.toThrow(
+        "Generation failed",
       );
     });
   });
 
-  describe('返回值验证', () => {
-    it('应该返回包含organizationData和websiteData的对象', async () => {
-      const result = await generatePageStructuredData('en');
+  describe("返回值验证", () => {
+    it("应该返回包含organizationData和websiteData的对象", async () => {
+      const result = await generatePageStructuredData("en");
 
-      expect(result).toHaveProperty('organizationData');
-      expect(result).toHaveProperty('websiteData');
+      expect(result).toHaveProperty("organizationData");
+      expect(result).toHaveProperty("websiteData");
       expect(Object.keys(result)).toHaveLength(2);
     });
 
-    it('organizationData应该是一个对象', async () => {
-      const result = await generatePageStructuredData('en');
+    it("organizationData应该是一个对象", async () => {
+      const result = await generatePageStructuredData("en");
 
-      expect(typeof result.organizationData).toBe('object');
+      expect(typeof result.organizationData).toBe("object");
       expect(result.organizationData).not.toBeNull();
     });
 
-    it('websiteData应该是一个对象', async () => {
-      const result = await generatePageStructuredData('en');
+    it("websiteData应该是一个对象", async () => {
+      const result = await generatePageStructuredData("en");
 
-      expect(typeof result.websiteData).toBe('object');
+      expect(typeof result.websiteData).toBe("object");
       expect(result.websiteData).not.toBeNull();
     });
   });
 
-  describe('locale参数处理', () => {
-    it('应该正确传递locale参数给两个生成函数', async () => {
-      await generatePageStructuredData('zh');
+  describe("locale参数处理", () => {
+    it("应该正确传递locale参数给两个生成函数", async () => {
+      await generatePageStructuredData("zh");
 
       expect(mockGenerateLocalizedStructuredData).toHaveBeenNthCalledWith(
         1,
-        'zh',
-        'Organization',
+        "zh",
+        "Organization",
         {},
       );
       expect(mockGenerateLocalizedStructuredData).toHaveBeenNthCalledWith(
         2,
-        'zh',
-        'WebSite',
+        "zh",
+        "WebSite",
         {},
       );
     });
 
-    it('应该为不同locale调用相同的生成逻辑', async () => {
+    it("应该为不同locale调用相同的生成逻辑", async () => {
       // 测试英文
-      await generatePageStructuredData('en');
+      await generatePageStructuredData("en");
 
       // 重置Mock
       vi.clearAllMocks();
       mockGenerateLocalizedStructuredData
-        .mockResolvedValueOnce({ locale: 'zh', type: 'Organization' })
-        .mockResolvedValueOnce({ locale: 'zh', type: 'WebSite' });
+        .mockResolvedValueOnce({ locale: "zh", type: "Organization" })
+        .mockResolvedValueOnce({ locale: "zh", type: "WebSite" });
 
       // 测试中文
-      await generatePageStructuredData('zh');
+      await generatePageStructuredData("zh");
 
       expect(mockGenerateLocalizedStructuredData).toHaveBeenCalledTimes(2);
     });
   });
 
-  describe('接口类型验证', () => {
-    it('应该符合PageStructuredData接口', async () => {
-      const result = await generatePageStructuredData('en');
+  describe("接口类型验证", () => {
+    it("应该符合PageStructuredData接口", async () => {
+      const result = await generatePageStructuredData("en");
 
       // 验证返回值符合接口定义
       expect(result).toMatchObject({

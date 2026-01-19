@@ -1,24 +1,24 @@
-import * as React from 'react';
-import { cva, type VariantProps } from 'class-variance-authority';
-import { cn } from '@/lib/utils';
+import * as React from "react";
+import { cva, type VariantProps } from "class-variance-authority";
+import { cn } from "@/lib/utils";
 
-const sectionVariants = cva('scroll-mt-20', {
+const sectionVariants = cva("scroll-mt-20", {
   variants: {
     spacing: {
-      none: '',
-      sm: 'py-8',
-      md: 'py-12',
-      lg: 'py-16',
-      xl: 'py-20',
+      none: "",
+      sm: "py-8",
+      md: "py-12",
+      lg: "py-16",
+      xl: "py-20",
     },
     background: {
-      default: '',
-      muted: 'bg-muted/50',
-      gradient: 'bg-gradient-to-br from-background via-background to-muted/20',
+      default: "",
+      muted: "bg-muted/50",
+      gradient: "bg-gradient-to-br from-background via-background to-muted/20",
     },
   },
   defaultVariants: {
-    background: 'default',
+    background: "default",
   },
 });
 
@@ -30,7 +30,7 @@ interface SectionProps
 function Section({ className, spacing, background, ...props }: SectionProps) {
   return (
     <section
-      data-slot='section'
+      data-slot="section"
       className={cn(sectionVariants({ spacing, background, className }))}
       {...props}
     />

@@ -1,17 +1,17 @@
-'use client';
+"use client";
 
-import { Component, type ErrorInfo, type ReactNode } from 'react';
-import { useTranslations } from 'next-intl';
-import { logger } from '@/lib/logger';
-import { Button } from '@/components/ui/button';
+import { Component, type ErrorInfo, type ReactNode } from "react";
+import { useTranslations } from "next-intl";
+import { logger } from "@/lib/logger";
+import { Button } from "@/components/ui/button";
 import {
   Card,
   CardContent,
   CardDescription,
   CardHeader,
   CardTitle,
-} from '@/components/ui/card';
-import { ZERO } from '@/constants';
+} from "@/components/ui/card";
+import { ZERO } from "@/constants";
 
 interface ErrorBoundaryState {
   hasError: boolean;
@@ -43,7 +43,7 @@ export class ErrorBoundary extends Component<
 
   private logError(error: Error, errorInfo: ErrorInfo) {
     // Dev-only console output; no-ops in production
-    logger.error('ErrorBoundary caught an error:', error, errorInfo);
+    logger.error("ErrorBoundary caught an error:", error, errorInfo);
   }
 
   override render() {
@@ -70,51 +70,45 @@ interface ErrorFallbackProps {
 }
 
 function ErrorFallback({ onReset, error: _error }: ErrorFallbackProps) {
-  const t = useTranslations('common');
+  const t = useTranslations("common");
 
   return (
-    <div className='flex min-h-screen items-center justify-center p-4'>
-      <Card
-        className='w-full max-w-md'
-        data-testid='error-boundary-card'
-      >
+    <div className="flex min-h-screen items-center justify-center p-4">
+      <Card className="w-full max-w-md" data-testid="error-boundary-card">
         <CardHeader
-          className='text-center'
-          data-testid='error-boundary-card-header'
+          className="text-center"
+          data-testid="error-boundary-card-header"
         >
-          <div className='mx-auto mb-4 flex h-12 w-12 items-center justify-center rounded-full bg-destructive/10'>
+          <div className="mx-auto mb-4 flex h-12 w-12 items-center justify-center rounded-full bg-destructive/10">
             <span
-              className='h-6 w-6 text-destructive'
-              data-testid='alert-triangle-icon'
+              className="h-6 w-6 text-destructive"
+              data-testid="alert-triangle-icon"
             >
               ⚠️
             </span>
           </div>
           <CardTitle
-            className='text-destructive'
-            data-testid='error-boundary-card-title'
+            className="text-destructive"
+            data-testid="error-boundary-card-title"
           >
-            {t('error')}
+            {t("error")}
           </CardTitle>
-          <CardDescription data-testid='error-boundary-card-description'>
+          <CardDescription data-testid="error-boundary-card-description">
             Something went wrong. Please try refreshing the page.
           </CardDescription>
         </CardHeader>
         <CardContent
-          className='text-center'
-          data-testid='error-boundary-card-content'
+          className="text-center"
+          data-testid="error-boundary-card-content"
         >
           <Button
             onClick={onReset}
-            variant='outline'
-            className='gap-2'
-            data-testid='error-boundary-button'
+            variant="outline"
+            className="gap-2"
+            data-testid="error-boundary-button"
             tabIndex={ZERO}
           >
-            <span
-              className='h-4 w-4'
-              data-testid='refresh-icon'
-            >
+            <span className="h-4 w-4" data-testid="refresh-icon">
               🔄
             </span>
             Try Again

@@ -4,9 +4,9 @@
  * A React Server Component that renders MDX content securely without innerHTML.
  */
 
-import type { ComponentType, ReactNode } from 'react';
-import type { ContentType, Locale } from '@/types/content.types';
-import { getMDXComponent } from '@/lib/mdx-loader';
+import type { ComponentType, ReactNode } from "react";
+import type { ContentType, Locale } from "@/types/content.types";
+import { getMDXComponent } from "@/lib/mdx-loader";
 
 interface MDXContentProps {
   type: ContentType;

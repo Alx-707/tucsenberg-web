@@ -5,21 +5,21 @@
  * 注意：高级测试场景请参考 contact-form-container.test.tsx
  */
 
-import { act, fireEvent, render, screen } from '@testing-library/react';
-import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
-import { ContactFormContainer } from '@/components/forms/contact-form-container';
+import { act, fireEvent, render, screen } from "@testing-library/react";
+import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
+import { ContactFormContainer } from "@/components/forms/contact-form-container";
 
 // 确保使用真实的Zod库和validations模块
-vi.unmock('zod');
-vi.unmock('@/lib/validations');
+vi.unmock("zod");
+vi.unmock("@/lib/validations");
 
 // Mock fetch
 global.fetch = vi.fn();
 
 // Mock useActionState for React 19 testing
 const mockUseActionState = vi.hoisted(() => vi.fn());
-vi.mock('react', async () => {
-  const actual = await vi.importActual('react');
+vi.mock("react", async () => {
+  const actual = await vi.importActual("react");
   return {
     ...actual,
     useActionState: mockUseActionState,
@@ -29,32 +29,32 @@ vi.mock('react', async () => {
 // Mock next-intl
 const mockT = vi.fn((key: string) => {
   const translations: Record<string, string> = {
-    firstName: 'First Name',
-    lastName: 'Last Name',
-    email: 'Email',
-    company: 'Company',
-    phone: 'Phone',
-    subject: 'Subject',
-    message: 'Message',
-    submit: 'Submit',
-    submitting: 'Submitting...',
-    acceptPrivacy: 'I accept the privacy policy',
-    marketingConsent: 'I would like to receive marketing communications',
-    submitSuccess: 'Message sent successfully',
-    submitError: 'Failed to submit form. Please try again.',
-    rateLimitMessage: 'Please wait before submitting again.',
-    firstNamePlaceholder: 'Enter your first name',
-    lastNamePlaceholder: 'Enter your last name',
-    emailPlaceholder: 'your@email.com',
-    companyPlaceholder: 'Your company name',
-    phonePlaceholder: '+1 (555) 123-4567',
-    subjectPlaceholder: 'What can we help you with?',
-    messagePlaceholder: 'Please describe your needs or questions...',
+    firstName: "First Name",
+    lastName: "Last Name",
+    email: "Email",
+    company: "Company",
+    phone: "Phone",
+    subject: "Subject",
+    message: "Message",
+    submit: "Submit",
+    submitting: "Submitting...",
+    acceptPrivacy: "I accept the privacy policy",
+    marketingConsent: "I would like to receive marketing communications",
+    submitSuccess: "Message sent successfully",
+    submitError: "Failed to submit form. Please try again.",
+    rateLimitMessage: "Please wait before submitting again.",
+    firstNamePlaceholder: "Enter your first name",
+    lastNamePlaceholder: "Enter your last name",
+    emailPlaceholder: "your@email.com",
+    companyPlaceholder: "Your company name",
+    phonePlaceholder: "+1 (555) 123-4567",
+    subjectPlaceholder: "What can we help you with?",
+    messagePlaceholder: "Please describe your needs or questions...",
   };
   return translations[key] || key; // key 来自测试数据，安全
 });
 
-vi.mock('next-intl', () => ({
+vi.mock("next-intl", () => ({
   useTranslations: () => mockT,
 }));
 
@@ -68,12 +68,12 @@ const originalIntersectionObserver = (
 
 class MockIntersectionObserver implements IntersectionObserver {
   readonly root: Element | Document | null = null;
-  readonly rootMargin = '';
+  readonly rootMargin = "";
   readonly thresholds = [0];
 
   constructor(private readonly callback: IntersectionObserverCallback) {}
 
-  observe: IntersectionObserver['observe'] = vi.fn((element: Element) => {
+  observe: IntersectionObserver["observe"] = vi.fn((element: Element) => {
     this.callback(
       [
         {
@@ -85,13 +85,13 @@ class MockIntersectionObserver implements IntersectionObserver {
     );
   });
 
-  unobserve: IntersectionObserver['unobserve'] = vi.fn();
-  disconnect: IntersectionObserver['disconnect'] = vi.fn();
-  takeRecords: IntersectionObserver['takeRecords'] = vi.fn(() => []);
+  unobserve: IntersectionObserver["unobserve"] = vi.fn();
+  disconnect: IntersectionObserver["disconnect"] = vi.fn();
+  takeRecords: IntersectionObserver["takeRecords"] = vi.fn(() => []);
 }
 
 // Mock Turnstile
-vi.mock('@marsidev/react-turnstile', () => ({
+vi.mock("@marsidev/react-turnstile", () => ({
   Turnstile: ({
     onSuccess,
     onError,
@@ -101,31 +101,28 @@ vi.mock('@marsidev/react-turnstile', () => ({
     onError?: (error: string) => void;
     onExpire?: () => void;
   }) => (
-    <div data-testid='turnstile-mock'>
+    <div data-testid="turnstile-mock">
       <button
-        data-testid='turnstile-success'
-        onClick={() => onSuccess?.('mock-token')}
+        data-testid="turnstile-success"
+        onClick={() => onSuccess?.("mock-token")}
       >
         Success
       </button>
       <button
-        data-testid='turnstile-error'
-        onClick={() => onError?.('mock-error')}
+        data-testid="turnstile-error"
+        onClick={() => onError?.("mock-error")}
       >
         Error
       </button>
-      <button
-        data-testid='turnstile-expire'
-        onClick={() => onExpire?.()}
-      >
+      <button data-testid="turnstile-expire" onClick={() => onExpire?.()}>
         Expire
       </button>
     </div>
   ),
 }));
 
-vi.mock('next/dynamic', async () => {
-  const React = await import('react');
+vi.mock("next/dynamic", async () => {
+  const React = await import("react");
   return {
     default: (
       importer: () => Promise<{ default?: React.ComponentType<any> }>,
@@ -169,55 +166,55 @@ const renderContactForm = async () => {
 // Note: phone field is disabled per Lead Pipeline requirements
 const _fillValidForm = async (excludeFields: string[] = []) => {
   await act(async () => {
-    if (!excludeFields.includes('firstName')) {
+    if (!excludeFields.includes("firstName")) {
       fireEvent.change(screen.getByLabelText(/first name/i), {
-        target: { value: 'John' },
+        target: { value: "John" },
       });
     }
 
-    if (!excludeFields.includes('lastName')) {
+    if (!excludeFields.includes("lastName")) {
       fireEvent.change(screen.getByLabelText(/last name/i), {
-        target: { value: 'Doe' },
+        target: { value: "Doe" },
       });
     }
 
-    if (!excludeFields.includes('email')) {
+    if (!excludeFields.includes("email")) {
       fireEvent.change(screen.getByLabelText(/email/i), {
-        target: { value: 'john.doe@example.com' },
+        target: { value: "john.doe@example.com" },
       });
     }
 
-    if (!excludeFields.includes('company')) {
+    if (!excludeFields.includes("company")) {
       fireEvent.change(screen.getByLabelText(/company/i), {
-        target: { value: 'Test Company' },
+        target: { value: "Test Company" },
       });
     }
 
-    if (!excludeFields.includes('subject')) {
+    if (!excludeFields.includes("subject")) {
       fireEvent.change(screen.getByLabelText(/subject/i), {
-        target: { value: 'Test Subject' },
+        target: { value: "Test Subject" },
       });
     }
 
-    if (!excludeFields.includes('message')) {
+    if (!excludeFields.includes("message")) {
       fireEvent.change(screen.getByLabelText(/message/i), {
-        target: { value: 'Test message content' },
+        target: { value: "Test message content" },
       });
     }
 
     // 总是勾选隐私政策（除非明确排除）
-    if (!excludeFields.includes('acceptPrivacy')) {
+    if (!excludeFields.includes("acceptPrivacy")) {
       const privacyCheckbox = screen.getByLabelText(/accept.*privacy/i);
       fireEvent.click(privacyCheckbox);
     }
 
     // 启用 Turnstile
-    const successButton = await screen.findByTestId('turnstile-success');
+    const successButton = await screen.findByTestId("turnstile-success");
     fireEvent.click(successButton);
   });
 };
 
-describe('ContactFormContainer - 核心功能', () => {
+describe("ContactFormContainer - 核心功能", () => {
   beforeEach(() => {
     vi.clearAllMocks();
 
@@ -275,19 +272,19 @@ describe('ContactFormContainer - 核心功能', () => {
         }
       ).IntersectionObserver = originalIntersectionObserver;
     } else {
-      Reflect.deleteProperty(globalThis, 'IntersectionObserver');
+      Reflect.deleteProperty(globalThis, "IntersectionObserver");
     }
   });
 
-  describe('基础渲染', () => {
-    it('应该正确渲染联系表单', async () => {
+  describe("基础渲染", () => {
+    it("应该正确渲染联系表单", async () => {
       await renderContactForm();
 
       // 检查表单元素存在
       expect(
-        screen.getByRole('button', { name: /submit/i }),
+        screen.getByRole("button", { name: /submit/i }),
       ).toBeInTheDocument();
-      expect(await screen.findByTestId('turnstile-mock')).toBeInTheDocument();
+      expect(await screen.findByTestId("turnstile-mock")).toBeInTheDocument();
 
       // 检查所有表单字段都存在
       expect(screen.getByLabelText(/first name/i)).toBeInTheDocument();
@@ -296,7 +293,7 @@ describe('ContactFormContainer - 核心功能', () => {
       expect(screen.getByLabelText(/company/i)).toBeInTheDocument();
     });
 
-    it('应该渲染所有必需的表单字段', async () => {
+    it("应该渲染所有必需的表单字段", async () => {
       await renderContactForm();
 
       // 检查所有字段是否存在
@@ -309,19 +306,19 @@ describe('ContactFormContainer - 核心功能', () => {
       expect(screen.getByLabelText(/message/i)).toBeInTheDocument();
     });
 
-    it('提交按钮初始状态应该被禁用', async () => {
+    it("提交按钮初始状态应该被禁用", async () => {
       await renderContactForm();
 
-      const submitButton = screen.getByRole('button', { name: /submit/i });
+      const submitButton = screen.getByRole("button", { name: /submit/i });
       expect(submitButton).toBeDisabled();
     });
   });
 
-  describe('基本验证', () => {
-    it('应该验证邮箱格式', async () => {
+  describe("基本验证", () => {
+    it("应该验证邮箱格式", async () => {
       // Mock useActionState to return error state
       mockUseActionState.mockReturnValue([
-        { success: false, error: 'Validation failed' }, // state
+        { success: false, error: "Validation failed" }, // state
         vi.fn(), // formAction
         false, // isPending
       ]);
@@ -330,14 +327,14 @@ describe('ContactFormContainer - 核心功能', () => {
 
       // 验证错误状态消息已显示
       expect(
-        screen.getByText('Failed to submit form. Please try again.'),
+        screen.getByText("Failed to submit form. Please try again."),
       ).toBeInTheDocument();
     });
 
-    it('应该验证必填字段', async () => {
+    it("应该验证必填字段", async () => {
       // Mock useActionState to return error state
       mockUseActionState.mockReturnValue([
-        { success: false, error: 'Validation failed' }, // state
+        { success: false, error: "Validation failed" }, // state
         vi.fn(), // formAction
         false, // isPending
       ]);
@@ -346,52 +343,52 @@ describe('ContactFormContainer - 核心功能', () => {
 
       // 验证错误状态消息已显示
       expect(
-        screen.getByText('Failed to submit form. Please try again.'),
+        screen.getByText("Failed to submit form. Please try again."),
       ).toBeInTheDocument();
     });
   });
 
-  describe('Turnstile 集成', () => {
-    it('Turnstile 成功后应该启用提交按钮', async () => {
+  describe("Turnstile 集成", () => {
+    it("Turnstile 成功后应该启用提交按钮", async () => {
       await renderContactForm();
 
-      const submitButton = screen.getByRole('button', { name: /submit/i });
+      const submitButton = screen.getByRole("button", { name: /submit/i });
       expect(submitButton).toBeDisabled();
 
-      const successButton = await screen.findByTestId('turnstile-success');
+      const successButton = await screen.findByTestId("turnstile-success");
       fireEvent.click(successButton);
       // 注意：实际启用还需要表单验证通过
     });
 
-    it('Turnstile 错误后应该禁用提交按钮', async () => {
+    it("Turnstile 错误后应该禁用提交按钮", async () => {
       await renderContactForm();
 
       // 先成功，再错误
-      const successButton = await screen.findByTestId('turnstile-success');
+      const successButton = await screen.findByTestId("turnstile-success");
       fireEvent.click(successButton);
-      const errorButton = await screen.findByTestId('turnstile-error');
+      const errorButton = await screen.findByTestId("turnstile-error");
       fireEvent.click(errorButton);
 
-      const submitButton = screen.getByRole('button', { name: /submit/i });
+      const submitButton = screen.getByRole("button", { name: /submit/i });
       expect(submitButton).toBeDisabled();
     });
 
-    it('Turnstile 过期后应该禁用提交按钮', async () => {
+    it("Turnstile 过期后应该禁用提交按钮", async () => {
       await renderContactForm();
 
       // 先成功，再过期
-      const successButton = await screen.findByTestId('turnstile-success');
+      const successButton = await screen.findByTestId("turnstile-success");
       fireEvent.click(successButton);
-      const expireButton = await screen.findByTestId('turnstile-expire');
+      const expireButton = await screen.findByTestId("turnstile-expire");
       fireEvent.click(expireButton);
 
-      const submitButton = screen.getByRole('button', { name: /submit/i });
+      const submitButton = screen.getByRole("button", { name: /submit/i });
       expect(submitButton).toBeDisabled();
     });
   });
 
-  describe('基本提交功能', () => {
-    it('应该成功提交有效表单', async () => {
+  describe("基本提交功能", () => {
+    it("应该成功提交有效表单", async () => {
       // Mock useActionState to return success state
       mockUseActionState.mockReturnValue([
         { success: true }, // state
@@ -402,13 +399,13 @@ describe('ContactFormContainer - 核心功能', () => {
       await renderContactForm();
 
       // 检查成功消息 - 使用翻译文本
-      expect(screen.getByText('Message sent successfully')).toBeInTheDocument();
+      expect(screen.getByText("Message sent successfully")).toBeInTheDocument();
     });
 
-    it('应该处理 API 错误响应', async () => {
+    it("应该处理 API 错误响应", async () => {
       // Mock useActionState to return error state
       mockUseActionState.mockReturnValue([
-        { success: false, error: 'Server error' }, // state
+        { success: false, error: "Server error" }, // state
         vi.fn(), // formAction
         false, // isPending
       ]);
@@ -417,7 +414,7 @@ describe('ContactFormContainer - 核心功能', () => {
 
       // 检查错误消息 - 使用翻译文本
       expect(
-        screen.getByText('Failed to submit form. Please try again.'),
+        screen.getByText("Failed to submit form. Please try again."),
       ).toBeInTheDocument();
     });
   });

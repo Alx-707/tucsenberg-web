@@ -1,10 +1,10 @@
-'use client';
+"use client";
 
-import dynamic from 'next/dynamic';
+import dynamic from "next/dynamic";
 
 const WhatsAppButtonWithTranslations = dynamic(
   () =>
-    import('@/components/whatsapp/whatsapp-button-with-translations').then(
+    import("@/components/whatsapp/whatsapp-button-with-translations").then(
       (mod) => mod.WhatsAppButtonWithTranslations,
     ),
   {

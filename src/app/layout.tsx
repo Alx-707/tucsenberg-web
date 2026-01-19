@@ -1,8 +1,8 @@
-import type { ReactNode } from 'react';
-import type { Metadata } from 'next';
-import { getFontClassNames } from '@/app/[locale]/layout-fonts';
-import { SITE_CONFIG } from '@/config/paths/site-config';
-import { routing } from '@/i18n/routing';
+import type { ReactNode } from "react";
+import type { Metadata } from "next";
+import { getFontClassNames } from "@/app/[locale]/layout-fonts";
+import { SITE_CONFIG } from "@/config/paths/site-config";
+import { routing } from "@/i18n/routing";
 
 interface RootLayoutProps {
   children: ReactNode;
@@ -13,7 +13,7 @@ export const metadata: Metadata = {
   metadataBase: new URL(
     process.env.NEXT_PUBLIC_BASE_URL ||
       process.env.NEXT_PUBLIC_SITE_URL ||
-      'http://localhost:3000',
+      "http://localhost:3000",
   ),
   title: SITE_CONFIG.seo.defaultTitle,
   description: SITE_CONFIG.seo.defaultDescription,
@@ -31,7 +31,7 @@ export default function RootLayout({ children }: RootLayoutProps) {
       suppressHydrationWarning
     >
       <body
-        className='flex min-h-screen flex-col antialiased'
+        className="flex min-h-screen flex-col antialiased"
         suppressHydrationWarning
       >
         {children}

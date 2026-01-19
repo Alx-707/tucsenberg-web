@@ -6,7 +6,7 @@
  */
 
 /** Cookie categories aligned with privacy regulations */
-export type CookieCategory = 'necessary' | 'analytics' | 'marketing';
+export type CookieCategory = "necessary" | "analytics" | "marketing";
 
 /** User consent state for each category */
 export interface CookieConsent {
@@ -45,12 +45,12 @@ export interface CookieConsentActions {
   rejectAll: () => void;
   /** Update specific category consent */
   updateConsent: (
-    category: Exclude<CookieCategory, 'necessary'>,
+    category: Exclude<CookieCategory, "necessary">,
     value: boolean,
   ) => void;
   /** Save custom consent preferences */
   savePreferences: (
-    preferences: Partial<Omit<CookieConsent, 'necessary'>>,
+    preferences: Partial<Omit<CookieConsent, "necessary">>,
   ) => void;
   /** Reset consent to show banner again */
   resetConsent: () => void;
@@ -71,4 +71,4 @@ export const DEFAULT_CONSENT: CookieConsent = {
 export const CONSENT_VERSION = 1;
 
 /** localStorage key for consent data */
-export const CONSENT_STORAGE_KEY = 'cookie-consent';
+export const CONSENT_STORAGE_KEY = "cookie-consent";

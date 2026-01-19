@@ -7,9 +7,9 @@
  * 运行：node scripts/check-eslint-disable-usage.js
  */
 
-const fs = require('fs');
-const path = require('path');
-const { execSync } = require('child_process');
+const fs = require("fs");
+const path = require("path");
+const { execSync } = require("child_process");
 
 // 允许使用 ESLint 禁用注释的目录和文件模式
 const ALLOWED_PATTERNS = [
@@ -43,15 +43,15 @@ function findFilesWithEslintDisable() {
   try {
     const result = execSync(
       'find src -name "*.ts" -o -name "*.tsx" | xargs grep -l "eslint-disable" 2>/dev/null || true',
-      { encoding: 'utf8' },
+      { encoding: "utf8" },
     );
 
     return result
       .trim()
-      .split('\n')
+      .split("\n")
       .filter((file) => file.length > 0);
   } catch (error) {
-    console.error('查找文件时出错:', error.message);
+    console.error("查找文件时出错:", error.message);
     return [];
   }
 }
@@ -70,17 +70,17 @@ function isFileAllowed(filePath) {
 
 function analyzeFile(filePath) {
   try {
-    const content = fs.readFileSync(filePath, 'utf8');
-    const lines = content.split('\n');
+    const content = fs.readFileSync(filePath, "utf8");
+    const lines = content.split("\n");
 
     const disableComments = [];
     lines.forEach((line, index) => {
-      if (line.includes('eslint-disable')) {
+      if (line.includes("eslint-disable")) {
         disableComments.push({
           line: index + 1,
           content: line.trim(),
           hasDocumentation:
-            lines[index + 1] && lines[index + 1].includes('/**'),
+            lines[index + 1] && lines[index + 1].includes("/**"),
         });
       }
     });
@@ -93,12 +93,12 @@ function analyzeFile(filePath) {
 }
 
 function main() {
-  console.log('🔍 检查 ESLint 禁用注释使用情况...\n');
+  console.log("🔍 检查 ESLint 禁用注释使用情况...\n");
 
   const filesWithDisable = findFilesWithEslintDisable();
 
   if (filesWithDisable.length === 0) {
-    console.log('✅ 未发现使用 ESLint 禁用注释的文件');
+    console.log("✅ 未发现使用 ESLint 禁用注释的文件");
     return;
   }
 
@@ -137,23 +137,23 @@ function main() {
         console.log(`      第${comment.line}行: ${comment.content}`);
       });
     }
-    console.log('');
+    console.log("");
   });
 
   // 总结报告
-  console.log('📊 检查结果总结:');
+  console.log("📊 检查结果总结:");
   console.log(`   ✅ 符合准则的文件: ${allowedFiles}`);
   console.log(`   ❌ 违规文件: ${violationFiles}`);
   console.log(`   📋 总文件数: ${filesWithDisable.length}`);
 
   if (hasViolations) {
     console.log(
-      '\n🚨 发现违规使用！请参考 docs/development/eslint-disable-guidelines.md',
+      "\n🚨 发现违规使用！请参考 docs/development/eslint-disable-guidelines.md",
     );
-    console.log('   建议：优先修复 ESLint 错误而非禁用规则');
+    console.log("   建议：优先修复 ESLint 错误而非禁用规则");
     process.exit(1);
   } else {
-    console.log('\n🎉 所有 ESLint 禁用注释的使用都符合准则！');
+    console.log("\n🎉 所有 ESLint 禁用注释的使用都符合准则！");
   }
 }
 

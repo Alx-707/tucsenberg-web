@@ -1,4 +1,4 @@
-import { describe, expect, it } from 'vitest';
+import { describe, expect, it } from "vitest";
 import {
   APP_CONSTANTS,
   CONTENT_LIMITS,
@@ -9,25 +9,25 @@ import {
   PERCENTAGE_CONSTANTS,
   PERFORMANCE_CONSTANTS,
   TIME_CONSTANTS,
-} from '../app-constants';
+} from "../app-constants";
 import {
   TEST_APP_CONSTANTS,
   TEST_DELAY_VALUES,
   TEST_PERCENTAGE_VALUES,
   TEST_PERFORMANCE_TIMESTAMPS,
   TEST_TIME_CALCULATIONS,
-} from '../test-app-constants';
+} from "../test-app-constants";
 import {
   TEST_ANGLE_CONSTANTS,
   TEST_CONTENT_LIMITS,
   TEST_COUNT_CONSTANTS,
   TEST_OPACITY_CONSTANTS,
   TEST_SPECIAL_CONSTANTS,
-} from '../test-constants';
+} from "../test-constants";
 
-describe('app-constants', () => {
-  describe('TIME_CONSTANTS', () => {
-    it('should have correct time calculations', () => {
+describe("app-constants", () => {
+  describe("TIME_CONSTANTS", () => {
+    it("should have correct time calculations", () => {
       expect(TIME_CONSTANTS.SECOND).toBe(
         TEST_TIME_CALCULATIONS.MILLISECOND_BASE,
       );
@@ -54,7 +54,7 @@ describe('app-constants', () => {
       );
     });
 
-    it('should have ascending time values', () => {
+    it("should have ascending time values", () => {
       expect(TIME_CONSTANTS.SECOND).toBeLessThan(TIME_CONSTANTS.MINUTE);
       expect(TIME_CONSTANTS.MINUTE).toBeLessThan(TIME_CONSTANTS.HOUR);
       expect(TIME_CONSTANTS.HOUR).toBeLessThan(TIME_CONSTANTS.FULL_DAY);
@@ -63,14 +63,14 @@ describe('app-constants', () => {
       );
     });
 
-    it('should be readonly', () => {
+    it("should be readonly", () => {
       // Skip readonly test - constants are not frozen in current implementation
       expect(true).toBe(true);
     });
   });
 
-  describe('DELAY_CONSTANTS', () => {
-    it('should have reasonable delay values', () => {
+  describe("DELAY_CONSTANTS", () => {
+    it("should have reasonable delay values", () => {
       expect(DELAY_CONSTANTS.SHORT_DELAY).toBe(TEST_DELAY_VALUES.SHORT_DELAY);
       expect(DELAY_CONSTANTS.MEDIUM_DELAY).toBe(TEST_DELAY_VALUES.MEDIUM_DELAY);
       expect(DELAY_CONSTANTS.STANDARD_TIMEOUT).toBe(
@@ -87,7 +87,7 @@ describe('app-constants', () => {
       );
     });
 
-    it('should have ascending delay values where appropriate', () => {
+    it("should have ascending delay values where appropriate", () => {
       expect(DELAY_CONSTANTS.SHORT_DELAY).toBeLessThan(
         DELAY_CONSTANTS.MEDIUM_DELAY,
       );
@@ -99,14 +99,14 @@ describe('app-constants', () => {
       );
     });
 
-    it('should be based on TIME_CONSTANTS where applicable', () => {
+    it("should be based on TIME_CONSTANTS where applicable", () => {
       expect(DELAY_CONSTANTS.STANDARD_TIMEOUT).toBe(TIME_CONSTANTS.SECOND);
       expect(DELAY_CONSTANTS.CLEANUP_DELAY).toBe(TIME_CONSTANTS.SECOND);
     });
   });
 
-  describe('CONTENT_LIMITS', () => {
-    it('should have reasonable content limits', () => {
+  describe("CONTENT_LIMITS", () => {
+    it("should have reasonable content limits", () => {
       expect(CONTENT_LIMITS.TITLE_MAX_LENGTH).toBe(
         TEST_CONTENT_LIMITS.TITLE_MAX,
       );
@@ -131,7 +131,7 @@ describe('app-constants', () => {
       ); // 1MB - 保持原值用于文件大小测试
     });
 
-    it('should have ascending limits where logical', () => {
+    it("should have ascending limits where logical", () => {
       expect(CONTENT_LIMITS.TITLE_MAX_LENGTH).toBeLessThan(
         CONTENT_LIMITS.DESCRIPTION_MAX_LENGTH,
       );
@@ -144,8 +144,8 @@ describe('app-constants', () => {
     });
   });
 
-  describe('PAGINATION_CONSTANTS', () => {
-    it('should have correct pagination values', () => {
+  describe("PAGINATION_CONSTANTS", () => {
+    it("should have correct pagination values", () => {
       expect(PAGINATION_CONSTANTS.DEFAULT_PAGE_SIZE).toBe(
         TEST_COUNT_CONSTANTS.LARGE,
       );
@@ -160,7 +160,7 @@ describe('app-constants', () => {
       );
     });
 
-    it('should have ascending page sizes', () => {
+    it("should have ascending page sizes", () => {
       expect(PAGINATION_CONSTANTS.SMALL_PAGE_SIZE).toBeLessThan(
         PAGINATION_CONSTANTS.DEFAULT_PAGE_SIZE,
       );
@@ -173,8 +173,8 @@ describe('app-constants', () => {
     });
   });
 
-  describe('OPACITY_CONSTANTS', () => {
-    it('should have correct opacity values', () => {
+  describe("OPACITY_CONSTANTS", () => {
+    it("should have correct opacity values", () => {
       expect(OPACITY_CONSTANTS.TRANSPARENT).toBe(0);
       expect(OPACITY_CONSTANTS.LOW_OPACITY).toBe(TEST_OPACITY_CONSTANTS.LOW);
       expect(OPACITY_CONSTANTS.MEDIUM_OPACITY).toBe(
@@ -190,14 +190,14 @@ describe('app-constants', () => {
       expect(OPACITY_CONSTANTS.OPAQUE).toBe(1);
     });
 
-    it('should have values between 0 and 1', () => {
+    it("should have values between 0 and 1", () => {
       Object.values(OPACITY_CONSTANTS).forEach((value) => {
         expect(value).toBeGreaterThanOrEqual(0);
         expect(value).toBeLessThanOrEqual(1);
       });
     });
 
-    it('should have ascending opacity values', () => {
+    it("should have ascending opacity values", () => {
       expect(OPACITY_CONSTANTS.TRANSPARENT).toBeLessThan(
         OPACITY_CONSTANTS.LOW_OPACITY,
       );
@@ -219,15 +219,15 @@ describe('app-constants', () => {
     });
   });
 
-  describe('PERCENTAGE_CONSTANTS', () => {
-    it('should have correct percentage values', () => {
+  describe("PERCENTAGE_CONSTANTS", () => {
+    it("should have correct percentage values", () => {
       expect(PERCENTAGE_CONSTANTS.FULL).toBe(TEST_PERCENTAGE_VALUES.FULL);
       expect(PERCENTAGE_CONSTANTS.HALF).toBe(TEST_PERCENTAGE_VALUES.HALF);
       expect(PERCENTAGE_CONSTANTS.QUARTER).toBe(TEST_PERCENTAGE_VALUES.QUARTER);
       expect(PERCENTAGE_CONSTANTS.SIXTY).toBe(TEST_PERCENTAGE_VALUES.SIXTY);
     });
 
-    it('should have logical relationships', () => {
+    it("should have logical relationships", () => {
       expect(PERCENTAGE_CONSTANTS.QUARTER).toBeLessThan(
         PERCENTAGE_CONSTANTS.HALF,
       );
@@ -240,8 +240,8 @@ describe('app-constants', () => {
     });
   });
 
-  describe('PERFORMANCE_CONSTANTS', () => {
-    it('should have timestamp base and increments', () => {
+  describe("PERFORMANCE_CONSTANTS", () => {
+    it("should have timestamp base and increments", () => {
       expect(PERFORMANCE_CONSTANTS.TIMESTAMP_BASE).toBe(
         TEST_PERFORMANCE_TIMESTAMPS.BASE,
       );
@@ -256,7 +256,7 @@ describe('app-constants', () => {
       );
     });
 
-    it('should have ascending timestamp increments', () => {
+    it("should have ascending timestamp increments", () => {
       expect(PERFORMANCE_CONSTANTS.TIMESTAMP_BASE).toBeLessThan(
         PERFORMANCE_CONSTANTS.TIMESTAMP_OFFSET,
       );
@@ -268,7 +268,7 @@ describe('app-constants', () => {
       );
     });
 
-    it('should have large number constants', () => {
+    it("should have large number constants", () => {
       expect(PERFORMANCE_CONSTANTS.LARGE_NUMBER_BASE).toBe(
         TEST_PERFORMANCE_TIMESTAMPS.LARGE_BASE,
       );
@@ -281,8 +281,8 @@ describe('app-constants', () => {
     });
   });
 
-  describe('DEBUG_CONSTANTS', () => {
-    it('should have debug values', () => {
+  describe("DEBUG_CONSTANTS", () => {
+    it("should have debug values", () => {
       expect(DEBUG_CONSTANTS.HEX_LARGE_NUMBER).toBe(
         TEST_SPECIAL_CONSTANTS.HEX_LARGE_NUMBER,
       );
@@ -295,7 +295,7 @@ describe('app-constants', () => {
       expect(DEBUG_CONSTANTS.SMALL_COUNT).toBe(TEST_COUNT_CONSTANTS.SMALL);
     });
 
-    it('should have valid test values', () => {
+    it("should have valid test values", () => {
       expect(DEBUG_CONSTANTS.HEX_LARGE_NUMBER).toBeGreaterThan(0);
       expect(DEBUG_CONSTANTS.NEGATIVE_TEST_VALUE).toBeLessThan(0);
       expect(DEBUG_CONSTANTS.ANGLE_FULL_CIRCLE).toBeGreaterThan(0);
@@ -303,8 +303,8 @@ describe('app-constants', () => {
     });
   });
 
-  describe('APP_CONSTANTS', () => {
-    it('should include all constant groups', () => {
+  describe("APP_CONSTANTS", () => {
+    it("should include all constant groups", () => {
       expect(APP_CONSTANTS.TIME).toBe(TIME_CONSTANTS);
       expect(APP_CONSTANTS.DELAY).toBe(DELAY_CONSTANTS);
       expect(APP_CONSTANTS.CONTENT).toBe(CONTENT_LIMITS);
@@ -315,7 +315,7 @@ describe('app-constants', () => {
       expect(APP_CONSTANTS.DEBUG).toBe(DEBUG_CONSTANTS);
     });
 
-    it('should be readonly', () => {
+    it("should be readonly", () => {
       expect(() => {
         // @ts-expect-error - Testing readonly property
         APP_CONSTANTS.TIME = {} as unknown;
@@ -323,8 +323,8 @@ describe('app-constants', () => {
     });
   });
 
-  describe('constant relationships', () => {
-    it('should have consistent time-based calculations', () => {
+  describe("constant relationships", () => {
+    it("should have consistent time-based calculations", () => {
       expect(DELAY_CONSTANTS.LONG_TIMEOUT).toBe(
         TEST_COUNT_CONSTANTS.SMALL * TIME_CONSTANTS.SECOND,
       );
@@ -333,7 +333,7 @@ describe('app-constants', () => {
       );
     });
 
-    it('should use base numbers consistently', () => {
+    it("should use base numbers consistently", () => {
       expect(PAGINATION_CONSTANTS.MAX_PAGE_SIZE).toBe(
         PERCENTAGE_CONSTANTS.FULL,
       );
@@ -345,7 +345,7 @@ describe('app-constants', () => {
       ).toBe(PERCENTAGE_CONSTANTS.FULL);
     });
 
-    it('should have logical size relationships', () => {
+    it("should have logical size relationships", () => {
       expect(CONTENT_LIMITS.MAX_FILE_SIZE).toBe(
         TEST_APP_CONSTANTS.SCREEN_WIDTH_TABLET *
           TEST_APP_CONSTANTS.SCREEN_WIDTH_TABLET,
@@ -356,8 +356,8 @@ describe('app-constants', () => {
     });
   });
 
-  describe('magic number compliance', () => {
-    it('should avoid magic numbers in calculations', () => {
+  describe("magic number compliance", () => {
+    it("should avoid magic numbers in calculations", () => {
       // All constants should be built from base numbers or other constants
       // This test ensures we follow the "no magic numbers" principle
       expect(TIME_CONSTANTS.MINUTE).toBe(
@@ -376,7 +376,7 @@ describe('app-constants', () => {
       );
     });
 
-    it('should use meaningful constant names', () => {
+    it("should use meaningful constant names", () => {
       // Test that constants have descriptive names
       const constantNames = Object.keys(TIME_CONSTANTS);
       constantNames.forEach((name) => {

@@ -3,20 +3,20 @@
  * Security headers and configuration utilities
  */
 
-import { env } from '@/lib/env';
-import { logger } from '@/lib/logger';
-import { getSecurityHeaders, type SecurityHeader } from '@/config/security';
-import { ZERO } from '@/constants';
+import { env } from "@/lib/env";
+import { logger } from "@/lib/logger";
+import { getSecurityHeaders, type SecurityHeader } from "@/config/security";
+import { ZERO } from "@/constants";
 
 // nosemgrep: object-injection-sink-dynamic-property -- 本文件的 header 键均来自常量或受控白名单，未直接使用外部输入作为属性名
 const HEADER_KEYS = {
-  contentSecurityPolicy: 'Content-Security-Policy',
-  strictTransportSecurity: 'Strict-Transport-Security',
-  xssProtection: 'X-XSS-Protection',
-  frameOptions: 'X-Frame-Options',
-  contentTypeOptions: 'X-Content-Type-Options',
-  referrerPolicy: 'Referrer-Policy',
-  permissionsPolicy: 'Permissions-Policy',
+  contentSecurityPolicy: "Content-Security-Policy",
+  strictTransportSecurity: "Strict-Transport-Security",
+  xssProtection: "X-XSS-Protection",
+  frameOptions: "X-Frame-Options",
+  contentTypeOptions: "X-Content-Type-Options",
+  referrerPolicy: "Referrer-Policy",
+  permissionsPolicy: "Permissions-Policy",
 } as const;
 
 function toHeaderRecord(headers: SecurityHeader[]): Record<string, string> {
@@ -39,27 +39,27 @@ export function getWebSecurityHeaders(nonce?: string): Record<string, string> {
  */
 export function getCORSHeaders(origin?: string): Record<string, string> {
   const allowedOrigins = [
-    'http://localhost:3000',
-    'http://localhost:3001',
-    'https://example.com',
-    'https://www.example.com',
+    "http://localhost:3000",
+    "http://localhost:3001",
+    "https://example.com",
+    "https://www.example.com",
   ];
 
   const headers: Record<string, string> = {
-    'Access-Control-Allow-Methods': 'GET, POST, PUT, DELETE, OPTIONS',
-    'Access-Control-Allow-Headers':
-      'Content-Type, Authorization, X-Requested-With',
-    'Access-Control-Max-Age': '86400', // 24 hours
+    "Access-Control-Allow-Methods": "GET, POST, PUT, DELETE, OPTIONS",
+    "Access-Control-Allow-Headers":
+      "Content-Type, Authorization, X-Requested-With",
+    "Access-Control-Max-Age": "86400", // 24 hours
   };
 
   if (origin && allowedOrigins.includes(origin)) {
     // nosemgrep: object-injection-sink-dynamic-property -- origin 已在白名单校验后使用
-    headers['Access-Control-Allow-Origin'] = origin;
+    headers["Access-Control-Allow-Origin"] = origin;
     // nosemgrep: object-injection-sink-dynamic-property -- origin 已在白名单校验后使用
-    headers['Access-Control-Allow-Credentials'] = 'true';
-  } else if (process.env.NODE_ENV === 'development') {
+    headers["Access-Control-Allow-Credentials"] = "true";
+  } else if (process.env.NODE_ENV === "development") {
     // nosemgrep: object-injection-sink-dynamic-property -- 开发环境允许通配符
-    headers['Access-Control-Allow-Origin'] = '*';
+    headers["Access-Control-Allow-Origin"] = "*";
   }
 
   return headers;
@@ -73,10 +73,10 @@ export async function verifyTurnstileToken(
   remoteip?: string,
 ): Promise<boolean> {
   try {
-    const response = await fetch('/api/verify-turnstile', {
-      method: 'POST',
+    const response = await fetch("/api/verify-turnstile", {
+      method: "POST",
       headers: {
-        'Content-Type': 'application/json',
+        "Content-Type": "application/json",
       },
       body: JSON.stringify({ token, remoteip }),
     });
@@ -84,7 +84,7 @@ export async function verifyTurnstileToken(
     const result = await response.json();
     return result.success === true;
   } catch (error) {
-    logger.error('Error verifying Turnstile token', { error: error as Error });
+    logger.error("Error verifying Turnstile token", { error: error as Error });
     return false;
   }
 }
@@ -103,21 +103,21 @@ export function checkSecurityConfig(testMode = false): {
   // Use process.env directly in tests to avoid env validation issues
   const nodeEnv = process.env.NODE_ENV;
   const turnstileKey =
-    testMode || process.env.NODE_ENV === 'test'
+    testMode || process.env.NODE_ENV === "test"
       ? process.env.TURNSTILE_SECRET_KEY
       : env.TURNSTILE_SECRET_KEY;
   const securityMode =
-    testMode || process.env.NODE_ENV === 'test'
+    testMode || process.env.NODE_ENV === "test"
       ? process.env.NEXT_PUBLIC_SECURITY_MODE
       : env.NEXT_PUBLIC_SECURITY_MODE;
 
   // Check environment variables
-  if (!turnstileKey && nodeEnv === 'production') {
-    issues.push('Turnstile secret key not configured in production');
+  if (!turnstileKey && nodeEnv === "production") {
+    issues.push("Turnstile secret key not configured in production");
   }
 
-  if (securityMode === 'relaxed' && nodeEnv === 'production') {
-    issues.push('Security mode is set to relaxed in production');
+  if (securityMode === "relaxed" && nodeEnv === "production") {
+    issues.push("Security mode is set to relaxed in production");
   }
 
   return {
@@ -138,7 +138,7 @@ export interface SecurityMiddlewareConfig {
   enableContentTypeOptions: boolean;
   enableReferrerPolicy: boolean;
   enablePermissionsPolicy: boolean;
-  frameOptionsValue?: 'DENY' | 'SAMEORIGIN';
+  frameOptionsValue?: "DENY" | "SAMEORIGIN";
 }
 
 const resolveSecurityMiddlewareConfig = (
@@ -146,7 +146,7 @@ const resolveSecurityMiddlewareConfig = (
   defaults: SecurityMiddlewareConfig,
 ): SecurityMiddlewareConfig => {
   const frameOptionsValue: NonNullable<
-    SecurityMiddlewareConfig['frameOptionsValue']
+    SecurityMiddlewareConfig["frameOptionsValue"]
   > = (config.frameOptionsValue ?? defaults.frameOptionsValue)!;
 
   return {
@@ -181,7 +181,7 @@ export function getSecurityMiddlewareHeaders(
     enableContentTypeOptions: true,
     enableReferrerPolicy: true,
     enablePermissionsPolicy: true,
-    frameOptionsValue: 'DENY',
+    frameOptionsValue: "DENY",
   };
   const finalConfig = resolveSecurityMiddlewareConfig(config, defaultConfig);
   const headers = toHeaderRecord(getSecurityHeaders(nonce));
@@ -274,7 +274,7 @@ export function generateSecurityReport(): {
 
   return {
     timestamp: new Date().toISOString(),
-    environment: process.env.NODE_ENV || 'unknown',
+    environment: process.env.NODE_ENV || "unknown",
     config: checkSecurityConfig(),
     headers: validateSecurityHeaders(mockHeaders),
   };

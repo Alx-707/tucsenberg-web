@@ -1,8 +1,8 @@
-'use client';
+"use client";
 
-import { useEffect, useRef, useState } from 'react';
-import { FIVE_MINUTES_MS } from '@/constants';
-import { useCurrentTime } from '@/hooks/use-current-time';
+import { useEffect, useRef, useState } from "react";
+import { FIVE_MINUTES_MS } from "@/constants";
+import { useCurrentTime } from "@/hooks/use-current-time";
 
 /**
  * 获取配置的冷却时间（毫秒）
@@ -10,7 +10,7 @@ import { useCurrentTime } from '@/hooks/use-current-time';
  */
 function getConfiguredCooldownMs(): number {
   const envValue =
-    typeof process !== 'undefined'
+    typeof process !== "undefined"
       ? Number(process.env.NEXT_PUBLIC_CONTACT_FORM_COOLDOWN_MS)
       : Number.NaN;
 

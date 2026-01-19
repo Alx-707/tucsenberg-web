@@ -1,0 +1,3753 @@
+{
+  "timestamp": "2026-01-19T07:54:04.647Z",
+  "summary": {
+    "totalFiles": 387,
+    "scannedFiles": 387,
+    "errorCount": 0,
+    "warningCount": 0,
+    "totalKeys": 889,
+    "uniqueKeys": 262,
+    "missingKeys": [],
+    "unusedKeys": [
+      "_comment",
+      "_usage",
+      "_last_updated",
+      "common.loading",
+      "common.success",
+      "common.cancel",
+      "common.confirm",
+      "common.save",
+      "common.edit",
+      "common.delete",
+      "common.search",
+      "common.filter",
+      "common.sort",
+      "common.next",
+      "common.previous",
+      "common.open",
+      "common.toast.form.contact.success",
+      "common.toast.form.contact.successDescription",
+      "common.toast.form.contact.error",
+      "common.toast.form.contact.errorDescription",
+      "common.toast.form.contact.loading",
+      "common.toast.form.newsletter.success",
+      "common.toast.form.newsletter.successDescription",
+      "common.toast.form.newsletter.error",
+      "common.toast.form.newsletter.errorDescription",
+      "common.toast.form.newsletter.loading",
+      "common.toast.form.feedback.success",
+      "common.toast.form.feedback.successDescription",
+      "common.toast.form.feedback.error",
+      "common.toast.form.feedback.errorDescription",
+      "common.toast.form.feedback.loading",
+      "navigation.home",
+      "navigation.more",
+      "navigation.about",
+      "navigation.contact",
+      "navigation.services",
+      "navigation.products",
+      "navigation.solutions",
+      "navigation.resources",
+      "navigation.enterprise",
+      "navigation.docs",
+      "navigation.pricing",
+      "navigation.blog",
+      "navigation.faq",
+      "navigation.privacy",
+      "navigation.login",
+      "navigation.logout",
+      "navigation.profile",
+      "navigation.settings",
+      "navigation.frameworks",
+      "navigation.infrastructure",
+      "navigation.security",
+      "navigation.aiApps",
+      "navigation.webApps",
+      "navigation.ecommerce",
+      "navigation.guides",
+      "navigation.frameworksDescription",
+      "navigation.infrastructureDescription",
+      "navigation.securityDescription",
+      "navigation.aiAppsDescription",
+      "navigation.webAppsDescription",
+      "navigation.ecommerceDescription",
+      "navigation.docsDescription",
+      "navigation.guidesDescription",
+      "navigation.blogDescription",
+      "theme.toggle",
+      "theme.toggleLabel",
+      "theme.light",
+      "theme.dark",
+      "theme.system",
+      "theme.selectTheme",
+      "theme.selectDisplayTheme",
+      "theme.switchToLight",
+      "theme.switchToDark",
+      "theme.switchToSystem",
+      "language.toggle",
+      "language.selectLanguage",
+      "language.english",
+      "language.chinese",
+      "language.switching",
+      "language.switchSuccess",
+      "language.switchError",
+      "language.fallbackWarning",
+      "language.detectionInfo",
+      "language.source",
+      "language.confidence",
+      "language.userPreference",
+      "language.detector.title",
+      "language.detector.source",
+      "language.detector.confidence",
+      "language.detector.userSaved",
+      "language.detector.sources.browser",
+      "language.detector.sources.cookie",
+      "language.detector.sources.url",
+      "language.detector.sources.header",
+      "language.detector.sources.default",
+      "language.detector.sources.user",
+      "language.detector.sources.stored",
+      "language.detector.sources.geo",
+      "language.detector.sources.timezone",
+      "home.hero.stats.technologies",
+      "home.hero.stats.typescript",
+      "home.hero.stats.performance",
+      "home.hero.stats.languages",
+      "home.techStack.learnMore",
+      "home.techStack.categories.core",
+      "home.techStack.categories.ui",
+      "home.techStack.categories.i18n",
+      "home.techStack.categories.tools",
+      "home.techStack.categories.testing",
+      "home.techStack.categories.dev",
+      "home.techStack.categories.performance",
+      "home.techStack.categories.security",
+      "home.techStack.categories.animation",
+      "home.techStack.categories.deployment",
+      "home.techStack.categories.quality",
+      "home.techStack.categories.docs",
+      "home.techStack.categories.data",
+      "home.techStack.categories.state",
+      "home.techStack.technologies.nextjs",
+      "home.techStack.technologies.react",
+      "home.techStack.technologies.typescript",
+      "home.techStack.technologies.tailwindcss",
+      "home.techStack.technologies.shadcn-ui",
+      "home.techStack.technologies.radix-ui",
+      "home.techStack.technologies.next-intl",
+      "home.techStack.technologies.eslint",
+      "home.techStack.technologies.prettier",
+      "home.techStack.technologies.lefthook",
+      "home.techStack.technologies.vitest",
+      "home.techStack.technologies.playwright",
+      "home.techStack.technologies.husky",
+      "home.techStack.technologies.jest",
+      "home.techStack.technologies.testing-library",
+      "home.techStack.technologies.pnpm",
+      "home.techStack.technologies.turbo",
+      "home.techStack.technologies.lighthouse",
+      "home.techStack.technologies.semgrep",
+      "home.techStack.technologies.embla-carousel",
+      "home.techStack.technologies.vercel",
+      "home.techStack.technologies.sonarqube",
+      "home.techStack.technologies.storybook",
+      "home.techStack.technologies.swr",
+      "home.techStack.technologies.zustand",
+      "home.showcase.components.buttons.title",
+      "home.showcase.components.buttons.description",
+      "home.showcase.components.buttons.primary",
+      "home.showcase.components.buttons.secondary",
+      "home.showcase.components.buttons.outline",
+      "home.showcase.components.buttons.ghost",
+      "home.showcase.components.buttons.small",
+      "home.showcase.components.buttons.default",
+      "home.showcase.components.buttons.large",
+      "home.showcase.components.forms.title",
+      "home.showcase.components.forms.description",
+      "home.showcase.components.forms.name",
+      "home.showcase.components.forms.namePlaceholder",
+      "home.showcase.components.forms.email",
+      "home.showcase.components.forms.emailPlaceholder",
+      "home.showcase.components.forms.submit",
+      "home.showcase.components.interactive.title",
+      "home.showcase.components.interactive.description",
+      "home.showcase.components.interactive.likes",
+      "home.showcase.components.interactive.star",
+      "home.showcase.components.interactive.download",
+      "home.showcase.components.interactive.share",
+      "home.showcase.components.badges.title",
+      "home.showcase.components.badges.description",
+      "home.showcase.components.badges.default",
+      "home.showcase.components.badges.secondary",
+      "home.showcase.components.badges.outline",
+      "home.showcase.components.badges.destructive",
+      "home.showcase.components.badges.success",
+      "home.showcase.components.badges.warning",
+      "home.showcase.components.badges.info",
+      "home.showcase.themes.title",
+      "home.showcase.themes.description",
+      "home.showcase.themes.toggle",
+      "home.showcase.themes.language",
+      "home.showcase.themes.colors.title",
+      "home.showcase.themes.typography.title",
+      "home.showcase.themes.typography.bold",
+      "home.showcase.themes.typography.medium",
+      "home.showcase.themes.typography.normal",
+      "home.showcase.themes.typography.muted",
+      "home.showcase.responsive.title",
+      "home.showcase.responsive.description",
+      "home.showcase.responsive.mobile.title",
+      "home.showcase.responsive.mobile.description",
+      "home.showcase.responsive.tablet.title",
+      "home.showcase.responsive.tablet.description",
+      "home.showcase.responsive.desktop.title",
+      "home.showcase.responsive.desktop.description",
+      "home.overview.features.performance.title",
+      "home.overview.features.performance.description",
+      "home.overview.features.security.title",
+      "home.overview.features.security.description",
+      "home.overview.features.i18n.title",
+      "home.overview.features.i18n.description",
+      "home.overview.features.i18n.languageUnit",
+      "home.overview.features.themes.title",
+      "home.overview.features.themes.description",
+      "home.overview.features.themes.multiTheme",
+      "home.overview.features.typescript.title",
+      "home.overview.features.typescript.description",
+      "home.overview.features.deployment.title",
+      "home.overview.features.deployment.description",
+      "home.overview.highlights.modern",
+      "home.overview.highlights.scalable",
+      "home.overview.highlights.accessible",
+      "home.overview.highlights.performant",
+      "home.overview.highlights.secure",
+      "home.overview.highlights.maintainable",
+      "home.overview.architecture.frontend.title",
+      "home.overview.architecture.frontend.description",
+      "home.overview.architecture.ui.title",
+      "home.overview.architecture.ui.description",
+      "home.overview.architecture.tooling.title",
+      "home.overview.architecture.tooling.description",
+      "home.overview.cta.title",
+      "home.overview.cta.description",
+      "home.overview.cta.getStarted",
+      "home.overview.cta.viewSource",
+      "home.cta.actions.github.title",
+      "home.cta.actions.github.description",
+      "home.cta.actions.download.title",
+      "home.cta.actions.download.description",
+      "home.cta.actions.docs.title",
+      "home.cta.actions.docs.description",
+      "home.cta.stats.technologies",
+      "home.cta.stats.typescript",
+      "home.cta.stats.performance",
+      "home.cta.stats.languages",
+      "home.title",
+      "home.subtitle",
+      "home.description",
+      "home.getStarted",
+      "home.learnMore",
+      "home.welcome",
+      "home.modernApp",
+      "home.features.title",
+      "home.features.performance.title",
+      "home.features.performance.description",
+      "home.features.scalable.title",
+      "home.features.scalable.description",
+      "home.features.secure.title",
+      "home.features.secure.description",
+      "home.modernStack",
+      "home.modernStackDesc",
+      "home.internationalization",
+      "home.internationalizationDesc",
+      "home.testingReady",
+      "home.testingReadyDesc",
+      "monitoring.loadError",
+      "footer.sections.product.title",
+      "footer.sections.product.home",
+      "footer.sections.product.enterprise",
+      "footer.sections.product.pricing",
+      "footer.sections.company.title",
+      "footer.sections.company.terms",
+      "footer.sections.company.aiPolicy",
+      "footer.sections.company.privacy",
+      "footer.sections.resources.title",
+      "footer.sections.resources.faqs",
+      "footer.sections.resources.docs",
+      "footer.sections.resources.ambassadors",
+      "footer.sections.resources.community",
+      "footer.sections.resources.vercel",
+      "footer.sections.navigation.title",
+      "footer.sections.navigation.home",
+      "footer.sections.navigation.about",
+      "footer.sections.navigation.products",
+      "footer.sections.navigation.blog",
+      "footer.sections.navigation.contact",
+      "footer.sections.social.title",
+      "footer.sections.social.twitter",
+      "footer.sections.social.linkedin",
+      "footer.sections.social.github",
+      "footer.sections.support.title",
+      "footer.sections.support.faq",
+      "footer.sections.support.privacy",
+      "footer.sections.support.terms",
+      "footer.vercel.products.title",
+      "footer.vercel.products.ai",
+      "footer.vercel.products.enterprise",
+      "footer.vercel.products.fluidCompute",
+      "footer.vercel.products.nextjs",
+      "footer.vercel.products.observability",
+      "footer.vercel.products.previews",
+      "footer.vercel.products.rendering",
+      "footer.vercel.products.security",
+      "footer.vercel.products.turbo",
+      "footer.vercel.products.domains",
+      "footer.vercel.products.v0",
+      "footer.vercel.resources.title",
+      "footer.vercel.resources.community",
+      "footer.vercel.resources.docs",
+      "footer.vercel.resources.guides",
+      "footer.vercel.resources.academy",
+      "footer.vercel.resources.help",
+      "footer.vercel.resources.integrations",
+      "footer.vercel.resources.pricing",
+      "footer.vercel.resources.resources",
+      "footer.vercel.resources.solutionPartners",
+      "footer.vercel.resources.startups",
+      "footer.vercel.resources.templates",
+      "footer.vercel.resources.sdks",
+      "footer.vercel.company.title",
+      "footer.vercel.company.about",
+      "footer.vercel.company.blog",
+      "footer.vercel.company.careers",
+      "footer.vercel.company.changelog",
+      "footer.vercel.company.contact",
+      "footer.vercel.company.customers",
+      "footer.vercel.company.events",
+      "footer.vercel.company.partners",
+      "footer.vercel.company.shipped",
+      "footer.vercel.company.privacy",
+      "footer.vercel.company.legal",
+      "footer.vercel.social.title",
+      "footer.vercel.social.github",
+      "footer.vercel.social.linkedin",
+      "footer.vercel.social.twitter",
+      "footer.vercel.social.youtube",
+      "footer.learn",
+      "footer.examples",
+      "footer.goToNextjs",
+      "footer.copyright",
+      "footer.description",
+      "accessibility.skipToContent",
+      "accessibility.loading",
+      "accessibility.error",
+      "accessibility.languageSelector",
+      "accessibility.themeSelector",
+      "seo.title",
+      "seo.keywords",
+      "seo.pages.home.title",
+      "seo.pages.home.description",
+      "seo.pages.about.title",
+      "seo.pages.about.description",
+      "seo.pages.contact.title",
+      "seo.pages.contact.description",
+      "seo.pages.products.title",
+      "seo.pages.products.description",
+      "seo.pages.blog.title",
+      "seo.pages.blog.description",
+      "underConstruction.title",
+      "underConstruction.subtitle",
+      "underConstruction.description",
+      "underConstruction.backToHome",
+      "underConstruction.comingSoon",
+      "underConstruction.expectedCompletion",
+      "underConstruction.expectedLaunch",
+      "underConstruction.dates.q2_2024",
+      "underConstruction.dates.q3_2024",
+      "underConstruction.stayTuned",
+      "underConstruction.contactUs",
+      "underConstruction.progress.title",
+      "underConstruction.pages.products.title",
+      "underConstruction.pages.products.description",
+      "underConstruction.pages.products.features",
+      "underConstruction.pages.blog.title",
+      "underConstruction.pages.blog.description",
+      "underConstruction.pages.blog.features",
+      "underConstruction.pages.about.title",
+      "underConstruction.pages.about.description",
+      "underConstruction.pages.about.features",
+      "underConstruction.pages.contact.features",
+      "underConstruction.animation.loading",
+      "underConstruction.animation.construction",
+      "underConstruction.status.inProgress",
+      "underConstruction.features.title",
+      "underConstruction.features.performance",
+      "underConstruction.features.performanceDesc",
+      "underConstruction.features.collaboration",
+      "underConstruction.features.collaborationDesc",
+      "underConstruction.features.quality",
+      "underConstruction.features.qualityDesc",
+      "underConstruction.social.followUs",
+      "underConstruction.subscription.title",
+      "underConstruction.subscription.description",
+      "underConstruction.subscription.placeholder",
+      "underConstruction.subscription.submit",
+      "underConstruction.subscription.submitting",
+      "underConstruction.subscription.success",
+      "underConstruction.emailSubscription.title",
+      "underConstruction.emailSubscription.description",
+      "underConstruction.emailSubscription.success",
+      "underConstruction.emailSubscription.placeholder",
+      "underConstruction.emailSubscription.button",
+      "underConstruction.contact.title",
+      "underConstruction.contact.description",
+      "underConstruction.contact.button",
+      "structured-data.organization.name",
+      "structured-data.organization.description",
+      "structured-data.organization.phone",
+      "structured-data.organization.social.twitter",
+      "structured-data.organization.social.linkedin",
+      "structured-data.organization.social.github",
+      "structured-data.website.name",
+      "structured-data.website.description",
+      "structured-data.article.defaultTitle",
+      "structured-data.article.defaultDescription",
+      "structured-data.article.defaultAuthor",
+      "structured-data.product.defaultName",
+      "structured-data.product.defaultDescription",
+      "apiErrors.RATE_LIMIT_EXCEEDED",
+      "apiErrors.UNAUTHORIZED",
+      "apiErrors.INTERNAL_SERVER_ERROR",
+      "apiErrors.INVALID_JSON_BODY",
+      "apiErrors.CONFIRMATION_REQUIRED",
+      "apiErrors.INVALID_LOCALE_PARAMETER",
+      "apiErrors.SUBSCRIBE_SUCCESS",
+      "apiErrors.SUBSCRIBE_VALIDATION_EMAIL_REQUIRED",
+      "apiErrors.SUBSCRIBE_VALIDATION_EMAIL_INVALID",
+      "apiErrors.SUBSCRIBE_SECURITY_REQUIRED",
+      "apiErrors.SUBSCRIBE_SECURITY_FAILED",
+      "apiErrors.SUBSCRIBE_PROCESSING_ERROR",
+      "apiErrors.WEB_VITALS_RECORDED",
+      "apiErrors.WEB_VITALS_INVALID_FORMAT",
+      "apiErrors.WEB_VITALS_PROCESS_FAILED",
+      "apiErrors.WEB_VITALS_RETRIEVE_FAILED",
+      "apiErrors.WEB_VITALS_DELETED",
+      "apiErrors.WEB_VITALS_DELETE_FAILED",
+      "apiErrors.I18N_ANALYTICS_RECORDED",
+      "apiErrors.I18N_ANALYTICS_INVALID_FORMAT",
+      "apiErrors.I18N_ANALYTICS_PROCESS_FAILED",
+      "apiErrors.I18N_ANALYTICS_RETRIEVE_FAILED",
+      "apiErrors.I18N_ANALYTICS_DELETED",
+      "apiErrors.I18N_ANALYTICS_DELETE_FAILED",
+      "apiErrors.MONITORING_DATA_RECEIVED",
+      "apiErrors.MONITORING_INVALID_FORMAT",
+      "apiErrors.MONITORING_PROCESS_FAILED",
+      "apiErrors.MONITORING_RETRIEVE_FAILED",
+      "apiErrors.MONITORING_DELETED",
+      "apiErrors.MONITORING_DELETE_FAILED",
+      "apiErrors.MONITORING_CONFIG_UPDATED",
+      "apiErrors.MONITORING_CONFIG_INVALID",
+      "apiErrors.MONITORING_CONFIG_UPDATE_FAILED",
+      "apiErrors.CACHE_INVALIDATED",
+      "apiErrors.CACHE_LOCALE_REQUIRED",
+      "apiErrors.CACHE_INVALID_DOMAIN",
+      "apiErrors.CACHE_INVALIDATION_FAILED",
+      "apiErrors.UNKNOWN_ERROR",
+      "errors.global.title",
+      "errors.global.description",
+      "errors.global.tryAgain",
+      "errors.global.goHome",
+      "errors.global.devDetails",
+      "errors.products.title",
+      "errors.products.description",
+      "errors.products.tryAgain",
+      "errors.products.goHome",
+      "errors.contact.title",
+      "errors.contact.description",
+      "errors.contact.tryAgain",
+      "errors.contact.goHome",
+      "errors.serverError",
+      "errors.networkError",
+      "errors.validationError",
+      "errors.unauthorized",
+      "errors.forbidden",
+      "errors.timeout",
+      "errors.generic",
+      "errors.translationMissing",
+      "errors.loadingFailed",
+      "errorBoundary.title",
+      "errorBoundary.description",
+      "errorBoundary.tryAgain",
+      "themeDemo.title",
+      "themeDemo.description",
+      "themeDemo.chineseTest",
+      "themeDemo.englishTest",
+      "themeDemo.chineseDescription",
+      "themeDemo.englishDescription",
+      "themeDemo.chineseInput",
+      "themeDemo.englishInput",
+      "themeDemo.chinesePlaceholder",
+      "themeDemo.englishPlaceholder",
+      "themeDemo.primaryButton",
+      "themeDemo.secondaryButton",
+      "themeDemo.outlineButton",
+      "instructions.getStarted",
+      "instructions.saveChanges",
+      "actions.deployNow",
+      "actions.readDocs",
+      "formTemplate.example.fields.name.label",
+      "formTemplate.example.fields.name.placeholder",
+      "formTemplate.example.fields.email.label",
+      "formTemplate.example.fields.email.placeholder",
+      "formTemplate.example.fields.message.label",
+      "formTemplate.example.fields.message.placeholder",
+      "contact.form.title",
+      "contact.form.description",
+      "contact.form.optional",
+      "contact.form.lastName",
+      "contact.form.phone",
+      "contact.form.subject",
+      "contact.form.message",
+      "contact.form.lastNamePlaceholder",
+      "contact.form.phonePlaceholder",
+      "contact.form.subjectPlaceholder",
+      "contact.form.messagePlaceholder",
+      "contact.form.acceptPrivacy",
+      "contact.form.marketingConsent",
+      "contact.form.submitSuccess",
+      "contact.form.submitError",
+      "contact.form.success",
+      "contact.form.errors.generic",
+      "contact.form.errors.firstName.required",
+      "contact.form.errors.firstName.tooShort",
+      "contact.form.errors.firstName.tooLong",
+      "contact.form.errors.firstName.invalid",
+      "contact.form.errors.lastName.required",
+      "contact.form.errors.lastName.tooShort",
+      "contact.form.errors.lastName.tooLong",
+      "contact.form.errors.lastName.invalid",
+      "contact.form.errors.email.required",
+      "contact.form.errors.email.invalid",
+      "contact.form.errors.email.tooLong",
+      "contact.form.errors.company.tooShort",
+      "contact.form.errors.company.tooLong",
+      "contact.form.errors.company.invalid",
+      "contact.form.errors.message.required",
+      "contact.form.errors.message.tooShort",
+      "contact.form.errors.message.tooLong",
+      "contact.form.errors.phone.invalid",
+      "contact.form.errors.subject.length",
+      "contact.form.errors.acceptPrivacy.required",
+      "contact.form.errors.website.shouldBeEmpty",
+      "contact.form.validation.firstNameRequired",
+      "contact.form.validation.firstNameTooShort",
+      "contact.form.validation.lastNameRequired",
+      "contact.form.validation.lastNameTooShort",
+      "contact.form.validation.emailRequired",
+      "contact.form.validation.emailInvalid",
+      "contact.form.validation.messageRequired",
+      "contact.form.validation.messageTooShort",
+      "formatting.date.today",
+      "formatting.date.yesterday",
+      "formatting.date.tomorrow",
+      "formatting.date.lastUpdated",
+      "formatting.date.publishedOn",
+      "formatting.number.currency",
+      "formatting.number.percentage",
+      "formatting.number.fileSize",
+      "formatting.plurals.items.zero",
+      "formatting.plurals.items.one",
+      "formatting.plurals.items.other",
+      "formatting.plurals.users.zero",
+      "formatting.plurals.users.one",
+      "formatting.plurals.users.other",
+      "formatting.plurals.notifications.zero",
+      "formatting.plurals.notifications.one",
+      "formatting.plurals.notifications.other",
+      "progress.title",
+      "progress.status",
+      "progress.nearCompletion",
+      "progress.planning",
+      "progress.development",
+      "progress.testing",
+      "progress.launch",
+      "progress.ariaLabel",
+      "progress.completed",
+      "progress.current",
+      "progress.upcoming",
+      "ReactScanDemo.title",
+      "ReactScanDemo.description",
+      "ReactScanDemo.instructions.title",
+      "ReactScanDemo.instructions.step1",
+      "ReactScanDemo.instructions.step2",
+      "ReactScanDemo.instructions.step3",
+      "ReactScanDemo.instructions.step4",
+      "blog.updatedOn",
+      "blog.tags",
+      "blog.categories",
+      "blog.allCategories",
+      "blog.relatedArticles",
+      "blog.shareArticle",
+      "blog.articleNotFound",
+      "blog.sidebar.mostPopular",
+      "blog.sidebar.categories",
+      "blog.contentTypes.article",
+      "blog.contentTypes.case-study",
+      "blog.contentTypes.guide",
+      "blog.contentTypes.news",
+      "blog.contentTypes.whitepaper",
+      "about.hero.badge",
+      "about.hero.title",
+      "about.hero.subtitle",
+      "about.overview.title",
+      "about.overview.history",
+      "about.overview.mission",
+      "about.overview.highlight1",
+      "about.overview.highlight2",
+      "about.overview.highlight3",
+      "about.factory.title",
+      "about.factory.subtitle",
+      "about.factory.stats.capacity",
+      "about.factory.stats.capacityUnit",
+      "about.factory.stats.experience",
+      "about.factory.stats.experienceUnit",
+      "about.factory.stats.markets",
+      "about.factory.stats.marketsUnit",
+      "about.factory.stats.projects",
+      "about.factory.stats.projectsUnit",
+      "about.factory.process.tempering.title",
+      "about.factory.process.tempering.description",
+      "about.factory.process.coating.title",
+      "about.factory.process.coating.description",
+      "about.factory.process.cnc.title",
+      "about.factory.process.cnc.description",
+      "about.factory.galleryLabel",
+      "about.certifications.title",
+      "about.certifications.subtitle",
+      "about.certifications.viewAll",
+      "about.certifications.as2047",
+      "about.certifications.as1288",
+      "about.certifications.iso9001",
+      "about.certifications.ce",
+      "about.global.badge",
+      "about.global.title",
+      "about.global.description",
+      "about.global.markets.australia",
+      "about.global.markets.newZealand",
+      "about.global.markets.germany",
+      "about.global.markets.uk",
+      "about.global.mapPlaceholder",
+      "about.projects.title",
+      "about.projects.case1.title",
+      "about.projects.case1.location",
+      "about.projects.case2.title",
+      "about.projects.case2.location",
+      "about.projects.case3.title",
+      "about.projects.case3.location",
+      "about.projects.imagePlaceholder",
+      "about.team.title",
+      "about.team.member1.name",
+      "about.team.member1.role",
+      "about.team.member2.name",
+      "about.team.member2.role",
+      "about.team.member3.name",
+      "about.team.member3.role",
+      "about.team.member4.name",
+      "about.team.member4.role",
+      "about.cta.contact",
+      "about.cta.downloadBrochure",
+      "about.cta.finalTitle",
+      "about.cta.finalSubtitle",
+      "about.cta.emailUs",
+      "about.cta.callUs",
+      "products.viewDetails",
+      "products.detail.relatedProducts",
+      "products.category.hero.viewProducts",
+      "products.category.hero.requestQuote",
+      "products.category.trust.climateTitle",
+      "products.category.trust.climateDescription",
+      "products.category.trust.compliant",
+      "products.category.grid.title",
+      "products.category.grid.viewDetails",
+      "products.category.cta.readyToStart",
+      "products.category.cta.contactDescription",
+      "products.category.cta.contactUs",
+      "products.category.cta.learnMore",
+      "title",
+      "trust.testimonials.title",
+      "trust.testimonials.subtitle",
+      "trust.partners.title",
+      "trust.partners.subtitle",
+      "trust.certifications.title",
+      "trust.certifications.subtitle",
+      "trust.stats.title",
+      "trust.stats.yearsInBusiness",
+      "trust.stats.countriesServed",
+      "trust.stats.satisfactionRate",
+      "trust.stats.projectsCompleted",
+      "faq.categories.ordering",
+      "faq.categories.payment",
+      "faq.categories.logistics",
+      "faq.categories.quality",
+      "faq.searchPlaceholder",
+      "privacy.sections.introduction",
+      "privacy.sections.informationCollected",
+      "privacy.sections.howWeUse",
+      "privacy.sections.sharing",
+      "privacy.sections.security",
+      "privacy.sections.retention",
+      "privacy.sections.rights",
+      "privacy.sections.children",
+      "privacy.sections.changes",
+      "privacy.sections.contact",
+      "terms.sections.introduction",
+      "terms.sections.acceptance",
+      "terms.sections.services",
+      "terms.sections.orders",
+      "terms.sections.payment",
+      "terms.sections.shipping",
+      "terms.sections.warranty",
+      "terms.sections.liability",
+      "terms.sections.ip",
+      "terms.sections.confidentiality",
+      "terms.sections.termination",
+      "terms.sections.governing",
+      "terms.sections.disputes",
+      "terms.sections.contact"
+    ],
+    "misuseKeys": []
+  },
+  "translationKeys": [
+    "about.pageDescription",
+    "about.pageTitle",
+    "acceptPrivacy",
+    "accessibility.closeMenu",
+    "accessibility.openMenu",
+    "actions.docs.description",
+    "actions.docs.title",
+    "actions.download.description",
+    "actions.download.title",
+    "actions.github.description",
+    "actions.github.title",
+    "article.defaultAuthor",
+    "blog.author",
+    "blog.backToList",
+    "blog.emptyState",
+    "blog.newsletter.description",
+    "blog.newsletter.error",
+    "blog.newsletter.placeholder",
+    "blog.newsletter.submit",
+    "blog.newsletter.submitting",
+    "blog.newsletter.success",
+    "blog.newsletter.title",
+    "blog.newsletter.turnstileRequired",
+    "blog.pageDescription",
+    "blog.pageTitle",
+    "blog.publishedOn",
+    "blog.readingTime",
+    "buttons.getStarted",
+    "buttons.learnMore",
+    "common.close",
+    "common.error",
+    "common.whatsapp.buttonLabel",
+    "common.whatsapp.defaultMessage",
+    "common.whatsapp.greeting",
+    "common.whatsapp.placeholder",
+    "common.whatsapp.responseTime",
+    "common.whatsapp.startChat",
+    "community.description",
+    "community.discussions",
+    "community.issues",
+    "community.title",
+    "company",
+    "companyPlaceholder",
+    "components.badges.default",
+    "components.badges.description",
+    "components.badges.destructive",
+    "components.badges.info",
+    "components.badges.outline",
+    "components.badges.secondary",
+    "components.badges.success",
+    "components.badges.title",
+    "components.badges.warning",
+    "components.buttons.default",
+    "components.buttons.description",
+    "components.buttons.ghost",
+    "components.buttons.large",
+    "components.buttons.outline",
+    "components.buttons.primary",
+    "components.buttons.secondary",
+    "components.buttons.small",
+    "components.buttons.title",
+    "components.forms.description",
+    "components.forms.email",
+    "components.forms.emailPlaceholder",
+    "components.forms.name",
+    "components.forms.namePlaceholder",
+    "components.forms.submit",
+    "components.forms.title",
+    "components.interactive.description",
+    "components.interactive.download",
+    "components.interactive.likes",
+    "components.interactive.share",
+    "components.interactive.star",
+    "components.interactive.title",
+    "contact.form.company",
+    "contact.form.companyPlaceholder",
+    "contact.form.email",
+    "contact.form.emailPlaceholder",
+    "contact.form.error",
+    "contact.form.firstName",
+    "contact.form.firstNamePlaceholder",
+    "contact.form.rateLimitMessage",
+    "contact.form.submit",
+    "contact.form.submitting",
+    "cookie.acceptAll",
+    "cookie.cancel",
+    "cookie.categories.analytics",
+    "cookie.categories.analyticsDesc",
+    "cookie.categories.marketing",
+    "cookie.categories.marketingDesc",
+    "cookie.categories.necessary",
+    "cookie.categories.necessaryDesc",
+    "cookie.close",
+    "cookie.description",
+    "cookie.learnMore",
+    "cookie.manage",
+    "cookie.preferences.description",
+    "cookie.preferences.title",
+    "cookie.rejectAll",
+    "cookie.savePreferences",
+    "cookie.title",
+    "cta.contactDescription",
+    "cta.contactUs",
+    "cta.learnMore",
+    "cta.readyToStart",
+    "email",
+    "emailPlaceholder",
+    "errors.notFound.description",
+    "errors.notFound.goHome",
+    "errors.notFound.title",
+    "faq.contactCta.button",
+    "faq.contactCta.description",
+    "faq.contactCta.title",
+    "faq.noResults",
+    "faq.pageDescription",
+    "faq.pageTitle",
+    "firstName",
+    "firstNamePlaceholder",
+    "footer.systemStatus",
+    "formTemplate.form.error",
+    "formTemplate.form.selectOption",
+    "formTemplate.form.submit",
+    "formTemplate.form.submitting",
+    "formTemplate.form.success",
+    "grid.title",
+    "grid.viewDetails",
+    "hero.requestQuote",
+    "hero.viewProducts",
+    "home.cta.badge",
+    "home.cta.buttons.getStarted",
+    "home.cta.buttons.learnMore",
+    "home.cta.community.description",
+    "home.cta.community.discussions",
+    "home.cta.community.issues",
+    "home.cta.community.title",
+    "home.cta.primary.demo",
+    "home.cta.primary.github",
+    "home.cta.subtitle",
+    "home.cta.title",
+    "home.hero.cta.demo",
+    "home.hero.cta.github",
+    "home.hero.subtitle",
+    "home.hero.title.line1",
+    "home.hero.title.line2",
+    "home.hero.version",
+    "home.overview.architecture.title",
+    "home.overview.highlights.subtitle",
+    "home.overview.highlights.title",
+    "home.overview.subtitle",
+    "home.overview.title",
+    "home.showcase.subtitle",
+    "home.showcase.tabs.components",
+    "home.showcase.tabs.responsive",
+    "home.showcase.tabs.themes",
+    "home.showcase.title",
+    "home.techStack.learnMoreLabel",
+    "home.techStack.stats.categories",
+    "home.techStack.stats.modern",
+    "home.techStack.stats.quality",
+    "home.techStack.stats.totalTech",
+    "home.techStack.subtitle",
+    "home.techStack.title",
+    "lastName",
+    "lastNamePlaceholder",
+    "marketingConsent",
+    "message",
+    "messagePlaceholder",
+    "navigation.contactSales",
+    "organization.description",
+    "organization.name",
+    "organization.phone",
+    "organization.social.github",
+    "organization.social.linkedin",
+    "organization.social.twitter",
+    "phone",
+    "phonePlaceholder",
+    "privacy.effectiveDate",
+    "privacy.lastUpdated",
+    "privacy.pageDescription",
+    "privacy.pageTitle",
+    "privacy.tableOfContents",
+    "products.allCategories",
+    "products.card.leadTime",
+    "products.card.moq",
+    "products.card.supplyCapacity",
+    "products.detail.certifications",
+    "products.detail.downloadPdf",
+    "products.detail.labels.leadTime",
+    "products.detail.labels.moq",
+    "products.detail.labels.packaging",
+    "products.detail.labels.portOfLoading",
+    "products.detail.labels.supplyCapacity",
+    "products.detail.specifications",
+    "products.detail.tradeInfo",
+    "products.emptyState",
+    "products.featured",
+    "products.inquiry.description",
+    "products.inquiry.error",
+    "products.inquiry.productName",
+    "products.inquiry.quantity",
+    "products.inquiry.quantityPlaceholder",
+    "products.inquiry.requirements",
+    "products.inquiry.requirementsPlaceholder",
+    "products.inquiry.submit",
+    "products.inquiry.submitting",
+    "products.inquiry.success",
+    "products.inquiry.targetPrice",
+    "products.inquiry.targetPricePlaceholder",
+    "products.inquiry.title",
+    "products.inquiry.turnstileRequired",
+    "products.pageDescription",
+    "products.pageTitle",
+    "products.requestQuote",
+    "responsive.description",
+    "responsive.desktop.description",
+    "responsive.desktop.title",
+    "responsive.mobile.description",
+    "responsive.mobile.title",
+    "responsive.tablet.description",
+    "responsive.tablet.title",
+    "responsive.title",
+    "seo.description",
+    "seo.siteName",
+    "stats.languages",
+    "stats.performance",
+    "stats.technologies",
+    "stats.typescript",
+    "subject",
+    "subjectPlaceholder",
+    "submitError",
+    "submitSuccess",
+    "submitting",
+    "terms.effectiveDate",
+    "terms.lastUpdated",
+    "terms.pageDescription",
+    "terms.pageTitle",
+    "terms.tableOfContents",
+    "themes.colors.title",
+    "themes.description",
+    "themes.language",
+    "themes.title",
+    "themes.toggle",
+    "themes.typography.bold",
+    "themes.typography.medium",
+    "themes.typography.muted",
+    "themes.typography.normal",
+    "themes.typography.title",
+    "trust.climateDescription",
+    "trust.climateTitle",
+    "trust.compliant",
+    "underConstruction.pages.contact.description",
+    "underConstruction.pages.contact.panel.closed",
+    "underConstruction.pages.contact.panel.contactTitle",
+    "underConstruction.pages.contact.panel.email",
+    "underConstruction.pages.contact.panel.hoursTitle",
+    "underConstruction.pages.contact.panel.phone",
+    "underConstruction.pages.contact.panel.saturday",
+    "underConstruction.pages.contact.panel.sunday",
+    "underConstruction.pages.contact.panel.weekdays",
+    "underConstruction.pages.contact.title",
+    "website.description",
+    "website.name"
+  ],
+  "keyUsages": {
+    "formTemplate.form.success": [
+      {
+        "file": "src/templates/react19-form-template.tsx",
+        "line": 104,
+        "column": 22
+      },
+      {
+        "file": "src/templates/react19-form-template.tsx",
+        "line": 276,
+        "column": 21
+      }
+    ],
+    "formTemplate.form.error": [
+      {
+        "file": "src/templates/react19-form-template.tsx",
+        "line": 109,
+        "column": 22
+      },
+      {
+        "file": "src/templates/react19-form-template.tsx",
+        "line": 280,
+        "column": 34
+      },
+      {
+        "file": "src/templates/react19-form-template.tsx",
+        "line": 283,
+        "column": 35
+      },
+      {
+        "file": "src/templates/react19-form-template.tsx",
+        "line": 289,
+        "column": 51
+      }
+    ],
+    "formTemplate.form.submitting": [
+      {
+        "file": "src/templates/react19-form-template.tsx",
+        "line": 114,
+        "column": 22
+      },
+      {
+        "file": "src/templates/react19-form-template.tsx",
+        "line": 241,
+        "column": 10
+      },
+      {
+        "file": "src/templates/react19-form-template.tsx",
+        "line": 311,
+        "column": 17
+      }
+    ],
+    "formTemplate.form.selectOption": [
+      {
+        "file": "src/templates/react19-form-template.tsx",
+        "line": 193,
+        "column": 28
+      }
+    ],
+    "formTemplate.form.submit": [
+      {
+        "file": "src/templates/react19-form-template.tsx",
+        "line": 242,
+        "column": 18
+      }
+    ],
+    "organization.name": [
+      {
+        "file": "src/lib/structured-data-generators.ts",
+        "line": 32,
+        "column": 6
+      },
+      {
+        "file": "src/lib/structured-data-generators.ts",
+        "line": 120,
+        "column": 12
+      },
+      {
+        "file": "src/lib/structured-data-generators.ts",
+        "line": 162,
+        "column": 8
+      },
+      {
+        "file": "src/lib/structured-data-generators.ts",
+        "line": 170,
+        "column": 8
+      }
+    ],
+    "organization.description": [
+      {
+        "file": "src/lib/structured-data-generators.ts",
+        "line": 37,
+        "column": 6
+      }
+    ],
+    "organization.phone": [
+      {
+        "file": "src/lib/structured-data-generators.ts",
+        "line": 46,
+        "column": 8
+      }
+    ],
+    "organization.social.twitter": [
+      {
+        "file": "src/lib/structured-data-generators.ts",
+        "line": 51,
+        "column": 6
+      }
+    ],
+    "organization.social.linkedin": [
+      {
+        "file": "src/lib/structured-data-generators.ts",
+        "line": 54,
+        "column": 6
+      }
+    ],
+    "organization.social.github": [
+      {
+        "file": "src/lib/structured-data-generators.ts",
+        "line": 57,
+        "column": 6
+      }
+    ],
+    "website.name": [
+      {
+        "file": "src/lib/structured-data-generators.ts",
+        "line": 77,
+        "column": 6
+      }
+    ],
+    "website.description": [
+      {
+        "file": "src/lib/structured-data-generators.ts",
+        "line": 82,
+        "column": 6
+      }
+    ],
+    "article.defaultAuthor": [
+      {
+        "file": "src/lib/structured-data-generators.ts",
+        "line": 114,
+        "column": 8
+      }
+    ],
+    "underConstruction.pages.contact.title": [
+      {
+        "file": "src/lib/contact/getContactCopy.ts",
+        "line": 61,
+        "column": 13
+      },
+      {
+        "file": "src/app/[locale]/contact/page.tsx",
+        "line": 61,
+        "column": 13
+      }
+    ],
+    "underConstruction.pages.contact.description": [
+      {
+        "file": "src/lib/contact/getContactCopy.ts",
+        "line": 62,
+        "column": 19
+      },
+      {
+        "file": "src/app/[locale]/contact/page.tsx",
+        "line": 62,
+        "column": 19
+      }
+    ],
+    "underConstruction.pages.contact.panel.contactTitle": [
+      {
+        "file": "src/lib/contact/getContactCopy.ts",
+        "line": 66,
+        "column": 15
+      }
+    ],
+    "underConstruction.pages.contact.panel.email": [
+      {
+        "file": "src/lib/contact/getContactCopy.ts",
+        "line": 67,
+        "column": 20
+      }
+    ],
+    "underConstruction.pages.contact.panel.phone": [
+      {
+        "file": "src/lib/contact/getContactCopy.ts",
+        "line": 68,
+        "column": 20
+      }
+    ],
+    "underConstruction.pages.contact.panel.hoursTitle": [
+      {
+        "file": "src/lib/contact/getContactCopy.ts",
+        "line": 71,
+        "column": 15
+      }
+    ],
+    "underConstruction.pages.contact.panel.weekdays": [
+      {
+        "file": "src/lib/contact/getContactCopy.ts",
+        "line": 72,
+        "column": 23
+      }
+    ],
+    "underConstruction.pages.contact.panel.saturday": [
+      {
+        "file": "src/lib/contact/getContactCopy.ts",
+        "line": 73,
+        "column": 23
+      }
+    ],
+    "underConstruction.pages.contact.panel.sunday": [
+      {
+        "file": "src/lib/contact/getContactCopy.ts",
+        "line": 74,
+        "column": 21
+      }
+    ],
+    "underConstruction.pages.contact.panel.closed": [
+      {
+        "file": "src/lib/contact/getContactCopy.ts",
+        "line": 75,
+        "column": 21
+      }
+    ],
+    "common.error": [
+      {
+        "file": "src/components/error-boundary.tsx",
+        "line": 94,
+        "column": 13
+      }
+    ],
+    "common.whatsapp.greeting": [
+      {
+        "file": "src/components/whatsapp/whatsapp-button-with-translations.tsx",
+        "line": 50,
+        "column": 14
+      }
+    ],
+    "common.whatsapp.responseTime": [
+      {
+        "file": "src/components/whatsapp/whatsapp-button-with-translations.tsx",
+        "line": 51,
+        "column": 18
+      }
+    ],
+    "common.whatsapp.placeholder": [
+      {
+        "file": "src/components/whatsapp/whatsapp-button-with-translations.tsx",
+        "line": 52,
+        "column": 17
+      }
+    ],
+    "common.whatsapp.startChat": [
+      {
+        "file": "src/components/whatsapp/whatsapp-button-with-translations.tsx",
+        "line": 53,
+        "column": 15
+      }
+    ],
+    "common.close": [
+      {
+        "file": "src/components/whatsapp/whatsapp-button-with-translations.tsx",
+        "line": 54,
+        "column": 11
+      }
+    ],
+    "common.whatsapp.defaultMessage": [
+      {
+        "file": "src/components/whatsapp/whatsapp-button-with-translations.tsx",
+        "line": 57,
+        "column": 25
+      }
+    ],
+    "common.whatsapp.buttonLabel": [
+      {
+        "file": "src/components/whatsapp/whatsapp-button-with-translations.tsx",
+        "line": 59,
+        "column": 16
+      }
+    ],
+    "products.inquiry.turnstileRequired": [
+      {
+        "file": "src/components/products/product-inquiry-form.tsx",
+        "line": 340,
+        "column": 50
+      }
+    ],
+    "products.inquiry.error": [
+      {
+        "file": "src/components/products/product-inquiry-form.tsx",
+        "line": 350,
+        "column": 56
+      },
+      {
+        "file": "src/components/products/product-inquiry-form.tsx",
+        "line": 355,
+        "column": 38
+      }
+    ],
+    "products.inquiry.success": [
+      {
+        "file": "src/components/products/product-inquiry-form.tsx",
+        "line": 366,
+        "column": 33
+      }
+    ],
+    "products.inquiry.title": [
+      {
+        "file": "src/components/products/product-inquiry-form.tsx",
+        "line": 373,
+        "column": 25
+      }
+    ],
+    "products.inquiry.description": [
+      {
+        "file": "src/components/products/product-inquiry-form.tsx",
+        "line": 373,
+        "column": 50
+      },
+      {
+        "file": "src/components/products/inquiry-drawer.tsx",
+        "line": 107,
+        "column": 13
+      }
+    ],
+    "products.inquiry.productName": [
+      {
+        "file": "src/components/products/product-inquiry-form.tsx",
+        "line": 378,
+        "column": 33
+      }
+    ],
+    "contact.form.firstName": [
+      {
+        "file": "src/components/products/product-inquiry-form.tsx",
+        "line": 380,
+        "column": 23
+      }
+    ],
+    "contact.form.firstNamePlaceholder": [
+      {
+        "file": "src/components/products/product-inquiry-form.tsx",
+        "line": 381,
+        "column": 29
+      }
+    ],
+    "contact.form.email": [
+      {
+        "file": "src/components/products/product-inquiry-form.tsx",
+        "line": 382,
+        "column": 24
+      }
+    ],
+    "contact.form.emailPlaceholder": [
+      {
+        "file": "src/components/products/product-inquiry-form.tsx",
+        "line": 383,
+        "column": 30
+      }
+    ],
+    "contact.form.company": [
+      {
+        "file": "src/components/products/product-inquiry-form.tsx",
+        "line": 386,
+        "column": 19
+      }
+    ],
+    "contact.form.companyPlaceholder": [
+      {
+        "file": "src/components/products/product-inquiry-form.tsx",
+        "line": 387,
+        "column": 25
+      }
+    ],
+    "products.inquiry.quantity": [
+      {
+        "file": "src/components/products/product-inquiry-form.tsx",
+        "line": 390,
+        "column": 27
+      }
+    ],
+    "products.inquiry.quantityPlaceholder": [
+      {
+        "file": "src/components/products/product-inquiry-form.tsx",
+        "line": 391,
+        "column": 33
+      }
+    ],
+    "products.inquiry.targetPrice": [
+      {
+        "file": "src/components/products/product-inquiry-form.tsx",
+        "line": 392,
+        "column": 24
+      }
+    ],
+    "products.inquiry.targetPricePlaceholder": [
+      {
+        "file": "src/components/products/product-inquiry-form.tsx",
+        "line": 393,
+        "column": 30
+      }
+    ],
+    "products.inquiry.requirements": [
+      {
+        "file": "src/components/products/product-inquiry-form.tsx",
+        "line": 396,
+        "column": 19
+      }
+    ],
+    "products.inquiry.requirementsPlaceholder": [
+      {
+        "file": "src/components/products/product-inquiry-form.tsx",
+        "line": 397,
+        "column": 25
+      }
+    ],
+    "products.inquiry.submit": [
+      {
+        "file": "src/components/products/product-inquiry-form.tsx",
+        "line": 410,
+        "column": 25
+      }
+    ],
+    "products.inquiry.submitting": [
+      {
+        "file": "src/components/products/product-inquiry-form.tsx",
+        "line": 411,
+        "column": 29
+      }
+    ],
+    "hero.viewProducts": [
+      {
+        "file": "src/components/products/category-landing-page.tsx",
+        "line": 381,
+        "column": 18
+      }
+    ],
+    "hero.requestQuote": [
+      {
+        "file": "src/components/products/category-landing-page.tsx",
+        "line": 382,
+        "column": 18
+      }
+    ],
+    "trust.climateTitle": [
+      {
+        "file": "src/components/products/category-landing-page.tsx",
+        "line": 386,
+        "column": 18
+      }
+    ],
+    "trust.climateDescription": [
+      {
+        "file": "src/components/products/category-landing-page.tsx",
+        "line": 387,
+        "column": 24
+      }
+    ],
+    "trust.compliant": [
+      {
+        "file": "src/components/products/category-landing-page.tsx",
+        "line": 388,
+        "column": 15
+      }
+    ],
+    "grid.viewDetails": [
+      {
+        "file": "src/components/products/category-landing-page.tsx",
+        "line": 392,
+        "column": 17
+      }
+    ],
+    "grid.title": [
+      {
+        "file": "src/components/products/category-landing-page.tsx",
+        "line": 393,
+        "column": 19
+      }
+    ],
+    "cta.readyToStart": [
+      {
+        "file": "src/components/products/category-landing-page.tsx",
+        "line": 397,
+        "column": 18
+      }
+    ],
+    "cta.contactDescription": [
+      {
+        "file": "src/components/products/category-landing-page.tsx",
+        "line": 398,
+        "column": 24
+      }
+    ],
+    "cta.contactUs": [
+      {
+        "file": "src/components/products/category-landing-page.tsx",
+        "line": 399,
+        "column": 15
+      }
+    ],
+    "cta.learnMore": [
+      {
+        "file": "src/components/products/category-landing-page.tsx",
+        "line": 400,
+        "column": 15
+      }
+    ],
+    "accessibility.closeMenu": [
+      {
+        "file": "src/components/layout/mobile-navigation.tsx",
+        "line": 64,
+        "column": 18
+      },
+      {
+        "file": "src/components/layout/mobile-navigation.tsx",
+        "line": 218,
+        "column": 18
+      }
+    ],
+    "accessibility.openMenu": [
+      {
+        "file": "src/components/layout/mobile-navigation.tsx",
+        "line": 65,
+        "column": 18
+      },
+      {
+        "file": "src/components/layout/mobile-navigation.tsx",
+        "line": 218,
+        "column": 49
+      }
+    ],
+    "seo.siteName": [
+      {
+        "file": "src/components/layout/mobile-navigation.tsx",
+        "line": 82,
+        "column": 15
+      }
+    ],
+    "seo.description": [
+      {
+        "file": "src/components/layout/mobile-navigation.tsx",
+        "line": 85,
+        "column": 15
+      }
+    ],
+    "navigation.contactSales": [
+      {
+        "file": "src/components/layout/mobile-navigation.tsx",
+        "line": 126,
+        "column": 19
+      },
+      {
+        "file": "src/components/layout/header.tsx",
+        "line": 112,
+        "column": 19
+      }
+    ],
+    "home.showcase.title": [
+      {
+        "file": "src/components/home/component-showcase.tsx",
+        "line": 49,
+        "column": 15
+      }
+    ],
+    "home.showcase.subtitle": [
+      {
+        "file": "src/components/home/component-showcase.tsx",
+        "line": 52,
+        "column": 15
+      }
+    ],
+    "home.showcase.tabs.components": [
+      {
+        "file": "src/components/home/component-showcase.tsx",
+        "line": 59,
+        "column": 17
+      }
+    ],
+    "home.showcase.tabs.themes": [
+      {
+        "file": "src/components/home/component-showcase.tsx",
+        "line": 61,
+        "column": 43
+      }
+    ],
+    "home.showcase.tabs.responsive": [
+      {
+        "file": "src/components/home/component-showcase.tsx",
+        "line": 63,
+        "column": 17
+      }
+    ],
+    "themes.title": [
+      {
+        "file": "src/components/home/showcase/theme-showcase.tsx",
+        "line": 21,
+        "column": 22
+      }
+    ],
+    "themes.description": [
+      {
+        "file": "src/components/home/showcase/theme-showcase.tsx",
+        "line": 22,
+        "column": 28
+      }
+    ],
+    "themes.toggle": [
+      {
+        "file": "src/components/home/showcase/theme-showcase.tsx",
+        "line": 26,
+        "column": 19
+      }
+    ],
+    "themes.language": [
+      {
+        "file": "src/components/home/showcase/theme-showcase.tsx",
+        "line": 30,
+        "column": 19
+      }
+    ],
+    "themes.colors.title": [
+      {
+        "file": "src/components/home/showcase/theme-showcase.tsx",
+        "line": 35,
+        "column": 43
+      }
+    ],
+    "themes.typography.title": [
+      {
+        "file": "src/components/home/showcase/theme-showcase.tsx",
+        "line": 44,
+        "column": 43
+      }
+    ],
+    "themes.typography.bold": [
+      {
+        "file": "src/components/home/showcase/theme-showcase.tsx",
+        "line": 46,
+        "column": 42
+      }
+    ],
+    "themes.typography.medium": [
+      {
+        "file": "src/components/home/showcase/theme-showcase.tsx",
+        "line": 47,
+        "column": 44
+      }
+    ],
+    "themes.typography.normal": [
+      {
+        "file": "src/components/home/showcase/theme-showcase.tsx",
+        "line": 48,
+        "column": 44
+      }
+    ],
+    "themes.typography.muted": [
+      {
+        "file": "src/components/home/showcase/theme-showcase.tsx",
+        "line": 50,
+        "column": 19
+      }
+    ],
+    "responsive.title": [
+      {
+        "file": "src/components/home/showcase/responsive-showcase.tsx",
+        "line": 20,
+        "column": 22
+      }
+    ],
+    "responsive.description": [
+      {
+        "file": "src/components/home/showcase/responsive-showcase.tsx",
+        "line": 21,
+        "column": 28
+      }
+    ],
+    "responsive.mobile.title": [
+      {
+        "file": "src/components/home/showcase/responsive-showcase.tsx",
+        "line": 27,
+        "column": 43
+      }
+    ],
+    "responsive.mobile.description": [
+      {
+        "file": "src/components/home/showcase/responsive-showcase.tsx",
+        "line": 29,
+        "column": 17
+      }
+    ],
+    "responsive.tablet.title": [
+      {
+        "file": "src/components/home/showcase/responsive-showcase.tsx",
+        "line": 34,
+        "column": 43
+      }
+    ],
+    "responsive.tablet.description": [
+      {
+        "file": "src/components/home/showcase/responsive-showcase.tsx",
+        "line": 36,
+        "column": 17
+      }
+    ],
+    "responsive.desktop.title": [
+      {
+        "file": "src/components/home/showcase/responsive-showcase.tsx",
+        "line": 41,
+        "column": 43
+      }
+    ],
+    "responsive.desktop.description": [
+      {
+        "file": "src/components/home/showcase/responsive-showcase.tsx",
+        "line": 43,
+        "column": 17
+      }
+    ],
+    "components.interactive.title": [
+      {
+        "file": "src/components/home/showcase/interactive-showcase.tsx",
+        "line": 27,
+        "column": 20
+      }
+    ],
+    "components.interactive.description": [
+      {
+        "file": "src/components/home/showcase/interactive-showcase.tsx",
+        "line": 29,
+        "column": 11
+      }
+    ],
+    "components.interactive.likes": [
+      {
+        "file": "src/components/home/showcase/interactive-showcase.tsx",
+        "line": 34,
+        "column": 17
+      },
+      {
+        "file": "src/components/home/showcase/interactive-showcase.tsx",
+        "line": 41,
+        "column": 26
+      },
+      {
+        "file": "src/components/home/showcase/interactive-showcase.tsx",
+        "line": 45,
+        "column": 17
+      }
+    ],
+    "components.interactive.star": [
+      {
+        "file": "src/components/home/showcase/interactive-showcase.tsx",
+        "line": 54,
+        "column": 13
+      }
+    ],
+    "components.interactive.download": [
+      {
+        "file": "src/components/home/showcase/interactive-showcase.tsx",
+        "line": 58,
+        "column": 13
+      }
+    ],
+    "components.interactive.share": [
+      {
+        "file": "src/components/home/showcase/interactive-showcase.tsx",
+        "line": 62,
+        "column": 13
+      }
+    ],
+    "components.forms.title": [
+      {
+        "file": "src/components/home/showcase/form-showcase.tsx",
+        "line": 20,
+        "column": 20
+      }
+    ],
+    "components.forms.description": [
+      {
+        "file": "src/components/home/showcase/form-showcase.tsx",
+        "line": 21,
+        "column": 26
+      }
+    ],
+    "components.forms.name": [
+      {
+        "file": "src/components/home/showcase/form-showcase.tsx",
+        "line": 25,
+        "column": 38
+      }
+    ],
+    "components.forms.namePlaceholder": [
+      {
+        "file": "src/components/home/showcase/form-showcase.tsx",
+        "line": 28,
+        "column": 25
+      }
+    ],
+    "components.forms.email": [
+      {
+        "file": "src/components/home/showcase/form-showcase.tsx",
+        "line": 32,
+        "column": 39
+      }
+    ],
+    "components.forms.emailPlaceholder": [
+      {
+        "file": "src/components/home/showcase/form-showcase.tsx",
+        "line": 36,
+        "column": 25
+      }
+    ],
+    "components.forms.submit": [
+      {
+        "file": "src/components/home/showcase/form-showcase.tsx",
+        "line": 39,
+        "column": 36
+      }
+    ],
+    "components.buttons.title": [
+      {
+        "file": "src/components/home/showcase/button-showcase.tsx",
+        "line": 18,
+        "column": 20
+      }
+    ],
+    "components.buttons.description": [
+      {
+        "file": "src/components/home/showcase/button-showcase.tsx",
+        "line": 19,
+        "column": 26
+      }
+    ],
+    "components.buttons.primary": [
+      {
+        "file": "src/components/home/showcase/button-showcase.tsx",
+        "line": 23,
+        "column": 19
+      }
+    ],
+    "components.buttons.secondary": [
+      {
+        "file": "src/components/home/showcase/button-showcase.tsx",
+        "line": 25,
+        "column": 13
+      }
+    ],
+    "components.buttons.outline": [
+      {
+        "file": "src/components/home/showcase/button-showcase.tsx",
+        "line": 27,
+        "column": 37
+      }
+    ],
+    "components.buttons.ghost": [
+      {
+        "file": "src/components/home/showcase/button-showcase.tsx",
+        "line": 28,
+        "column": 35
+      }
+    ],
+    "components.buttons.small": [
+      {
+        "file": "src/components/home/showcase/button-showcase.tsx",
+        "line": 31,
+        "column": 29
+      }
+    ],
+    "components.buttons.default": [
+      {
+        "file": "src/components/home/showcase/button-showcase.tsx",
+        "line": 32,
+        "column": 34
+      }
+    ],
+    "components.buttons.large": [
+      {
+        "file": "src/components/home/showcase/button-showcase.tsx",
+        "line": 33,
+        "column": 29
+      }
+    ],
+    "components.badges.title": [
+      {
+        "file": "src/components/home/showcase/badge-showcase.tsx",
+        "line": 18,
+        "column": 20
+      }
+    ],
+    "components.badges.description": [
+      {
+        "file": "src/components/home/showcase/badge-showcase.tsx",
+        "line": 19,
+        "column": 26
+      }
+    ],
+    "components.badges.default": [
+      {
+        "file": "src/components/home/showcase/badge-showcase.tsx",
+        "line": 23,
+        "column": 18
+      }
+    ],
+    "components.badges.secondary": [
+      {
+        "file": "src/components/home/showcase/badge-showcase.tsx",
+        "line": 24,
+        "column": 38
+      }
+    ],
+    "components.badges.outline": [
+      {
+        "file": "src/components/home/showcase/badge-showcase.tsx",
+        "line": 25,
+        "column": 36
+      }
+    ],
+    "components.badges.destructive": [
+      {
+        "file": "src/components/home/showcase/badge-showcase.tsx",
+        "line": 27,
+        "column": 13
+      }
+    ],
+    "components.badges.success": [
+      {
+        "file": "src/components/home/showcase/badge-showcase.tsx",
+        "line": 32,
+        "column": 13
+      }
+    ],
+    "components.badges.warning": [
+      {
+        "file": "src/components/home/showcase/badge-showcase.tsx",
+        "line": 35,
+        "column": 13
+      }
+    ],
+    "components.badges.info": [
+      {
+        "file": "src/components/home/showcase/badge-showcase.tsx",
+        "line": 37,
+        "column": 42
+      }
+    ],
+    "community.title": [
+      {
+        "file": "src/components/home/cta/community-section.tsx",
+        "line": 23,
+        "column": 13
+      }
+    ],
+    "community.description": [
+      {
+        "file": "src/components/home/cta/community-section.tsx",
+        "line": 26,
+        "column": 13
+      }
+    ],
+    "community.discussions": [
+      {
+        "file": "src/components/home/cta/community-section.tsx",
+        "line": 38,
+        "column": 17
+      }
+    ],
+    "community.issues": [
+      {
+        "file": "src/components/home/cta/community-section.tsx",
+        "line": 49,
+        "column": 17
+      }
+    ],
+    "buttons.getStarted": [
+      {
+        "file": "src/components/home/cta/action-cards.tsx",
+        "line": 71,
+        "column": 22
+      }
+    ],
+    "buttons.learnMore": [
+      {
+        "file": "src/components/home/cta/action-cards.tsx",
+        "line": 72,
+        "column": 22
+      }
+    ],
+    "submitSuccess": [
+      {
+        "file": "src/components/forms/contact-form-container.tsx",
+        "line": 45,
+        "column": 17
+      }
+    ],
+    "submitError": [
+      {
+        "file": "src/components/forms/contact-form-container.tsx",
+        "line": 50,
+        "column": 17
+      }
+    ],
+    "submitting": [
+      {
+        "file": "src/components/forms/contact-form-container.tsx",
+        "line": 55,
+        "column": 38
+      }
+    ],
+    "contact.form.error": [
+      {
+        "file": "src/components/forms/contact-form-container.tsx",
+        "line": 213,
+        "column": 34
+      }
+    ],
+    "contact.form.submit": [
+      {
+        "file": "src/components/forms/contact-form-container.tsx",
+        "line": 419,
+        "column": 21
+      }
+    ],
+    "contact.form.submitting": [
+      {
+        "file": "src/components/forms/contact-form-container.tsx",
+        "line": 420,
+        "column": 24
+      }
+    ],
+    "contact.form.rateLimitMessage": [
+      {
+        "file": "src/components/forms/contact-form-container.tsx",
+        "line": 425,
+        "column": 13
+      }
+    ],
+    "firstName": [
+      {
+        "file": "src/components/forms/fields/name-fields.tsx",
+        "line": 23,
+        "column": 11
+      }
+    ],
+    "firstNamePlaceholder": [
+      {
+        "file": "src/components/forms/fields/name-fields.tsx",
+        "line": 29,
+        "column": 23
+      }
+    ],
+    "lastName": [
+      {
+        "file": "src/components/forms/fields/name-fields.tsx",
+        "line": 41,
+        "column": 11
+      }
+    ],
+    "lastNamePlaceholder": [
+      {
+        "file": "src/components/forms/fields/name-fields.tsx",
+        "line": 47,
+        "column": 23
+      }
+    ],
+    "message": [
+      {
+        "file": "src/components/forms/fields/message-field.tsx",
+        "line": 16,
+        "column": 9
+      }
+    ],
+    "messagePlaceholder": [
+      {
+        "file": "src/components/forms/fields/message-field.tsx",
+        "line": 21,
+        "column": 21
+      }
+    ],
+    "email": [
+      {
+        "file": "src/components/forms/fields/contact-fields.tsx",
+        "line": 23,
+        "column": 11
+      }
+    ],
+    "emailPlaceholder": [
+      {
+        "file": "src/components/forms/fields/contact-fields.tsx",
+        "line": 29,
+        "column": 23
+      }
+    ],
+    "company": [
+      {
+        "file": "src/components/forms/fields/contact-fields.tsx",
+        "line": 41,
+        "column": 11
+      }
+    ],
+    "companyPlaceholder": [
+      {
+        "file": "src/components/forms/fields/contact-fields.tsx",
+        "line": 47,
+        "column": 23
+      }
+    ],
+    "acceptPrivacy": [
+      {
+        "file": "src/components/forms/fields/checkbox-fields.tsx",
+        "line": 31,
+        "column": 13
+      }
+    ],
+    "marketingConsent": [
+      {
+        "file": "src/components/forms/fields/checkbox-fields.tsx",
+        "line": 46,
+        "column": 13
+      }
+    ],
+    "phone": [
+      {
+        "file": "src/components/forms/fields/additional-fields.tsx",
+        "line": 20,
+        "column": 34
+      }
+    ],
+    "phonePlaceholder": [
+      {
+        "file": "src/components/forms/fields/additional-fields.tsx",
+        "line": 25,
+        "column": 25
+      }
+    ],
+    "subject": [
+      {
+        "file": "src/components/forms/fields/additional-fields.tsx",
+        "line": 32,
+        "column": 36
+      }
+    ],
+    "subjectPlaceholder": [
+      {
+        "file": "src/components/forms/fields/additional-fields.tsx",
+        "line": 37,
+        "column": 25
+      }
+    ],
+    "cookie.title": [
+      {
+        "file": "src/components/cookie/cookie-banner.tsx",
+        "line": 102,
+        "column": 18
+      },
+      {
+        "file": "src/components/cookie/cookie-banner.tsx",
+        "line": 150,
+        "column": 60
+      }
+    ],
+    "cookie.description": [
+      {
+        "file": "src/components/cookie/cookie-banner.tsx",
+        "line": 152,
+        "column": 11
+      }
+    ],
+    "cookie.learnMore": [
+      {
+        "file": "src/components/cookie/cookie-banner.tsx",
+        "line": 157,
+        "column": 13
+      }
+    ],
+    "cookie.manage": [
+      {
+        "file": "src/components/cookie/cookie-banner.tsx",
+        "line": 168,
+        "column": 11
+      }
+    ],
+    "cookie.rejectAll": [
+      {
+        "file": "src/components/cookie/cookie-banner.tsx",
+        "line": 176,
+        "column": 11
+      }
+    ],
+    "cookie.acceptAll": [
+      {
+        "file": "src/components/cookie/cookie-banner.tsx",
+        "line": 184,
+        "column": 11
+      }
+    ],
+    "cookie.preferences.title": [
+      {
+        "file": "src/components/cookie/cookie-banner.tsx",
+        "line": 215,
+        "column": 13
+      }
+    ],
+    "cookie.preferences.description": [
+      {
+        "file": "src/components/cookie/cookie-banner.tsx",
+        "line": 218,
+        "column": 13
+      }
+    ],
+    "cookie.close": [
+      {
+        "file": "src/components/cookie/cookie-banner.tsx",
+        "line": 226,
+        "column": 22
+      }
+    ],
+    "cookie.categories.necessary": [
+      {
+        "file": "src/components/cookie/cookie-banner.tsx",
+        "line": 235,
+        "column": 17
+      }
+    ],
+    "cookie.categories.necessaryDesc": [
+      {
+        "file": "src/components/cookie/cookie-banner.tsx",
+        "line": 236,
+        "column": 23
+      }
+    ],
+    "cookie.categories.analytics": [
+      {
+        "file": "src/components/cookie/cookie-banner.tsx",
+        "line": 244,
+        "column": 17
+      }
+    ],
+    "cookie.categories.analyticsDesc": [
+      {
+        "file": "src/components/cookie/cookie-banner.tsx",
+        "line": 245,
+        "column": 23
+      }
+    ],
+    "cookie.categories.marketing": [
+      {
+        "file": "src/components/cookie/cookie-banner.tsx",
+        "line": 252,
+        "column": 17
+      }
+    ],
+    "cookie.categories.marketingDesc": [
+      {
+        "file": "src/components/cookie/cookie-banner.tsx",
+        "line": 253,
+        "column": 23
+      }
+    ],
+    "cookie.cancel": [
+      {
+        "file": "src/components/cookie/cookie-banner.tsx",
+        "line": 261,
+        "column": 11
+      }
+    ],
+    "cookie.savePreferences": [
+      {
+        "file": "src/components/cookie/cookie-banner.tsx",
+        "line": 264,
+        "column": 11
+      }
+    ],
+    "blog.newsletter.turnstileRequired": [
+      {
+        "file": "src/components/blog/blog-newsletter.tsx",
+        "line": 248,
+        "column": 50
+      }
+    ],
+    "blog.newsletter.error": [
+      {
+        "file": "src/components/blog/blog-newsletter.tsx",
+        "line": 265,
+        "column": 58
+      },
+      {
+        "file": "src/components/blog/blog-newsletter.tsx",
+        "line": 269,
+        "column": 38
+      }
+    ],
+    "blog.newsletter.placeholder": [
+      {
+        "file": "src/components/blog/blog-newsletter.tsx",
+        "line": 281,
+        "column": 17
+      }
+    ],
+    "blog.newsletter.submit": [
+      {
+        "file": "src/components/blog/blog-newsletter.tsx",
+        "line": 282,
+        "column": 17
+      }
+    ],
+    "blog.newsletter.submitting": [
+      {
+        "file": "src/components/blog/blog-newsletter.tsx",
+        "line": 283,
+        "column": 21
+      }
+    ],
+    "blog.newsletter.title": [
+      {
+        "file": "src/components/blog/blog-newsletter.tsx",
+        "line": 293,
+        "column": 11
+      },
+      {
+        "file": "src/components/blog/blog-newsletter.tsx",
+        "line": 308,
+        "column": 11
+      }
+    ],
+    "blog.newsletter.description": [
+      {
+        "file": "src/components/blog/blog-newsletter.tsx",
+        "line": 294,
+        "column": 17
+      },
+      {
+        "file": "src/components/blog/blog-newsletter.tsx",
+        "line": 310,
+        "column": 26
+      }
+    ],
+    "blog.newsletter.success": [
+      {
+        "file": "src/components/blog/blog-newsletter.tsx",
+        "line": 296,
+        "column": 20
+      },
+      {
+        "file": "src/components/blog/blog-newsletter.tsx",
+        "line": 314,
+        "column": 35
+      }
+    ],
+    "home.techStack.stats.totalTech": [
+      {
+        "file": "src/components/blocks/tech/tech-tabs-block.tsx",
+        "line": 179,
+        "column": 13
+      }
+    ],
+    "home.techStack.stats.categories": [
+      {
+        "file": "src/components/blocks/tech/tech-tabs-block.tsx",
+        "line": 185,
+        "column": 13
+      }
+    ],
+    "home.techStack.stats.modern": [
+      {
+        "file": "src/components/blocks/tech/tech-tabs-block.tsx",
+        "line": 190,
+        "column": 55
+      }
+    ],
+    "home.techStack.stats.quality": [
+      {
+        "file": "src/components/blocks/tech/tech-tabs-block.tsx",
+        "line": 194,
+        "column": 55
+      }
+    ],
+    "home.techStack.learnMoreLabel": [
+      {
+        "file": "src/components/blocks/tech/tech-tabs-block.tsx",
+        "line": 304,
+        "column": 38
+      },
+      {
+        "file": "src/components/blocks/tech/tech-tabs-block.tsx",
+        "line": 308,
+        "column": 27
+      }
+    ],
+    "home.techStack.title": [
+      {
+        "file": "src/components/blocks/tech/tech-tabs-block.tsx",
+        "line": 367,
+        "column": 19
+      }
+    ],
+    "home.techStack.subtitle": [
+      {
+        "file": "src/components/blocks/tech/tech-tabs-block.tsx",
+        "line": 368,
+        "column": 22
+      }
+    ],
+    "home.hero.cta.demo": [
+      {
+        "file": "src/components/blocks/hero/hero-split-block.tsx",
+        "line": 103,
+        "column": 11
+      }
+    ],
+    "home.hero.cta.github": [
+      {
+        "file": "src/components/blocks/hero/hero-split-block.tsx",
+        "line": 116,
+        "column": 11
+      }
+    ],
+    "home.hero.version": [
+      {
+        "file": "src/components/blocks/hero/hero-split-block.tsx",
+        "line": 200,
+        "column": 30
+      }
+    ],
+    "home.hero.title.line1": [
+      {
+        "file": "src/components/blocks/hero/hero-split-block.tsx",
+        "line": 203,
+        "column": 19
+      }
+    ],
+    "home.hero.title.line2": [
+      {
+        "file": "src/components/blocks/hero/hero-split-block.tsx",
+        "line": 204,
+        "column": 19
+      }
+    ],
+    "home.hero.subtitle": [
+      {
+        "file": "src/components/blocks/hero/hero-split-block.tsx",
+        "line": 209,
+        "column": 13
+      }
+    ],
+    "home.overview.highlights.title": [
+      {
+        "file": "src/components/blocks/features/features-grid-block.tsx",
+        "line": 198,
+        "column": 43
+      }
+    ],
+    "home.overview.highlights.subtitle": [
+      {
+        "file": "src/components/blocks/features/features-grid-block.tsx",
+        "line": 200,
+        "column": 13
+      }
+    ],
+    "home.overview.architecture.title": [
+      {
+        "file": "src/components/blocks/features/features-grid-block.tsx",
+        "line": 232,
+        "column": 9
+      }
+    ],
+    "home.overview.title": [
+      {
+        "file": "src/components/blocks/features/features-grid-block.tsx",
+        "line": 331,
+        "column": 15
+      }
+    ],
+    "home.overview.subtitle": [
+      {
+        "file": "src/components/blocks/features/features-grid-block.tsx",
+        "line": 334,
+        "column": 15
+      }
+    ],
+    "home.cta.buttons.getStarted": [
+      {
+        "file": "src/components/blocks/cta/cta-banner-block.tsx",
+        "line": 126,
+        "column": 22
+      }
+    ],
+    "home.cta.buttons.learnMore": [
+      {
+        "file": "src/components/blocks/cta/cta-banner-block.tsx",
+        "line": 127,
+        "column": 22
+      }
+    ],
+    "home.cta.community.title": [
+      {
+        "file": "src/components/blocks/cta/cta-banner-block.tsx",
+        "line": 158,
+        "column": 13
+      }
+    ],
+    "home.cta.community.description": [
+      {
+        "file": "src/components/blocks/cta/cta-banner-block.tsx",
+        "line": 161,
+        "column": 13
+      }
+    ],
+    "home.cta.community.discussions": [
+      {
+        "file": "src/components/blocks/cta/cta-banner-block.tsx",
+        "line": 173,
+        "column": 17
+      }
+    ],
+    "home.cta.community.issues": [
+      {
+        "file": "src/components/blocks/cta/cta-banner-block.tsx",
+        "line": 184,
+        "column": 17
+      }
+    ],
+    "actions.github.title": [
+      {
+        "file": "src/components/blocks/cta/cta-banner-block.tsx",
+        "line": 201,
+        "column": 15
+      }
+    ],
+    "actions.github.description": [
+      {
+        "file": "src/components/blocks/cta/cta-banner-block.tsx",
+        "line": 202,
+        "column": 21
+      }
+    ],
+    "actions.download.title": [
+      {
+        "file": "src/components/blocks/cta/cta-banner-block.tsx",
+        "line": 209,
+        "column": 15
+      }
+    ],
+    "actions.download.description": [
+      {
+        "file": "src/components/blocks/cta/cta-banner-block.tsx",
+        "line": 210,
+        "column": 21
+      }
+    ],
+    "actions.docs.title": [
+      {
+        "file": "src/components/blocks/cta/cta-banner-block.tsx",
+        "line": 217,
+        "column": 15
+      }
+    ],
+    "actions.docs.description": [
+      {
+        "file": "src/components/blocks/cta/cta-banner-block.tsx",
+        "line": 218,
+        "column": 21
+      }
+    ],
+    "stats.technologies": [
+      {
+        "file": "src/components/blocks/cta/cta-banner-block.tsx",
+        "line": 225,
+        "column": 29
+      }
+    ],
+    "stats.typescript": [
+      {
+        "file": "src/components/blocks/cta/cta-banner-block.tsx",
+        "line": 226,
+        "column": 30
+      }
+    ],
+    "stats.performance": [
+      {
+        "file": "src/components/blocks/cta/cta-banner-block.tsx",
+        "line": 227,
+        "column": 28
+      }
+    ],
+    "stats.languages": [
+      {
+        "file": "src/components/blocks/cta/cta-banner-block.tsx",
+        "line": 228,
+        "column": 27
+      }
+    ],
+    "home.cta.badge": [
+      {
+        "file": "src/components/blocks/cta/cta-banner-block.tsx",
+        "line": 274,
+        "column": 17
+      }
+    ],
+    "home.cta.title": [
+      {
+        "file": "src/components/blocks/cta/cta-banner-block.tsx",
+        "line": 279,
+        "column": 15
+      }
+    ],
+    "home.cta.subtitle": [
+      {
+        "file": "src/components/blocks/cta/cta-banner-block.tsx",
+        "line": 283,
+        "column": 15
+      }
+    ],
+    "home.cta.primary.github": [
+      {
+        "file": "src/components/blocks/cta/cta-banner-block.tsx",
+        "line": 296,
+        "column": 19
+      }
+    ],
+    "home.cta.primary.demo": [
+      {
+        "file": "src/components/blocks/cta/cta-banner-block.tsx",
+        "line": 308,
+        "column": 19
+      }
+    ],
+    "errors.notFound.title": [
+      {
+        "file": "src/app/[locale]/not-found.tsx",
+        "line": 16,
+        "column": 13
+      }
+    ],
+    "errors.notFound.description": [
+      {
+        "file": "src/app/[locale]/not-found.tsx",
+        "line": 19,
+        "column": 13
+      }
+    ],
+    "errors.notFound.goHome": [
+      {
+        "file": "src/app/[locale]/not-found.tsx",
+        "line": 23,
+        "column": 26
+      }
+    ],
+    "footer.systemStatus": [
+      {
+        "file": "src/app/[locale]/layout.tsx",
+        "line": 52,
+        "column": 29
+      }
+    ],
+    "terms.pageTitle": [
+      {
+        "file": "src/app/[locale]/terms/page.tsx",
+        "line": 61,
+        "column": 13
+      },
+      {
+        "file": "src/app/[locale]/terms/page.tsx",
+        "line": 160,
+        "column": 10
+      },
+      {
+        "file": "src/app/[locale]/terms/page.tsx",
+        "line": 177,
+        "column": 45
+      }
+    ],
+    "terms.pageDescription": [
+      {
+        "file": "src/app/[locale]/terms/page.tsx",
+        "line": 62,
+        "column": 19
+      },
+      {
+        "file": "src/app/[locale]/terms/page.tsx",
+        "line": 161,
+        "column": 17
+      },
+      {
+        "file": "src/app/[locale]/terms/page.tsx",
+        "line": 179,
+        "column": 13
+      }
+    ],
+    "terms.effectiveDate": [
+      {
+        "file": "src/app/[locale]/terms/page.tsx",
+        "line": 186,
+        "column": 45
+      }
+    ],
+    "terms.lastUpdated": [
+      {
+        "file": "src/app/[locale]/terms/page.tsx",
+        "line": 192,
+        "column": 45
+      }
+    ],
+    "terms.tableOfContents": [
+      {
+        "file": "src/app/[locale]/terms/page.tsx",
+        "line": 206,
+        "column": 17
+      },
+      {
+        "file": "src/app/[locale]/terms/page.tsx",
+        "line": 208,
+        "column": 31
+      }
+    ],
+    "products.pageTitle": [
+      {
+        "file": "src/app/[locale]/products/page.tsx",
+        "line": 41,
+        "column": 13
+      },
+      {
+        "file": "src/app/[locale]/products/page.tsx",
+        "line": 97,
+        "column": 43
+      },
+      {
+        "file": "src/app/[locale]/products/[category]/[slug]/page.tsx",
+        "line": 263,
+        "column": 23
+      }
+    ],
+    "products.pageDescription": [
+      {
+        "file": "src/app/[locale]/products/page.tsx",
+        "line": 42,
+        "column": 19
+      },
+      {
+        "file": "src/app/[locale]/products/page.tsx",
+        "line": 99,
+        "column": 11
+      }
+    ],
+    "products.card.moq": [
+      {
+        "file": "src/app/[locale]/products/page.tsx",
+        "line": 87,
+        "column": 9
+      },
+      {
+        "file": "src/app/[locale]/products/[category]/[slug]/page.tsx",
+        "line": 282,
+        "column": 47
+      }
+    ],
+    "products.card.leadTime": [
+      {
+        "file": "src/app/[locale]/products/page.tsx",
+        "line": 88,
+        "column": 14
+      },
+      {
+        "file": "src/app/[locale]/products/[category]/[slug]/page.tsx",
+        "line": 288,
+        "column": 47
+      }
+    ],
+    "products.card.supplyCapacity": [
+      {
+        "file": "src/app/[locale]/products/page.tsx",
+        "line": 89,
+        "column": 20
+      }
+    ],
+    "products.featured": [
+      {
+        "file": "src/app/[locale]/products/page.tsx",
+        "line": 90,
+        "column": 14
+      }
+    ],
+    "products.allCategories": [
+      {
+        "file": "src/app/[locale]/products/page.tsx",
+        "line": 107,
+        "column": 30
+      }
+    ],
+    "products.emptyState": [
+      {
+        "file": "src/app/[locale]/products/page.tsx",
+        "line": 126,
+        "column": 48
+      }
+    ],
+    "products.detail.labels.moq": [
+      {
+        "file": "src/app/[locale]/products/[category]/[slug]/page.tsx",
+        "line": 244,
+        "column": 9
+      }
+    ],
+    "products.detail.labels.leadTime": [
+      {
+        "file": "src/app/[locale]/products/[category]/[slug]/page.tsx",
+        "line": 245,
+        "column": 14
+      }
+    ],
+    "products.detail.labels.supplyCapacity": [
+      {
+        "file": "src/app/[locale]/products/[category]/[slug]/page.tsx",
+        "line": 246,
+        "column": 20
+      }
+    ],
+    "products.detail.labels.packaging": [
+      {
+        "file": "src/app/[locale]/products/[category]/[slug]/page.tsx",
+        "line": 247,
+        "column": 15
+      }
+    ],
+    "products.detail.labels.portOfLoading": [
+      {
+        "file": "src/app/[locale]/products/[category]/[slug]/page.tsx",
+        "line": 248,
+        "column": 19
+      }
+    ],
+    "products.detail.certifications": [
+      {
+        "file": "src/app/[locale]/products/[category]/[slug]/page.tsx",
+        "line": 299,
+        "column": 21
+      }
+    ],
+    "products.requestQuote": [
+      {
+        "file": "src/app/[locale]/products/[category]/[slug]/page.tsx",
+        "line": 308,
+        "column": 33
+      }
+    ],
+    "products.detail.downloadPdf": [
+      {
+        "file": "src/app/[locale]/products/[category]/[slug]/page.tsx",
+        "line": 311,
+        "column": 34
+      }
+    ],
+    "products.detail.specifications": [
+      {
+        "file": "src/app/[locale]/products/[category]/[slug]/page.tsx",
+        "line": 322,
+        "column": 19
+      }
+    ],
+    "products.detail.tradeInfo": [
+      {
+        "file": "src/app/[locale]/products/[category]/[slug]/page.tsx",
+        "line": 328,
+        "column": 17
+      }
+    ],
+    "privacy.pageTitle": [
+      {
+        "file": "src/app/[locale]/privacy/page.tsx",
+        "line": 57,
+        "column": 13
+      },
+      {
+        "file": "src/app/[locale]/privacy/page.tsx",
+        "line": 283,
+        "column": 10
+      },
+      {
+        "file": "src/app/[locale]/privacy/page.tsx",
+        "line": 300,
+        "column": 45
+      }
+    ],
+    "privacy.pageDescription": [
+      {
+        "file": "src/app/[locale]/privacy/page.tsx",
+        "line": 58,
+        "column": 19
+      },
+      {
+        "file": "src/app/[locale]/privacy/page.tsx",
+        "line": 284,
+        "column": 17
+      },
+      {
+        "file": "src/app/[locale]/privacy/page.tsx",
+        "line": 302,
+        "column": 13
+      }
+    ],
+    "privacy.effectiveDate": [
+      {
+        "file": "src/app/[locale]/privacy/page.tsx",
+        "line": 309,
+        "column": 45
+      }
+    ],
+    "privacy.lastUpdated": [
+      {
+        "file": "src/app/[locale]/privacy/page.tsx",
+        "line": 315,
+        "column": 45
+      }
+    ],
+    "privacy.tableOfContents": [
+      {
+        "file": "src/app/[locale]/privacy/page.tsx",
+        "line": 329,
+        "column": 17
+      },
+      {
+        "file": "src/app/[locale]/privacy/page.tsx",
+        "line": 331,
+        "column": 31
+      }
+    ],
+    "faq.pageTitle": [
+      {
+        "file": "src/app/[locale]/faq/page.tsx",
+        "line": 57,
+        "column": 13
+      },
+      {
+        "file": "src/app/[locale]/faq/page.tsx",
+        "line": 172,
+        "column": 45
+      }
+    ],
+    "faq.pageDescription": [
+      {
+        "file": "src/app/[locale]/faq/page.tsx",
+        "line": 58,
+        "column": 19
+      },
+      {
+        "file": "src/app/[locale]/faq/page.tsx",
+        "line": 174,
+        "column": 13
+      }
+    ],
+    "faq.noResults": [
+      {
+        "file": "src/app/[locale]/faq/page.tsx",
+        "line": 211,
+        "column": 48
+      }
+    ],
+    "faq.contactCta.title": [
+      {
+        "file": "src/app/[locale]/faq/page.tsx",
+        "line": 216,
+        "column": 13
+      }
+    ],
+    "faq.contactCta.description": [
+      {
+        "file": "src/app/[locale]/faq/page.tsx",
+        "line": 219,
+        "column": 13
+      }
+    ],
+    "faq.contactCta.button": [
+      {
+        "file": "src/app/[locale]/faq/page.tsx",
+        "line": 222,
+        "column": 35
+      }
+    ],
+    "blog.pageTitle": [
+      {
+        "file": "src/app/[locale]/blog/page.tsx",
+        "line": 53,
+        "column": 13
+      },
+      {
+        "file": "src/app/[locale]/blog/page.tsx",
+        "line": 79,
+        "column": 43
+      }
+    ],
+    "blog.pageDescription": [
+      {
+        "file": "src/app/[locale]/blog/page.tsx",
+        "line": 54,
+        "column": 19
+      },
+      {
+        "file": "src/app/[locale]/blog/page.tsx",
+        "line": 81,
+        "column": 11
+      }
+    ],
+    "blog.readingTime": [
+      {
+        "file": "src/app/[locale]/blog/page.tsx",
+        "line": 91,
+        "column": 28
+      },
+      {
+        "file": "src/app/[locale]/blog/[slug]/page.tsx",
+        "line": 271,
+        "column": 30
+      }
+    ],
+    "blog.emptyState": [
+      {
+        "file": "src/app/[locale]/blog/page.tsx",
+        "line": 95,
+        "column": 50
+      }
+    ],
+    "blog.backToList": [
+      {
+        "file": "src/app/[locale]/blog/[slug]/page.tsx",
+        "line": 259,
+        "column": 11
+      }
+    ],
+    "blog.publishedOn": [
+      {
+        "file": "src/app/[locale]/blog/[slug]/page.tsx",
+        "line": 270,
+        "column": 28
+      }
+    ],
+    "blog.author": [
+      {
+        "file": "src/app/[locale]/blog/[slug]/page.tsx",
+        "line": 282,
+        "column": 53
+      }
+    ],
+    "about.pageTitle": [
+      {
+        "file": "src/app/[locale]/about/page.tsx",
+        "line": 82,
+        "column": 13
+      }
+    ],
+    "about.pageDescription": [
+      {
+        "file": "src/app/[locale]/about/page.tsx",
+        "line": 83,
+        "column": 19
+      }
+    ]
+  },
+  "analysis": {
+    "missingKeys": [],
+    "unusedKeys": [
+      "_comment",
+      "_usage",
+      "_last_updated",
+      "common.loading",
+      "common.success",
+      "common.cancel",
+      "common.confirm",
+      "common.save",
+      "common.edit",
+      "common.delete",
+      "common.search",
+      "common.filter",
+      "common.sort",
+      "common.next",
+      "common.previous",
+      "common.open",
+      "common.toast.form.contact.success",
+      "common.toast.form.contact.successDescription",
+      "common.toast.form.contact.error",
+      "common.toast.form.contact.errorDescription",
+      "common.toast.form.contact.loading",
+      "common.toast.form.newsletter.success",
+      "common.toast.form.newsletter.successDescription",
+      "common.toast.form.newsletter.error",
+      "common.toast.form.newsletter.errorDescription",
+      "common.toast.form.newsletter.loading",
+      "common.toast.form.feedback.success",
+      "common.toast.form.feedback.successDescription",
+      "common.toast.form.feedback.error",
+      "common.toast.form.feedback.errorDescription",
+      "common.toast.form.feedback.loading",
+      "navigation.home",
+      "navigation.more",
+      "navigation.about",
+      "navigation.contact",
+      "navigation.services",
+      "navigation.products",
+      "navigation.solutions",
+      "navigation.resources",
+      "navigation.enterprise",
+      "navigation.docs",
+      "navigation.pricing",
+      "navigation.blog",
+      "navigation.faq",
+      "navigation.privacy",
+      "navigation.login",
+      "navigation.logout",
+      "navigation.profile",
+      "navigation.settings",
+      "navigation.frameworks",
+      "navigation.infrastructure",
+      "navigation.security",
+      "navigation.aiApps",
+      "navigation.webApps",
+      "navigation.ecommerce",
+      "navigation.guides",
+      "navigation.frameworksDescription",
+      "navigation.infrastructureDescription",
+      "navigation.securityDescription",
+      "navigation.aiAppsDescription",
+      "navigation.webAppsDescription",
+      "navigation.ecommerceDescription",
+      "navigation.docsDescription",
+      "navigation.guidesDescription",
+      "navigation.blogDescription",
+      "theme.toggle",
+      "theme.toggleLabel",
+      "theme.light",
+      "theme.dark",
+      "theme.system",
+      "theme.selectTheme",
+      "theme.selectDisplayTheme",
+      "theme.switchToLight",
+      "theme.switchToDark",
+      "theme.switchToSystem",
+      "language.toggle",
+      "language.selectLanguage",
+      "language.english",
+      "language.chinese",
+      "language.switching",
+      "language.switchSuccess",
+      "language.switchError",
+      "language.fallbackWarning",
+      "language.detectionInfo",
+      "language.source",
+      "language.confidence",
+      "language.userPreference",
+      "language.detector.title",
+      "language.detector.source",
+      "language.detector.confidence",
+      "language.detector.userSaved",
+      "language.detector.sources.browser",
+      "language.detector.sources.cookie",
+      "language.detector.sources.url",
+      "language.detector.sources.header",
+      "language.detector.sources.default",
+      "language.detector.sources.user",
+      "language.detector.sources.stored",
+      "language.detector.sources.geo",
+      "language.detector.sources.timezone",
+      "home.hero.stats.technologies",
+      "home.hero.stats.typescript",
+      "home.hero.stats.performance",
+      "home.hero.stats.languages",
+      "home.techStack.learnMore",
+      "home.techStack.categories.core",
+      "home.techStack.categories.ui",
+      "home.techStack.categories.i18n",
+      "home.techStack.categories.tools",
+      "home.techStack.categories.testing",
+      "home.techStack.categories.dev",
+      "home.techStack.categories.performance",
+      "home.techStack.categories.security",
+      "home.techStack.categories.animation",
+      "home.techStack.categories.deployment",
+      "home.techStack.categories.quality",
+      "home.techStack.categories.docs",
+      "home.techStack.categories.data",
+      "home.techStack.categories.state",
+      "home.techStack.technologies.nextjs",
+      "home.techStack.technologies.react",
+      "home.techStack.technologies.typescript",
+      "home.techStack.technologies.tailwindcss",
+      "home.techStack.technologies.shadcn-ui",
+      "home.techStack.technologies.radix-ui",
+      "home.techStack.technologies.next-intl",
+      "home.techStack.technologies.eslint",
+      "home.techStack.technologies.prettier",
+      "home.techStack.technologies.lefthook",
+      "home.techStack.technologies.vitest",
+      "home.techStack.technologies.playwright",
+      "home.techStack.technologies.husky",
+      "home.techStack.technologies.jest",
+      "home.techStack.technologies.testing-library",
+      "home.techStack.technologies.pnpm",
+      "home.techStack.technologies.turbo",
+      "home.techStack.technologies.lighthouse",
+      "home.techStack.technologies.semgrep",
+      "home.techStack.technologies.embla-carousel",
+      "home.techStack.technologies.vercel",
+      "home.techStack.technologies.sonarqube",
+      "home.techStack.technologies.storybook",
+      "home.techStack.technologies.swr",
+      "home.techStack.technologies.zustand",
+      "home.showcase.components.buttons.title",
+      "home.showcase.components.buttons.description",
+      "home.showcase.components.buttons.primary",
+      "home.showcase.components.buttons.secondary",
+      "home.showcase.components.buttons.outline",
+      "home.showcase.components.buttons.ghost",
+      "home.showcase.components.buttons.small",
+      "home.showcase.components.buttons.default",
+      "home.showcase.components.buttons.large",
+      "home.showcase.components.forms.title",
+      "home.showcase.components.forms.description",
+      "home.showcase.components.forms.name",
+      "home.showcase.components.forms.namePlaceholder",
+      "home.showcase.components.forms.email",
+      "home.showcase.components.forms.emailPlaceholder",
+      "home.showcase.components.forms.submit",
+      "home.showcase.components.interactive.title",
+      "home.showcase.components.interactive.description",
+      "home.showcase.components.interactive.likes",
+      "home.showcase.components.interactive.star",
+      "home.showcase.components.interactive.download",
+      "home.showcase.components.interactive.share",
+      "home.showcase.components.badges.title",
+      "home.showcase.components.badges.description",
+      "home.showcase.components.badges.default",
+      "home.showcase.components.badges.secondary",
+      "home.showcase.components.badges.outline",
+      "home.showcase.components.badges.destructive",
+      "home.showcase.components.badges.success",
+      "home.showcase.components.badges.warning",
+      "home.showcase.components.badges.info",
+      "home.showcase.themes.title",
+      "home.showcase.themes.description",
+      "home.showcase.themes.toggle",
+      "home.showcase.themes.language",
+      "home.showcase.themes.colors.title",
+      "home.showcase.themes.typography.title",
+      "home.showcase.themes.typography.bold",
+      "home.showcase.themes.typography.medium",
+      "home.showcase.themes.typography.normal",
+      "home.showcase.themes.typography.muted",
+      "home.showcase.responsive.title",
+      "home.showcase.responsive.description",
+      "home.showcase.responsive.mobile.title",
+      "home.showcase.responsive.mobile.description",
+      "home.showcase.responsive.tablet.title",
+      "home.showcase.responsive.tablet.description",
+      "home.showcase.responsive.desktop.title",
+      "home.showcase.responsive.desktop.description",
+      "home.overview.features.performance.title",
+      "home.overview.features.performance.description",
+      "home.overview.features.security.title",
+      "home.overview.features.security.description",
+      "home.overview.features.i18n.title",
+      "home.overview.features.i18n.description",
+      "home.overview.features.i18n.languageUnit",
+      "home.overview.features.themes.title",
+      "home.overview.features.themes.description",
+      "home.overview.features.themes.multiTheme",
+      "home.overview.features.typescript.title",
+      "home.overview.features.typescript.description",
+      "home.overview.features.deployment.title",
+      "home.overview.features.deployment.description",
+      "home.overview.highlights.modern",
+      "home.overview.highlights.scalable",
+      "home.overview.highlights.accessible",
+      "home.overview.highlights.performant",
+      "home.overview.highlights.secure",
+      "home.overview.highlights.maintainable",
+      "home.overview.architecture.frontend.title",
+      "home.overview.architecture.frontend.description",
+      "home.overview.architecture.ui.title",
+      "home.overview.architecture.ui.description",
+      "home.overview.architecture.tooling.title",
+      "home.overview.architecture.tooling.description",
+      "home.overview.cta.title",
+      "home.overview.cta.description",
+      "home.overview.cta.getStarted",
+      "home.overview.cta.viewSource",
+      "home.cta.actions.github.title",
+      "home.cta.actions.github.description",
+      "home.cta.actions.download.title",
+      "home.cta.actions.download.description",
+      "home.cta.actions.docs.title",
+      "home.cta.actions.docs.description",
+      "home.cta.stats.technologies",
+      "home.cta.stats.typescript",
+      "home.cta.stats.performance",
+      "home.cta.stats.languages",
+      "home.title",
+      "home.subtitle",
+      "home.description",
+      "home.getStarted",
+      "home.learnMore",
+      "home.welcome",
+      "home.modernApp",
+      "home.features.title",
+      "home.features.performance.title",
+      "home.features.performance.description",
+      "home.features.scalable.title",
+      "home.features.scalable.description",
+      "home.features.secure.title",
+      "home.features.secure.description",
+      "home.modernStack",
+      "home.modernStackDesc",
+      "home.internationalization",
+      "home.internationalizationDesc",
+      "home.testingReady",
+      "home.testingReadyDesc",
+      "monitoring.loadError",
+      "footer.sections.product.title",
+      "footer.sections.product.home",
+      "footer.sections.product.enterprise",
+      "footer.sections.product.pricing",
+      "footer.sections.company.title",
+      "footer.sections.company.terms",
+      "footer.sections.company.aiPolicy",
+      "footer.sections.company.privacy",
+      "footer.sections.resources.title",
+      "footer.sections.resources.faqs",
+      "footer.sections.resources.docs",
+      "footer.sections.resources.ambassadors",
+      "footer.sections.resources.community",
+      "footer.sections.resources.vercel",
+      "footer.sections.navigation.title",
+      "footer.sections.navigation.home",
+      "footer.sections.navigation.about",
+      "footer.sections.navigation.products",
+      "footer.sections.navigation.blog",
+      "footer.sections.navigation.contact",
+      "footer.sections.social.title",
+      "footer.sections.social.twitter",
+      "footer.sections.social.linkedin",
+      "footer.sections.social.github",
+      "footer.sections.support.title",
+      "footer.sections.support.faq",
+      "footer.sections.support.privacy",
+      "footer.sections.support.terms",
+      "footer.vercel.products.title",
+      "footer.vercel.products.ai",
+      "footer.vercel.products.enterprise",
+      "footer.vercel.products.fluidCompute",
+      "footer.vercel.products.nextjs",
+      "footer.vercel.products.observability",
+      "footer.vercel.products.previews",
+      "footer.vercel.products.rendering",
+      "footer.vercel.products.security",
+      "footer.vercel.products.turbo",
+      "footer.vercel.products.domains",
+      "footer.vercel.products.v0",
+      "footer.vercel.resources.title",
+      "footer.vercel.resources.community",
+      "footer.vercel.resources.docs",
+      "footer.vercel.resources.guides",
+      "footer.vercel.resources.academy",
+      "footer.vercel.resources.help",
+      "footer.vercel.resources.integrations",
+      "footer.vercel.resources.pricing",
+      "footer.vercel.resources.resources",
+      "footer.vercel.resources.solutionPartners",
+      "footer.vercel.resources.startups",
+      "footer.vercel.resources.templates",
+      "footer.vercel.resources.sdks",
+      "footer.vercel.company.title",
+      "footer.vercel.company.about",
+      "footer.vercel.company.blog",
+      "footer.vercel.company.careers",
+      "footer.vercel.company.changelog",
+      "footer.vercel.company.contact",
+      "footer.vercel.company.customers",
+      "footer.vercel.company.events",
+      "footer.vercel.company.partners",
+      "footer.vercel.company.shipped",
+      "footer.vercel.company.privacy",
+      "footer.vercel.company.legal",
+      "footer.vercel.social.title",
+      "footer.vercel.social.github",
+      "footer.vercel.social.linkedin",
+      "footer.vercel.social.twitter",
+      "footer.vercel.social.youtube",
+      "footer.learn",
+      "footer.examples",
+      "footer.goToNextjs",
+      "footer.copyright",
+      "footer.description",
+      "accessibility.skipToContent",
+      "accessibility.loading",
+      "accessibility.error",
+      "accessibility.languageSelector",
+      "accessibility.themeSelector",
+      "seo.title",
+      "seo.keywords",
+      "seo.pages.home.title",
+      "seo.pages.home.description",
+      "seo.pages.about.title",
+      "seo.pages.about.description",
+      "seo.pages.contact.title",
+      "seo.pages.contact.description",
+      "seo.pages.products.title",
+      "seo.pages.products.description",
+      "seo.pages.blog.title",
+      "seo.pages.blog.description",
+      "underConstruction.title",
+      "underConstruction.subtitle",
+      "underConstruction.description",
+      "underConstruction.backToHome",
+      "underConstruction.comingSoon",
+      "underConstruction.expectedCompletion",
+      "underConstruction.expectedLaunch",
+      "underConstruction.dates.q2_2024",
+      "underConstruction.dates.q3_2024",
+      "underConstruction.stayTuned",
+      "underConstruction.contactUs",
+      "underConstruction.progress.title",
+      "underConstruction.pages.products.title",
+      "underConstruction.pages.products.description",
+      "underConstruction.pages.products.features",
+      "underConstruction.pages.blog.title",
+      "underConstruction.pages.blog.description",
+      "underConstruction.pages.blog.features",
+      "underConstruction.pages.about.title",
+      "underConstruction.pages.about.description",
+      "underConstruction.pages.about.features",
+      "underConstruction.pages.contact.features",
+      "underConstruction.animation.loading",
+      "underConstruction.animation.construction",
+      "underConstruction.status.inProgress",
+      "underConstruction.features.title",
+      "underConstruction.features.performance",
+      "underConstruction.features.performanceDesc",
+      "underConstruction.features.collaboration",
+      "underConstruction.features.collaborationDesc",
+      "underConstruction.features.quality",
+      "underConstruction.features.qualityDesc",
+      "underConstruction.social.followUs",
+      "underConstruction.subscription.title",
+      "underConstruction.subscription.description",
+      "underConstruction.subscription.placeholder",
+      "underConstruction.subscription.submit",
+      "underConstruction.subscription.submitting",
+      "underConstruction.subscription.success",
+      "underConstruction.emailSubscription.title",
+      "underConstruction.emailSubscription.description",
+      "underConstruction.emailSubscription.success",
+      "underConstruction.emailSubscription.placeholder",
+      "underConstruction.emailSubscription.button",
+      "underConstruction.contact.title",
+      "underConstruction.contact.description",
+      "underConstruction.contact.button",
+      "structured-data.organization.name",
+      "structured-data.organization.description",
+      "structured-data.organization.phone",
+      "structured-data.organization.social.twitter",
+      "structured-data.organization.social.linkedin",
+      "structured-data.organization.social.github",
+      "structured-data.website.name",
+      "structured-data.website.description",
+      "structured-data.article.defaultTitle",
+      "structured-data.article.defaultDescription",
+      "structured-data.article.defaultAuthor",
+      "structured-data.product.defaultName",
+      "structured-data.product.defaultDescription",
+      "apiErrors.RATE_LIMIT_EXCEEDED",
+      "apiErrors.UNAUTHORIZED",
+      "apiErrors.INTERNAL_SERVER_ERROR",
+      "apiErrors.INVALID_JSON_BODY",
+      "apiErrors.CONFIRMATION_REQUIRED",
+      "apiErrors.INVALID_LOCALE_PARAMETER",
+      "apiErrors.SUBSCRIBE_SUCCESS",
+      "apiErrors.SUBSCRIBE_VALIDATION_EMAIL_REQUIRED",
+      "apiErrors.SUBSCRIBE_VALIDATION_EMAIL_INVALID",
+      "apiErrors.SUBSCRIBE_SECURITY_REQUIRED",
+      "apiErrors.SUBSCRIBE_SECURITY_FAILED",
+      "apiErrors.SUBSCRIBE_PROCESSING_ERROR",
+      "apiErrors.WEB_VITALS_RECORDED",
+      "apiErrors.WEB_VITALS_INVALID_FORMAT",
+      "apiErrors.WEB_VITALS_PROCESS_FAILED",
+      "apiErrors.WEB_VITALS_RETRIEVE_FAILED",
+      "apiErrors.WEB_VITALS_DELETED",
+      "apiErrors.WEB_VITALS_DELETE_FAILED",
+      "apiErrors.I18N_ANALYTICS_RECORDED",
+      "apiErrors.I18N_ANALYTICS_INVALID_FORMAT",
+      "apiErrors.I18N_ANALYTICS_PROCESS_FAILED",
+      "apiErrors.I18N_ANALYTICS_RETRIEVE_FAILED",
+      "apiErrors.I18N_ANALYTICS_DELETED",
+      "apiErrors.I18N_ANALYTICS_DELETE_FAILED",
+      "apiErrors.MONITORING_DATA_RECEIVED",
+      "apiErrors.MONITORING_INVALID_FORMAT",
+      "apiErrors.MONITORING_PROCESS_FAILED",
+      "apiErrors.MONITORING_RETRIEVE_FAILED",
+      "apiErrors.MONITORING_DELETED",
+      "apiErrors.MONITORING_DELETE_FAILED",
+      "apiErrors.MONITORING_CONFIG_UPDATED",
+      "apiErrors.MONITORING_CONFIG_INVALID",
+      "apiErrors.MONITORING_CONFIG_UPDATE_FAILED",
+      "apiErrors.CACHE_INVALIDATED",
+      "apiErrors.CACHE_LOCALE_REQUIRED",
+      "apiErrors.CACHE_INVALID_DOMAIN",
+      "apiErrors.CACHE_INVALIDATION_FAILED",
+      "apiErrors.UNKNOWN_ERROR",
+      "errors.global.title",
+      "errors.global.description",
+      "errors.global.tryAgain",
+      "errors.global.goHome",
+      "errors.global.devDetails",
+      "errors.products.title",
+      "errors.products.description",
+      "errors.products.tryAgain",
+      "errors.products.goHome",
+      "errors.contact.title",
+      "errors.contact.description",
+      "errors.contact.tryAgain",
+      "errors.contact.goHome",
+      "errors.serverError",
+      "errors.networkError",
+      "errors.validationError",
+      "errors.unauthorized",
+      "errors.forbidden",
+      "errors.timeout",
+      "errors.generic",
+      "errors.translationMissing",
+      "errors.loadingFailed",
+      "errorBoundary.title",
+      "errorBoundary.description",
+      "errorBoundary.tryAgain",
+      "themeDemo.title",
+      "themeDemo.description",
+      "themeDemo.chineseTest",
+      "themeDemo.englishTest",
+      "themeDemo.chineseDescription",
+      "themeDemo.englishDescription",
+      "themeDemo.chineseInput",
+      "themeDemo.englishInput",
+      "themeDemo.chinesePlaceholder",
+      "themeDemo.englishPlaceholder",
+      "themeDemo.primaryButton",
+      "themeDemo.secondaryButton",
+      "themeDemo.outlineButton",
+      "instructions.getStarted",
+      "instructions.saveChanges",
+      "actions.deployNow",
+      "actions.readDocs",
+      "formTemplate.example.fields.name.label",
+      "formTemplate.example.fields.name.placeholder",
+      "formTemplate.example.fields.email.label",
+      "formTemplate.example.fields.email.placeholder",
+      "formTemplate.example.fields.message.label",
+      "formTemplate.example.fields.message.placeholder",
+      "contact.form.title",
+      "contact.form.description",
+      "contact.form.optional",
+      "contact.form.lastName",
+      "contact.form.phone",
+      "contact.form.subject",
+      "contact.form.message",
+      "contact.form.lastNamePlaceholder",
+      "contact.form.phonePlaceholder",
+      "contact.form.subjectPlaceholder",
+      "contact.form.messagePlaceholder",
+      "contact.form.acceptPrivacy",
+      "contact.form.marketingConsent",
+      "contact.form.submitSuccess",
+      "contact.form.submitError",
+      "contact.form.success",
+      "contact.form.errors.generic",
+      "contact.form.errors.firstName.required",
+      "contact.form.errors.firstName.tooShort",
+      "contact.form.errors.firstName.tooLong",
+      "contact.form.errors.firstName.invalid",
+      "contact.form.errors.lastName.required",
+      "contact.form.errors.lastName.tooShort",
+      "contact.form.errors.lastName.tooLong",
+      "contact.form.errors.lastName.invalid",
+      "contact.form.errors.email.required",
+      "contact.form.errors.email.invalid",
+      "contact.form.errors.email.tooLong",
+      "contact.form.errors.company.tooShort",
+      "contact.form.errors.company.tooLong",
+      "contact.form.errors.company.invalid",
+      "contact.form.errors.message.required",
+      "contact.form.errors.message.tooShort",
+      "contact.form.errors.message.tooLong",
+      "contact.form.errors.phone.invalid",
+      "contact.form.errors.subject.length",
+      "contact.form.errors.acceptPrivacy.required",
+      "contact.form.errors.website.shouldBeEmpty",
+      "contact.form.validation.firstNameRequired",
+      "contact.form.validation.firstNameTooShort",
+      "contact.form.validation.lastNameRequired",
+      "contact.form.validation.lastNameTooShort",
+      "contact.form.validation.emailRequired",
+      "contact.form.validation.emailInvalid",
+      "contact.form.validation.messageRequired",
+      "contact.form.validation.messageTooShort",
+      "formatting.date.today",
+      "formatting.date.yesterday",
+      "formatting.date.tomorrow",
+      "formatting.date.lastUpdated",
+      "formatting.date.publishedOn",
+      "formatting.number.currency",
+      "formatting.number.percentage",
+      "formatting.number.fileSize",
+      "formatting.plurals.items.zero",
+      "formatting.plurals.items.one",
+      "formatting.plurals.items.other",
+      "formatting.plurals.users.zero",
+      "formatting.plurals.users.one",
+      "formatting.plurals.users.other",
+      "formatting.plurals.notifications.zero",
+      "formatting.plurals.notifications.one",
+      "formatting.plurals.notifications.other",
+      "progress.title",
+      "progress.status",
+      "progress.nearCompletion",
+      "progress.planning",
+      "progress.development",
+      "progress.testing",
+      "progress.launch",
+      "progress.ariaLabel",
+      "progress.completed",
+      "progress.current",
+      "progress.upcoming",
+      "ReactScanDemo.title",
+      "ReactScanDemo.description",
+      "ReactScanDemo.instructions.title",
+      "ReactScanDemo.instructions.step1",
+      "ReactScanDemo.instructions.step2",
+      "ReactScanDemo.instructions.step3",
+      "ReactScanDemo.instructions.step4",
+      "blog.updatedOn",
+      "blog.tags",
+      "blog.categories",
+      "blog.allCategories",
+      "blog.relatedArticles",
+      "blog.shareArticle",
+      "blog.articleNotFound",
+      "blog.sidebar.mostPopular",
+      "blog.sidebar.categories",
+      "blog.contentTypes.article",
+      "blog.contentTypes.case-study",
+      "blog.contentTypes.guide",
+      "blog.contentTypes.news",
+      "blog.contentTypes.whitepaper",
+      "about.hero.badge",
+      "about.hero.title",
+      "about.hero.subtitle",
+      "about.overview.title",
+      "about.overview.history",
+      "about.overview.mission",
+      "about.overview.highlight1",
+      "about.overview.highlight2",
+      "about.overview.highlight3",
+      "about.factory.title",
+      "about.factory.subtitle",
+      "about.factory.stats.capacity",
+      "about.factory.stats.capacityUnit",
+      "about.factory.stats.experience",
+      "about.factory.stats.experienceUnit",
+      "about.factory.stats.markets",
+      "about.factory.stats.marketsUnit",
+      "about.factory.stats.projects",
+      "about.factory.stats.projectsUnit",
+      "about.factory.process.tempering.title",
+      "about.factory.process.tempering.description",
+      "about.factory.process.coating.title",
+      "about.factory.process.coating.description",
+      "about.factory.process.cnc.title",
+      "about.factory.process.cnc.description",
+      "about.factory.galleryLabel",
+      "about.certifications.title",
+      "about.certifications.subtitle",
+      "about.certifications.viewAll",
+      "about.certifications.as2047",
+      "about.certifications.as1288",
+      "about.certifications.iso9001",
+      "about.certifications.ce",
+      "about.global.badge",
+      "about.global.title",
+      "about.global.description",
+      "about.global.markets.australia",
+      "about.global.markets.newZealand",
+      "about.global.markets.germany",
+      "about.global.markets.uk",
+      "about.global.mapPlaceholder",
+      "about.projects.title",
+      "about.projects.case1.title",
+      "about.projects.case1.location",
+      "about.projects.case2.title",
+      "about.projects.case2.location",
+      "about.projects.case3.title",
+      "about.projects.case3.location",
+      "about.projects.imagePlaceholder",
+      "about.team.title",
+      "about.team.member1.name",
+      "about.team.member1.role",
+      "about.team.member2.name",
+      "about.team.member2.role",
+      "about.team.member3.name",
+      "about.team.member3.role",
+      "about.team.member4.name",
+      "about.team.member4.role",
+      "about.cta.contact",
+      "about.cta.downloadBrochure",
+      "about.cta.finalTitle",
+      "about.cta.finalSubtitle",
+      "about.cta.emailUs",
+      "about.cta.callUs",
+      "products.viewDetails",
+      "products.detail.relatedProducts",
+      "products.category.hero.viewProducts",
+      "products.category.hero.requestQuote",
+      "products.category.trust.climateTitle",
+      "products.category.trust.climateDescription",
+      "products.category.trust.compliant",
+      "products.category.grid.title",
+      "products.category.grid.viewDetails",
+      "products.category.cta.readyToStart",
+      "products.category.cta.contactDescription",
+      "products.category.cta.contactUs",
+      "products.category.cta.learnMore",
+      "title",
+      "trust.testimonials.title",
+      "trust.testimonials.subtitle",
+      "trust.partners.title",
+      "trust.partners.subtitle",
+      "trust.certifications.title",
+      "trust.certifications.subtitle",
+      "trust.stats.title",
+      "trust.stats.yearsInBusiness",
+      "trust.stats.countriesServed",
+      "trust.stats.satisfactionRate",
+      "trust.stats.projectsCompleted",
+      "faq.categories.ordering",
+      "faq.categories.payment",
+      "faq.categories.logistics",
+      "faq.categories.quality",
+      "faq.searchPlaceholder",
+      "privacy.sections.introduction",
+      "privacy.sections.informationCollected",
+      "privacy.sections.howWeUse",
+      "privacy.sections.sharing",
+      "privacy.sections.security",
+      "privacy.sections.retention",
+      "privacy.sections.rights",
+      "privacy.sections.children",
+      "privacy.sections.changes",
+      "privacy.sections.contact",
+      "terms.sections.introduction",
+      "terms.sections.acceptance",
+      "terms.sections.services",
+      "terms.sections.orders",
+      "terms.sections.payment",
+      "terms.sections.shipping",
+      "terms.sections.warranty",
+      "terms.sections.liability",
+      "terms.sections.ip",
+      "terms.sections.confidentiality",
+      "terms.sections.termination",
+      "terms.sections.governing",
+      "terms.sections.disputes",
+      "terms.sections.contact"
+    ],
+    "misuseKeys": []
+  },
+  "errors": [],
+  "warnings": []
+}
