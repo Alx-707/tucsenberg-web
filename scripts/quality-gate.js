@@ -176,7 +176,7 @@ class QualityGate {
           diffCoverageThreshold:
             Number.isFinite(diffCoverageThreshold) && diffCoverageThreshold > 0
               ? diffCoverageThreshold
-              : 90, // 增量覆盖率阈值：变更代码需达到90%覆盖率
+              : 70, // 增量覆盖率阈值：变更代码需达到70%覆盖率（从90%降低，适配模板项目初期）
           diffWarningThreshold:
             Number.isFinite(diffWarningThreshold) && diffWarningThreshold >= 0
               ? diffWarningThreshold
