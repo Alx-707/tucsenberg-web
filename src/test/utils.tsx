@@ -193,11 +193,11 @@
  * @see src/test/constants/mock-messages.ts - 集中 mock 消息定义
  */
 
-import React from 'react';
-import { render, type RenderOptions } from '@testing-library/react';
-import { NextIntlClientProvider } from 'next-intl';
-import { vi } from 'vitest';
-import { combinedMessages } from '@/test/constants/mock-messages';
+import React from "react";
+import { render, type RenderOptions } from "@testing-library/react";
+import { NextIntlClientProvider } from "next-intl";
+import { vi } from "vitest";
+import { combinedMessages } from "@/test/constants/mock-messages";
 
 // import { ThemeProvider } from 'next-themes';
 
@@ -225,10 +225,10 @@ function deepMerge<T extends Record<string, unknown>>(
 
       if (
         sourceValue &&
-        typeof sourceValue === 'object' &&
+        typeof sourceValue === "object" &&
         !Array.isArray(sourceValue) &&
         targetValue &&
-        typeof targetValue === 'object' &&
+        typeof targetValue === "object" &&
         !Array.isArray(targetValue)
       ) {
         output[key] = deepMerge(
@@ -247,16 +247,13 @@ function deepMerge<T extends Record<string, unknown>>(
 // 国际化Provider Mock
 const MockIntlProvider = ({
   children,
-  locale = 'en',
+  locale = "en",
 }: {
   children: React.ReactNode;
   locale?: string;
 }) => {
   return (
-    <div
-      data-testid='intl-provider'
-      data-locale={locale}
-    >
+    <div data-testid="intl-provider" data-locale={locale}>
       {children}
     </div>
   );
@@ -271,14 +268,14 @@ interface ThemeProviderProps {
 
 const MockThemeProvider = ({
   children,
-  theme = 'light',
-  themes = ['light', 'dark', 'system'],
+  theme = "light",
+  themes = ["light", "dark", "system"],
 }: ThemeProviderProps) => {
   return (
     <div
-      data-testid='theme-provider'
+      data-testid="theme-provider"
       data-theme={theme}
-      data-themes={themes.join(',')}
+      data-themes={themes.join(",")}
     >
       {children}
     </div>
@@ -295,16 +292,13 @@ interface AllTheProvidersProps {
 
 const AllTheProviders = ({
   children,
-  locale = 'en',
-  theme = 'light',
-  themes = ['light', 'dark', 'system'],
+  locale = "en",
+  theme = "light",
+  themes = ["light", "dark", "system"],
 }: AllTheProvidersProps) => {
   return (
     <MockIntlProvider locale={locale}>
-      <MockThemeProvider
-        theme={theme}
-        themes={themes}
-      >
+      <MockThemeProvider theme={theme} themes={themes}>
         {children}
       </MockThemeProvider>
     </MockIntlProvider>
@@ -312,7 +306,7 @@ const AllTheProviders = ({
 };
 
 // 自定义渲染函数
-interface CustomRenderOptions extends Omit<RenderOptions, 'wrapper'> {
+interface CustomRenderOptions extends Omit<RenderOptions, "wrapper"> {
   locale?: string;
   theme?: string;
   themes?: string[];
@@ -324,9 +318,9 @@ const customRender = (
   options: CustomRenderOptions = {},
 ) => {
   const {
-    locale = 'en',
-    theme = 'light',
-    themes = ['light', 'dark', 'system'],
+    locale = "en",
+    theme = "light",
+    themes = ["light", "dark", "system"],
     wrapper,
     ...renderOptions
   } = options;
@@ -334,11 +328,7 @@ const customRender = (
   const Wrapper =
     wrapper ||
     (({ children }: { children: React.ReactNode }) => (
-      <AllTheProviders
-        locale={locale}
-        theme={theme}
-        themes={themes}
-      >
+      <AllTheProviders locale={locale} theme={theme} themes={themes}>
         {children}
       </AllTheProviders>
     ));
@@ -371,16 +361,16 @@ export const createMockTranslations = (
   // 扁平化集中 mock 消息为 key-value 映射
   const flattenMessages = (
     obj: Record<string, unknown>,
-    prefix = '',
+    prefix = "",
   ): Record<string, string> => {
     const result: Record<string, string> = {};
 
     for (const [key, value] of Object.entries(obj)) {
       const fullKey = prefix ? `${prefix}.${key}` : key;
 
-      if (typeof value === 'string') {
+      if (typeof value === "string") {
         result[fullKey] = value;
-      } else if (typeof value === 'object' && value !== null) {
+      } else if (typeof value === "object" && value !== null) {
         Object.assign(
           result,
           flattenMessages(value as Record<string, unknown>, fullKey),
@@ -403,23 +393,23 @@ export const createMockTranslations = (
 };
 
 // 主题测试工具
-export const createMockTheme = (theme: string = 'light') => {
+export const createMockTheme = (theme: string = "light") => {
   return {
     theme,
     setTheme: vi.fn(),
     resolvedTheme: theme,
-    themes: ['light', 'dark', 'system'],
-    systemTheme: 'light',
+    themes: ["light", "dark", "system"],
+    systemTheme: "light",
   };
 };
 
 // 路由测试工具
 export const createMockRouter = (overrides: Record<string, unknown> = {}) => {
   return {
-    route: '/',
-    pathname: '/',
+    route: "/",
+    pathname: "/",
     query: {},
-    asPath: '/',
+    asPath: "/",
     push: vi.fn(),
     replace: vi.fn(),
     reload: vi.fn(),
@@ -458,7 +448,7 @@ export const createAccessibilityMocks = () => {
   return {
     // 高对比度模式
     highContrast: vi.fn().mockImplementation((query: string) => ({
-      matches: query.includes('prefers-contrast: high'),
+      matches: query.includes("prefers-contrast: high"),
       media: query,
       onchange: null,
       addListener: vi.fn(),
@@ -470,7 +460,7 @@ export const createAccessibilityMocks = () => {
 
     // 减少动画
     reducedMotion: vi.fn().mockImplementation((query: string) => ({
-      matches: query.includes('prefers-reduced-motion: reduce'),
+      matches: query.includes("prefers-reduced-motion: reduce"),
       media: query,
       onchange: null,
       addListener: vi.fn(),
@@ -505,7 +495,7 @@ export const createFetchMock = (
       status >= HTTP_STATUS.CLIENT_ERROR_MIN &&
       status < HTTP_STATUS.CLIENT_ERROR_MAX,
     status,
-    statusText: status === HTTP_STATUS.OK ? 'OK' : 'Error',
+    statusText: status === HTTP_STATUS.OK ? "OK" : "Error",
     json: vi.fn().mockResolvedValue(response),
     text: vi.fn().mockResolvedValue(JSON.stringify(response)),
     headers: new Headers(),
@@ -529,12 +519,12 @@ export const createErrorBoundaryMock = () => {
     }
 
     override componentDidCatch(error: Error, errorInfo: React.ErrorInfo) {
-      console.error('Error caught by boundary:', error, errorInfo);
+      console.error("Error caught by boundary:", error, errorInfo);
     }
 
     override render() {
       if (this.state.hasError) {
-        return <div data-testid='error-boundary'>Something went wrong.</div>;
+        return <div data-testid="error-boundary">Something went wrong.</div>;
       }
 
       return this.props.children;
@@ -549,28 +539,28 @@ export const waitForNextTick = () =>
 // 测试数据生成器
 export const generateTestData = {
   user: (overrides: Record<string, unknown> = {}) => ({
-    id: '1',
-    name: 'Test User',
-    email: 'test@example.com',
-    role: 'user',
+    id: "1",
+    name: "Test User",
+    email: "test@example.com",
+    role: "user",
     ...overrides,
   }),
 
   post: (overrides: Record<string, unknown> = {}) => ({
-    id: '1',
-    title: 'Test Post',
-    content: 'Test content',
-    author: 'Test Author',
+    id: "1",
+    title: "Test Post",
+    content: "Test content",
+    author: "Test Author",
     createdAt: new Date().toISOString(),
     ...overrides,
   }),
 
   translation: (overrides: Record<string, string> = {}) => ({
-    'common.loading': 'Loading...',
-    'common.error': 'Error',
-    'common.success': 'Success',
-    'nav.home': 'Home',
-    'nav.about': 'About',
+    "common.loading": "Loading...",
+    "common.error": "Error",
+    "common.success": "Success",
+    "nav.home": "Home",
+    "nav.about": "About",
     ...overrides,
   }),
 };
@@ -610,7 +600,7 @@ export const generateTestData = {
  */
 export const renderWithIntl = (
   ui: React.ReactElement,
-  locale: string = 'en',
+  locale: string = "en",
   partialMessages?: Record<string, unknown>,
 ) => {
   // 使用集中的 mock 消息作为默认
@@ -619,10 +609,7 @@ export const renderWithIntl = (
     : combinedMessages;
 
   return render(
-    <NextIntlClientProvider
-      locale={locale}
-      messages={messages}
-    >
+    <NextIntlClientProvider locale={locale} messages={messages}>
       {ui}
     </NextIntlClientProvider>,
   );
@@ -632,5 +619,5 @@ export const renderWithIntl = (
 export { customRender as render };
 
 // 重新导出testing-library的所有工具
-export * from '@testing-library/react';
-export { vi } from 'vitest';
+export * from "@testing-library/react";
+export { vi } from "vitest";

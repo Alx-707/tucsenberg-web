@@ -12,25 +12,25 @@
  * - Form library integration patterns
  */
 
-import React from 'react';
-import { act, render, screen, waitFor } from '@testing-library/react';
-import userEvent from '@testing-library/user-event';
-import { beforeEach, describe, expect, it } from 'vitest';
-import { Label } from '@/components/ui/label';
+import React from "react";
+import { act, render, screen, waitFor } from "@testing-library/react";
+import userEvent from "@testing-library/user-event";
+import { beforeEach, describe, expect, it } from "vitest";
+import { Label } from "@/components/ui/label";
 
-describe('Label Validation Scenarios Tests', () => {
+describe("Label Validation Scenarios Tests", () => {
   let user: ReturnType<typeof userEvent.setup>;
 
   beforeEach(() => {
     user = userEvent.setup();
   });
 
-  describe('Validation Integration', () => {
-    it('handles form state management', async () => {
+  describe("Validation Integration", () => {
+    it("handles form state management", async () => {
       const FormWithState = () => {
         const [values, setValues] = React.useState({
-          name: '',
-          email: '',
+          name: "",
+          email: "",
         });
 
         const handleNameChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -46,19 +46,19 @@ describe('Label Validation Scenarios Tests', () => {
         return (
           <form>
             <div>
-              <Label htmlFor='state-name'>Name: {values.name}</Label>
+              <Label htmlFor="state-name">Name: {values.name}</Label>
               <input
-                id='state-name'
-                type='text'
+                id="state-name"
+                type="text"
                 value={values.name}
                 onChange={handleNameChange}
               />
             </div>
             <div>
-              <Label htmlFor='state-email'>Email: {values.email}</Label>
+              <Label htmlFor="state-email">Email: {values.email}</Label>
               <input
-                id='state-email'
-                type='email'
+                id="state-email"
+                type="email"
                 value={values.email}
                 onChange={handleEmailChange}
               />
@@ -72,14 +72,14 @@ describe('Label Validation Scenarios Tests', () => {
       const nameInput = screen.getByLabelText(/Name:/);
       const emailInput = screen.getByLabelText(/Email:/);
 
-      await user.type(nameInput, 'John');
-      expect(screen.getByText('Name: John')).toBeInTheDocument();
+      await user.type(nameInput, "John");
+      expect(screen.getByText("Name: John")).toBeInTheDocument();
 
-      await user.type(emailInput, 'john@test.com');
-      expect(screen.getByText('Email: john@test.com')).toBeInTheDocument();
+      await user.type(emailInput, "john@test.com");
+      expect(screen.getByText("Email: john@test.com")).toBeInTheDocument();
     });
 
-    it('works with form libraries integration', async () => {
+    it("works with form libraries integration", async () => {
       // Simulate integration with form validation libraries
       const FormWithLibrary = () => {
         const [errors, setErrors] = React.useState<Record<string, string>>({});
@@ -88,7 +88,7 @@ describe('Label Validation Scenarios Tests', () => {
           if (!value) {
             setErrors((prev) => ({
               ...prev,
-              name: 'This field is required',
+              name: "This field is required",
             }));
           } else {
             setErrors((prev) => {
@@ -102,16 +102,16 @@ describe('Label Validation Scenarios Tests', () => {
           <form>
             <div>
               <Label
-                htmlFor='lib-name'
-                className={errors.name ? 'text-red-500' : ''}
+                htmlFor="lib-name"
+                className={errors.name ? "text-red-500" : ""}
               >
                 Name {errors.name && <span>({errors.name})</span>}
               </Label>
               <input
-                id='lib-name'
-                type='text'
+                id="lib-name"
+                type="text"
                 onBlur={(e) => validate(e.target.value)}
-                className={errors.name ? 'border-red-500' : ''}
+                className={errors.name ? "border-red-500" : ""}
               />
             </div>
           </form>
@@ -136,20 +136,20 @@ describe('Label Validation Scenarios Tests', () => {
       });
     });
 
-    it('handles complex validation scenarios', async () => {
+    it("handles complex validation scenarios", async () => {
       const ComplexValidationForm = () => {
         const [values, setValues] = React.useState({
-          password: '',
-          confirmPassword: '',
+          password: "",
+          confirmPassword: "",
         });
         const [errors, setErrors] = React.useState<Record<string, string>>({});
 
         const validatePassword = (password: string) => {
           const errors: string[] = [];
-          if (password.length < 8) errors.push('at least 8 characters');
-          if (!/[A-Z]/.test(password)) errors.push('one uppercase letter');
-          if (!/[a-z]/.test(password)) errors.push('one lowercase letter');
-          if (!/[0-9]/.test(password)) errors.push('one number');
+          if (password.length < 8) errors.push("at least 8 characters");
+          if (!/[A-Z]/.test(password)) errors.push("one uppercase letter");
+          if (!/[a-z]/.test(password)) errors.push("one lowercase letter");
+          if (!/[0-9]/.test(password)) errors.push("one number");
           return errors;
         };
 
@@ -163,7 +163,7 @@ describe('Label Validation Scenarios Tests', () => {
           if (validationErrors.length > 0) {
             setErrors((prev) => ({
               ...prev,
-              password: `Password must contain ${validationErrors.join(', ')}`,
+              password: `Password must contain ${validationErrors.join(", ")}`,
             }));
           } else {
             setErrors((prev) => {
@@ -182,7 +182,7 @@ describe('Label Validation Scenarios Tests', () => {
           if (confirmPassword !== values.password) {
             setErrors((prev) => ({
               ...prev,
-              confirmPassword: 'Passwords do not match',
+              confirmPassword: "Passwords do not match",
             }));
           } else {
             setErrors((prev) => {
@@ -196,38 +196,38 @@ describe('Label Validation Scenarios Tests', () => {
           <form>
             <div>
               <Label
-                htmlFor='complex-password'
-                className={errors.password ? 'text-red-500' : ''}
+                htmlFor="complex-password"
+                className={errors.password ? "text-red-500" : ""}
               >
                 Password
               </Label>
               <input
-                id='complex-password'
-                type='password'
+                id="complex-password"
+                type="password"
                 value={values.password}
                 onChange={handlePasswordChange}
-                className={errors.password ? 'border-red-500' : ''}
+                className={errors.password ? "border-red-500" : ""}
               />
               {errors.password && (
-                <div className='error-message'>{errors.password}</div>
+                <div className="error-message">{errors.password}</div>
               )}
             </div>
             <div>
               <Label
-                htmlFor='complex-confirm'
-                className={errors.confirmPassword ? 'text-red-500' : ''}
+                htmlFor="complex-confirm"
+                className={errors.confirmPassword ? "text-red-500" : ""}
               >
                 Confirm Password
               </Label>
               <input
-                id='complex-confirm'
-                type='password'
+                id="complex-confirm"
+                type="password"
                 value={values.confirmPassword}
                 onChange={handleConfirmPasswordChange}
-                className={errors.confirmPassword ? 'border-red-500' : ''}
+                className={errors.confirmPassword ? "border-red-500" : ""}
               />
               {errors.confirmPassword && (
-                <div className='error-message'>{errors.confirmPassword}</div>
+                <div className="error-message">{errors.confirmPassword}</div>
               )}
             </div>
           </form>
@@ -236,49 +236,49 @@ describe('Label Validation Scenarios Tests', () => {
 
       render(<ComplexValidationForm />);
 
-      const passwordInput = screen.getByLabelText('Password');
-      const confirmInput = screen.getByLabelText('Confirm Password');
+      const passwordInput = screen.getByLabelText("Password");
+      const confirmInput = screen.getByLabelText("Confirm Password");
 
       // Test weak password
-      await user.type(passwordInput, 'weak');
+      await user.type(passwordInput, "weak");
       expect(screen.getByText(/Password must contain/)).toBeInTheDocument();
 
       // Test strong password
       await user.clear(passwordInput);
-      await user.type(passwordInput, 'StrongPass123');
+      await user.type(passwordInput, "StrongPass123");
       expect(
         screen.queryByText(/Password must contain/),
       ).not.toBeInTheDocument();
 
       // Test password mismatch
-      await user.type(confirmInput, 'DifferentPass123');
-      expect(screen.getByText('Passwords do not match')).toBeInTheDocument();
+      await user.type(confirmInput, "DifferentPass123");
+      expect(screen.getByText("Passwords do not match")).toBeInTheDocument();
 
       // Test password match
       await user.clear(confirmInput);
-      await user.type(confirmInput, 'StrongPass123');
+      await user.type(confirmInput, "StrongPass123");
       expect(
-        screen.queryByText('Passwords do not match'),
+        screen.queryByText("Passwords do not match"),
       ).not.toBeInTheDocument();
     });
 
-    it('handles async validation', async () => {
+    it("handles async validation", async () => {
       const AsyncValidationForm = () => {
-        const [email, setEmail] = React.useState('');
+        const [email, setEmail] = React.useState("");
         const [isValidating, setIsValidating] = React.useState(false);
-        const [error, _setError] = React.useState('');
+        const [error, _setError] = React.useState("");
 
         const validateEmail = async (emailValue: string) => {
           if (!emailValue) return;
 
           setIsValidating(true);
-          _setError('');
+          _setError("");
 
           // Simulate async validation
           await new Promise((resolve) => setTimeout(resolve, 500));
 
-          if (emailValue === 'taken@example.com') {
-            _setError('This email is already taken');
+          if (emailValue === "taken@example.com") {
+            _setError("This email is already taken");
           }
 
           setIsValidating(false);
@@ -294,19 +294,19 @@ describe('Label Validation Scenarios Tests', () => {
           <form>
             <div>
               <Label
-                htmlFor='async-email'
-                className={error ? 'text-red-500' : ''}
+                htmlFor="async-email"
+                className={error ? "text-red-500" : ""}
               >
-                Email {isValidating && '(Checking...)'}
+                Email {isValidating && "(Checking...)"}
               </Label>
               <input
-                id='async-email'
-                type='email'
+                id="async-email"
+                type="email"
                 value={email}
                 onChange={handleEmailChange}
-                className={error ? 'border-red-500' : ''}
+                className={error ? "border-red-500" : ""}
               />
-              {error && <div className='error-message'>{error}</div>}
+              {error && <div className="error-message">{error}</div>}
             </div>
           </form>
         );
@@ -317,42 +317,42 @@ describe('Label Validation Scenarios Tests', () => {
       const emailInput = screen.getByLabelText(/Email/);
 
       // Test taken email
-      await user.type(emailInput, 'taken@example.com');
+      await user.type(emailInput, "taken@example.com");
 
       // Wait for validation
       expect(screen.getByText(/Checking/)).toBeInTheDocument();
 
       // Wait for validation to complete
-      await screen.findByText('This email is already taken');
+      await screen.findByText("This email is already taken");
       expect(
-        screen.getByText('This email is already taken'),
+        screen.getByText("This email is already taken"),
       ).toBeInTheDocument();
     });
 
-    it('handles conditional validation', async () => {
+    it("handles conditional validation", async () => {
       const ConditionalValidationForm = () => {
-        const [userType, setUserType] = React.useState('');
-        const [companyName, setCompanyName] = React.useState('');
-        const [error, _setError] = React.useState('');
+        const [userType, setUserType] = React.useState("");
+        const [companyName, setCompanyName] = React.useState("");
+        const [error, _setError] = React.useState("");
 
         const validateCompanyName = (
           value: string,
           currentUserType?: string,
         ) => {
           const typeToCheck = currentUserType || userType;
-          if (typeToCheck === 'business' && !value) {
-            _setError('Company name is required for business accounts');
+          if (typeToCheck === "business" && !value) {
+            _setError("Company name is required for business accounts");
           } else {
-            _setError('');
+            _setError("");
           }
         };
 
         return (
           <form>
             <div>
-              <Label htmlFor='user-type'>User Type</Label>
+              <Label htmlFor="user-type">User Type</Label>
               <select
-                id='user-type'
+                id="user-type"
                 value={userType}
                 onChange={(e) => {
                   const newUserType = e.target.value;
@@ -360,30 +360,30 @@ describe('Label Validation Scenarios Tests', () => {
                   validateCompanyName(companyName, newUserType);
                 }}
               >
-                <option value=''>Select type</option>
-                <option value='personal'>Personal</option>
-                <option value='business'>Business</option>
+                <option value="">Select type</option>
+                <option value="personal">Personal</option>
+                <option value="business">Business</option>
               </select>
             </div>
-            {userType === 'business' && (
+            {userType === "business" && (
               <div>
                 <Label
-                  htmlFor='company-name'
-                  className={error ? 'text-red-500' : ''}
+                  htmlFor="company-name"
+                  className={error ? "text-red-500" : ""}
                 >
                   Company Name *
                 </Label>
                 <input
-                  id='company-name'
-                  type='text'
+                  id="company-name"
+                  type="text"
                   value={companyName}
                   onChange={(e) => {
                     setCompanyName(e.target.value);
                     validateCompanyName(e.target.value);
                   }}
-                  className={error ? 'border-red-500' : ''}
+                  className={error ? "border-red-500" : ""}
                 />
-                {error && <div className='error-message'>{error}</div>}
+                {error && <div className="error-message">{error}</div>}
               </div>
             )}
           </form>
@@ -392,35 +392,35 @@ describe('Label Validation Scenarios Tests', () => {
 
       render(<ConditionalValidationForm />);
 
-      const userTypeSelect = screen.getByLabelText('User Type');
+      const userTypeSelect = screen.getByLabelText("User Type");
 
       // Select business type
-      await user.selectOptions(userTypeSelect, 'business');
+      await user.selectOptions(userTypeSelect, "business");
 
       // Company name field should appear
-      expect(screen.getByLabelText('Company Name *')).toBeInTheDocument();
+      expect(screen.getByLabelText("Company Name *")).toBeInTheDocument();
 
       // Wait for validation error to appear
       await waitFor(() => {
         expect(
-          screen.getByText('Company name is required for business accounts'),
+          screen.getByText("Company name is required for business accounts"),
         ).toBeInTheDocument();
       });
 
       // Fill company name
-      const companyInput = screen.getByLabelText('Company Name *');
-      await user.type(companyInput, 'Test Company');
+      const companyInput = screen.getByLabelText("Company Name *");
+      await user.type(companyInput, "Test Company");
 
       // Error should disappear
       expect(
-        screen.queryByText('Company name is required for business accounts'),
+        screen.queryByText("Company name is required for business accounts"),
       ).not.toBeInTheDocument();
 
       // Switch to personal
-      await user.selectOptions(userTypeSelect, 'personal');
+      await user.selectOptions(userTypeSelect, "personal");
 
       // Company name field should disappear
-      expect(screen.queryByLabelText('Company Name *')).not.toBeInTheDocument();
+      expect(screen.queryByLabelText("Company Name *")).not.toBeInTheDocument();
     });
   });
 });

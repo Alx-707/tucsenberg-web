@@ -15,19 +15,19 @@
  * - Console output provides human-readable summary
  */
 
-const fs = require('fs');
-const fsp = require('fs').promises;
-const path = require('path');
+const fs = require("fs");
+const fsp = require("fs").promises;
+const path = require("path");
 
-const ROOT = path.join(__dirname, '..');
-const REPORT_DIR = path.join(ROOT, 'reports');
-const REPORT_PATH = path.join(REPORT_DIR, 'i18n-shape-report.json');
+const ROOT = path.join(__dirname, "..");
+const REPORT_DIR = path.join(ROOT, "reports");
+const REPORT_PATH = path.join(REPORT_DIR, "i18n-shape-report.json");
 
 function isObject(v) {
-  return v !== null && typeof v === 'object' && !Array.isArray(v);
+  return v !== null && typeof v === "object" && !Array.isArray(v);
 }
 
-function collectLeafPaths(obj, prefix = '') {
+function collectLeafPaths(obj, prefix = "") {
   const out = [];
   if (!isObject(obj)) return out; // non-object root => no keys
   for (const [k, v] of Object.entries(obj)) {
@@ -43,7 +43,7 @@ function collectLeafPaths(obj, prefix = '') {
 }
 
 async function readJson(p) {
-  const s = await fsp.readFile(p, 'utf-8');
+  const s = await fsp.readFile(p, "utf-8");
   return JSON.parse(s);
 }
 
@@ -69,19 +69,19 @@ async function ensureDir(p) {
  * This ensures type safety as the types are derived from en/*.json files.
  */
 async function compareSplitFiles(result, locales) {
-  const splitTypes = ['critical', 'deferred'];
+  const splitTypes = ["critical", "deferred"];
 
   for (const splitType of splitTypes) {
     const splitData = {};
 
     for (const locale of locales) {
-      const filePath = path.join(ROOT, 'messages', locale, `${splitType}.json`);
+      const filePath = path.join(ROOT, "messages", locale, `${splitType}.json`);
       try {
         splitData[locale] = await readJson(filePath);
       } catch (err) {
         result.ok = false;
         result.issues.push({
-          type: 'file-read-error',
+          type: "file-read-error",
           locale,
           file: `${splitType}.json`,
           message: `Failed to read messages/${locale}/${splitType}.json: ${err.message}`,
@@ -126,12 +126,12 @@ async function main() {
   };
 
   try {
-    const locales = require('../i18n-locales.config').locales;
+    const locales = require("../i18n-locales.config").locales;
 
     // Load full sources
     const full = {};
     for (const locale of locales) {
-      const p = path.join(ROOT, 'messages', `${locale}.json`);
+      const p = path.join(ROOT, "messages", `${locale}.json`);
       full[locale] = await readJson(p);
     }
 
@@ -147,8 +147,8 @@ async function main() {
       result.ok = false;
       result.summary.failedChecks++;
       result.issues.push({
-        type: 'shape-mismatch-full',
-        message: 'messages/en.json and messages/zh.json leaf key sets differ',
+        type: "shape-mismatch-full",
+        message: "messages/en.json and messages/zh.json leaf key sets differ",
         missingInZh: enMinusZh.slice(0, 50),
         missingInEn: zhMinusEn.slice(0, 50),
         missingInZhCount: enMinusZh.length,
@@ -171,29 +171,29 @@ async function main() {
       result.summary.totalChecks++;
       const srcCriticalPath = path.join(
         ROOT,
-        'messages',
+        "messages",
         locale,
-        'critical.json',
+        "critical.json",
       );
       const srcDeferredPath = path.join(
         ROOT,
-        'messages',
+        "messages",
         locale,
-        'deferred.json',
+        "deferred.json",
       );
       const pubCriticalPath = path.join(
         ROOT,
-        'public',
-        'messages',
+        "public",
+        "messages",
         locale,
-        'critical.json',
+        "critical.json",
       );
       const pubDeferredPath = path.join(
         ROOT,
-        'public',
-        'messages',
+        "public",
+        "messages",
         locale,
-        'deferred.json',
+        "deferred.json",
       );
 
       const srcCritical = await readJson(srcCriticalPath);
@@ -212,7 +212,7 @@ async function main() {
         result.ok = false;
         result.summary.failedChecks++;
         result.issues.push({
-          type: 'split-vs-full-mismatch',
+          type: "split-vs-full-mismatch",
           locale,
           message: `messages/${locale}/{critical,deferred}.json union != messages/${locale}.json`,
           extraInSplit: srcMinusFull.slice(0, 50),
@@ -242,7 +242,7 @@ async function main() {
           result.ok = false;
           result.summary.failedChecks++;
           result.issues.push({
-            type: 'public-vs-src-split-mismatch',
+            type: "public-vs-src-split-mismatch",
             locale,
             message: `public/messages/${locale}/{critical,deferred}.json union != messages/${locale}/{critical,deferred}.json union`,
             extraInPublic: pubMinusSrc.slice(0, 50),
@@ -263,10 +263,10 @@ async function main() {
     result.duration = Date.now() - startTime;
 
     await ensureDir(REPORT_DIR);
-    await fsp.writeFile(REPORT_PATH, JSON.stringify(result, null, 2), 'utf-8');
+    await fsp.writeFile(REPORT_PATH, JSON.stringify(result, null, 2), "utf-8");
 
     // Output summary
-    console.log('\n=== i18n Shape Check Report ===');
+    console.log("\n=== i18n Shape Check Report ===");
     console.log(`Timestamp: ${result.timestamp}`);
     console.log(`Duration: ${result.duration}ms`);
     console.log(
@@ -274,60 +274,60 @@ async function main() {
     );
 
     if (!result.ok) {
-      console.error('\n❌ i18n shape check failed');
+      console.error("\n❌ i18n shape check failed");
       console.error(`\nIssues found: ${result.issues.length}`);
       for (const issue of result.issues) {
         console.error(
-          '\n-',
+          "\n-",
           issue.type,
-          issue.locale ? `(locale: ${issue.locale})` : '',
+          issue.locale ? `(locale: ${issue.locale})` : "",
         );
-        console.error('  ', issue.message);
+        console.error("  ", issue.message);
         if (issue.missingInZhCount)
-          console.error('  Missing in zh:', issue.missingInZhCount, 'keys');
+          console.error("  Missing in zh:", issue.missingInZhCount, "keys");
         if (issue.missingInEnCount)
-          console.error('  Missing in en:', issue.missingInEnCount, 'keys');
+          console.error("  Missing in en:", issue.missingInEnCount, "keys");
         if (issue.missingInSplitCount !== undefined)
           console.error(
-            '  Missing in split:',
+            "  Missing in split:",
             issue.missingInSplitCount,
-            'keys',
+            "keys",
           );
         if (issue.extraInSplitCount !== undefined)
-          console.error('  Extra in split:', issue.extraInSplitCount, 'keys');
+          console.error("  Extra in split:", issue.extraInSplitCount, "keys");
         if (issue.missingInPublicCount !== undefined)
           console.error(
-            '  Missing in public:',
+            "  Missing in public:",
             issue.missingInPublicCount,
-            'keys',
+            "keys",
           );
         if (issue.extraInPublicCount !== undefined)
-          console.error('  Extra in public:', issue.extraInPublicCount, 'keys');
+          console.error("  Extra in public:", issue.extraInPublicCount, "keys");
 
         // Show sample keys for debugging
         if (issue.missingInZh?.length) {
           console.error(
-            '  Sample missing in zh:',
-            issue.missingInZh.slice(0, 5).join(', '),
+            "  Sample missing in zh:",
+            issue.missingInZh.slice(0, 5).join(", "),
           );
         }
         if (issue.missingInEn?.length) {
           console.error(
-            '  Sample missing in en:',
-            issue.missingInEn.slice(0, 5).join(', '),
+            "  Sample missing in en:",
+            issue.missingInEn.slice(0, 5).join(", "),
           );
         }
       }
       console.error(`\nReport saved to: ${REPORT_PATH}`);
       process.exit(1);
     } else {
-      console.log('\n✅ i18n shape check passed');
+      console.log("\n✅ i18n shape check passed");
       console.log(`Report saved to: ${REPORT_PATH}`);
       process.exit(0);
     }
   } catch (err) {
     result.duration = Date.now() - startTime;
-    console.error('❌ i18n shape check crashed:', err?.message || err);
+    console.error("❌ i18n shape check crashed:", err?.message || err);
     try {
       await ensureDir(REPORT_DIR);
       await fsp.writeFile(
@@ -343,7 +343,7 @@ async function main() {
           null,
           2,
         ),
-        'utf-8',
+        "utf-8",
       );
     } catch {}
     process.exit(1);

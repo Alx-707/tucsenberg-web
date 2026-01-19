@@ -1,20 +1,20 @@
-import { act, renderHook } from '@testing-library/react';
-import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
-import { TEST_BASE_NUMBERS } from '@/constants/test-constants';
-import { useReducedMotion } from '@/hooks/use-reduced-motion';
+import { act, renderHook } from "@testing-library/react";
+import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
+import { TEST_BASE_NUMBERS } from "@/constants/test-constants";
+import { useReducedMotion } from "@/hooks/use-reduced-motion";
 
 // Mock matchMedia
 const mockMatchMedia = vi.fn();
 
 // Mock window object
-Object.defineProperty(global, 'window', {
+Object.defineProperty(global, "window", {
   writable: true,
   value: {
     matchMedia: mockMatchMedia,
   },
 });
 
-describe('useReducedMotion', () => {
+describe("useReducedMotion", () => {
   beforeEach(() => {
     // Reset mocks
     vi.clearAllMocks();
@@ -29,7 +29,7 @@ describe('useReducedMotion', () => {
     vi.restoreAllMocks();
   });
 
-  it('should return false by default when reduced motion is not preferred', () => {
+  it("should return false by default when reduced motion is not preferred", () => {
     const mockMediaQuery = {
       matches: false,
       addEventListener: vi.fn(),
@@ -42,15 +42,15 @@ describe('useReducedMotion', () => {
 
     expect(result.current).toBe(false);
     expect(mockMatchMedia).toHaveBeenCalledWith(
-      '(prefers-reduced-motion: reduce)',
+      "(prefers-reduced-motion: reduce)",
     );
     expect(mockMediaQuery.addEventListener).toHaveBeenCalledWith(
-      'change',
+      "change",
       expect.any(Function),
     );
   });
 
-  it('should return true when reduced motion is preferred', () => {
+  it("should return true when reduced motion is preferred", () => {
     const mockMediaQuery = {
       matches: true,
       addEventListener: vi.fn(),
@@ -64,13 +64,13 @@ describe('useReducedMotion', () => {
     expect(result.current).toBe(true);
   });
 
-  it('should update when media query changes', () => {
+  it("should update when media query changes", () => {
     let changeHandler: ((_event: MediaQueryListEvent) => void) | null = null;
 
     const mockMediaQuery = {
       matches: false,
       addEventListener: vi.fn((_event, handler) => {
-        if (_event === 'change') {
+        if (_event === "change") {
           changeHandler = handler;
         }
       }),
@@ -103,7 +103,7 @@ describe('useReducedMotion', () => {
     expect(result.current).toBe(false);
   });
 
-  it('should clean up event listener on unmount', () => {
+  it("should clean up event listener on unmount", () => {
     const mockMediaQuery = {
       matches: false,
       addEventListener: vi.fn(),
@@ -119,16 +119,16 @@ describe('useReducedMotion', () => {
     unmount();
 
     expect(mockMediaQuery.removeEventListener).toHaveBeenCalledWith(
-      'change',
+      "change",
       expect.any(Function),
     );
   });
 
-  it('should handle server-side rendering gracefully', () => {
+  it("should handle server-side rendering gracefully", () => {
     // Mock matchMedia to return null (SSR behavior)
     const originalMatchMedia = global.window.matchMedia;
-    const descriptor = Object.getOwnPropertyDescriptor(window, 'matchMedia');
-    Object.defineProperty(window, 'matchMedia', {
+    const descriptor = Object.getOwnPropertyDescriptor(window, "matchMedia");
+    Object.defineProperty(window, "matchMedia", {
       value: vi.fn(() => null),
       configurable: true,
     });
@@ -140,19 +140,19 @@ describe('useReducedMotion', () => {
 
     // Restore original matchMedia
     if (descriptor) {
-      Object.defineProperty(window, 'matchMedia', descriptor);
+      Object.defineProperty(window, "matchMedia", descriptor);
     } else {
       window.matchMedia = originalMatchMedia;
     }
   });
 
-  it('should handle missing matchMedia gracefully', () => {
+  it("should handle missing matchMedia gracefully", () => {
     // Store original matchMedia
     const originalMatchMedia = global.window.matchMedia;
-    const descriptor = Object.getOwnPropertyDescriptor(window, 'matchMedia');
+    const descriptor = Object.getOwnPropertyDescriptor(window, "matchMedia");
 
     // Mock window without matchMedia
-    Object.defineProperty(window, 'matchMedia', {
+    Object.defineProperty(window, "matchMedia", {
       value: undefined,
       configurable: true,
     });
@@ -164,19 +164,19 @@ describe('useReducedMotion', () => {
 
     // Restore original matchMedia
     if (descriptor) {
-      Object.defineProperty(window, 'matchMedia', descriptor);
+      Object.defineProperty(window, "matchMedia", descriptor);
     } else {
       window.matchMedia = originalMatchMedia;
     }
   });
 
-  it('should handle multiple rapid changes correctly', () => {
+  it("should handle multiple rapid changes correctly", () => {
     let changeHandler: ((_event: MediaQueryListEvent) => void) | null = null;
 
     const mockMediaQuery = {
       matches: false,
       addEventListener: vi.fn((_event, handler) => {
-        if (_event === 'change') {
+        if (_event === "change") {
           changeHandler = handler;
         }
       }),
@@ -199,7 +199,7 @@ describe('useReducedMotion', () => {
     expect(result.current).toBe(true);
   });
 
-  it('should maintain consistent state across re-renders', () => {
+  it("should maintain consistent state across re-renders", () => {
     const mockMediaQuery = {
       matches: true,
       addEventListener: vi.fn(),
@@ -220,7 +220,7 @@ describe('useReducedMotion', () => {
     expect(mockMatchMedia).toHaveBeenCalledTimes(TEST_BASE_NUMBERS.SMALL_COUNT);
   });
 
-  it('should handle edge case where addEventListener is not available', () => {
+  it("should handle edge case where addEventListener is not available", () => {
     const mockMediaQuery = {
       matches: false,
       addEventListener: undefined,
@@ -235,7 +235,7 @@ describe('useReducedMotion', () => {
     }).not.toThrow();
   });
 
-  it('should handle edge case where removeEventListener is not available', () => {
+  it("should handle edge case where removeEventListener is not available", () => {
     const mockMediaQuery = {
       matches: false,
       addEventListener: vi.fn(),
@@ -252,7 +252,7 @@ describe('useReducedMotion', () => {
     }).not.toThrow();
   });
 
-  it('should handle malformed MediaQueryListEvent', () => {
+  it("should handle malformed MediaQueryListEvent", () => {
     let changeHandler: ((event: Event) => void) | null = null;
 
     const mockMediaQuery = {
@@ -278,7 +278,7 @@ describe('useReducedMotion', () => {
     expect(result.current).toBe(false);
   });
 
-  it('should handle null MediaQueryList', () => {
+  it("should handle null MediaQueryList", () => {
     mockMatchMedia.mockReturnValue(null);
 
     expect(() => {
@@ -286,7 +286,7 @@ describe('useReducedMotion', () => {
     }).not.toThrow();
   });
 
-  it('should handle MediaQueryList with missing properties', () => {
+  it("should handle MediaQueryList with missing properties", () => {
     const incompleteMediaQuery = {
       matches: true,
       // Missing addEventListener and removeEventListener
@@ -299,13 +299,13 @@ describe('useReducedMotion', () => {
     }).not.toThrow();
   });
 
-  it('should handle window object being undefined', () => {
+  it("should handle window object being undefined", () => {
     // Create a minimal window mock that simulates SSR environment
     const originalWindow = global.window;
 
     try {
       // Create a minimal window object without matchMedia to simulate SSR
-      Object.defineProperty(global, 'window', {
+      Object.defineProperty(global, "window", {
         value: {
           // Minimal properties that React Testing Library might need
           document: {},

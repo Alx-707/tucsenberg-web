@@ -8,7 +8,7 @@
  * Phone number registration request
  */
 export interface PhoneNumberRegistrationRequest {
-  messaging_product: 'whatsapp';
+  messaging_product: "whatsapp";
   pin: string;
 }
 
@@ -25,7 +25,7 @@ export interface PhoneNumberVerificationRequest {
  * Webhook subscription request
  */
 export interface WebhookSubscriptionRequest {
-  object: 'whatsapp_business_account';
+  object: "whatsapp_business_account";
   callback_url: string;
   fields: string[];
   verify_token: string;
@@ -37,7 +37,7 @@ export interface WebhookSubscriptionRequest {
  * Message marking request
  */
 export interface MessageMarkRequest {
-  messaging_product: 'whatsapp';
-  status: 'read';
+  messaging_product: "whatsapp";
+  status: "read";
   message_id: string;
 }

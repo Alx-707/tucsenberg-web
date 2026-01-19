@@ -11,44 +11,44 @@
  * - 支持回滚操作
  */
 
-const fs = require('fs');
-const path = require('path');
-const { parse } = require('@babel/parser');
-const traverse = require('@babel/traverse').default;
-const generate = require('@babel/generator').default;
-const glob = require('glob');
+const fs = require("fs");
+const path = require("path");
+const { parse } = require("@babel/parser");
+const traverse = require("@babel/traverse").default;
+const generate = require("@babel/generator").default;
+const glob = require("glob");
 
 // 转换配置
 const TRANSFORM_CONFIG = {
   // 扫描模式
   scanPatterns: [
-    'src/**/*.{ts,tsx,js,jsx}',
-    '!src/**/*.{test,spec}.{ts,tsx,js,jsx}',
-    '!src/**/*.d.ts',
+    "src/**/*.{ts,tsx,js,jsx}",
+    "!src/**/*.{test,spec}.{ts,tsx,js,jsx}",
+    "!src/**/*.d.ts",
   ],
 
   // 输出目录
-  outputDir: path.join(process.cwd(), 'reports', 'transforms'),
+  outputDir: path.join(process.cwd(), "reports", "transforms"),
 
   // 备份目录
-  backupDir: path.join(process.cwd(), 'backups', 'barrel-exports'),
+  backupDir: path.join(process.cwd(), "backups", "barrel-exports"),
 
   // 解析器选项
   parserOptions: {
-    sourceType: 'module',
+    sourceType: "module",
     allowImportExportEverywhere: true,
     allowReturnOutsideFunction: true,
     plugins: [
-      'typescript',
-      'jsx',
-      'decorators-legacy',
-      'classProperties',
-      'objectRestSpread',
-      'asyncGenerators',
-      'functionBind',
-      'exportDefaultFrom',
-      'exportNamespaceFrom',
-      'dynamicImport',
+      "typescript",
+      "jsx",
+      "decorators-legacy",
+      "classProperties",
+      "objectRestSpread",
+      "asyncGenerators",
+      "functionBind",
+      "exportDefaultFrom",
+      "exportNamespaceFrom",
+      "dynamicImport",
     ],
   },
 
@@ -99,7 +99,7 @@ class BarrelExportTransformer {
    */
   analyzeExportStar(filePath) {
     try {
-      const content = fs.readFileSync(filePath, 'utf8');
+      const content = fs.readFileSync(filePath, "utf8");
       const ast = parse(content, TRANSFORM_CONFIG.parserOptions);
 
       const exportStarNodes = [];
@@ -139,7 +139,7 @@ class BarrelExportTransformer {
       ).errors.push({
         file: filePath,
         error: error.message,
-        type: 'parse_error',
+        type: "parse_error",
       });
 
       console.error(`❌ 解析失败: ${filePath} - ${error.message}`);
@@ -159,7 +159,7 @@ class BarrelExportTransformer {
         return [];
       }
 
-      const content = fs.readFileSync(resolvedPath, 'utf8');
+      const content = fs.readFileSync(resolvedPath, "utf8");
       const ast = parse(content, TRANSFORM_CONFIG.parserOptions);
 
       const exports = [];
@@ -192,7 +192,7 @@ class BarrelExportTransformer {
         },
 
         ExportDefaultDeclaration(nodePath) {
-          exports.push('default');
+          exports.push("default");
         },
       });
 
@@ -209,7 +209,7 @@ class BarrelExportTransformer {
    * 解析模块路径
    */
   resolveModulePath(modulePath, currentFilePath) {
-    if (!modulePath.startsWith('.')) {
+    if (!modulePath.startsWith(".")) {
       return null; // 跳过 node_modules
     }
 
@@ -218,14 +218,14 @@ class BarrelExportTransformer {
 
     // 尝试不同的扩展名
     const extensions = [
-      '.ts',
-      '.tsx',
-      '.js',
-      '.jsx',
-      '/index.ts',
-      '/index.tsx',
-      '/index.js',
-      '/index.jsx',
+      ".ts",
+      ".tsx",
+      ".js",
+      ".jsx",
+      "/index.ts",
+      "/index.tsx",
+      "/index.js",
+      "/index.jsx",
     ];
 
     for (const ext of extensions) {
@@ -308,14 +308,14 @@ class BarrelExportTransformer {
                 // 创建命名导出节点
                 const specifiers = newExports.map((exportName) => {
                   return {
-                    type: 'ExportSpecifier',
-                    local: { type: 'Identifier', name: exportName },
-                    exported: { type: 'Identifier', name: exportName },
+                    type: "ExportSpecifier",
+                    local: { type: "Identifier", name: exportName },
+                    exported: { type: "Identifier", name: exportName },
                   };
                 });
 
                 const namedExportNode = {
-                  type: 'ExportNamedDeclaration',
+                  type: "ExportNamedDeclaration",
                   declaration: null,
                   specifiers: specifiers,
                   source: node.source,
@@ -336,7 +336,7 @@ class BarrelExportTransformer {
           stats.errors.push({
             file: filePath,
             error: `Export processing error: ${exportError.message}`,
-            type: 'export_processing_error',
+            type: "export_processing_error",
           });
 
           if (this.options.verbose) {
@@ -380,7 +380,7 @@ class BarrelExportTransformer {
       stats.errors.push({
         file: filePath,
         error: `Transform file error: ${error.message}`,
-        type: 'transform_file_error',
+        type: "transform_file_error",
       });
 
       if (this.options.verbose) {
@@ -410,7 +410,7 @@ class BarrelExportTransformer {
    * 批量转换文件
    */
   async transformFiles(patterns = TRANSFORM_CONFIG.scanPatterns) {
-    console.log('🚀 开始 Export * 转换...\n');
+    console.log("🚀 开始 Export * 转换...\n");
 
     // 获取要处理的文件
     const files = [];
@@ -438,7 +438,7 @@ class BarrelExportTransformer {
         ).errors.push({
           file,
           error: error.message,
-          type: 'transform_error',
+          type: "transform_error",
         });
         console.error(`❌ 转换失败: ${file} - ${error.message}`);
       }
@@ -447,7 +447,7 @@ class BarrelExportTransformer {
     // 生成报告
     await this.generateReport();
 
-    console.log('\n📊 转换完成!');
+    console.log("\n📊 转换完成!");
     console.log(`处理文件: ${this.transformStats.filesProcessed}`);
     console.log(`转换文件: ${this.transformStats.filesTransformed}`);
     console.log(`移除 export *: ${this.transformStats.exportStarRemoved}`);
@@ -479,7 +479,7 @@ class BarrelExportTransformer {
                   this.transformStats.filesProcessed) *
                 100
               ).toFixed(2)}%`
-            : '0%',
+            : "0%",
       },
     };
 
@@ -502,16 +502,16 @@ async function main() {
   // 解析命令行参数
   for (let i = 0; i < args.length; i++) {
     switch (args[i]) {
-      case '--dry-run':
+      case "--dry-run":
         options.dryRun = true;
         break;
-      case '--no-backup':
+      case "--no-backup":
         options.createBackup = false;
         break;
-      case '--quiet':
+      case "--quiet":
         options.verbose = false;
         break;
-      case '--no-comments':
+      case "--no-comments":
         options.preserveComments = false;
         break;
     }
@@ -522,7 +522,7 @@ async function main() {
   try {
     await transformer.transformFiles();
   } catch (error) {
-    console.error('❌ 转换过程中出现错误:', error);
+    console.error("❌ 转换过程中出现错误:", error);
     process.exit(1);
   }
 }

@@ -1,7 +1,7 @@
-'use client';
+"use client";
 
-import { useTranslations } from 'next-intl';
-import { RouteErrorView } from '@/components/errors/route-error-view';
+import { useTranslations } from "next-intl";
+import { RouteErrorView } from "@/components/errors/route-error-view";
 
 interface RouteErrorProps {
   error: Error & { digest?: string };
@@ -9,12 +9,12 @@ interface RouteErrorProps {
 }
 
 export default function ProductsRouteError({ error, reset }: RouteErrorProps) {
-  const t = useTranslations('errors.products');
+  const t = useTranslations("errors.products");
   return (
     <RouteErrorView
       error={error}
       reset={reset}
-      logContext='Products'
+      logContext="Products"
       translationFn={t}
     />
   );

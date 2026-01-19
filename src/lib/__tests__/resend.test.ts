@@ -1,7 +1,7 @@
-import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
-import type { DynamicImportModule } from '@/types/test-types';
-import { SITE_CONFIG } from '@/config/paths/site-config';
-import type { ResendService as ResendServiceInstance } from '../resend-core';
+import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
+import type { DynamicImportModule } from "@/types/test-types";
+import { SITE_CONFIG } from "@/config/paths/site-config";
+import type { ResendService as ResendServiceInstance } from "../resend-core";
 
 type ResendServiceConstructor = new () => ResendServiceInstance;
 
@@ -22,29 +22,29 @@ class ResendCtorMock {
   }
 }
 
-vi.mock('resend', () => ({
+vi.mock("resend", () => ({
   Resend: ResendCtorMock,
 }));
 
 // Use TypeScript Mock modules to bypass Vite's special handling
-vi.mock('@/../env.mjs', () => {
+vi.mock("@/../env.mjs", () => {
   return {
     env: {
-      RESEND_API_KEY: 'test-resend-key',
-      EMAIL_FROM: 'test@example.com',
-      EMAIL_REPLY_TO: 'reply@example.com',
-      NODE_ENV: 'test',
+      RESEND_API_KEY: "test-resend-key",
+      EMAIL_FROM: "test@example.com",
+      EMAIL_REPLY_TO: "reply@example.com",
+      NODE_ENV: "test",
     },
   };
 });
 
-vi.mock('./logger', async () => {
-  const mockLogger = await import('./mocks/logger');
+vi.mock("./logger", async () => {
+  const mockLogger = await import("./mocks/logger");
   return mockLogger;
 });
 
-vi.mock('./validations', async () => {
-  const mockValidations = await import('./mocks/validations');
+vi.mock("./validations", async () => {
+  const mockValidations = await import("./mocks/validations");
   return mockValidations;
 });
 
@@ -58,11 +58,11 @@ const setupResendTest = async (): Promise<ResendServiceConstructor> => {
   // 构造器已固定返回 mockResendInstance，无需在此返回
 
   // Dynamic import to ensure mocks are applied
-  const module = await import('../resend');
+  const module = await import("../resend");
   const typedModule = module as DynamicImportModule;
   const ResendService = typedModule.ResendService ?? typedModule.default;
-  if (typeof ResendService !== 'function') {
-    throw new Error('ResendService class 未找到，无法执行测试');
+  if (typeof ResendService !== "function") {
+    throw new Error("ResendService class 未找到，无法执行测试");
   }
   return ResendService as unknown as ResendServiceConstructor;
 };
@@ -71,7 +71,7 @@ const cleanupResendTest = () => {
   vi.resetModules();
 };
 
-describe('resend - Service Initialization', () => {
+describe("resend - Service Initialization", () => {
   let ResendServiceClass: ResendServiceConstructor;
 
   beforeEach(async () => {
@@ -82,14 +82,14 @@ describe('resend - Service Initialization', () => {
     cleanupResendTest();
   });
 
-  describe('ResendService initialization', () => {
-    it('should initialize successfully with valid API key', async () => {
+  describe("ResendService initialization", () => {
+    it("should initialize successfully with valid API key", async () => {
       const service = new ResendServiceClass();
       expect(service.isReady()).toBe(true);
-      expect(mockResendCtorCalls).toHaveBeenCalledWith('test-resend-key');
+      expect(mockResendCtorCalls).toHaveBeenCalledWith("test-resend-key");
     });
 
-    it('should handle missing API key gracefully', async () => {
+    it("should handle missing API key gracefully", async () => {
       // Create a service instance and manually test the missing API key scenario
       // Since we can'_t easily mock the environment after module load,
       // we'll test the behavior by checking the service state
@@ -97,29 +97,29 @@ describe('resend - Service Initialization', () => {
 
       // The service should be created and ready with our test API key
       expect(service).toBeDefined();
-      expect(typeof service.isReady).toBe('function');
+      expect(typeof service.isReady).toBe("function");
       // With our mock API key, the service should be ready
       expect(service.isReady()).toBe(true);
     });
 
-    it('should use default email configuration when env vars are missing', async () => {
+    it("should use default email configuration when env vars are missing", async () => {
       // Mock environment with minimal configuration
-      vi.stubEnv('RESEND_API_KEY', 'test-resend-key');
-      vi.stubEnv('EMAIL_FROM', '');
-      vi.stubEnv('EMAIL_REPLY_TO', '');
+      vi.stubEnv("RESEND_API_KEY", "test-resend-key");
+      vi.stubEnv("EMAIL_FROM", "");
+      vi.stubEnv("EMAIL_REPLY_TO", "");
       vi.resetModules();
 
       const ServiceClass = await setupResendTest();
       const service = new ServiceClass();
 
       expect(service).toBeDefined();
-      expect(typeof service.sendContactFormEmail).toBe('function');
-      expect(typeof service.isReady).toBe('function');
+      expect(typeof service.sendContactFormEmail).toBe("function");
+      expect(typeof service.isReady).toBe("function");
     });
   });
 });
 
-describe('resend - Email Operations', () => {
+describe("resend - Email Operations", () => {
   let ResendServiceClass: ResendServiceConstructor;
 
   beforeEach(async () => {
@@ -130,51 +130,51 @@ describe('resend - Email Operations', () => {
     cleanupResendTest();
   });
 
-  describe('sendContactFormEmail', () => {
+  describe("sendContactFormEmail", () => {
     const validEmailData = {
-      firstName: 'John',
-      lastName: 'Doe',
-      email: 'john.doe@example.com',
-      company: 'Test Company',
-      message: 'This is a test message',
-      submittedAt: '2023-01-01T00:00:00Z',
+      firstName: "John",
+      lastName: "Doe",
+      email: "john.doe@example.com",
+      company: "Test Company",
+      message: "This is a test message",
+      submittedAt: "2023-01-01T00:00:00Z",
     };
 
-    it('should send contact form email successfully', async () => {
+    it("should send contact form email successfully", async () => {
       const service = new ResendServiceClass();
 
       mockResendSend.mockClear();
       mockResendSend.mockResolvedValue({
-        data: { id: 'test-message-id' },
+        data: { id: "test-message-id" },
         error: null,
       });
 
       const result = await service.sendContactFormEmail(validEmailData);
 
-      expect(result).toBe('test-message-id');
+      expect(result).toBe("test-message-id");
       expect(mockResendSend).toHaveBeenCalledWith(
         expect.objectContaining({
-          from: 'test@example.com',
-          to: ['reply@example.com'],
-          replyTo: 'john.doe@example.com',
-          subject: expect.stringContaining('John Doe'),
+          from: "test@example.com",
+          to: ["reply@example.com"],
+          replyTo: "john.doe@example.com",
+          subject: expect.stringContaining("John Doe"),
           react: expect.anything(),
           text: expect.any(String),
           tags: expect.arrayContaining([
-            { name: 'type', value: 'contact-form' },
-            { name: 'source', value: 'website' },
+            { name: "type", value: "contact-form" },
+            { name: "source", value: "website" },
           ]),
         }),
       );
     });
 
-    it('should use custom subject when provided', async () => {
+    it("should use custom subject when provided", async () => {
       const service = new ResendServiceClass();
-      const dataWithSubject = { ...validEmailData, subject: 'Custom Subject' };
+      const dataWithSubject = { ...validEmailData, subject: "Custom Subject" };
 
       mockResendSend.mockClear();
       mockResendSend.mockResolvedValue({
-        data: { id: 'test-message-id' },
+        data: { id: "test-message-id" },
         error: null,
       });
 
@@ -182,12 +182,12 @@ describe('resend - Email Operations', () => {
 
       expect(mockResendSend).toHaveBeenCalledWith(
         expect.objectContaining({
-          subject: 'Contact Form: Custom Subject',
+          subject: "Contact Form: Custom Subject",
         }),
       );
     });
 
-    it('should throw error when service is not configured', async () => {
+    it("should throw error when service is not configured", async () => {
       // Since we can'_t easily mock missing API key after module load,
       // we'll test this by creating a service that fails due to other reasons
       // and verify the error handling works correctly
@@ -196,36 +196,36 @@ describe('resend - Email Operations', () => {
       // Mock the resend send to simulate service not configured scenario
       mockResendSend.mockResolvedValue({
         data: null,
-        error: { message: 'API key not configured' },
+        error: { message: "API key not configured" },
       });
 
       await expect(
         service.sendContactFormEmail(validEmailData),
-      ).rejects.toThrow('Failed to send email');
+      ).rejects.toThrow("Failed to send email");
     });
 
-    it('should handle Resend API errors', async () => {
+    it("should handle Resend API errors", async () => {
       const service = new ResendServiceClass();
       mockResendSend.mockResolvedValue({
         data: null,
-        error: { message: 'API Error' },
+        error: { message: "API Error" },
       });
 
       await expect(
         service.sendContactFormEmail(validEmailData),
-      ).rejects.toThrow('Failed to send email');
+      ).rejects.toThrow("Failed to send email");
     });
 
-    it('should handle network errors', async () => {
+    it("should handle network errors", async () => {
       const service = new ResendServiceClass();
-      mockResendSend.mockRejectedValue(new Error('Network error'));
+      mockResendSend.mockRejectedValue(new Error("Network error"));
 
       await expect(
         service.sendContactFormEmail(validEmailData),
-      ).rejects.toThrow('Failed to send email');
+      ).rejects.toThrow("Failed to send email");
     });
 
-    it('should return unknown when message ID is not available', async () => {
+    it("should return unknown when message ID is not available", async () => {
       const service = new ResendServiceClass();
 
       mockResendSend.mockClear();
@@ -235,12 +235,12 @@ describe('resend - Email Operations', () => {
       });
 
       const result = await service.sendContactFormEmail(validEmailData);
-      expect(result).toBe('unknown');
+      expect(result).toBe("unknown");
     });
   });
 });
 
-describe('resend - Confirmation and Validation', () => {
+describe("resend - Confirmation and Validation", () => {
   let ResendServiceClass: ResendServiceConstructor;
 
   beforeEach(async () => {
@@ -251,78 +251,78 @@ describe('resend - Confirmation and Validation', () => {
     cleanupResendTest();
   });
 
-  describe('sendConfirmationEmail', () => {
+  describe("sendConfirmationEmail", () => {
     const validEmailData = {
-      firstName: 'John',
-      lastName: 'Doe',
-      email: 'john.doe@example.com',
-      company: 'Test Company',
-      message: 'This is a test message',
-      submittedAt: '2023-01-01T00:00:00Z',
+      firstName: "John",
+      lastName: "Doe",
+      email: "john.doe@example.com",
+      company: "Test Company",
+      message: "This is a test message",
+      submittedAt: "2023-01-01T00:00:00Z",
     };
 
-    it('should send confirmation email successfully', async () => {
+    it("should send confirmation email successfully", async () => {
       const service = new ResendServiceClass();
 
       mockResendSend.mockClear();
       mockResendSend.mockResolvedValue({
-        data: { id: 'confirmation-message-id' },
+        data: { id: "confirmation-message-id" },
         error: null,
       });
 
       const result = await service.sendConfirmationEmail(validEmailData);
 
-      expect(result).toBe('confirmation-message-id');
+      expect(result).toBe("confirmation-message-id");
       expect(mockResendSend).toHaveBeenCalledWith(
         expect.objectContaining({
-          from: 'test@example.com',
-          to: ['john.doe@example.com'],
-          replyTo: 'reply@example.com',
+          from: "test@example.com",
+          to: ["john.doe@example.com"],
+          replyTo: "reply@example.com",
           subject: `Thank you for contacting us - ${SITE_CONFIG.name}`,
           react: expect.anything(),
           text: expect.any(String),
           tags: expect.arrayContaining([
-            { name: 'type', value: 'confirmation' },
+            { name: "type", value: "confirmation" },
           ]),
         }),
       );
     });
 
-    it('should throw error when service is not configured', async () => {
+    it("should throw error when service is not configured", async () => {
       // Test error handling by simulating API configuration error
       const service = new ResendServiceClass();
 
       // Mock the resend send to simulate service not configured scenario
       mockResendSend.mockResolvedValue({
         data: null,
-        error: { message: 'API key not configured' },
+        error: { message: "API key not configured" },
       });
 
       await expect(
         service.sendConfirmationEmail(validEmailData),
-      ).rejects.toThrow('Failed to send confirmation email');
+      ).rejects.toThrow("Failed to send confirmation email");
     });
 
-    it('should handle confirmation email API errors', async () => {
+    it("should handle confirmation email API errors", async () => {
       const service = new ResendServiceClass();
       mockResendSend.mockResolvedValue({
         data: null,
-        error: { message: 'Confirmation API Error' },
+        error: { message: "Confirmation API Error" },
       });
 
       await expect(
         service.sendConfirmationEmail(validEmailData),
-      ).rejects.toThrow('Failed to send confirmation email');
+      ).rejects.toThrow("Failed to send confirmation email");
     });
   });
 
-  describe('isReady', () => {
-    it('should return true when properly configured', () => {
+  describe("isReady", () => {
+    it("should return true when properly configured", () => {
       const service = new ResendServiceClass();
       expect(service.isReady()).toBe(true);
     });
 
-    it('should return false when not configured', async () => {
+    it("should return false when not configured", async () => {
       // Since we can'_t easily mock missing API key after module load,
       // we'll test that the service is ready with our test configuration
       const service = new ResendServiceClass();
@@ -332,21 +332,21 @@ describe('resend - Confirmation and Validation', () => {
     });
   });
 
-  describe('Email content generation', () => {
-    it('should generate HTML and text content for contact emails', async () => {
+  describe("Email content generation", () => {
+    it("should generate HTML and text content for contact emails", async () => {
       const service = new ResendServiceClass();
       const emailData = {
-        firstName: 'John',
-        lastName: 'Doe',
-        email: 'john@example.com',
-        company: 'Test Co',
-        message: 'Test message',
-        submittedAt: '2023-01-01T00:00:00Z',
+        firstName: "John",
+        lastName: "Doe",
+        email: "john@example.com",
+        company: "Test Co",
+        message: "Test message",
+        submittedAt: "2023-01-01T00:00:00Z",
       };
 
       mockResendSend.mockClear();
       mockResendSend.mockResolvedValue({
-        data: { id: 'test-id' },
+        data: { id: "test-id" },
         error: null,
       });
 
@@ -355,23 +355,23 @@ describe('resend - Confirmation and Validation', () => {
       const callArgs = mockResendSend.mock.calls[0]?.[0];
       expect(callArgs.react).toBeDefined();
       expect(callArgs.text).toBeDefined();
-      expect(typeof callArgs.text).toBe('string');
+      expect(typeof callArgs.text).toBe("string");
     });
 
-    it('should generate react and text content for confirmation emails', async () => {
+    it("should generate react and text content for confirmation emails", async () => {
       const service = new ResendServiceClass();
       const emailData = {
-        firstName: 'John',
-        lastName: 'Doe',
-        email: 'john@example.com',
-        company: 'Test Co',
-        message: 'Test message',
-        submittedAt: '2023-01-01T00:00:00Z',
+        firstName: "John",
+        lastName: "Doe",
+        email: "john@example.com",
+        company: "Test Co",
+        message: "Test message",
+        submittedAt: "2023-01-01T00:00:00Z",
       };
 
       mockResendSend.mockClear();
       mockResendSend.mockResolvedValue({
-        data: { id: 'test-id' },
+        data: { id: "test-id" },
         error: null,
       });
 
@@ -380,27 +380,27 @@ describe('resend - Confirmation and Validation', () => {
       const callArgs = mockResendSend.mock.calls[0]?.[0];
       expect(callArgs.react).toBeDefined();
       expect(callArgs.text).toBeDefined();
-      expect(typeof callArgs.text).toBe('string');
+      expect(typeof callArgs.text).toBe("string");
     });
   });
 
-  describe('Data validation and sanitization', () => {
-    it('should validate email data before sending', async () => {
+  describe("Data validation and sanitization", () => {
+    it("should validate email data before sending", async () => {
       const service = new ResendServiceClass();
 
       mockResendSend.mockClear();
       mockResendSend.mockResolvedValue({
-        data: { id: 'test-id' },
+        data: { id: "test-id" },
         error: null,
       });
 
       const emailData = {
-        firstName: 'John',
-        lastName: 'Doe',
-        email: 'john@example.com',
-        company: 'Test Co',
-        message: 'Test message',
-        submittedAt: '2023-01-01T00:00:00Z',
+        firstName: "John",
+        lastName: "Doe",
+        email: "john@example.com",
+        company: "Test Co",
+        message: "Test message",
+        submittedAt: "2023-01-01T00:00:00Z",
       };
 
       // Test that the service successfully processes valid email data
@@ -408,42 +408,42 @@ describe('resend - Confirmation and Validation', () => {
       const result = await service.sendContactFormEmail(emailData);
 
       // Verify that the email was sent successfully (validation passed)
-      expect(result).toBe('test-id');
+      expect(result).toBe("test-id");
       expect(mockResendSend).toHaveBeenCalledWith(
         expect.objectContaining({
-          from: 'test@example.com',
-          to: ['reply@example.com'],
-          replyTo: 'john@example.com',
+          from: "test@example.com",
+          to: ["reply@example.com"],
+          replyTo: "john@example.com",
         }),
       );
     });
 
-    it('should handle validation errors', async () => {
+    it("should handle validation errors", async () => {
       const service = new ResendServiceClass();
-      const { emailTemplateDataSchema } = await import('./mocks/validations');
+      const { emailTemplateDataSchema } = await import("./mocks/validations");
 
       // Use vi.mocked to properly mock the function
       vi.mocked(emailTemplateDataSchema.parse).mockImplementation(() => {
-        throw new Error('Validation failed');
+        throw new Error("Validation failed");
       });
 
       const emailData = {
-        firstName: 'John',
-        lastName: 'Doe',
-        email: 'invalid-email',
-        company: 'Test Co',
-        message: 'Test message',
-        submittedAt: '2023-01-01T00:00:00Z',
+        firstName: "John",
+        lastName: "Doe",
+        email: "invalid-email",
+        company: "Test Co",
+        message: "Test message",
+        submittedAt: "2023-01-01T00:00:00Z",
       };
 
       await expect(service.sendContactFormEmail(emailData)).rejects.toThrow(
-        'Failed to send email',
+        "Failed to send email",
       );
     });
   });
 });
 
-describe('resend - Product Inquiry and Utility Methods', () => {
+describe("resend - Product Inquiry and Utility Methods", () => {
   let ResendServiceClass: ResendServiceConstructor;
 
   beforeEach(async () => {
@@ -454,25 +454,25 @@ describe('resend - Product Inquiry and Utility Methods', () => {
     cleanupResendTest();
   });
 
-  describe('sendProductInquiryEmail', () => {
+  describe("sendProductInquiryEmail", () => {
     const validProductInquiryData = {
-      firstName: 'Jane',
-      lastName: 'Smith',
-      email: 'jane.smith@example.com',
-      productName: 'Enterprise Widget',
-      productSlug: 'enterprise-widget',
+      firstName: "Jane",
+      lastName: "Smith",
+      email: "jane.smith@example.com",
+      productName: "Enterprise Widget",
+      productSlug: "enterprise-widget",
       quantity: 100,
-      company: 'Acme Corp',
-      requirements: 'Need bulk pricing',
+      company: "Acme Corp",
+      requirements: "Need bulk pricing",
       marketingConsent: true,
     };
 
-    it('should send product inquiry email successfully', async () => {
+    it("should send product inquiry email successfully", async () => {
       const service = new ResendServiceClass();
 
       mockResendSend.mockClear();
       mockResendSend.mockResolvedValue({
-        data: { id: 'product-inquiry-id' },
+        data: { id: "product-inquiry-id" },
         error: null,
       });
 
@@ -480,57 +480,57 @@ describe('resend - Product Inquiry and Utility Methods', () => {
         validProductInquiryData,
       );
 
-      expect(result).toBe('product-inquiry-id');
+      expect(result).toBe("product-inquiry-id");
       expect(mockResendSend).toHaveBeenCalledWith(
         expect.objectContaining({
-          from: 'test@example.com',
-          to: ['reply@example.com'],
-          replyTo: 'jane.smith@example.com',
-          subject: expect.stringContaining('Enterprise Widget'),
+          from: "test@example.com",
+          to: ["reply@example.com"],
+          replyTo: "jane.smith@example.com",
+          subject: expect.stringContaining("Enterprise Widget"),
           react: expect.anything(),
           text: expect.any(String),
           tags: expect.arrayContaining([
-            { name: 'type', value: 'product-inquiry' },
+            { name: "type", value: "product-inquiry" },
           ]),
         }),
       );
     });
 
-    it('should throw error when service is not configured', async () => {
+    it("should throw error when service is not configured", async () => {
       const service = new ResendServiceClass();
 
       mockResendSend.mockResolvedValue({
         data: null,
-        error: { message: 'API key not configured' },
+        error: { message: "API key not configured" },
       });
 
       await expect(
         service.sendProductInquiryEmail(validProductInquiryData),
-      ).rejects.toThrow('Failed to send product inquiry email');
+      ).rejects.toThrow("Failed to send product inquiry email");
     });
 
-    it('should handle API errors for product inquiry', async () => {
+    it("should handle API errors for product inquiry", async () => {
       const service = new ResendServiceClass();
       mockResendSend.mockResolvedValue({
         data: null,
-        error: { message: 'Product Inquiry API Error' },
+        error: { message: "Product Inquiry API Error" },
       });
 
       await expect(
         service.sendProductInquiryEmail(validProductInquiryData),
-      ).rejects.toThrow('Failed to send product inquiry email');
+      ).rejects.toThrow("Failed to send product inquiry email");
     });
 
-    it('should handle network errors for product inquiry', async () => {
+    it("should handle network errors for product inquiry", async () => {
       const service = new ResendServiceClass();
-      mockResendSend.mockRejectedValue(new Error('Network error'));
+      mockResendSend.mockRejectedValue(new Error("Network error"));
 
       await expect(
         service.sendProductInquiryEmail(validProductInquiryData),
-      ).rejects.toThrow('Failed to send product inquiry email');
+      ).rejects.toThrow("Failed to send product inquiry email");
     });
 
-    it('should return unknown when message ID is not available', async () => {
+    it("should return unknown when message ID is not available", async () => {
       const service = new ResendServiceClass();
 
       mockResendSend.mockClear();
@@ -542,12 +542,12 @@ describe('resend - Product Inquiry and Utility Methods', () => {
       const result = await service.sendProductInquiryEmail(
         validProductInquiryData,
       );
-      expect(result).toBe('unknown');
+      expect(result).toBe("unknown");
     });
   });
 
-  describe('getEmailStats', () => {
-    it('should return email statistics with zero values', () => {
+  describe("getEmailStats", () => {
+    it("should return email statistics with zero values", () => {
       const service = new ResendServiceClass();
       const stats = service.getEmailStats();
 
@@ -560,21 +560,21 @@ describe('resend - Product Inquiry and Utility Methods', () => {
     });
   });
 
-  describe('getEmailConfig', () => {
-    it('should return email configuration', () => {
+  describe("getEmailConfig", () => {
+    it("should return email configuration", () => {
       const service = new ResendServiceClass();
       const config = service.getEmailConfig();
 
       expect(config).toEqual({
-        from: 'test@example.com',
-        replyTo: 'reply@example.com',
-        supportEmail: 'reply@example.com',
+        from: "test@example.com",
+        replyTo: "reply@example.com",
+        supportEmail: "reply@example.com",
       });
     });
   });
 
-  describe('checkConnection', () => {
-    it('should return true when service is ready', () => {
+  describe("checkConnection", () => {
+    it("should return true when service is ready", () => {
       const service = new ResendServiceClass();
       expect(service.checkConnection()).toBe(true);
     });

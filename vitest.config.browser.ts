@@ -1,7 +1,7 @@
 // v4: provider types reference removed; provider is configured via function API
-import { resolve } from 'path';
-import { playwright } from '@vitest/browser-playwright';
-import { defineConfig } from 'vitest/config';
+import { resolve } from "path";
+import { playwright } from "@vitest/browser-playwright";
+import { defineConfig } from "vitest/config";
 
 /**
  * 浏览器测试专用配置
@@ -14,14 +14,14 @@ import { defineConfig } from 'vitest/config';
 export default defineConfig({
   optimizeDeps: {
     include: [
-      '@testing-library/react',
-      '@testing-library/dom',
-      'next/router',
-      'next/navigation',
-      'next-intl',
-      'next-intl/server',
-      '@t3-oss/env-nextjs',
-      'react/jsx-dev-runtime',
+      "@testing-library/react",
+      "@testing-library/dom",
+      "next/router",
+      "next/navigation",
+      "next-intl",
+      "next-intl/server",
+      "@t3-oss/env-nextjs",
+      "react/jsx-dev-runtime",
     ],
   },
   test: {
@@ -31,30 +31,30 @@ export default defineConfig({
     globals: true,
 
     // 设置文件（Browser Mode 使用轻量版 setup，避免与手动 Mock 冲突）
-    setupFiles: ['./src/test/setup.browser.ts'],
+    setupFiles: ["./src/test/setup.browser.ts"],
 
     // 浏览器测试文件匹配模式 - 严格限制范围
     include: [
-      'src/**/*.browser.test.{js,jsx,ts,tsx}',
-      'src/**/__tests__/**/*.browser.{js,jsx,ts,tsx}',
-      'tests/browser/**/*.{test,spec}.{js,jsx,ts,tsx}',
+      "src/**/*.browser.test.{js,jsx,ts,tsx}",
+      "src/**/__tests__/**/*.browser.{js,jsx,ts,tsx}",
+      "tests/browser/**/*.{test,spec}.{js,jsx,ts,tsx}",
       // 包含需要真实浏览器环境的测试
-      'src/**/visual-regression/**/*.{test,spec}.{js,jsx,ts,tsx}',
-      'src/**/performance/**/*.{test,spec}.{js,jsx,ts,tsx}',
+      "src/**/visual-regression/**/*.{test,spec}.{js,jsx,ts,tsx}",
+      "src/**/performance/**/*.{test,spec}.{js,jsx,ts,tsx}",
     ],
 
     // 排除文件 - 简化配置
     exclude: [
-      'node_modules',
-      '.next',
-      'dist',
-      'build',
-      'coverage',
-      '**/*.d.ts',
-      '**/*.stories.{js,jsx,ts,tsx}',
-      'tests/e2e/**/*',
-      '**/setup.{js,jsx,ts,tsx}',
-      '**/test-utils.{js,jsx,ts,tsx}',
+      "node_modules",
+      ".next",
+      "dist",
+      "build",
+      "coverage",
+      "**/*.d.ts",
+      "**/*.stories.{js,jsx,ts,tsx}",
+      "tests/e2e/**/*",
+      "**/setup.{js,jsx,ts,tsx}",
+      "**/test-utils.{js,jsx,ts,tsx}",
     ],
 
     // 浏览器特定配置 - Vitest v4 Provider API
@@ -63,7 +63,7 @@ export default defineConfig({
       // 在容器/CI 环境中禁用 sandbox 以提升兼容性
       provider: playwright({
         launchOptions: {
-          args: ['--no-sandbox', '--disable-dev-shm-usage'],
+          args: ["--no-sandbox", "--disable-dev-shm-usage"],
         },
       }),
       headless: true, // 无头模式，提高CI性能
@@ -71,7 +71,7 @@ export default defineConfig({
       // 浏览器实例配置（v4）
       instances: [
         {
-          browser: 'chromium',
+          browser: "chromium",
         },
       ],
 
@@ -87,26 +87,26 @@ export default defineConfig({
 
     // 覆盖率配置 - 浏览器测试专用
     coverage: {
-      provider: 'v8',
-      include: ['src/**/*.{js,jsx,ts,tsx}'],
-      reportsDirectory: './coverage/browser',
-      reporter: ['text', 'html', 'json'],
+      provider: "v8",
+      include: ["src/**/*.{js,jsx,ts,tsx}"],
+      reportsDirectory: "./coverage/browser",
+      reporter: ["text", "html", "json"],
       exclude: [
-        'node_modules/',
-        '.next/',
-        'dist/',
-        'build/',
-        'coverage/',
-        '**/*.d.ts',
-        '**/*.stories.{js,jsx,ts,tsx}',
-        '**/*.test.{js,jsx,ts,tsx}',
-        '**/*.spec.{js,jsx,ts,tsx}',
-        '**/*.browser.test.{js,jsx,ts,tsx}',
-        'src/test/**',
-        'src/testing/**',
-        'scripts/**',
-        '**/__mocks__/**',
-        '**/test-utils/**',
+        "node_modules/",
+        ".next/",
+        "dist/",
+        "build/",
+        "coverage/",
+        "**/*.d.ts",
+        "**/*.stories.{js,jsx,ts,tsx}",
+        "**/*.test.{js,jsx,ts,tsx}",
+        "**/*.spec.{js,jsx,ts,tsx}",
+        "**/*.browser.test.{js,jsx,ts,tsx}",
+        "src/test/**",
+        "src/testing/**",
+        "scripts/**",
+        "**/__mocks__/**",
+        "**/test-utils/**",
       ],
       // 全局覆盖率目标 → 85%（与主配置保持一致）
       thresholds: {
@@ -124,18 +124,18 @@ export default defineConfig({
     hookTimeout: 8000, // 从10秒降低到8秒，减少等待时间
 
     // 并发设置 - 浏览器测试资源消耗大，进一步优化
-    pool: 'threads',
+    pool: "threads",
 
     // 报告器配置
-    reporters: ['verbose', 'json'],
+    reporters: ["verbose", "json"],
     outputFile: {
-      json: './reports/browser-test-results.json',
+      json: "./reports/browser-test-results.json",
     },
 
     // 环境变量
     env: {
-      NODE_ENV: 'test',
-      BROWSER_TEST: 'true',
+      NODE_ENV: "test",
+      BROWSER_TEST: "true",
     },
 
     // 性能配置 - 浏览器环境优化
@@ -144,7 +144,7 @@ export default defineConfig({
 
     // 缓存配置 - 浏览器测试专用缓存
     cache: {
-      dir: 'node_modules/.vitest-browser', // 独立的浏览器测试缓存目录
+      dir: "node_modules/.vitest-browser", // 独立的浏览器测试缓存目录
     },
 
     // 依赖优化 - 浏览器环境特定优化
@@ -153,15 +153,15 @@ export default defineConfig({
         client: {
           enabled: true,
           include: [
-            'next/router',
-            'next/navigation',
-            'zod',
-            'next-intl',
-            'next-intl/server',
-            '@t3-oss/env-nextjs',
-            'next/font/local',
-            'react/jsx-dev-runtime',
-            '@testing-library/react',
+            "next/router",
+            "next/navigation",
+            "zod",
+            "next-intl",
+            "next-intl/server",
+            "@t3-oss/env-nextjs",
+            "next/font/local",
+            "react/jsx-dev-runtime",
+            "@testing-library/react",
           ],
         },
       },
@@ -179,18 +179,18 @@ export default defineConfig({
   // 路径别名配置 - 与主配置保持一致
   resolve: {
     alias: {
-      '@': resolve(__dirname, './src'),
+      "@": resolve(__dirname, "./src"),
     },
   },
 
   // 定义全局变量
   define: {
-    'process.env.NODE_ENV': '"test"',
-    'process.env.BROWSER_TEST': '"true"',
+    "process.env.NODE_ENV": '"test"',
+    "process.env.BROWSER_TEST": '"true"',
   },
 
   // JSX配置 - 移除自动注入避免冲突
   esbuild: {
-    jsx: 'automatic',
+    jsx: "automatic",
   },
 });

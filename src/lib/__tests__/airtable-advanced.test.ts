@@ -1,13 +1,13 @@
-import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
+import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 import type {
   AirtableBaseLike,
   AirtableServicePrivate,
-} from '@/types/test-types';
-import type { AirtableService as AirtableServiceType } from '../airtable/service';
+} from "@/types/test-types";
+import type { AirtableService as AirtableServiceType } from "../airtable/service";
 import {
   configureServiceForTesting,
   createMockBase,
-} from './mocks/airtable-test-helpers';
+} from "./mocks/airtable-test-helpers";
 
 // Mock Airtable
 const mockCreate = vi.fn();
@@ -21,9 +21,9 @@ const mockTable = vi.fn().mockReturnValue({
   destroy: mockDestroy,
 });
 
-const tableFactory: AirtableBaseLike['table'] = (_name) => {
+const tableFactory: AirtableBaseLike["table"] = (_name) => {
   // Parameter renamed with underscore to indicate it's intentionally unused
-  return mockTable() as ReturnType<AirtableBaseLike['table']>;
+  return mockTable() as ReturnType<AirtableBaseLike["table"]>;
 };
 
 const mockBase = vi.fn(() => createMockBase(tableFactory));
@@ -35,7 +35,7 @@ const setServiceReady = (service: unknown) =>
     createMockBase(tableFactory),
   );
 
-vi.mock('airtable', () => ({
+vi.mock("airtable", () => ({
   default: {
     configure: mockConfigure,
     base: mockBase,
@@ -43,22 +43,22 @@ vi.mock('airtable', () => ({
 }));
 
 // Use TypeScript Mock modules to bypass Vite's special handling
-vi.mock('@/../env.mjs', async () => {
-  const mockEnv = await import('./mocks/airtable-env');
+vi.mock("@/../env.mjs", async () => {
+  const mockEnv = await import("./mocks/airtable-env");
   return mockEnv;
 });
 
-vi.mock('./logger', async () => {
-  const mockLogger = await import('./mocks/logger');
+vi.mock("./logger", async () => {
+  const mockLogger = await import("./mocks/logger");
   return mockLogger;
 });
 
-vi.mock('./validations', async () => {
-  const mockValidations = await import('./mocks/airtable-validations');
+vi.mock("./validations", async () => {
+  const mockValidations = await import("./mocks/airtable-validations");
   return mockValidations;
 });
 
-describe('Airtable Advanced Tests', () => {
+describe("Airtable Advanced Tests", () => {
   let AirtableServiceClass: typeof AirtableServiceType;
 
   beforeEach(async () => {
@@ -80,7 +80,7 @@ describe('Airtable Advanced Tests', () => {
     vi.resetModules();
 
     // Import the service fresh for each test
-    const AirtableModule = await import('../airtable');
+    const AirtableModule = await import("../airtable");
     AirtableServiceClass =
       AirtableModule.AirtableService as typeof AirtableServiceType;
   });
@@ -89,27 +89,27 @@ describe('Airtable Advanced Tests', () => {
     vi.clearAllMocks();
   });
 
-  describe('Edge Cases', () => {
-    it('should handle very large form data', async () => {
+  describe("Edge Cases", () => {
+    it("should handle very large form data", async () => {
       const service = new AirtableServiceClass();
 
       // Override service configuration to make it ready
       setServiceReady(service);
 
       const largeFormData = {
-        firstName: 'John',
-        lastName: 'Doe',
-        email: 'john.doe@example.com',
-        company: 'Test Company',
-        message: 'A'.repeat(10000), // Very large message
+        firstName: "John",
+        lastName: "Doe",
+        email: "john.doe@example.com",
+        company: "Test Company",
+        message: "A".repeat(10000), // Very large message
         acceptPrivacy: true,
-        website: '',
+        website: "",
       };
 
       const mockRecord = {
-        id: 'rec123456',
+        id: "rec123456",
         fields: {},
-        get: vi.fn().mockReturnValue('2023-01-01T00:00:00Z'),
+        get: vi.fn().mockReturnValue("2023-01-01T00:00:00Z"),
       };
 
       mockCreate.mockClear();
@@ -121,26 +121,26 @@ describe('Airtable Advanced Tests', () => {
       expect(mockCreate).toHaveBeenCalled();
     });
 
-    it('should handle special characters in form data', async () => {
+    it("should handle special characters in form data", async () => {
       const service = new AirtableServiceClass();
 
       // Override service configuration to make it ready
       setServiceReady(service);
 
       const specialCharFormData = {
-        firstName: 'José',
-        lastName: 'García-López',
-        email: 'jose.garcia@example.com', // Use ASCII-compatible email
-        company: 'Tëst Çömpäny',
-        message: 'Special chars: àáâãäåæçèéêë',
+        firstName: "José",
+        lastName: "García-López",
+        email: "jose.garcia@example.com", // Use ASCII-compatible email
+        company: "Tëst Çömpäny",
+        message: "Special chars: àáâãäåæçèéêë",
         acceptPrivacy: true,
-        website: '',
+        website: "",
       };
 
       const mockRecord = {
-        id: 'rec123456',
+        id: "rec123456",
         fields: {},
-        get: vi.fn().mockReturnValue('2023-01-01T00:00:00Z'),
+        get: vi.fn().mockReturnValue("2023-01-01T00:00:00Z"),
       };
 
       mockCreate.mockClear();
@@ -152,15 +152,15 @@ describe('Airtable Advanced Tests', () => {
       expect(mockCreate).toHaveBeenCalledWith([
         expect.objectContaining({
           fields: expect.objectContaining({
-            'First Name': 'José',
-            'Last Name': 'García-López',
-            'Email': 'jose.garcia@example.com',
+            "First Name": "José",
+            "Last Name": "García-López",
+            Email: "jose.garcia@example.com",
           }),
         }),
       ]);
     });
 
-    it('should handle concurrent operations', async () => {
+    it("should handle concurrent operations", async () => {
       const service = new AirtableServiceClass();
 
       // Override service configuration to make it ready
@@ -173,9 +173,9 @@ describe('Airtable Advanced Tests', () => {
       };
 
       const mockRecord = {
-        id: 'rec123456',
+        id: "rec123456",
         fields: {},
-        get: vi.fn().mockReturnValue('2023-01-01T00:00:00Z'),
+        get: vi.fn().mockReturnValue("2023-01-01T00:00:00Z"),
       };
 
       const mockSelectChain = {
@@ -188,20 +188,20 @@ describe('Airtable Advanced Tests', () => {
       mockSelect.mockReturnValue(mockSelectChain);
 
       const formData = {
-        firstName: 'John',
-        lastName: 'Doe',
-        email: 'john.doe@example.com',
-        company: 'Test Company',
-        message: 'Test message',
+        firstName: "John",
+        lastName: "Doe",
+        email: "john.doe@example.com",
+        company: "Test Company",
+        message: "Test message",
         acceptPrivacy: true,
-        website: '',
+        website: "",
       };
 
       // Run concurrent operations
       const promises = [
         service.createContact(formData),
         service.getContacts(),
-        service.createContact({ ...formData, firstName: 'Jane' }),
+        service.createContact({ ...formData, firstName: "Jane" }),
       ];
 
       const results = await Promise.all(promises);

@@ -2,7 +2,7 @@
  * 内容查询函数
  */
 
-import path from 'path';
+import path from "path";
 import type {
   BlogPost,
   BlogPostMetadata,
@@ -13,11 +13,11 @@ import type {
   Page,
   PageMetadata,
   ParsedContent,
-} from '@/types/content.types';
-import { getContentFiles, parseContentFile } from '@/lib/content-parser';
-import { filterPosts } from '@/lib/content-query/filters';
-import { paginatePosts, sortPosts } from '@/lib/content-query/sorting';
-import { getContentConfig, PAGES_DIR, POSTS_DIR } from '@/lib/content-utils';
+} from "@/types/content.types";
+import { getContentFiles, parseContentFile } from "@/lib/content-parser";
+import { filterPosts } from "@/lib/content-query/filters";
+import { paginatePosts, sortPosts } from "@/lib/content-query/sorting";
+import { getContentConfig, PAGES_DIR, POSTS_DIR } from "@/lib/content-utils";
 
 /**
  * Get all blog posts
@@ -28,7 +28,7 @@ export function getAllPosts(
 ): BlogPost[] {
   const files = getContentFiles(POSTS_DIR, locale);
   const parsedPosts = files.map((file) =>
-    parseContentFile<BlogPostMetadata>(file, 'posts'),
+    parseContentFile<BlogPostMetadata>(file, "posts"),
   );
 
   const filteredPosts = filterPosts(parsedPosts, options);
@@ -44,7 +44,7 @@ export function getAllPosts(
 export function getAllPages(locale?: Locale): Page[] {
   const files = getContentFiles(PAGES_DIR, locale);
   return files
-    .map((file) => parseContentFile<PageMetadata>(file, 'pages'))
+    .map((file) => parseContentFile<PageMetadata>(file, "pages"))
     .filter((page) => {
       // Filter drafts in production
       const config = getContentConfig();
@@ -60,7 +60,7 @@ export function getContentBySlug<T extends ContentMetadata = ContentMetadata>(
   type: ContentType,
   locale?: Locale,
 ): ParsedContent<T> {
-  const contentDir = type === 'posts' ? POSTS_DIR : PAGES_DIR;
+  const contentDir = type === "posts" ? POSTS_DIR : PAGES_DIR;
   const files = getContentFiles(contentDir, locale);
 
   const matchingFile = files.find((file) => {
@@ -79,12 +79,12 @@ export function getContentBySlug<T extends ContentMetadata = ContentMetadata>(
  * Get blog post by slug
  */
 export function getPostBySlug(slug: string, locale?: Locale): BlogPost {
-  return getContentBySlug<BlogPostMetadata>(slug, 'posts', locale) as BlogPost;
+  return getContentBySlug<BlogPostMetadata>(slug, "posts", locale) as BlogPost;
 }
 
 /**
  * Get page by slug
  */
 export function getPageBySlug(slug: string, locale?: Locale): Page {
-  return getContentBySlug<PageMetadata>(slug, 'pages', locale) as Page;
+  return getContentBySlug<PageMetadata>(slug, "pages", locale) as Page;
 }

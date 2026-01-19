@@ -1,8 +1,8 @@
-import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
-import { WhatsAppMessageService } from '../whatsapp-messages';
+import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
+import { WhatsAppMessageService } from "../whatsapp-messages";
 
 // Mock the logger to prevent console output during tests
-vi.mock('@/lib/logger', () => ({
+vi.mock("@/lib/logger", () => ({
   logger: {
     error: vi.fn(),
     info: vi.fn(),
@@ -11,9 +11,9 @@ vi.mock('@/lib/logger', () => ({
   },
 }));
 
-describe('WhatsAppMessageService', () => {
-  const mockAccessToken = 'test-access-token';
-  const mockPhoneNumberId = 'test-phone-id';
+describe("WhatsAppMessageService", () => {
+  const mockAccessToken = "test-access-token";
+  const mockPhoneNumberId = "test-phone-id";
   let service: WhatsAppMessageService;
 
   beforeEach(() => {
@@ -25,18 +25,18 @@ describe('WhatsAppMessageService', () => {
     vi.restoreAllMocks();
   });
 
-  describe('constructor', () => {
-    it('should create instance with provided credentials', () => {
-      const instance = new WhatsAppMessageService('token', 'phone-id');
+  describe("constructor", () => {
+    it("should create instance with provided credentials", () => {
+      const instance = new WhatsAppMessageService("token", "phone-id");
       expect(instance).toBeInstanceOf(WhatsAppMessageService);
     });
   });
 
-  describe('sendMessage', () => {
-    it('should return success response on successful API call', async () => {
-      const mockResponse = { messages: [{ id: 'msg-123' }] };
+  describe("sendMessage", () => {
+    it("should return success response on successful API call", async () => {
+      const mockResponse = { messages: [{ id: "msg-123" }] };
       vi.stubGlobal(
-        'fetch',
+        "fetch",
         vi.fn().mockResolvedValue({
           ok: true,
           json: () => Promise.resolve(mockResponse),
@@ -44,20 +44,20 @@ describe('WhatsAppMessageService', () => {
       );
 
       const result = await service.sendMessage({
-        messaging_product: 'whatsapp',
-        recipient_type: 'individual',
-        to: '1234567890',
-        type: 'text',
-        text: { body: 'Hello' },
+        messaging_product: "whatsapp",
+        recipient_type: "individual",
+        to: "1234567890",
+        type: "text",
+        text: { body: "Hello" },
       });
 
       expect(result.success).toBe(true);
       expect(result.data).toEqual(mockResponse);
     });
 
-    it('should call API with correct URL and headers', async () => {
+    it("should call API with correct URL and headers", async () => {
       vi.stubGlobal(
-        'fetch',
+        "fetch",
         vi.fn().mockResolvedValue({
           ok: true,
           json: () => Promise.resolve({}),
@@ -65,48 +65,48 @@ describe('WhatsAppMessageService', () => {
       );
 
       await service.sendMessage({
-        messaging_product: 'whatsapp',
-        recipient_type: 'individual',
-        to: '1234567890',
-        type: 'text',
+        messaging_product: "whatsapp",
+        recipient_type: "individual",
+        to: "1234567890",
+        type: "text",
       });
 
       expect(fetch).toHaveBeenCalledWith(
         `https://graph.facebook.com/v18.0/${mockPhoneNumberId}/messages`,
         expect.objectContaining({
-          method: 'POST',
+          method: "POST",
           headers: {
-            'Authorization': `Bearer ${mockAccessToken}`,
-            'Content-Type': 'application/json',
+            Authorization: `Bearer ${mockAccessToken}`,
+            "Content-Type": "application/json",
           },
         }),
       );
     });
 
-    it('should return error response when API returns error', async () => {
+    it("should return error response when API returns error", async () => {
       vi.stubGlobal(
-        'fetch',
+        "fetch",
         vi.fn().mockResolvedValue({
           ok: false,
           json: () =>
-            Promise.resolve({ error: { message: 'Invalid recipient' } }),
+            Promise.resolve({ error: { message: "Invalid recipient" } }),
         }),
       );
 
       const result = await service.sendMessage({
-        messaging_product: 'whatsapp',
-        recipient_type: 'individual',
-        to: 'invalid',
-        type: 'text',
+        messaging_product: "whatsapp",
+        recipient_type: "individual",
+        to: "invalid",
+        type: "text",
       });
 
       expect(result.success).toBe(false);
-      expect(result.error).toBe('Invalid recipient');
+      expect(result.error).toBe("Invalid recipient");
     });
 
-    it('should return generic error when API error has no message', async () => {
+    it("should return generic error when API error has no message", async () => {
       vi.stubGlobal(
-        'fetch',
+        "fetch",
         vi.fn().mockResolvedValue({
           ok: false,
           json: () => Promise.resolve({}),
@@ -114,70 +114,70 @@ describe('WhatsAppMessageService', () => {
       );
 
       const result = await service.sendMessage({
-        messaging_product: 'whatsapp',
-        recipient_type: 'individual',
-        to: '1234567890',
-        type: 'text',
+        messaging_product: "whatsapp",
+        recipient_type: "individual",
+        to: "1234567890",
+        type: "text",
       });
 
       expect(result.success).toBe(false);
-      expect(result.error).toBe('Failed to send message');
+      expect(result.error).toBe("Failed to send message");
     });
 
-    it('should handle fetch exceptions', async () => {
+    it("should handle fetch exceptions", async () => {
       vi.stubGlobal(
-        'fetch',
-        vi.fn().mockRejectedValue(new Error('Network error')),
+        "fetch",
+        vi.fn().mockRejectedValue(new Error("Network error")),
       );
 
       const result = await service.sendMessage({
-        messaging_product: 'whatsapp',
-        recipient_type: 'individual',
-        to: '1234567890',
-        type: 'text',
+        messaging_product: "whatsapp",
+        recipient_type: "individual",
+        to: "1234567890",
+        type: "text",
       });
 
       expect(result.success).toBe(false);
-      expect(result.error).toBe('Network error');
+      expect(result.error).toBe("Network error");
     });
 
-    it('should handle non-Error exceptions', async () => {
-      vi.stubGlobal('fetch', vi.fn().mockRejectedValue('String error'));
+    it("should handle non-Error exceptions", async () => {
+      vi.stubGlobal("fetch", vi.fn().mockRejectedValue("String error"));
 
       const result = await service.sendMessage({
-        messaging_product: 'whatsapp',
-        recipient_type: 'individual',
-        to: '1234567890',
-        type: 'text',
+        messaging_product: "whatsapp",
+        recipient_type: "individual",
+        to: "1234567890",
+        type: "text",
       });
 
       expect(result.success).toBe(false);
-      expect(result.error).toBe('Unknown error');
+      expect(result.error).toBe("Unknown error");
     });
   });
 
-  describe('sendTextMessage', () => {
-    it('should send text message with correct payload', async () => {
+  describe("sendTextMessage", () => {
+    it("should send text message with correct payload", async () => {
       vi.stubGlobal(
-        'fetch',
+        "fetch",
         vi.fn().mockResolvedValue({
           ok: true,
-          json: () => Promise.resolve({ messages: [{ id: 'msg-123' }] }),
+          json: () => Promise.resolve({ messages: [{ id: "msg-123" }] }),
         }),
       );
 
-      await service.sendTextMessage('1234567890', 'Hello World');
+      await service.sendTextMessage("1234567890", "Hello World");
 
       expect(fetch).toHaveBeenCalledWith(
         expect.any(String),
         expect.objectContaining({
           body: JSON.stringify({
-            messaging_product: 'whatsapp',
-            recipient_type: 'individual',
-            to: '1234567890',
-            type: 'text',
+            messaging_product: "whatsapp",
+            recipient_type: "individual",
+            to: "1234567890",
+            type: "text",
             text: {
-              body: 'Hello World',
+              body: "Hello World",
               preview_url: false,
             },
           }),
@@ -185,9 +185,9 @@ describe('WhatsAppMessageService', () => {
       );
     });
 
-    it('should enable URL preview when specified', async () => {
+    it("should enable URL preview when specified", async () => {
       vi.stubGlobal(
-        'fetch',
+        "fetch",
         vi.fn().mockResolvedValue({
           ok: true,
           json: () => Promise.resolve({}),
@@ -195,8 +195,8 @@ describe('WhatsAppMessageService', () => {
       );
 
       await service.sendTextMessage(
-        '1234567890',
-        'Check out https://example.com',
+        "1234567890",
+        "Check out https://example.com",
         true,
       );
 
@@ -208,25 +208,25 @@ describe('WhatsAppMessageService', () => {
       );
     });
 
-    it('should return service response', async () => {
+    it("should return service response", async () => {
       vi.stubGlobal(
-        'fetch',
+        "fetch",
         vi.fn().mockResolvedValue({
           ok: true,
-          json: () => Promise.resolve({ messages: [{ id: 'msg-456' }] }),
+          json: () => Promise.resolve({ messages: [{ id: "msg-456" }] }),
         }),
       );
 
-      const result = await service.sendTextMessage('1234567890', 'Test');
+      const result = await service.sendTextMessage("1234567890", "Test");
 
       expect(result.success).toBe(true);
     });
   });
 
-  describe('sendImageMessage', () => {
-    it('should send image message with URL', async () => {
+  describe("sendImageMessage", () => {
+    it("should send image message with URL", async () => {
       vi.stubGlobal(
-        'fetch',
+        "fetch",
         vi.fn().mockResolvedValue({
           ok: true,
           json: () => Promise.resolve({}),
@@ -234,29 +234,29 @@ describe('WhatsAppMessageService', () => {
       );
 
       await service.sendImageMessage(
-        '1234567890',
-        'https://example.com/image.jpg',
+        "1234567890",
+        "https://example.com/image.jpg",
       );
 
       expect(fetch).toHaveBeenCalledWith(
         expect.any(String),
         expect.objectContaining({
           body: JSON.stringify({
-            messaging_product: 'whatsapp',
-            recipient_type: 'individual',
-            to: '1234567890',
-            type: 'image',
+            messaging_product: "whatsapp",
+            recipient_type: "individual",
+            to: "1234567890",
+            type: "image",
             image: {
-              link: 'https://example.com/image.jpg',
+              link: "https://example.com/image.jpg",
             },
           }),
         }),
       );
     });
 
-    it('should include caption when provided', async () => {
+    it("should include caption when provided", async () => {
       vi.stubGlobal(
-        'fetch',
+        "fetch",
         vi.fn().mockResolvedValue({
           ok: true,
           json: () => Promise.resolve({}),
@@ -264,9 +264,9 @@ describe('WhatsAppMessageService', () => {
       );
 
       await service.sendImageMessage(
-        '1234567890',
-        'https://example.com/image.jpg',
-        'Image caption',
+        "1234567890",
+        "https://example.com/image.jpg",
+        "Image caption",
       );
 
       expect(fetch).toHaveBeenCalledWith(
@@ -278,10 +278,10 @@ describe('WhatsAppMessageService', () => {
     });
   });
 
-  describe('sendTemplateMessage', () => {
-    it('should send template message with basic payload', async () => {
+  describe("sendTemplateMessage", () => {
+    it("should send template message with basic payload", async () => {
       vi.stubGlobal(
-        'fetch',
+        "fetch",
         vi.fn().mockResolvedValue({
           ok: true,
           json: () => Promise.resolve({}),
@@ -289,24 +289,24 @@ describe('WhatsAppMessageService', () => {
       );
 
       await service.sendTemplateMessage({
-        to: '1234567890',
-        templateName: 'hello_world',
-        languageCode: 'en_US',
+        to: "1234567890",
+        templateName: "hello_world",
+        languageCode: "en_US",
       });
 
       expect(fetch).toHaveBeenCalledWith(
         expect.any(String),
         expect.objectContaining({
           body: JSON.stringify({
-            messaging_product: 'whatsapp',
-            recipient_type: 'individual',
-            to: '1234567890',
-            type: 'template',
+            messaging_product: "whatsapp",
+            recipient_type: "individual",
+            to: "1234567890",
+            type: "template",
             template: {
-              name: 'hello_world',
+              name: "hello_world",
               language: {
-                code: 'en_US',
-                policy: 'deterministic',
+                code: "en_US",
+                policy: "deterministic",
               },
             },
           }),
@@ -314,9 +314,9 @@ describe('WhatsAppMessageService', () => {
       );
     });
 
-    it('should include parameters when provided', async () => {
+    it("should include parameters when provided", async () => {
       vi.stubGlobal(
-        'fetch',
+        "fetch",
         vi.fn().mockResolvedValue({
           ok: true,
           json: () => Promise.resolve({}),
@@ -324,10 +324,10 @@ describe('WhatsAppMessageService', () => {
       );
 
       await service.sendTemplateMessage({
-        to: '1234567890',
-        templateName: 'greeting',
-        languageCode: 'en_US',
-        parameters: ['John', 'Doe'],
+        to: "1234567890",
+        templateName: "greeting",
+        languageCode: "en_US",
+        parameters: ["John", "Doe"],
       });
 
       const callArgs = (fetch as ReturnType<typeof vi.fn>).mock.calls[0]![1];
@@ -335,18 +335,18 @@ describe('WhatsAppMessageService', () => {
 
       expect(body.template.components).toEqual([
         {
-          type: 'body',
+          type: "body",
           parameters: [
-            { type: 'text', text: 'John' },
-            { type: 'text', text: 'Doe' },
+            { type: "text", text: "John" },
+            { type: "text", text: "Doe" },
           ],
         },
       ]);
     });
 
-    it('should not include components when parameters is empty', async () => {
+    it("should not include components when parameters is empty", async () => {
       vi.stubGlobal(
-        'fetch',
+        "fetch",
         vi.fn().mockResolvedValue({
           ok: true,
           json: () => Promise.resolve({}),
@@ -354,9 +354,9 @@ describe('WhatsAppMessageService', () => {
       );
 
       await service.sendTemplateMessage({
-        to: '1234567890',
-        templateName: 'hello_world',
-        languageCode: 'en_US',
+        to: "1234567890",
+        templateName: "hello_world",
+        languageCode: "en_US",
         parameters: [],
       });
 
@@ -367,10 +367,10 @@ describe('WhatsAppMessageService', () => {
     });
   });
 
-  describe('sendButtonMessage', () => {
-    it('should send button message with required fields', async () => {
+  describe("sendButtonMessage", () => {
+    it("should send button message with required fields", async () => {
       vi.stubGlobal(
-        'fetch',
+        "fetch",
         vi.fn().mockResolvedValue({
           ok: true,
           json: () => Promise.resolve({}),
@@ -378,26 +378,26 @@ describe('WhatsAppMessageService', () => {
       );
 
       await service.sendButtonMessage({
-        to: '1234567890',
-        bodyText: 'Choose an option',
+        to: "1234567890",
+        bodyText: "Choose an option",
         buttons: [
-          { id: 'btn1', title: 'Option 1' },
-          { id: 'btn2', title: 'Option 2' },
+          { id: "btn1", title: "Option 1" },
+          { id: "btn2", title: "Option 2" },
         ],
       });
 
       const callArgs = (fetch as ReturnType<typeof vi.fn>).mock.calls[0]![1];
       const body = JSON.parse(callArgs!.body);
 
-      expect(body.type).toBe('interactive');
-      expect(body.interactive.type).toBe('button');
-      expect(body.interactive.body.text).toBe('Choose an option');
+      expect(body.type).toBe("interactive");
+      expect(body.interactive.type).toBe("button");
+      expect(body.interactive.body.text).toBe("Choose an option");
       expect(body.interactive.action.buttons).toHaveLength(2);
     });
 
-    it('should format buttons correctly', async () => {
+    it("should format buttons correctly", async () => {
       vi.stubGlobal(
-        'fetch',
+        "fetch",
         vi.fn().mockResolvedValue({
           ok: true,
           json: () => Promise.resolve({}),
@@ -405,26 +405,26 @@ describe('WhatsAppMessageService', () => {
       );
 
       await service.sendButtonMessage({
-        to: '1234567890',
-        bodyText: 'Test',
-        buttons: [{ id: 'yes', title: 'Yes' }],
+        to: "1234567890",
+        bodyText: "Test",
+        buttons: [{ id: "yes", title: "Yes" }],
       });
 
       const callArgs = (fetch as ReturnType<typeof vi.fn>).mock.calls[0]![1];
       const body = JSON.parse(callArgs!.body);
 
       expect(body.interactive.action.buttons[0]).toEqual({
-        type: 'reply',
+        type: "reply",
         reply: {
-          id: 'yes',
-          title: 'Yes',
+          id: "yes",
+          title: "Yes",
         },
       });
     });
 
-    it('should include header when provided', async () => {
+    it("should include header when provided", async () => {
       vi.stubGlobal(
-        'fetch',
+        "fetch",
         vi.fn().mockResolvedValue({
           ok: true,
           json: () => Promise.resolve({}),
@@ -432,24 +432,24 @@ describe('WhatsAppMessageService', () => {
       );
 
       await service.sendButtonMessage({
-        to: '1234567890',
-        bodyText: 'Body',
-        buttons: [{ id: 'btn1', title: 'OK' }],
-        headerText: 'Header Text',
+        to: "1234567890",
+        bodyText: "Body",
+        buttons: [{ id: "btn1", title: "OK" }],
+        headerText: "Header Text",
       });
 
       const callArgs = (fetch as ReturnType<typeof vi.fn>).mock.calls[0]![1];
       const body = JSON.parse(callArgs!.body);
 
       expect(body.interactive.header).toEqual({
-        type: 'text',
-        text: 'Header Text',
+        type: "text",
+        text: "Header Text",
       });
     });
 
-    it('should include footer when provided', async () => {
+    it("should include footer when provided", async () => {
       vi.stubGlobal(
-        'fetch',
+        "fetch",
         vi.fn().mockResolvedValue({
           ok: true,
           json: () => Promise.resolve({}),
@@ -457,23 +457,23 @@ describe('WhatsAppMessageService', () => {
       );
 
       await service.sendButtonMessage({
-        to: '1234567890',
-        bodyText: 'Body',
-        buttons: [{ id: 'btn1', title: 'OK' }],
-        footerText: 'Footer Text',
+        to: "1234567890",
+        bodyText: "Body",
+        buttons: [{ id: "btn1", title: "OK" }],
+        footerText: "Footer Text",
       });
 
       const callArgs = (fetch as ReturnType<typeof vi.fn>).mock.calls[0]![1];
       const body = JSON.parse(callArgs!.body);
 
       expect(body.interactive.footer).toEqual({
-        text: 'Footer Text',
+        text: "Footer Text",
       });
     });
 
-    it('should not include header or footer when not provided', async () => {
+    it("should not include header or footer when not provided", async () => {
       vi.stubGlobal(
-        'fetch',
+        "fetch",
         vi.fn().mockResolvedValue({
           ok: true,
           json: () => Promise.resolve({}),
@@ -481,9 +481,9 @@ describe('WhatsAppMessageService', () => {
       );
 
       await service.sendButtonMessage({
-        to: '1234567890',
-        bodyText: 'Body',
-        buttons: [{ id: 'btn1', title: 'OK' }],
+        to: "1234567890",
+        bodyText: "Body",
+        buttons: [{ id: "btn1", title: "OK" }],
       });
 
       const callArgs = (fetch as ReturnType<typeof vi.fn>).mock.calls[0]![1];
@@ -494,10 +494,10 @@ describe('WhatsAppMessageService', () => {
     });
   });
 
-  describe('sendListMessage', () => {
-    it('should send list message with required fields', async () => {
+  describe("sendListMessage", () => {
+    it("should send list message with required fields", async () => {
       vi.stubGlobal(
-        'fetch',
+        "fetch",
         vi.fn().mockResolvedValue({
           ok: true,
           json: () => Promise.resolve({}),
@@ -505,15 +505,15 @@ describe('WhatsAppMessageService', () => {
       );
 
       await service.sendListMessage({
-        to: '1234567890',
-        bodyText: 'Select an item',
-        buttonText: 'View Options',
+        to: "1234567890",
+        bodyText: "Select an item",
+        buttonText: "View Options",
         sections: [
           {
-            title: 'Section 1',
+            title: "Section 1",
             rows: [
-              { id: 'item1', title: 'Item 1' },
-              { id: 'item2', title: 'Item 2', description: 'Description' },
+              { id: "item1", title: "Item 1" },
+              { id: "item2", title: "Item 2", description: "Description" },
             ],
           },
         ],
@@ -522,15 +522,15 @@ describe('WhatsAppMessageService', () => {
       const callArgs = (fetch as ReturnType<typeof vi.fn>).mock.calls[0]![1];
       const body = JSON.parse(callArgs!.body);
 
-      expect(body.type).toBe('interactive');
-      expect(body.interactive.type).toBe('list');
-      expect(body.interactive.body.text).toBe('Select an item');
-      expect(body.interactive.action.button).toBe('View Options');
+      expect(body.type).toBe("interactive");
+      expect(body.interactive.type).toBe("list");
+      expect(body.interactive.body.text).toBe("Select an item");
+      expect(body.interactive.action.button).toBe("View Options");
     });
 
-    it('should format sections correctly', async () => {
+    it("should format sections correctly", async () => {
       vi.stubGlobal(
-        'fetch',
+        "fetch",
         vi.fn().mockResolvedValue({
           ok: true,
           json: () => Promise.resolve({}),
@@ -538,16 +538,16 @@ describe('WhatsAppMessageService', () => {
       );
 
       await service.sendListMessage({
-        to: '1234567890',
-        bodyText: 'Test',
-        buttonText: 'Menu',
+        to: "1234567890",
+        bodyText: "Test",
+        buttonText: "Menu",
         sections: [
           {
-            title: 'Products',
-            rows: [{ id: 'p1', title: 'Product 1' }],
+            title: "Products",
+            rows: [{ id: "p1", title: "Product 1" }],
           },
           {
-            rows: [{ id: 'p2', title: 'Product 2' }],
+            rows: [{ id: "p2", title: "Product 2" }],
           },
         ],
       });
@@ -556,13 +556,13 @@ describe('WhatsAppMessageService', () => {
       const body = JSON.parse(callArgs!.body);
 
       expect(body.interactive.action.sections).toHaveLength(2);
-      expect(body.interactive.action.sections[0].title).toBe('Products');
-      expect(body.interactive.action.sections[1].title).toBe('');
+      expect(body.interactive.action.sections[0].title).toBe("Products");
+      expect(body.interactive.action.sections[1].title).toBe("");
     });
 
-    it('should include header from options', async () => {
+    it("should include header from options", async () => {
       vi.stubGlobal(
-        'fetch',
+        "fetch",
         vi.fn().mockResolvedValue({
           ok: true,
           json: () => Promise.resolve({}),
@@ -570,25 +570,25 @@ describe('WhatsAppMessageService', () => {
       );
 
       await service.sendListMessage({
-        to: '1234567890',
-        bodyText: 'Body',
-        buttonText: 'Menu',
-        sections: [{ rows: [{ id: 'r1', title: 'Row' }] }],
-        options: { headerText: 'Header' },
+        to: "1234567890",
+        bodyText: "Body",
+        buttonText: "Menu",
+        sections: [{ rows: [{ id: "r1", title: "Row" }] }],
+        options: { headerText: "Header" },
       });
 
       const callArgs = (fetch as ReturnType<typeof vi.fn>).mock.calls[0]![1];
       const body = JSON.parse(callArgs!.body);
 
       expect(body.interactive.header).toEqual({
-        type: 'text',
-        text: 'Header',
+        type: "text",
+        text: "Header",
       });
     });
 
-    it('should include footer from options', async () => {
+    it("should include footer from options", async () => {
       vi.stubGlobal(
-        'fetch',
+        "fetch",
         vi.fn().mockResolvedValue({
           ok: true,
           json: () => Promise.resolve({}),
@@ -596,24 +596,24 @@ describe('WhatsAppMessageService', () => {
       );
 
       await service.sendListMessage({
-        to: '1234567890',
-        bodyText: 'Body',
-        buttonText: 'Menu',
-        sections: [{ rows: [{ id: 'r1', title: 'Row' }] }],
-        options: { footerText: 'Footer' },
+        to: "1234567890",
+        bodyText: "Body",
+        buttonText: "Menu",
+        sections: [{ rows: [{ id: "r1", title: "Row" }] }],
+        options: { footerText: "Footer" },
       });
 
       const callArgs = (fetch as ReturnType<typeof vi.fn>).mock.calls[0]![1];
       const body = JSON.parse(callArgs!.body);
 
       expect(body.interactive.footer).toEqual({
-        text: 'Footer',
+        text: "Footer",
       });
     });
 
-    it('should handle multiple sections with rows', async () => {
+    it("should handle multiple sections with rows", async () => {
       vi.stubGlobal(
-        'fetch',
+        "fetch",
         vi.fn().mockResolvedValue({
           ok: true,
           json: () => Promise.resolve({}),
@@ -621,20 +621,20 @@ describe('WhatsAppMessageService', () => {
       );
 
       await service.sendListMessage({
-        to: '1234567890',
-        bodyText: 'Menu',
-        buttonText: 'View',
+        to: "1234567890",
+        bodyText: "Menu",
+        buttonText: "View",
         sections: [
           {
-            title: 'Category A',
+            title: "Category A",
             rows: [
-              { id: 'a1', title: 'A1', description: 'Desc A1' },
-              { id: 'a2', title: 'A2' },
+              { id: "a1", title: "A1", description: "Desc A1" },
+              { id: "a2", title: "A2" },
             ],
           },
           {
-            title: 'Category B',
-            rows: [{ id: 'b1', title: 'B1' }],
+            title: "Category B",
+            rows: [{ id: "b1", title: "B1" }],
           },
         ],
       });

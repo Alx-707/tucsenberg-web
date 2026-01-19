@@ -50,7 +50,7 @@ export {
   BREAKPOINT_MD,
   BREAKPOINT_LG,
   BREAKPOINT_XL,
-} from './breakpoints';
+} from "./breakpoints";
 
 // Full HD 断点 (不在 Tailwind 默认断点中，保留在此)
 export const BREAKPOINT_FULL_HD = 1920;

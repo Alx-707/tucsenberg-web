@@ -26,19 +26,19 @@ export const SEO_PRIORITY_CONSTANTS = {
 /** 网站地图更新频率常量 */
 export const SITEMAP_CHANGEFREQ_CONSTANTS = {
   /** 每日更新 (首页、新闻) */
-  DAILY: 'daily',
+  DAILY: "daily",
 
   /** 每周更新 (产品页面、关于我们) */
-  WEEKLY: 'weekly',
+  WEEKLY: "weekly",
 
   /** 每月更新 (政策页面) */
-  MONTHLY: 'monthly',
+  MONTHLY: "monthly",
 
   /** 年度更新 (归档内容) */
-  YEARLY: 'yearly',
+  YEARLY: "yearly",
 
   /** 从不更新 (静态内容) */
-  NEVER: 'never',
+  NEVER: "never",
 } as const;
 
 // ==================== URL生成常量 ====================

@@ -12,7 +12,7 @@
  * Send message response
  */
 export interface SendMessageResponse {
-  messaging_product: 'whatsapp';
+  messaging_product: "whatsapp";
   contacts: Array<{
     input: string;
     wa_id: string;
@@ -68,9 +68,9 @@ export interface PhoneNumberInfo {
   verified_name: string;
   display_phone_number: string;
   id: string;
-  quality_rating: 'GREEN' | 'YELLOW' | 'RED' | 'UNKNOWN';
+  quality_rating: "GREEN" | "YELLOW" | "RED" | "UNKNOWN";
   throughput: {
-    level: 'STANDARD' | 'HIGH';
+    level: "STANDARD" | "HIGH";
   };
   webhook_configuration?: {
     webhook_url: string;
@@ -106,7 +106,7 @@ export interface BusinessProfile {
   profile_picture_url?: string;
   websites?: string[];
   vertical?: string;
-  messaging_product: 'whatsapp';
+  messaging_product: "whatsapp";
 }
 
 /**
@@ -123,16 +123,16 @@ export interface BusinessProfileResponse {
  */
 export interface TemplateStatus {
   name: string;
-  status: 'APPROVED' | 'PENDING' | 'REJECTED' | 'DISABLED' | 'PAUSED';
-  category: 'AUTHENTICATION' | 'MARKETING' | 'UTILITY';
+  status: "APPROVED" | "PENDING" | "REJECTED" | "DISABLED" | "PAUSED";
+  category: "AUTHENTICATION" | "MARKETING" | "UTILITY";
   language: string;
   id: string;
   components?: Array<{
-    type: 'HEADER' | 'BODY' | 'FOOTER' | 'BUTTONS';
-    format?: 'TEXT' | 'IMAGE' | 'DOCUMENT' | 'VIDEO';
+    type: "HEADER" | "BODY" | "FOOTER" | "BUTTONS";
+    format?: "TEXT" | "IMAGE" | "DOCUMENT" | "VIDEO";
     text?: string;
     buttons?: Array<{
-      type: 'QUICK_REPLY' | 'URL' | 'PHONE_NUMBER';
+      type: "QUICK_REPLY" | "URL" | "PHONE_NUMBER";
       text: string;
       url?: string;
       phone_number?: string;
@@ -222,7 +222,7 @@ export interface RateLimitInfo {
   call_count: number;
   total_cputime: number;
   total_time: number;
-  type: 'application' | 'business';
+  type: "application" | "business";
 }
 
 /**
@@ -234,8 +234,8 @@ export interface AccountInfoResponse {
   name: string;
   timezone_offset_minutes: number;
   message_template_namespace: string;
-  account_review_status: 'APPROVED' | 'PENDING' | 'REJECTED';
-  business_verification_status: 'VERIFIED' | 'UNVERIFIED' | 'PENDING';
+  account_review_status: "APPROVED" | "PENDING" | "REJECTED";
+  business_verification_status: "VERIFIED" | "UNVERIFIED" | "PENDING";
   country: string;
   currency: string;
   primary_business_location: string;
@@ -266,9 +266,9 @@ export interface AppSettingsResponse {
  */
 export interface QualityRatingResponse {
   quality_score: number;
-  quality_rating: 'GREEN' | 'YELLOW' | 'RED' | 'UNKNOWN';
-  previous_quality_rating?: 'GREEN' | 'YELLOW' | 'RED' | 'UNKNOWN';
-  event?: 'FLAGGED' | 'QUALITY_SCORE_CHANGED';
+  quality_rating: "GREEN" | "YELLOW" | "RED" | "UNKNOWN";
+  previous_quality_rating?: "GREEN" | "YELLOW" | "RED" | "UNKNOWN";
+  event?: "FLAGGED" | "QUALITY_SCORE_CHANGED";
 }
 
 /**
@@ -285,7 +285,7 @@ export interface MessageStatusResponse {
  */
 export interface UserBlockStatusResponse {
   success: boolean;
-  action: 'block' | 'unblock';
+  action: "block" | "unblock";
 }
 
 /**
@@ -391,8 +391,8 @@ export function isSendMessageResponse(
 ): response is SendMessageResponse {
   return Boolean(
     response &&
-    typeof response === 'object' &&
-    (response as Record<string, unknown>).messaging_product === 'whatsapp' &&
+    typeof response === "object" &&
+    (response as Record<string, unknown>).messaging_product === "whatsapp" &&
     Array.isArray((response as Record<string, unknown>).contacts) &&
     Array.isArray((response as Record<string, unknown>).messages),
   );
@@ -403,21 +403,21 @@ export function isMediaUploadResponse(
 ): response is MediaUploadResponse {
   return Boolean(
     response &&
-    typeof response === 'object' &&
-    typeof (response as Record<string, unknown>).id === 'string',
+    typeof response === "object" &&
+    typeof (response as Record<string, unknown>).id === "string",
   );
 }
 
 export function isWhatsAppApiError(error: unknown): error is WhatsAppApiError {
   return Boolean(
     error &&
-    typeof error === 'object' &&
-    typeof (error as Record<string, unknown>).error === 'object' &&
-    'message' in
+    typeof error === "object" &&
+    typeof (error as Record<string, unknown>).error === "object" &&
+    "message" in
       ((error as Record<string, unknown>).error as Record<string, unknown>) &&
-    'type' in
+    "type" in
       ((error as Record<string, unknown>).error as Record<string, unknown>) &&
-    'code' in
+    "code" in
       ((error as Record<string, unknown>).error as Record<string, unknown>),
   );
 }

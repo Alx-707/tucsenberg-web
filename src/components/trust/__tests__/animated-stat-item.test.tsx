@@ -2,11 +2,11 @@
  * @vitest-environment jsdom
  */
 
-import { act, render, screen } from '@testing-library/react';
-import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
-import { AnimatedStatItem } from '../animated-stat-item';
+import { act, render, screen } from "@testing-library/react";
+import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
+import { AnimatedStatItem } from "../animated-stat-item";
 
-describe('AnimatedStatItem', () => {
+describe("AnimatedStatItem", () => {
   beforeEach(() => {
     vi.useFakeTimers();
 
@@ -28,7 +28,7 @@ describe('AnimatedStatItem', () => {
       }
     };
 
-    vi.stubGlobal('IntersectionObserver', MockIntersectionObserver);
+    vi.stubGlobal("IntersectionObserver", MockIntersectionObserver);
   });
 
   afterEach(() => {
@@ -36,32 +36,32 @@ describe('AnimatedStatItem', () => {
     vi.useRealTimers();
   });
 
-  it('renders static value when numericValue is undefined', () => {
+  it("renders static value when numericValue is undefined", () => {
     render(
       <AnimatedStatItem
         stat={{
-          id: 'customers',
-          label: 'Customers',
-          value: '1,000+',
+          id: "customers",
+          label: "Customers",
+          value: "1,000+",
           numericValue: undefined,
           suffix: undefined,
         }}
       />,
     );
 
-    expect(screen.getByText('1,000+')).toBeInTheDocument();
-    expect(screen.getByText('Customers')).toBeInTheDocument();
+    expect(screen.getByText("1,000+")).toBeInTheDocument();
+    expect(screen.getByText("Customers")).toBeInTheDocument();
   });
 
-  it('animates towards numericValue when visible', async () => {
+  it("animates towards numericValue when visible", async () => {
     render(
       <AnimatedStatItem
         stat={{
-          id: 'uptime',
-          label: 'Uptime',
-          value: '99%',
+          id: "uptime",
+          label: "Uptime",
+          value: "99%",
           numericValue: 99,
-          suffix: '%',
+          suffix: "%",
         }}
       />,
     );
@@ -70,6 +70,6 @@ describe('AnimatedStatItem', () => {
       vi.advanceTimersByTime(2000);
     });
 
-    expect(screen.getByText('99%')).toBeInTheDocument();
+    expect(screen.getByText("99%")).toBeInTheDocument();
   });
 });

@@ -10,7 +10,7 @@
  * - 未捕获异常
  */
 
-import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
+import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 
 // 模拟系统错误场景
 class SystemErrorSimulator {
@@ -20,9 +20,9 @@ class SystemErrorSimulator {
     global.Error = class extends originalError {
       constructor(message?: string) {
         super(message);
-        if (message?.includes('memory')) {
-          this.name = 'RangeError';
-          this.message = 'Maximum call stack size exceeded';
+        if (message?.includes("memory")) {
+          this.name = "RangeError";
+          this.message = "Maximum call stack size exceeded";
         }
       }
     } as unknown as ErrorConstructor;
@@ -30,19 +30,19 @@ class SystemErrorSimulator {
 
   // 模拟文件系统错误
   simulateFileSystemError(
-    errorType: 'ENOENT' | 'EACCES' | 'EMFILE' | 'ENOSPC',
+    errorType: "ENOENT" | "EACCES" | "EMFILE" | "ENOSPC",
   ): Error {
     const errorMessages = {
-      ENOENT: 'ENOENT: no such file or directory',
-      EACCES: 'EACCES: permission denied',
-      EMFILE: 'EMFILE: too many open files',
-      ENOSPC: 'ENOSPC: no space left on device',
+      ENOENT: "ENOENT: no such file or directory",
+      EACCES: "EACCES: permission denied",
+      EMFILE: "EMFILE: too many open files",
+      ENOSPC: "ENOSPC: no space left on device",
     };
 
     const error = new Error(
       Object.hasOwn(errorMessages, errorType)
         ? errorMessages[errorType]
-        : 'Unknown error',
+        : "Unknown error",
     );
     (error as { code?: string; errno?: number }).code = errorType;
     (error as { code?: string; errno?: number }).errno = -2;
@@ -53,14 +53,14 @@ class SystemErrorSimulator {
   simulateResourceExhaustion(): void {
     global.fetch = vi
       .fn()
-      .mockRejectedValue(new Error('ECONNRESET: Connection reset by peer'));
+      .mockRejectedValue(new Error("ECONNRESET: Connection reset by peer"));
   }
 
   // 模拟异步操作超时
   simulateAsyncTimeout(delay: number = 5000): Promise<never> {
     return new Promise((_, reject) => {
       setTimeout(() => {
-        reject(new Error('Operation timed out'));
+        reject(new Error("Operation timed out"));
       }, delay);
     });
   }
@@ -88,34 +88,34 @@ class ErrorHandler {
     this.logError(error, context);
 
     // 根据错误类型决定处理策略
-    if (error.message.includes('ENOENT')) {
-      return { handled: true, action: 'create_missing_resource' };
+    if (error.message.includes("ENOENT")) {
+      return { handled: true, action: "create_missing_resource" };
     }
 
-    if (error.message.includes('EACCES')) {
-      return { handled: true, action: 'request_permissions' };
+    if (error.message.includes("EACCES")) {
+      return { handled: true, action: "request_permissions" };
     }
 
-    if (error.message.includes('EMFILE')) {
-      return { handled: true, action: 'close_unused_files' };
+    if (error.message.includes("EMFILE")) {
+      return { handled: true, action: "close_unused_files" };
     }
 
-    if (error.message.includes('ENOSPC')) {
-      return { handled: true, action: 'cleanup_disk_space' };
+    if (error.message.includes("ENOSPC")) {
+      return { handled: true, action: "cleanup_disk_space" };
     }
 
-    if (error.message.includes('timeout')) {
-      return { handled: true, action: 'retry_with_backoff' };
+    if (error.message.includes("timeout")) {
+      return { handled: true, action: "retry_with_backoff" };
     }
 
     if (
-      error.message.includes('memory') ||
-      error.message.includes('stack size exceeded')
+      error.message.includes("memory") ||
+      error.message.includes("stack size exceeded")
     ) {
-      return { handled: true, action: 'garbage_collect' };
+      return { handled: true, action: "garbage_collect" };
     }
 
-    return { handled: false, action: 'escalate_to_admin' };
+    return { handled: false, action: "escalate_to_admin" };
   }
 
   // 重试机制
@@ -154,19 +154,19 @@ class ErrorHandler {
     primaryOperation: () => Promise<T>,
     fallbackOperation: () => Promise<T>,
     defaultValue: T,
-  ): Promise<{ result: T; source: 'primary' | 'fallback' | 'default' }> {
+  ): Promise<{ result: T; source: "primary" | "fallback" | "default" }> {
     try {
       const result = await primaryOperation();
-      return { result, source: 'primary' };
+      return { result, source: "primary" };
     } catch (primaryError) {
-      this.logError(primaryError as Error, { operation: 'primary' });
+      this.logError(primaryError as Error, { operation: "primary" });
 
       try {
         const result = await fallbackOperation();
-        return { result, source: 'fallback' };
+        return { result, source: "fallback" };
       } catch (fallbackError) {
-        this.logError(fallbackError as Error, { operation: 'fallback' });
-        return { result: defaultValue, source: 'default' };
+        this.logError(fallbackError as Error, { operation: "fallback" });
+        return { result: defaultValue, source: "default" };
       }
     }
   }
@@ -210,7 +210,7 @@ class ErrorHandler {
   }
 }
 
-describe('System Error and Exception Handling Tests', () => {
+describe("System Error and Exception Handling Tests", () => {
   let systemSimulator: SystemErrorSimulator;
   let errorHandler: ErrorHandler;
 
@@ -225,59 +225,59 @@ describe('System Error and Exception Handling Tests', () => {
     vi.restoreAllMocks();
   });
 
-  describe('File System Error Handling', () => {
-    it('should handle file not found errors', () => {
-      const error = systemSimulator.simulateFileSystemError('ENOENT');
+  describe("File System Error Handling", () => {
+    it("should handle file not found errors", () => {
+      const error = systemSimulator.simulateFileSystemError("ENOENT");
       const result = errorHandler.handleSystemError(error);
 
       expect(result.handled).toBe(true);
-      expect(result.action).toBe('create_missing_resource');
+      expect(result.action).toBe("create_missing_resource");
     });
 
-    it('should handle permission denied errors', () => {
-      const error = systemSimulator.simulateFileSystemError('EACCES');
+    it("should handle permission denied errors", () => {
+      const error = systemSimulator.simulateFileSystemError("EACCES");
       const result = errorHandler.handleSystemError(error);
 
       expect(result.handled).toBe(true);
-      expect(result.action).toBe('request_permissions');
+      expect(result.action).toBe("request_permissions");
     });
 
-    it('should handle too many open files errors', () => {
-      const error = systemSimulator.simulateFileSystemError('EMFILE');
+    it("should handle too many open files errors", () => {
+      const error = systemSimulator.simulateFileSystemError("EMFILE");
       const result = errorHandler.handleSystemError(error);
 
       expect(result.handled).toBe(true);
-      expect(result.action).toBe('close_unused_files');
+      expect(result.action).toBe("close_unused_files");
     });
 
-    it('should handle disk space errors', () => {
-      const error = systemSimulator.simulateFileSystemError('ENOSPC');
+    it("should handle disk space errors", () => {
+      const error = systemSimulator.simulateFileSystemError("ENOSPC");
       const result = errorHandler.handleSystemError(error);
 
       expect(result.handled).toBe(true);
-      expect(result.action).toBe('cleanup_disk_space');
+      expect(result.action).toBe("cleanup_disk_space");
     });
   });
 
-  describe('Memory and Resource Management', () => {
-    it('should handle out of memory errors', () => {
-      const memoryError = new Error('Maximum call stack size exceeded');
+  describe("Memory and Resource Management", () => {
+    it("should handle out of memory errors", () => {
+      const memoryError = new Error("Maximum call stack size exceeded");
       const result = errorHandler.handleSystemError(memoryError);
 
       expect(result.handled).toBe(true);
-      expect(result.action).toBe('garbage_collect');
+      expect(result.action).toBe("garbage_collect");
     });
 
-    it('should handle resource exhaustion', async () => {
+    it("should handle resource exhaustion", async () => {
       systemSimulator.simulateResourceExhaustion();
 
       expect(global.fetch).toHaveBeenCalledTimes(0);
 
       // Test that fetch will reject
-      await expect(fetch('/test')).rejects.toThrow('ECONNRESET');
+      await expect(fetch("/test")).rejects.toThrow("ECONNRESET");
     });
 
-    it('should handle large memory allocations gracefully', () => {
+    it("should handle large memory allocations gracefully", () => {
       // Simulate attempting to allocate large amounts of memory
       const largeArrayTest = () => {
         try {
@@ -294,46 +294,46 @@ describe('System Error and Exception Handling Tests', () => {
     });
   });
 
-  describe('Async Error Handling', () => {
-    it('should handle async operation timeouts', async () => {
+  describe("Async Error Handling", () => {
+    it("should handle async operation timeouts", async () => {
       const timeoutPromise = systemSimulator.simulateAsyncTimeout(100);
 
-      await expect(timeoutPromise).rejects.toThrow('Operation timed out');
+      await expect(timeoutPromise).rejects.toThrow("Operation timed out");
     });
 
-    it('should handle unhandled promise rejections', async () => {
+    it("should handle unhandled promise rejections", async () => {
       const unhandledRejections: Array<{
         reason: unknown;
         promise: Promise<unknown>;
       }> = [];
 
       // Mock unhandled rejection handler
-      const originalHandler = process.listeners('unhandledRejection');
-      process.removeAllListeners('unhandledRejection');
+      const originalHandler = process.listeners("unhandledRejection");
+      process.removeAllListeners("unhandledRejection");
 
-      process.on('unhandledRejection', (reason, promise) => {
+      process.on("unhandledRejection", (reason, promise) => {
         unhandledRejections.push({ reason, promise });
       });
 
       // Create unhandled rejection
-      Promise.reject(new Error('Unhandled async error'));
+      Promise.reject(new Error("Unhandled async error"));
 
       // Wait for event loop
       await new Promise((resolve) => setTimeout(resolve, 10));
 
       expect(unhandledRejections).toHaveLength(1);
       expect((unhandledRejections[0]?.reason as Error).message).toBe(
-        'Unhandled async error',
+        "Unhandled async error",
       );
 
       // Restore original handlers
-      process.removeAllListeners('unhandledRejection');
+      process.removeAllListeners("unhandledRejection");
       originalHandler.forEach((handler) => {
-        process.on('unhandledRejection', handler as (...args: any[]) => void);
+        process.on("unhandledRejection", handler as (...args: any[]) => void);
       });
     });
 
-    it('should handle concurrent async errors', async () => {
+    it("should handle concurrent async errors", async () => {
       const operations = Array.from({ length: 10 }, (_, i) =>
         Promise.reject(new Error(`Async error ${i}`)),
       );
@@ -342,7 +342,7 @@ describe('System Error and Exception Handling Tests', () => {
 
       expect(results).toHaveLength(10);
       results.forEach((result, index) => {
-        expect(result.status).toBe('rejected');
+        expect(result.status).toBe("rejected");
         expect((result as PromiseRejectedResult).reason.message).toBe(
           `Async error ${index}`,
         );
@@ -350,8 +350,8 @@ describe('System Error and Exception Handling Tests', () => {
     });
   });
 
-  describe('Retry Mechanisms', () => {
-    it('should retry failed operations with exponential backoff', async () => {
+  describe("Retry Mechanisms", () => {
+    it("should retry failed operations with exponential backoff", async () => {
       let attemptCount = 0;
       const failingOperation = async () => {
         attemptCount++;
@@ -363,32 +363,32 @@ describe('System Error and Exception Handling Tests', () => {
 
       const result = await errorHandler.retryOperation(
         failingOperation,
-        'test-operation',
+        "test-operation",
         3,
         10, // Short delay for testing
       );
 
-      expect(result).toBe('Success on attempt 3');
+      expect(result).toBe("Success on attempt 3");
       expect(attemptCount).toBe(3);
     });
 
-    it('should fail after maximum retry attempts', async () => {
+    it("should fail after maximum retry attempts", async () => {
       const alwaysFailingOperation = async () => {
-        throw new Error('Always fails');
+        throw new Error("Always fails");
       };
 
       await expect(
         errorHandler.retryOperation(
           alwaysFailingOperation,
-          'failing-operation',
+          "failing-operation",
           2,
           10,
         ),
-      ).rejects.toThrow('Operation failed after 2 retries');
+      ).rejects.toThrow("Operation failed after 2 retries");
     });
 
-    it('should handle retry with different error types', async () => {
-      const errorTypes = ['Network error', 'Timeout error', 'Server error'];
+    it("should handle retry with different error types", async () => {
+      const errorTypes = ["Network error", "Timeout error", "Server error"];
       let attemptCount = 0;
 
       const varyingErrorOperation = async () => {
@@ -398,86 +398,86 @@ describe('System Error and Exception Handling Tests', () => {
         if (attemptCount < 4) {
           throw new Error(errorType);
         }
-        return 'Success';
+        return "Success";
       };
 
       const result = await errorHandler.retryOperation(
         varyingErrorOperation,
-        'varying-error-operation',
+        "varying-error-operation",
         5,
         10,
       );
 
-      expect(result).toBe('Success');
+      expect(result).toBe("Success");
       expect(attemptCount).toBe(4);
     });
   });
 
-  describe('Fallback and Degradation', () => {
-    it('should use fallback when primary operation fails', async () => {
+  describe("Fallback and Degradation", () => {
+    it("should use fallback when primary operation fails", async () => {
       const primaryOperation = async () => {
-        throw new Error('Primary failed');
+        throw new Error("Primary failed");
       };
 
       const fallbackOperation = async () => {
-        return 'Fallback success';
+        return "Fallback success";
       };
 
       const result = await errorHandler.handleWithFallback(
         primaryOperation,
         fallbackOperation,
-        'Default value',
+        "Default value",
       );
 
-      expect(result.result).toBe('Fallback success');
-      expect(result.source).toBe('fallback');
+      expect(result.result).toBe("Fallback success");
+      expect(result.source).toBe("fallback");
     });
 
-    it('should use default value when both operations fail', async () => {
+    it("should use default value when both operations fail", async () => {
       const primaryOperation = async () => {
-        throw new Error('Primary failed');
+        throw new Error("Primary failed");
       };
 
       const fallbackOperation = async () => {
-        throw new Error('Fallback failed');
+        throw new Error("Fallback failed");
       };
 
       const result = await errorHandler.handleWithFallback(
         primaryOperation,
         fallbackOperation,
-        'Default value',
+        "Default value",
       );
 
-      expect(result.result).toBe('Default value');
-      expect(result.source).toBe('default');
+      expect(result.result).toBe("Default value");
+      expect(result.source).toBe("default");
     });
 
-    it('should prefer primary operation when successful', async () => {
+    it("should prefer primary operation when successful", async () => {
       const primaryOperation = async () => {
-        return 'Primary success';
+        return "Primary success";
       };
 
       const fallbackOperation = async () => {
-        return 'Fallback success';
+        return "Fallback success";
       };
 
       const result = await errorHandler.handleWithFallback(
         primaryOperation,
         fallbackOperation,
-        'Default value',
+        "Default value",
       );
 
-      expect(result.result).toBe('Primary success');
-      expect(result.source).toBe('primary');
+      expect(result.result).toBe("Primary success");
+      expect(result.source).toBe("primary");
     });
   });
 
-  describe('Error Logging and Monitoring', () => {
-    it('should log all errors with timestamps', () => {
+  describe("Error Logging and Monitoring", () => {
+    it("should log all errors with timestamps", () => {
       const errors = [
-        new Error('Error 1'),
-        new Error('Error 2'),
-        new Error('Error 3'),
+        new Error("Error 1"),
+        new Error("Error 2"),
+        new Error("Error 3"),
       ];
 
       errors.forEach((error) => {
@@ -493,12 +493,12 @@ describe('System Error and Exception Handling Tests', () => {
       });
     });
 
-    it('should provide error statistics', () => {
+    it("should provide error statistics", () => {
       const errors = [
-        new Error('Error 1'),
-        new TypeError('Type Error'),
-        new RangeError('Range Error'),
-        new Error('Error 2'),
+        new Error("Error 1"),
+        new TypeError("Type Error"),
+        new RangeError("Range Error"),
+        new Error("Error 2"),
       ];
 
       errors.forEach((error) => {
@@ -512,8 +512,8 @@ describe('System Error and Exception Handling Tests', () => {
       expect(stats.byType.RangeError).toBe(1);
     });
 
-    it('should clear error logs when requested', () => {
-      errorHandler.handleSystemError(new Error('Test error'));
+    it("should clear error logs when requested", () => {
+      errorHandler.handleSystemError(new Error("Test error"));
       expect(errorHandler.getErrorLog()).toHaveLength(1);
 
       errorHandler.clearErrorLog();
@@ -521,17 +521,17 @@ describe('System Error and Exception Handling Tests', () => {
     });
   });
 
-  describe('Unknown Error Handling', () => {
-    it('should handle unknown error types gracefully', () => {
-      const unknownError = new Error('Unknown system error');
+  describe("Unknown Error Handling", () => {
+    it("should handle unknown error types gracefully", () => {
+      const unknownError = new Error("Unknown system error");
       const result = errorHandler.handleSystemError(unknownError);
 
       expect(result.handled).toBe(false);
-      expect(result.action).toBe('escalate_to_admin');
+      expect(result.action).toBe("escalate_to_admin");
     });
 
-    it('should handle non-Error objects thrown as errors', () => {
-      const nonErrorObject = { message: 'Not an Error object', code: 500 };
+    it("should handle non-Error objects thrown as errors", () => {
+      const nonErrorObject = { message: "Not an Error object", code: 500 };
 
       // Simulate handling non-Error objects
       const handleNonError = (obj: unknown) => {

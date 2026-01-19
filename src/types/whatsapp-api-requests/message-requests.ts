@@ -3,27 +3,27 @@
  * WhatsApp API Message Request Types
  */
 
-import type { ContactData, LocationData } from '@/types/whatsapp-base-types';
-import type { TemplateMessage } from '@/types/whatsapp-template-types';
+import type { ContactData, LocationData } from "@/types/whatsapp-base-types";
+import type { TemplateMessage } from "@/types/whatsapp-template-types";
 
 /**
  * 发送消息请求
  * Send message request
  */
 export interface SendMessageRequest {
-  messaging_product: 'whatsapp';
-  recipient_type: 'individual';
+  messaging_product: "whatsapp";
+  recipient_type: "individual";
   to: string;
   type:
-    | 'text'
-    | 'template'
-    | 'image'
-    | 'document'
-    | 'audio'
-    | 'video'
-    | 'location'
-    | 'contacts'
-    | 'interactive';
+    | "text"
+    | "template"
+    | "image"
+    | "document"
+    | "audio"
+    | "video"
+    | "location"
+    | "contacts"
+    | "interactive";
   text?: {
     preview_url?: boolean;
     body: string;
@@ -52,9 +52,9 @@ export interface SendMessageRequest {
   location?: LocationData;
   contacts?: ContactData[];
   interactive?: {
-    type: 'button' | 'list';
+    type: "button" | "list";
     header?: {
-      type: 'text' | 'image' | 'document' | 'video';
+      type: "text" | "image" | "document" | "video";
       text?: string;
       image?: {
         id?: string;
@@ -78,7 +78,7 @@ export interface SendMessageRequest {
     };
     action: {
       buttons?: Array<{
-        type: 'reply';
+        type: "reply";
         reply: {
           id: string;
           title: string;

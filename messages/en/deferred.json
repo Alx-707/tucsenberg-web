@@ -356,46 +356,113 @@
     }
   },
   "about": {
-    "pageTitle": "About Us",
-    "pageDescription": "Learn more about our company, mission, and the team dedicated to delivering quality products.",
+    "pageTitle": "About Tucsenberg Glass",
+    "pageDescription": "Leading manufacturer of architectural glass and aluminum window/door systems for Australian and European markets. AS 2047 & AS 1288 certified.",
     "hero": {
-      "title": "About Our Company",
-      "subtitle": "Your Trusted Partner in Global Trade",
-      "description": "We are a leading manufacturer and exporter specializing in high-quality industrial products. With years of experience in international trade, we are committed to delivering excellence to clients worldwide."
+      "badge": "Established 2010",
+      "title": "Precision Engineering for Modern Architecture",
+      "subtitle": "Your trusted partner for high-performance glass and aluminum facade solutions. Serving builders, contractors, and distributors across Australia and Europe."
     },
-    "mission": {
-      "title": "Our Mission",
-      "content": "To provide innovative, high-quality products that meet the evolving needs of our global customers, while maintaining the highest standards of service and integrity."
+    "overview": {
+      "title": "Our Legacy & Vision",
+      "history": "Founded in 2010, Tucsenberg Glass has grown from a regional manufacturer to a globally recognized supplier of premium architectural glass products. Our state-of-the-art facility combines German engineering precision with scalable production capacity to serve projects of any size.",
+      "mission": "We are committed to delivering superior facade solutions that enhance building performance, energy efficiency, and aesthetic appeal. Every product leaving our facility meets the stringent requirements of international building codes.",
+      "highlight1": "15+ Years of Industry Experience",
+      "highlight2": "State-of-the-Art Manufacturing Facility",
+      "highlight3": "Dedicated Export Logistics & Compliance Team"
     },
-    "values": {
-      "title": "Our Values",
-      "quality": {
-        "title": "Quality First",
-        "description": "We never compromise on quality. Every product undergoes rigorous testing and quality control."
+    "factory": {
+      "title": "Manufacturing Capabilities",
+      "subtitle": "Our 50,000 sqm facility is equipped with advanced automation to ensure precision, consistency, and scale for projects of any size.",
+      "stats": {
+        "capacity": "Monthly Capacity",
+        "capacityUnit": "sqm/month",
+        "experience": "Experience",
+        "experienceUnit": "Years",
+        "markets": "Global Markets",
+        "marketsUnit": "Countries",
+        "projects": "Projects",
+        "projectsUnit": "Completed"
       },
-      "innovation": {
-        "title": "Continuous Innovation",
-        "description": "We invest in R&D to bring cutting-edge solutions to market."
+      "process": {
+        "tempering": {
+          "title": "Glass Tempering",
+          "description": "Double-chamber convection furnaces with computerized temperature control for consistent safety glass production."
+        },
+        "coating": {
+          "title": "Coating Lines",
+          "description": "Advanced Low-E and solar control coating application for enhanced thermal performance and energy efficiency."
+        },
+        "cnc": {
+          "title": "CNC Processing",
+          "description": "High-precision cutting, drilling, and edge processing with tolerances to 0.1mm for perfect fit every time."
+        }
       },
-      "service": {
-        "title": "Customer Service",
-        "description": "Your success is our priority. We provide comprehensive pre-sale and after-sale support."
+      "galleryLabel": "Factory Image"
+    },
+    "certifications": {
+      "title": "Certified Quality",
+      "subtitle": "Meeting rigorous international standards for safety, performance, and environmental responsibility.",
+      "viewAll": "View All Certificates",
+      "as2047": "Windows & External Glazed Doors",
+      "as1288": "Glass in Buildings - Selection & Installation",
+      "iso9001": "Quality Management System",
+      "ce": "European Conformity Standard"
+    },
+    "global": {
+      "badge": "Global Reach",
+      "title": "Exporting Excellence Worldwide",
+      "description": "We specialize in international logistics and compliance for architectural glass products. Our dedicated export team ensures your glass arrives safely, on schedule, and fully compliant with local building codes.",
+      "markets": {
+        "australia": "Australia",
+        "newZealand": "New Zealand",
+        "germany": "Germany",
+        "uk": "United Kingdom"
       },
-      "integrity": {
-        "title": "Business Integrity",
-        "description": "We build long-term relationships based on trust, transparency, and mutual respect."
+      "mapPlaceholder": "Interactive Map Placeholder"
+    },
+    "projects": {
+      "title": "Featured Projects",
+      "case1": {
+        "title": "Skyline Tower",
+        "location": "Sydney, Australia"
+      },
+      "case2": {
+        "title": "Harbour View Residences",
+        "location": "Auckland, New Zealand"
+      },
+      "case3": {
+        "title": "Tech Park Campus",
+        "location": "Berlin, Germany"
+      },
+      "imagePlaceholder": "Project Image"
+    },
+    "team": {
+      "title": "Leadership Team",
+      "member1": {
+        "name": "Alex Chen",
+        "role": "Chief Executive Officer"
+      },
+      "member2": {
+        "name": "Sarah Mitchell",
+        "role": "Head of Export Sales"
+      },
+      "member3": {
+        "name": "David Li",
+        "role": "Technical Director"
+      },
+      "member4": {
+        "name": "Emma Wang",
+        "role": "Production Manager"
       }
     },
-    "stats": {
-      "yearsExperience": "Years Experience",
-      "countriesServed": "Countries Served",
-      "happyClients": "Happy Clients",
-      "productsDelivered": "Products Delivered"
-    },
     "cta": {
-      "title": "Ready to Work With Us?",
-      "description": "Contact our team to discuss your requirements and discover how we can help grow your business.",
-      "button": "Get in Touch"
+      "contact": "Contact Sales",
+      "downloadBrochure": "Company Profile",
+      "finalTitle": "Ready to Discuss Your Project?",
+      "finalSubtitle": "Get a competitive quote for your next commercial or residential development. Our team responds within 24 hours.",
+      "emailUs": "Email Sales",
+      "callUs": "Book a Call"
     }
   },
   "products": {
@@ -440,6 +507,27 @@
       "success": "Your inquiry has been sent successfully! We will get back to you within 24 hours.",
       "error": "Failed to send inquiry. Please try again later.",
       "turnstileRequired": "Please complete the security verification."
+    },
+    "category": {
+      "hero": {
+        "viewProducts": "View Products",
+        "requestQuote": "Request Quote"
+      },
+      "trust": {
+        "climateTitle": "Made for Australian Climate",
+        "climateDescription": "Our products are rigorously tested to withstand Australia's unique environmental conditions, from extreme heat to coastal storms.",
+        "compliant": "Compliant"
+      },
+      "grid": {
+        "title": "Products in this Category",
+        "viewDetails": "View Details"
+      },
+      "cta": {
+        "readyToStart": "Ready to Start Your Project?",
+        "contactDescription": "Contact our expert team to find the perfect glazing solutions for your next architectural project.",
+        "contactUs": "Contact Us",
+        "learnMore": "Learn More"
+      }
     }
   },
   "title": "B2B Web Template",

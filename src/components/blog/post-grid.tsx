@@ -1,6 +1,6 @@
-import type { PostSummary } from '@/types/content.types';
-import { cn } from '@/lib/utils';
-import { PostCard, type PostCardProps } from '@/components/blog/post-card';
+import type { PostSummary } from "@/types/content.types";
+import { cn } from "@/lib/utils";
+import { PostCard, type PostCardProps } from "@/components/blog/post-card";
 
 export interface PostGridProps {
   posts: PostSummary[];
@@ -20,7 +20,7 @@ export interface PostGridProps {
   /** Gap between cards (Tailwind gap class number, default: 6) */
   gap?: 4 | 6 | 8;
   /** Props to pass to each PostCard */
-  cardProps?: Partial<Omit<PostCardProps, 'post' | 'linkPrefix' | 'locale'>>;
+  cardProps?: Partial<Omit<PostCardProps, "post" | "linkPrefix" | "locale">>;
   /** Custom class name for the grid container */
   className?: string;
   /** Content to display when posts array is empty */
@@ -29,27 +29,27 @@ export interface PostGridProps {
 
 function getSmColumnClass(sm: 1 | 2): string {
   // Always include base grid-cols-1 for mobile, then responsive override
-  if (sm === 2) return 'grid-cols-1 sm:grid-cols-2';
-  return 'grid-cols-1';
+  if (sm === 2) return "grid-cols-1 sm:grid-cols-2";
+  return "grid-cols-1";
 }
 
 function getMdColumnClass(md: 1 | 2 | 3): string {
-  if (md === 1) return 'md:grid-cols-1';
-  if (md === 3) return 'md:grid-cols-3';
-  return 'md:grid-cols-2';
+  if (md === 1) return "md:grid-cols-1";
+  if (md === 3) return "md:grid-cols-3";
+  return "md:grid-cols-2";
 }
 
 function getLgColumnClass(lg: 1 | 2 | 3 | 4): string {
-  if (lg === 1) return 'lg:grid-cols-1';
-  if (lg === 2) return 'lg:grid-cols-2';
-  if (lg === 4) return 'lg:grid-cols-4';
-  return 'lg:grid-cols-3';
+  if (lg === 1) return "lg:grid-cols-1";
+  if (lg === 2) return "lg:grid-cols-2";
+  if (lg === 4) return "lg:grid-cols-4";
+  return "lg:grid-cols-3";
 }
 
 function getGapClass(gap: 4 | 6 | 8): string {
-  if (gap === 4) return 'gap-4';
-  if (gap === 8) return 'gap-8';
-  return 'gap-6';
+  if (gap === 4) return "gap-4";
+  if (gap === 8) return "gap-8";
+  return "gap-6";
 }
 
 /**
@@ -59,8 +59,8 @@ function getGapClass(gap: 4 | 6 | 8): string {
  */
 export function PostGrid({
   posts,
-  linkPrefix = '/blog',
-  locale = 'en',
+  linkPrefix = "/blog",
+  locale = "en",
   columns = { sm: 1, md: 2, lg: 3 },
   gap = 6,
   cardProps,
@@ -76,7 +76,7 @@ export function PostGrid({
   return (
     <div
       className={cn(
-        'grid',
+        "grid",
         getSmColumnClass(sm),
         getMdColumnClass(md),
         getLgColumnClass(lg),

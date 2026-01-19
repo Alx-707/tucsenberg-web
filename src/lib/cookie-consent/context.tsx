@@ -1,4 +1,4 @@
-'use client';
+"use client";
 
 /**
  * Cookie Consent React Context
@@ -13,20 +13,20 @@ import {
   useMemo,
   useSyncExternalStore,
   type ReactNode,
-} from 'react';
+} from "react";
 import {
   clearConsent,
   createAcceptAllConsent,
   createRejectAllConsent,
   loadConsent,
   saveConsent,
-} from '@/lib/cookie-consent/storage';
+} from "@/lib/cookie-consent/storage";
 import {
   DEFAULT_CONSENT,
   type CookieCategory,
   type CookieConsent,
   type CookieConsentContextValue,
-} from '@/lib/cookie-consent/types';
+} from "@/lib/cookie-consent/types";
 
 const CookieConsentContext = createContext<CookieConsentContextValue | null>(
   null,
@@ -57,7 +57,7 @@ function emitChange() {
 
 function subscribeToConsent(listener: ConsentListener): () => void {
   // Lazy initialization on first subscription (after hydration)
-  if (typeof window !== 'undefined' && !isClientInitialized) {
+  if (typeof window !== "undefined" && !isClientInitialized) {
     isClientInitialized = true;
     const stored = loadConsent();
     if (stored) {
@@ -158,7 +158,7 @@ export function CookieConsentProvider({
   }, []);
 
   const updateConsent = useCallback(
-    (category: Exclude<CookieCategory, 'necessary'>, value: boolean) => {
+    (category: Exclude<CookieCategory, "necessary">, value: boolean) => {
       const newConsent = { ...cachedConsent, [category]: value };
       saveConsent(newConsent);
       updateConsentStore(newConsent, true);
@@ -167,7 +167,7 @@ export function CookieConsentProvider({
   );
 
   const savePreferences = useCallback(
-    (preferences: Partial<Omit<CookieConsent, 'necessary'>>) => {
+    (preferences: Partial<Omit<CookieConsent, "necessary">>) => {
       const newConsent = {
         ...cachedConsent,
         ...preferences,
@@ -219,7 +219,7 @@ export function useCookieConsent(): CookieConsentContextValue {
   const context = useContext(CookieConsentContext);
   if (!context) {
     throw new Error(
-      'useCookieConsent must be used within CookieConsentProvider',
+      "useCookieConsent must be used within CookieConsentProvider",
     );
   }
   return context;

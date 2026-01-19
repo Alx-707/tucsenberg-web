@@ -39,7 +39,7 @@ export interface ExtendedApiConfig extends ApiConfig {
   // 日志配置
   logging: {
     enabled: boolean;
-    level: 'debug' | 'info' | 'warn' | 'error';
+    level: "debug" | "info" | "warn" | "error";
     includeRequestBody: boolean;
     includeResponseBody: boolean;
   };
@@ -49,14 +49,14 @@ export interface ExtendedApiConfig extends ApiConfig {
     enabled: boolean;
     ttl: number;
     maxSize: number;
-    strategy: 'memory' | 'redis' | 'file';
+    strategy: "memory" | "redis" | "file";
   };
 
   // 重试配置
   retry: {
     enabled: boolean;
     maxAttempts: number;
-    backoffStrategy: 'linear' | 'exponential' | 'fixed';
+    backoffStrategy: "linear" | "exponential" | "fixed";
     baseDelay: number;
     maxDelay: number;
     retryableStatusCodes: number[];
@@ -79,7 +79,7 @@ export interface ExtendedApiConfig extends ApiConfig {
  * Environment configuration
  */
 export interface EnvironmentConfig {
-  environment: 'development' | 'staging' | 'production';
+  environment: "development" | "staging" | "production";
   debug: boolean;
   apiConfig: ApiConfig;
   features: {

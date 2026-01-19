@@ -42,9 +42,17 @@ export const pageImporters: Record<string, Record<string, ContentImporter>> = {
 
 export const productImporters: Record<string, Record<string, ContentImporter>> = {
   en: {
+    'low-e-igu': () => import('@content/products/en/low-e-igu.mdx'),
     'sample-product': () => import('@content/products/en/sample-product.mdx'),
+    'shopfront-system': () => import('@content/products/en/shopfront-system.mdx'),
+    'sliding-door-system': () => import('@content/products/en/sliding-door-system.mdx'),
+    'unitized-curtain-wall': () => import('@content/products/en/unitized-curtain-wall.mdx'),
   },
   zh: {
+    'low-e-igu': () => import('@content/products/zh/low-e-igu.mdx'),
     'sample-product': () => import('@content/products/zh/sample-product.mdx'),
+    'shopfront-system': () => import('@content/products/zh/shopfront-system.mdx'),
+    'sliding-door-system': () => import('@content/products/zh/sliding-door-system.mdx'),
+    'unitized-curtain-wall': () => import('@content/products/zh/unitized-curtain-wall.mdx'),
   },
 };

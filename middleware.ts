@@ -1,10 +1,10 @@
-import { NextRequest, NextResponse } from 'next/server';
-import createMiddleware from 'next-intl/middleware';
-import { generateNonce, getSecurityHeaders } from '@/config/security';
-import { routing } from '@/i18n/routing-config';
+import { NextRequest, NextResponse } from "next/server";
+import createMiddleware from "next-intl/middleware";
+import { generateNonce, getSecurityHeaders } from "@/config/security";
+import { routing } from "@/i18n/routing-config";
 
 const intlMiddleware = createMiddleware(routing);
-const SUPPORTED_LOCALES = new Set(['en', 'zh']);
+const SUPPORTED_LOCALES = new Set(["en", "zh"]);
 
 function addSecurityHeaders(response: NextResponse, nonce: string): void {
   const securityHeaders = getSecurityHeaders(nonce);
@@ -14,23 +14,23 @@ function addSecurityHeaders(response: NextResponse, nonce: string): void {
 }
 
 function extractLocaleCandidate(pathname: string): string | undefined {
-  const segments = pathname.split('/').filter(Boolean);
+  const segments = pathname.split("/").filter(Boolean);
   const candidate = segments[0];
   return candidate && SUPPORTED_LOCALES.has(candidate) ? candidate : undefined;
 }
 
 function setLocaleCookie(resp: NextResponse, locale: string): void {
   try {
-    const isProduction = process.env.NODE_ENV === 'production';
-    resp.cookies.set('NEXT_LOCALE', locale, {
-      path: '/',
+    const isProduction = process.env.NODE_ENV === "production";
+    resp.cookies.set("NEXT_LOCALE", locale, {
+      path: "/",
       httpOnly: true,
-      sameSite: 'lax',
+      sameSite: "lax",
       secure: isProduction,
     });
     resp.headers.append(
-      'set-cookie',
-      `NEXT_LOCALE=${locale}; Path=/; SameSite=Lax; HttpOnly${isProduction ? '; Secure' : ''}`,
+      "set-cookie",
+      `NEXT_LOCALE=${locale}; Path=/; SameSite=Lax; HttpOnly${isProduction ? "; Secure" : ""}`,
     );
   } catch {
     // ignore cookie errors
@@ -42,7 +42,7 @@ function tryHandleExplicitLocalizedRequest(
   nonce: string,
 ): NextResponse | null {
   const locale = extractLocaleCandidate(request.nextUrl.pathname);
-  const existingLocale = request.cookies.get('NEXT_LOCALE')?.value;
+  const existingLocale = request.cookies.get("NEXT_LOCALE")?.value;
   if (locale && existingLocale !== locale) {
     const resp = NextResponse.next();
     setLocaleCookie(resp, locale);
@@ -57,7 +57,7 @@ function tryHandleInvalidLocalePrefix(
   nonce: string,
 ): NextResponse | null {
   const { pathname } = request.nextUrl;
-  const segments = pathname.split('/').filter(Boolean);
+  const segments = pathname.split("/").filter(Boolean);
 
   if (segments.length < 2) {
     return null;
@@ -69,7 +69,7 @@ function tryHandleInvalidLocalePrefix(
     return null;
   }
 
-  const candidatePath = `/${rest.join('/')}`;
+  const candidatePath = `/${rest.join("/")}`;
   const pathnames = routing.pathnames as Record<string, unknown> | undefined;
   const isKnownPath = Boolean(
     pathnames && Object.prototype.hasOwnProperty.call(pathnames, candidatePath),
@@ -100,7 +100,7 @@ export default function middleware(request: NextRequest) {
 
   const response = intlMiddleware(request);
   const locale = extractLocaleCandidate(request.nextUrl.pathname);
-  const existingLocale = request.cookies.get('NEXT_LOCALE')?.value;
+  const existingLocale = request.cookies.get("NEXT_LOCALE")?.value;
   if (response && locale && existingLocale !== locale)
     setLocaleCookie(response, locale);
   if (response) addSecurityHeaders(response, nonce);
@@ -109,5 +109,5 @@ export default function middleware(request: NextRequest) {
 
 export const config = {
   // Root path (/) is handled by src/app/page.tsx due to Turbopack matcher inconsistency
-  matcher: ['/((?!api|_next|_vercel|admin|.*\\..*).*)', '/(en|zh)/:path*'],
+  matcher: ["/((?!api|_next|_vercel|admin|.*\\..*).*)", "/(en|zh)/:path*"],
 };

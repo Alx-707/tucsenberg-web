@@ -1,9 +1,9 @@
-'use client';
+"use client";
 
-import { useEffect, useState, type ReactNode } from 'react';
-import { useIntersectionObserver } from '@/hooks/use-intersection-observer';
+import { useEffect, useState, type ReactNode } from "react";
+import { useIntersectionObserver } from "@/hooks/use-intersection-observer";
 
-type IdleStrategy = 'idle' | 'timeout' | 'visible';
+type IdleStrategy = "idle" | "timeout" | "visible";
 
 interface IdleProps {
   children: ReactNode;
@@ -19,9 +19,9 @@ interface IdleProps {
 
 export function Idle({
   children,
-  strategy = 'idle',
+  strategy = "idle",
   timeoutMs = 1200,
-  rootMargin = '300px 0px 300px 0px',
+  rootMargin = "300px 0px 300px 0px",
   threshold = 0,
   triggerOnce = true,
 }: IdleProps) {
@@ -41,12 +41,12 @@ export function Idle({
       cancelIdleCallback?: (id: number) => void;
     };
 
-    if (strategy === 'idle' && typeof w.requestIdleCallback === 'function') {
+    if (strategy === "idle" && typeof w.requestIdleCallback === "function") {
       const id = w.requestIdleCallback(() => setReady(true));
       return () => w.cancelIdleCallback?.(id);
     }
 
-    if (strategy === 'timeout') {
+    if (strategy === "timeout") {
       const t = setTimeout(() => setReady(true), timeoutMs);
       return () => clearTimeout(t);
     }
@@ -59,13 +59,10 @@ export function Idle({
     return undefined;
   }, [strategy, timeoutMs, ready]);
 
-  if (strategy === 'visible') {
+  if (strategy === "visible") {
     const show = isVisible || hasBeenVisible;
     return (
-      <span
-        ref={ref}
-        style={{ display: 'inline-block' }}
-      >
+      <span ref={ref} style={{ display: "inline-block" }}>
         {show ? children : null}
       </span>
     );

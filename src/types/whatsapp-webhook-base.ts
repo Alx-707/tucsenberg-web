@@ -10,7 +10,7 @@ import type {
   WhatsAppContact,
   WhatsAppError,
   WhatsAppMessage,
-} from '@/types/whatsapp-base-types';
+} from "@/types/whatsapp-base-types";
 
 /**
  * Webhook入口类型
@@ -20,7 +20,7 @@ export interface WebhookEntry {
   id: string;
   changes: Array<{
     value: {
-      messaging_product: 'whatsapp';
+      messaging_product: "whatsapp";
       metadata: {
         display_phone_number: string;
         phone_number_id: string;
@@ -30,7 +30,7 @@ export interface WebhookEntry {
       statuses?: MessageStatusUpdate[];
       errors?: WebhookError[];
     };
-    field: 'messages';
+    field: "messages";
   }>;
 }
 
@@ -39,7 +39,7 @@ export interface WebhookEntry {
  * Main webhook payload
  */
 export interface WebhookPayload {
-  object: 'whatsapp_business_account';
+  object: "whatsapp_business_account";
   entry: WebhookEntry[];
 }
 
@@ -56,12 +56,12 @@ export interface MessageStatusUpdate {
     id: string;
     expiration_timestamp?: string;
     origin: {
-      type: 'business_initiated' | 'customer_initiated' | 'referral_conversion';
+      type: "business_initiated" | "customer_initiated" | "referral_conversion";
     };
   };
   pricing?: {
     billable: boolean;
-    pricing_model: 'CBP' | 'NBP';
+    pricing_model: "CBP" | "NBP";
     category: string;
   };
   errors?: WhatsAppError[];
@@ -101,9 +101,9 @@ export interface MessageContext {
  * Webhook verification request
  */
 export interface WebhookVerificationRequest {
-  'hub.mode': 'subscribe';
-  'hub.challenge': string;
-  'hub.verify_token': string;
+  "hub.mode": "subscribe";
+  "hub.challenge": string;
+  "hub.verify_token": string;
 }
 
 /**
@@ -130,7 +130,7 @@ export interface WebhookConfig {
  * Webhook subscription
  */
 export interface WebhookSubscription {
-  object: 'whatsapp_business_account';
+  object: "whatsapp_business_account";
   callback_url: string;
   fields: string[];
   verify_token: string;
@@ -184,7 +184,7 @@ export interface WebhookRetryConfig {
  */
 export interface WebhookMonitoringConfig {
   enable_logging: boolean;
-  log_level: 'debug' | 'info' | 'warn' | 'error';
+  log_level: "debug" | "info" | "warn" | "error";
   metrics_enabled: boolean;
   health_check_interval_ms: number;
   alert_thresholds: {
@@ -270,13 +270,13 @@ export interface WebhookTransformConfig {
   enabled: boolean;
   transformations: Array<{
     field_path: string;
-    operation: 'rename' | 'remove' | 'add' | 'modify';
+    operation: "rename" | "remove" | "add" | "modify";
     target_path?: string;
     value?: string | number | boolean | Record<string, unknown> | unknown[];
     condition?: string;
   }>;
   custom_headers?: Record<string, string>;
-  response_format?: 'json' | 'xml' | 'form-data';
+  response_format?: "json" | "xml" | "form-data";
 }
 
 /**
@@ -299,16 +299,16 @@ export interface CompleteWebhookConfig {
  * Webhook constants
  */
 export const WEBHOOK_FIELDS = [
-  'messages',
-  'message_deliveries',
-  'message_reads',
-  'message_reactions',
-  'message_echoes',
+  "messages",
+  "message_deliveries",
+  "message_reads",
+  "message_reactions",
+  "message_echoes",
 ] as const;
 
-export const WEBHOOK_OBJECT_TYPES = ['whatsapp_business_account'] as const;
+export const WEBHOOK_OBJECT_TYPES = ["whatsapp_business_account"] as const;
 
-export const WEBHOOK_CHANGE_FIELDS = ['messages'] as const;
+export const WEBHOOK_CHANGE_FIELDS = ["messages"] as const;
 
 /**
  * Webhook字段类型
@@ -325,8 +325,8 @@ export type WebhookChangeField = (typeof WEBHOOK_CHANGE_FIELDS)[number];
 export function isWebhookPayload(obj: unknown): obj is WebhookPayload {
   return Boolean(
     obj &&
-    typeof obj === 'object' &&
-    (obj as Record<string, unknown>).object === 'whatsapp_business_account' &&
+    typeof obj === "object" &&
+    (obj as Record<string, unknown>).object === "whatsapp_business_account" &&
     Array.isArray((obj as Record<string, unknown>).entry),
   );
 }
@@ -334,8 +334,8 @@ export function isWebhookPayload(obj: unknown): obj is WebhookPayload {
 export function isWebhookEntry(obj: unknown): obj is WebhookEntry {
   return Boolean(
     obj &&
-    typeof obj === 'object' &&
-    typeof (obj as Record<string, unknown>).id === 'string' &&
+    typeof obj === "object" &&
+    typeof (obj as Record<string, unknown>).id === "string" &&
     Array.isArray((obj as Record<string, unknown>).changes),
   );
 }
@@ -345,21 +345,21 @@ export function isMessageStatusUpdate(
 ): obj is MessageStatusUpdate {
   return Boolean(
     obj &&
-    typeof obj === 'object' &&
-    typeof (obj as Record<string, unknown>).id === 'string' &&
-    typeof (obj as Record<string, unknown>).status === 'string' &&
-    typeof (obj as Record<string, unknown>).timestamp === 'string' &&
-    typeof (obj as Record<string, unknown>).recipient_id === 'string',
+    typeof obj === "object" &&
+    typeof (obj as Record<string, unknown>).id === "string" &&
+    typeof (obj as Record<string, unknown>).status === "string" &&
+    typeof (obj as Record<string, unknown>).timestamp === "string" &&
+    typeof (obj as Record<string, unknown>).recipient_id === "string",
   );
 }
 
 export function isWebhookError(obj: unknown): obj is WebhookError {
   return Boolean(
     obj &&
-    typeof obj === 'object' &&
-    typeof (obj as Record<string, unknown>).code === 'number' &&
-    typeof (obj as Record<string, unknown>).title === 'string' &&
-    typeof (obj as Record<string, unknown>).message === 'string',
+    typeof obj === "object" &&
+    typeof (obj as Record<string, unknown>).code === "number" &&
+    typeof (obj as Record<string, unknown>).title === "string" &&
+    typeof (obj as Record<string, unknown>).message === "string",
   );
 }
 
@@ -368,10 +368,10 @@ export function isWebhookVerificationRequest(
 ): query is WebhookVerificationRequest {
   return Boolean(
     query &&
-    typeof query === 'object' &&
-    'hub.mode' in query &&
-    'hub.challenge' in query &&
-    'hub.verify_token' in query &&
-    (query as Record<string, unknown>)['hub.mode'] === 'subscribe',
+    typeof query === "object" &&
+    "hub.mode" in query &&
+    "hub.challenge" in query &&
+    "hub.verify_token" in query &&
+    (query as Record<string, unknown>)["hub.mode"] === "subscribe",
   );
 }

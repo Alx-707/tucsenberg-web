@@ -40,95 +40,95 @@
  * API endpoint types
  */
 export type ApiEndpoint =
-  | 'messages'
-  | 'media'
-  | 'phone_numbers'
-  | 'business_profile'
-  | 'message_templates'
-  | 'analytics'
-  | 'batch'
-  | 'webhooks'
-  | 'account'
-  | 'apps';
+  | "messages"
+  | "media"
+  | "phone_numbers"
+  | "business_profile"
+  | "message_templates"
+  | "analytics"
+  | "batch"
+  | "webhooks"
+  | "account"
+  | "apps";
 
 /**
  * HTTP方法类型
  * HTTP method types
  */
-export type HttpMethod = 'GET' | 'POST' | 'PUT' | 'DELETE' | 'PATCH';
+export type HttpMethod = "GET" | "POST" | "PUT" | "DELETE" | "PATCH";
 
 /**
  * API版本类型
  * API version types
  */
-export type ApiVersion = 'v17.0' | 'v18.0' | 'v19.0' | 'v20.0';
+export type ApiVersion = "v17.0" | "v18.0" | "v19.0" | "v20.0";
 
 /**
  * 消息类型
  * Message types
  */
 export type MessageType =
-  | 'text'
-  | 'template'
-  | 'image'
-  | 'document'
-  | 'audio'
-  | 'video'
-  | 'location'
-  | 'contacts'
-  | 'interactive'
-  | 'reaction'
-  | 'sticker';
+  | "text"
+  | "template"
+  | "image"
+  | "document"
+  | "audio"
+  | "video"
+  | "location"
+  | "contacts"
+  | "interactive"
+  | "reaction"
+  | "sticker";
 
 /**
  * 媒体类型
  * Media types
  */
-export type MediaType = 'image' | 'document' | 'audio' | 'video' | 'sticker';
+export type MediaType = "image" | "document" | "audio" | "video" | "sticker";
 
 /**
  * 模板类别
  * Template categories
  */
-export type TemplateCategory = 'AUTHENTICATION' | 'MARKETING' | 'UTILITY';
+export type TemplateCategory = "AUTHENTICATION" | "MARKETING" | "UTILITY";
 
 /**
  * 模板状态
  * Template status
  */
 export type TemplateStatusType =
-  | 'APPROVED'
-  | 'PENDING'
-  | 'REJECTED'
-  | 'DISABLED'
-  | 'PAUSED';
+  | "APPROVED"
+  | "PENDING"
+  | "REJECTED"
+  | "DISABLED"
+  | "PAUSED";
 
 /**
  * 质量评级
  * Quality rating
  */
-export type QualityRating = 'GREEN' | 'YELLOW' | 'RED' | 'UNKNOWN';
+export type QualityRating = "GREEN" | "YELLOW" | "RED" | "UNKNOWN";
 
 /**
  * 吞吐量级别
  * Throughput level
  */
-export type ThroughputLevel = 'STANDARD' | 'HIGH';
+export type ThroughputLevel = "STANDARD" | "HIGH";
 
 /**
  * 分析粒度
  * Analytics granularity
  */
-export type AnalyticsGranularity = 'HALF_HOUR' | 'DAY' | 'MONTH';
+export type AnalyticsGranularity = "HALF_HOUR" | "DAY" | "MONTH";
 
 /**
  * 分析指标类型
  * Analytics metric types
  */
 export type AnalyticsMetricType =
-  | 'cost'
-  | 'conversation'
-  | 'phone_number_quality_score';
+  | "cost"
+  | "conversation"
+  | "phone_number_quality_score";
 
 /**
  * 错误代码类型

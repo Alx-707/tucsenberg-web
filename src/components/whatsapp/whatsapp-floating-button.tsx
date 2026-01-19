@@ -1,4 +1,4 @@
-'use client';
+"use client";
 
 import {
   useCallback,
@@ -6,15 +6,15 @@ import {
   useRef,
   useState,
   useSyncExternalStore,
-} from 'react';
-import { MessageCircle, X } from 'lucide-react';
-import Draggable from 'react-draggable';
-import { cn } from '@/lib/utils';
+} from "react";
+import { MessageCircle, X } from "lucide-react";
+import Draggable from "react-draggable";
+import { cn } from "@/lib/utils";
 import {
   WhatsAppChatWindow,
   type WhatsAppChatWindowTranslations,
-} from '@/components/whatsapp/whatsapp-chat-window';
-import { WHATSAPP_STYLE_TOKENS } from '@/config/footer-links';
+} from "@/components/whatsapp/whatsapp-chat-window";
+import { WHATSAPP_STYLE_TOKENS } from "@/config/footer-links";
 
 export interface WhatsAppFloatingButtonProps {
   number: string;
@@ -24,11 +24,11 @@ export interface WhatsAppFloatingButtonProps {
   defaultMessage?: string;
 }
 
-const POSITION_STORAGE_KEY = 'whatsapp-button-position';
+const POSITION_STORAGE_KEY = "whatsapp-button-position";
 const DEFAULT_POSITION = { x: 0, y: 0 };
 
 const normalizePhoneNumber = (value: string) => {
-  const digits = value.replace(/[^0-9]/g, '');
+  const digits = value.replace(/[^0-9]/g, "");
   if (!digits) return null;
   return digits;
 };
@@ -53,7 +53,7 @@ const savePosition = (x: number, y: number): void => {
     localStorage.setItem(POSITION_STORAGE_KEY, JSON.stringify({ x, y }));
     // 触发 storage 事件以通知其他订阅者
     window.dispatchEvent(
-      new StorageEvent('storage', { key: POSITION_STORAGE_KEY }),
+      new StorageEvent("storage", { key: POSITION_STORAGE_KEY }),
     );
   } catch {
     // 忽略存储错误（如隐私模式）
@@ -66,8 +66,8 @@ const savePosition = (x: number, y: number): void => {
  */
 function useStoredPosition() {
   const subscribe = useCallback((callback: () => void) => {
-    window.addEventListener('storage', callback);
-    return () => window.removeEventListener('storage', callback);
+    window.addEventListener("storage", callback);
+    return () => window.removeEventListener("storage", callback);
   }, []);
 
   const getSnapshot = useCallback(() => {
@@ -87,20 +87,20 @@ function useStoredPosition() {
 }
 
 const DEFAULT_TRANSLATIONS: WhatsAppChatWindowTranslations = {
-  greeting: 'Need help?',
-  responseTime: 'Team typically replies within 5 minutes.',
-  placeholder: 'Type your message...',
-  startChat: 'Start WhatsApp Chat',
-  close: 'Close',
+  greeting: "Need help?",
+  responseTime: "Team typically replies within 5 minutes.",
+  placeholder: "Type your message...",
+  startChat: "Start WhatsApp Chat",
+  close: "Close",
 };
 
 // eslint-disable-next-line max-lines-per-function -- Component integrates draggable behavior, chat window, and styled button; splitting would increase complexity without benefit
 export function WhatsAppFloatingButton({
   number,
-  label = 'Chat with us on WhatsApp',
-  className = '',
+  label = "Chat with us on WhatsApp",
+  className = "",
   translations = DEFAULT_TRANSLATIONS,
-  defaultMessage = '',
+  defaultMessage = "",
 }: WhatsAppFloatingButtonProps) {
   const tokens = WHATSAPP_STYLE_TOKENS;
   const normalizedNumber = normalizePhoneNumber(number);
@@ -128,8 +128,8 @@ export function WhatsAppFloatingButton({
       setIsChatOpen(false);
     };
 
-    document.addEventListener('mousedown', handleClickOutside);
-    return () => document.removeEventListener('mousedown', handleClickOutside);
+    document.addEventListener("mousedown", handleClickOutside);
+    return () => document.removeEventListener("mousedown", handleClickOutside);
   }, [isChatOpen]);
 
   if (!normalizedNumber) return null;
@@ -166,22 +166,22 @@ export function WhatsAppFloatingButton({
   return (
     <Draggable
       nodeRef={nodeRef}
-      bounds='body'
+      bounds="body"
       position={position}
       onStart={handleStart}
       onDrag={handleDrag}
       onStop={handleStop}
-      cancel='.whatsapp-chat-window'
+      cancel=".whatsapp-chat-window"
     >
       <div
         ref={nodeRef}
-        role='complementary'
-        aria-label='Support chat'
-        className='fixed right-6 z-[1100]'
+        role="complementary"
+        aria-label="Support chat"
+        className="fixed right-6 z-[1100]"
         style={{
-          cursor: isDragging ? 'grabbing' : 'grab',
-          bottom: '24px',
-          translate: '0 calc(-1 * var(--cookie-banner-height, 0px))',
+          cursor: isDragging ? "grabbing" : "grab",
+          bottom: "24px",
+          translate: "0 calc(-1 * var(--cookie-banner-height, 0px))",
         }}
       >
         {/* Chat Window */}
@@ -196,11 +196,11 @@ export function WhatsAppFloatingButton({
 
         {/* Floating Button */}
         <button
-          type='button'
+          type="button"
           aria-label={label}
           aria-expanded={isChatOpen}
           className={cn(
-            'group relative flex items-center justify-center',
+            "group relative flex items-center justify-center",
             tokens.transition,
             tokens.focusRing,
             tokens.light.background,
@@ -229,21 +229,21 @@ export function WhatsAppFloatingButton({
         >
           {isChatOpen ? (
             <X
-              className='transition-colors duration-150'
+              className="transition-colors duration-150"
               style={{
                 width: `${tokens.iconSizePx}px`,
                 height: `${tokens.iconSizePx}px`,
               }}
-              aria-hidden='true'
+              aria-hidden="true"
             />
           ) : (
             <MessageCircle
-              className='transition-colors duration-150'
+              className="transition-colors duration-150"
               style={{
                 width: `${tokens.iconSizePx}px`,
                 height: `${tokens.iconSizePx}px`,
               }}
-              aria-hidden='true'
+              aria-hidden="true"
             />
           )}
 
@@ -251,7 +251,7 @@ export function WhatsAppFloatingButton({
           {!isChatOpen && (
             <span
               className={cn(
-                'pointer-events-none absolute bottom-full mb-2 w-max rounded-lg px-3 py-1.5 text-xs font-medium opacity-0 shadow-lg transition-opacity group-hover:opacity-100',
+                "pointer-events-none absolute bottom-full mb-2 w-max rounded-lg px-3 py-1.5 text-xs font-medium opacity-0 shadow-lg transition-opacity group-hover:opacity-100",
                 tokens.tooltip.background,
                 tokens.tooltip.text,
               )}

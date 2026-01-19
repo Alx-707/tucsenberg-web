@@ -160,7 +160,7 @@ export interface Messages {
 export type TranslationKey = keyof Messages | `${keyof Messages}.${string}`;
 
 // 支持的语言类型
-export type Locale = 'en' | 'zh';
+export type Locale = "en" | "zh";
 // 兼容旧测试代码中的别名
 export type _Locale = Locale;
 
@@ -187,7 +187,7 @@ export interface TranslationContext {
 
 // 翻译错误类型
 export interface TranslationError {
-  code: 'MISSING_KEY' | 'INVALID_PARAMS' | 'FORMAT_ERROR' | 'NETWORK_ERROR';
+  code: "MISSING_KEY" | "INVALID_PARAMS" | "FORMAT_ERROR" | "NETWORK_ERROR";
   message: string;
   key?: string;
   locale?: Locale;
@@ -215,11 +215,11 @@ export interface I18nConfig {
     suffix: string;
   };
   detection: {
-    order: ('localStorage' | 'cookie' | 'header' | 'path')[];
-    caches: ('localStorage' | 'cookie')[];
+    order: ("localStorage" | "cookie" | "header" | "path")[];
+    caches: ("localStorage" | "cookie")[];
     cookieOptions: {
       maxAge: number;
-      sameSite: 'strict' | 'lax' | 'none';
+      sameSite: "strict" | "lax" | "none";
       secure: boolean;
     };
   };
@@ -277,7 +277,7 @@ export interface DomainConfig {
 export interface MiddlewareConfig {
   locales: Locale[];
   defaultLocale: Locale;
-  localePrefix: 'always' | 'as-needed' | 'never';
+  localePrefix: "always" | "as-needed" | "never";
   domains?: DomainConfig[];
   pathnames?: LocalizedPathnames;
   alternateLinks?: boolean;

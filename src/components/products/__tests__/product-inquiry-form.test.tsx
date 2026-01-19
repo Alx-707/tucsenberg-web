@@ -2,10 +2,10 @@
  * @vitest-environment jsdom
  * Tests for ProductInquiryForm component
  */
-import React from 'react';
-import { fireEvent, render, screen } from '@testing-library/react';
-import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
-import { ProductInquiryForm } from '../product-inquiry-form';
+import React from "react";
+import { fireEvent, render, screen } from "@testing-library/react";
+import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
+import { ProductInquiryForm } from "../product-inquiry-form";
 
 // Mock hoisted variables
 const { mockFetch, mockUseTranslations } = vi.hoisted(() => ({
@@ -14,40 +14,28 @@ const { mockFetch, mockUseTranslations } = vi.hoisted(() => ({
 }));
 
 // Mock next-intl
-vi.mock('next-intl', () => ({
+vi.mock("next-intl", () => ({
   useTranslations: mockUseTranslations,
 }));
 
 // Mock lucide-react icons
-vi.mock('lucide-react', () => ({
+vi.mock("lucide-react", () => ({
   CheckCircle: (props: React.SVGProps<SVGSVGElement>) => (
-    <svg
-      data-testid='check-circle-icon'
-      {...props}
-    />
+    <svg data-testid="check-circle-icon" {...props} />
   ),
   Loader2: (props: React.SVGProps<SVGSVGElement>) => (
-    <svg
-      data-testid='loader-icon'
-      {...props}
-    />
+    <svg data-testid="loader-icon" {...props} />
   ),
   MessageSquare: (props: React.SVGProps<SVGSVGElement>) => (
-    <svg
-      data-testid='message-square-icon'
-      {...props}
-    />
+    <svg data-testid="message-square-icon" {...props} />
   ),
   XCircle: (props: React.SVGProps<SVGSVGElement>) => (
-    <svg
-      data-testid='x-circle-icon'
-      {...props}
-    />
+    <svg data-testid="x-circle-icon" {...props} />
   ),
 }));
 
 // Mock TurnstileWidget
-vi.mock('next/dynamic', () => ({
+vi.mock("next/dynamic", () => ({
   default: (
     loader: () => Promise<{ TurnstileWidget: React.ComponentType }>,
     _options: Record<string, unknown>,
@@ -58,17 +46,17 @@ vi.mock('next/dynamic', () => ({
     }: {
       onSuccess?: (token: string) => void;
     }) => (
-      <div data-testid='turnstile-widget'>
+      <div data-testid="turnstile-widget">
         <button
-          type='button'
-          data-testid='turnstile-success-trigger'
-          onClick={() => onSuccess?.('mock-token-123')}
+          type="button"
+          data-testid="turnstile-success-trigger"
+          onClick={() => onSuccess?.("mock-token-123")}
         >
           Simulate Turnstile Success
         </button>
       </div>
     );
-    MockTurnstile.displayName = 'MockTurnstile';
+    MockTurnstile.displayName = "MockTurnstile";
     // Need to call loader to avoid warnings, but we return our mock
     loader();
     return MockTurnstile;
@@ -76,36 +64,36 @@ vi.mock('next/dynamic', () => ({
 }));
 
 // Mock @/components/security/turnstile
-vi.mock('@/components/security/turnstile', () => ({
-  TurnstileWidget: () => <div data-testid='turnstile-mock' />,
+vi.mock("@/components/security/turnstile", () => ({
+  TurnstileWidget: () => <div data-testid="turnstile-mock" />,
 }));
 
 // Translation mock helper
 function createTranslationMock() {
   const translations: Record<string, Record<string, string>> = {
-    'products.inquiry': {
-      title: 'Product Inquiry',
-      description: 'Fill out this form to inquire about this product',
-      productName: 'Product',
-      quantity: 'Quantity',
-      quantityPlaceholder: 'e.g. 100 pcs',
-      targetPrice: 'Target Price',
-      targetPricePlaceholder: 'e.g. $10/pc',
-      requirements: 'Requirements',
-      requirementsPlaceholder: 'Any special requirements...',
-      submit: 'Send Inquiry',
-      submitting: 'Sending...',
-      success: 'Inquiry sent successfully!',
-      error: 'Failed to send inquiry',
-      turnstileRequired: 'Please complete verification',
+    "products.inquiry": {
+      title: "Product Inquiry",
+      description: "Fill out this form to inquire about this product",
+      productName: "Product",
+      quantity: "Quantity",
+      quantityPlaceholder: "e.g. 100 pcs",
+      targetPrice: "Target Price",
+      targetPricePlaceholder: "e.g. $10/pc",
+      requirements: "Requirements",
+      requirementsPlaceholder: "Any special requirements...",
+      submit: "Send Inquiry",
+      submitting: "Sending...",
+      success: "Inquiry sent successfully!",
+      error: "Failed to send inquiry",
+      turnstileRequired: "Please complete verification",
     },
-    'contact.form': {
-      firstName: 'Name',
-      firstNamePlaceholder: 'Your name',
-      email: 'Email',
-      emailPlaceholder: 'your@email.com',
-      company: 'Company',
-      companyPlaceholder: 'Your company',
+    "contact.form": {
+      firstName: "Name",
+      firstNamePlaceholder: "Your name",
+      email: "Email",
+      emailPlaceholder: "your@email.com",
+      company: "Company",
+      companyPlaceholder: "Your company",
     },
   };
 
@@ -117,7 +105,7 @@ function createTranslationMock() {
   };
 }
 
-describe('ProductInquiryForm', () => {
+describe("ProductInquiryForm", () => {
   beforeEach(() => {
     vi.clearAllMocks();
     mockUseTranslations.mockImplementation(createTranslationMock());
@@ -132,37 +120,37 @@ describe('ProductInquiryForm', () => {
     vi.restoreAllMocks();
   });
 
-  describe('rendering', () => {
-    it('renders form title and description', () => {
+  describe("rendering", () => {
+    it("renders form title and description", () => {
       render(
         <ProductInquiryForm
-          productName='Test Product'
-          productSlug='test-product'
+          productName="Test Product"
+          productSlug="test-product"
         />,
       );
 
-      expect(screen.getByText('Product Inquiry')).toBeInTheDocument();
+      expect(screen.getByText("Product Inquiry")).toBeInTheDocument();
       expect(
-        screen.getByText('Fill out this form to inquire about this product'),
+        screen.getByText("Fill out this form to inquire about this product"),
       ).toBeInTheDocument();
     });
 
-    it('displays product name', () => {
+    it("displays product name", () => {
       render(
         <ProductInquiryForm
-          productName='Industrial Widget'
-          productSlug='industrial-widget'
+          productName="Industrial Widget"
+          productSlug="industrial-widget"
         />,
       );
 
-      expect(screen.getByText('Industrial Widget')).toBeInTheDocument();
+      expect(screen.getByText("Industrial Widget")).toBeInTheDocument();
     });
 
-    it('renders all form fields', () => {
+    it("renders all form fields", () => {
       render(
         <ProductInquiryForm
-          productName='Test Product'
-          productSlug='test-product'
+          productName="Test Product"
+          productSlug="test-product"
         />,
       );
 
@@ -174,121 +162,121 @@ describe('ProductInquiryForm', () => {
       expect(screen.getByLabelText(/Requirements/i)).toBeInTheDocument();
     });
 
-    it('renders submit button', () => {
+    it("renders submit button", () => {
       render(
         <ProductInquiryForm
-          productName='Test Product'
-          productSlug='test-product'
+          productName="Test Product"
+          productSlug="test-product"
         />,
       );
 
       expect(
-        screen.getByRole('button', { name: /Send Inquiry/i }),
+        screen.getByRole("button", { name: /Send Inquiry/i }),
       ).toBeInTheDocument();
     });
 
-    it('renders Turnstile widget', () => {
+    it("renders Turnstile widget", () => {
       render(
         <ProductInquiryForm
-          productName='Test Product'
-          productSlug='test-product'
+          productName="Test Product"
+          productSlug="test-product"
         />,
       );
 
-      expect(screen.getByTestId('turnstile-widget')).toBeInTheDocument();
+      expect(screen.getByTestId("turnstile-widget")).toBeInTheDocument();
     });
 
-    it('renders message square icon in header', () => {
+    it("renders message square icon in header", () => {
       render(
         <ProductInquiryForm
-          productName='Test Product'
-          productSlug='test-product'
+          productName="Test Product"
+          productSlug="test-product"
         />,
       );
 
-      expect(screen.getByTestId('message-square-icon')).toBeInTheDocument();
+      expect(screen.getByTestId("message-square-icon")).toBeInTheDocument();
     });
   });
 
-  describe('form fields', () => {
-    it('has required name field', () => {
+  describe("form fields", () => {
+    it("has required name field", () => {
       render(
         <ProductInquiryForm
-          productName='Test Product'
-          productSlug='test-product'
+          productName="Test Product"
+          productSlug="test-product"
         />,
       );
 
       const nameInput = screen.getByLabelText(/Name/i);
-      expect(nameInput).toHaveAttribute('required');
+      expect(nameInput).toHaveAttribute("required");
     });
 
-    it('has required email field with type email', () => {
+    it("has required email field with type email", () => {
       render(
         <ProductInquiryForm
-          productName='Test Product'
-          productSlug='test-product'
+          productName="Test Product"
+          productSlug="test-product"
         />,
       );
 
       const emailInput = screen.getByLabelText(/Email/i);
-      expect(emailInput).toHaveAttribute('required');
-      expect(emailInput).toHaveAttribute('type', 'email');
+      expect(emailInput).toHaveAttribute("required");
+      expect(emailInput).toHaveAttribute("type", "email");
     });
 
-    it('has required quantity field', () => {
+    it("has required quantity field", () => {
       render(
         <ProductInquiryForm
-          productName='Test Product'
-          productSlug='test-product'
+          productName="Test Product"
+          productSlug="test-product"
         />,
       );
 
       const quantityInput = screen.getByLabelText(/Quantity/i);
-      expect(quantityInput).toHaveAttribute('required');
+      expect(quantityInput).toHaveAttribute("required");
     });
 
-    it('has optional company field', () => {
+    it("has optional company field", () => {
       render(
         <ProductInquiryForm
-          productName='Test Product'
-          productSlug='test-product'
+          productName="Test Product"
+          productSlug="test-product"
         />,
       );
 
       const companyInput = screen.getByLabelText(/Company/i);
-      expect(companyInput).not.toHaveAttribute('required');
+      expect(companyInput).not.toHaveAttribute("required");
     });
 
-    it('has optional target price field', () => {
+    it("has optional target price field", () => {
       render(
         <ProductInquiryForm
-          productName='Test Product'
-          productSlug='test-product'
+          productName="Test Product"
+          productSlug="test-product"
         />,
       );
 
       const priceInput = screen.getByLabelText(/Target Price/i);
-      expect(priceInput).not.toHaveAttribute('required');
+      expect(priceInput).not.toHaveAttribute("required");
     });
 
-    it('has textarea for requirements', () => {
+    it("has textarea for requirements", () => {
       render(
         <ProductInquiryForm
-          productName='Test Product'
-          productSlug='test-product'
+          productName="Test Product"
+          productSlug="test-product"
         />,
       );
 
       const textarea = screen.getByLabelText(/Requirements/i);
-      expect(textarea.tagName).toBe('TEXTAREA');
+      expect(textarea.tagName).toBe("TEXTAREA");
     });
 
-    it('includes hidden fields for product data', () => {
+    it("includes hidden fields for product data", () => {
       const { container } = render(
         <ProductInquiryForm
-          productName='Test Product'
-          productSlug='test-product'
+          productName="Test Product"
+          productSlug="test-product"
         />,
       );
 
@@ -299,64 +287,64 @@ describe('ProductInquiryForm', () => {
         'input[name="productName"]',
       ) as HTMLInputElement;
 
-      expect(hiddenSlug).toHaveValue('test-product');
-      expect(hiddenName).toHaveValue('Test Product');
+      expect(hiddenSlug).toHaveValue("test-product");
+      expect(hiddenName).toHaveValue("Test Product");
     });
   });
 
-  describe('turnstile integration', () => {
-    it('disables submit button when turnstile not completed', () => {
+  describe("turnstile integration", () => {
+    it("disables submit button when turnstile not completed", () => {
       render(
         <ProductInquiryForm
-          productName='Test Product'
-          productSlug='test-product'
+          productName="Test Product"
+          productSlug="test-product"
         />,
       );
 
-      const submitButton = screen.getByRole('button', {
+      const submitButton = screen.getByRole("button", {
         name: /Send Inquiry/i,
       });
       expect(submitButton).toBeDisabled();
     });
 
-    it('enables submit button after turnstile success', () => {
+    it("enables submit button after turnstile success", () => {
       render(
         <ProductInquiryForm
-          productName='Test Product'
-          productSlug='test-product'
+          productName="Test Product"
+          productSlug="test-product"
         />,
       );
 
-      fireEvent.click(screen.getByTestId('turnstile-success-trigger'));
+      fireEvent.click(screen.getByTestId("turnstile-success-trigger"));
 
-      const submitButton = screen.getByRole('button', {
+      const submitButton = screen.getByRole("button", {
         name: /Send Inquiry/i,
       });
       expect(submitButton).not.toBeDisabled();
     });
   });
 
-  describe('custom className', () => {
-    it('applies custom className to Card', () => {
+  describe("custom className", () => {
+    it("applies custom className to Card", () => {
       const { container } = render(
         <ProductInquiryForm
-          productName='Test Product'
-          productSlug='test-product'
-          className='custom-form-class'
+          productName="Test Product"
+          productSlug="test-product"
+          className="custom-form-class"
         />,
       );
 
       const card = container.querySelector('[data-slot="card"]');
-      expect(card).toHaveClass('custom-form-class');
+      expect(card).toHaveClass("custom-form-class");
     });
   });
 
-  describe('form labels', () => {
-    it('shows asterisk for required fields', () => {
+  describe("form labels", () => {
+    it("shows asterisk for required fields", () => {
       render(
         <ProductInquiryForm
-          productName='Test Product'
-          productSlug='test-product'
+          productName="Test Product"
+          productSlug="test-product"
         />,
       );
 
@@ -367,92 +355,92 @@ describe('ProductInquiryForm', () => {
     });
   });
 
-  describe('placeholders', () => {
-    it('has placeholder for name field', () => {
+  describe("placeholders", () => {
+    it("has placeholder for name field", () => {
       render(
         <ProductInquiryForm
-          productName='Test Product'
-          productSlug='test-product'
+          productName="Test Product"
+          productSlug="test-product"
         />,
       );
 
       const nameInput = screen.getByLabelText(/Name/i);
-      expect(nameInput).toHaveAttribute('placeholder', 'Your name');
+      expect(nameInput).toHaveAttribute("placeholder", "Your name");
     });
 
-    it('has placeholder for email field', () => {
+    it("has placeholder for email field", () => {
       render(
         <ProductInquiryForm
-          productName='Test Product'
-          productSlug='test-product'
+          productName="Test Product"
+          productSlug="test-product"
         />,
       );
 
       const emailInput = screen.getByLabelText(/Email/i);
-      expect(emailInput).toHaveAttribute('placeholder', 'your@email.com');
+      expect(emailInput).toHaveAttribute("placeholder", "your@email.com");
     });
 
-    it('has placeholder for quantity field', () => {
+    it("has placeholder for quantity field", () => {
       render(
         <ProductInquiryForm
-          productName='Test Product'
-          productSlug='test-product'
+          productName="Test Product"
+          productSlug="test-product"
         />,
       );
 
       const quantityInput = screen.getByLabelText(/Quantity/i);
-      expect(quantityInput).toHaveAttribute('placeholder', 'e.g. 100 pcs');
+      expect(quantityInput).toHaveAttribute("placeholder", "e.g. 100 pcs");
     });
   });
 
-  describe('accessibility', () => {
-    it('has proper label associations', () => {
+  describe("accessibility", () => {
+    it("has proper label associations", () => {
       render(
         <ProductInquiryForm
-          productName='Test Product'
-          productSlug='test-product'
+          productName="Test Product"
+          productSlug="test-product"
         />,
       );
 
       expect(screen.getByLabelText(/Name \*/i)).toHaveAttribute(
-        'id',
-        'inquiry-name',
+        "id",
+        "inquiry-name",
       );
       expect(screen.getByLabelText(/Email \*/i)).toHaveAttribute(
-        'id',
-        'inquiry-email',
+        "id",
+        "inquiry-email",
       );
       expect(screen.getByLabelText(/Company/i)).toHaveAttribute(
-        'id',
-        'inquiry-company',
+        "id",
+        "inquiry-company",
       );
       expect(screen.getByLabelText(/Quantity \*/i)).toHaveAttribute(
-        'id',
-        'inquiry-quantity',
+        "id",
+        "inquiry-quantity",
       );
     });
 
-    it('submit button shows correct text states', async () => {
+    it("submit button shows correct text states", async () => {
       render(
         <ProductInquiryForm
-          productName='Test Product'
-          productSlug='test-product'
+          productName="Test Product"
+          productSlug="test-product"
         />,
       );
 
-      const submitButton = screen.getByRole('button', {
+      const submitButton = screen.getByRole("button", {
         name: /Send Inquiry/i,
       });
-      expect(submitButton).toHaveTextContent('Send Inquiry');
+      expect(submitButton).toHaveTextContent("Send Inquiry");
     });
   });
 
-  describe('edge cases', () => {
-    it('handles special characters in product name', () => {
+  describe("edge cases", () => {
+    it("handles special characters in product name", () => {
       render(
         <ProductInquiryForm
           productName='Product <Special> & "Test"'
-          productSlug='product-special'
+          productSlug="product-special"
         />,
       );
 
@@ -461,25 +449,25 @@ describe('ProductInquiryForm', () => {
       ).toBeInTheDocument();
     });
 
-    it('handles long product names', () => {
+    it("handles long product names", () => {
       const longName =
-        'This is a very long product name that should still be displayed properly in the form';
+        "This is a very long product name that should still be displayed properly in the form";
       render(
         <ProductInquiryForm
           productName={longName}
-          productSlug='long-product'
+          productSlug="long-product"
         />,
       );
 
       expect(screen.getByText(longName)).toBeInTheDocument();
     });
 
-    it('handles empty className', () => {
+    it("handles empty className", () => {
       const { container } = render(
         <ProductInquiryForm
-          productName='Test Product'
-          productSlug='test-product'
-          className=''
+          productName="Test Product"
+          productSlug="test-product"
+          className=""
         />,
       );
 
@@ -488,8 +476,8 @@ describe('ProductInquiryForm', () => {
     });
   });
 
-  describe('form submission', () => {
-    it('calls onSuccess callback after successful submission', async () => {
+  describe("form submission", () => {
+    it("calls onSuccess callback after successful submission", async () => {
       const onSuccessMock = vi.fn();
       mockFetch.mockResolvedValueOnce({
         ok: true,
@@ -498,76 +486,76 @@ describe('ProductInquiryForm', () => {
 
       render(
         <ProductInquiryForm
-          productName='Test Product'
-          productSlug='test-product'
+          productName="Test Product"
+          productSlug="test-product"
           onSuccess={onSuccessMock}
         />,
       );
 
       // Enable turnstile
-      fireEvent.click(screen.getByTestId('turnstile-success-trigger'));
+      fireEvent.click(screen.getByTestId("turnstile-success-trigger"));
 
       // Fill required fields
       fireEvent.change(screen.getByLabelText(/Name/i), {
-        target: { value: 'John Doe' },
+        target: { value: "John Doe" },
       });
       fireEvent.change(screen.getByLabelText(/Email/i), {
-        target: { value: 'john@example.com' },
+        target: { value: "john@example.com" },
       });
       fireEvent.change(screen.getByLabelText(/Quantity/i), {
-        target: { value: '100 pcs' },
+        target: { value: "100 pcs" },
       });
 
       // Verify form is ready for submission
-      const submitButton = screen.getByRole('button', {
+      const submitButton = screen.getByRole("button", {
         name: /Send Inquiry/i,
       });
       expect(submitButton).not.toBeDisabled();
     });
 
-    it('handles API error response', async () => {
+    it("handles API error response", async () => {
       mockFetch.mockResolvedValueOnce({
         ok: false,
-        json: async () => ({ success: false, error: 'Server error' }),
+        json: async () => ({ success: false, error: "Server error" }),
       });
 
       render(
         <ProductInquiryForm
-          productName='Test Product'
-          productSlug='test-product'
+          productName="Test Product"
+          productSlug="test-product"
         />,
       );
 
       // Enable turnstile
-      fireEvent.click(screen.getByTestId('turnstile-success-trigger'));
+      fireEvent.click(screen.getByTestId("turnstile-success-trigger"));
 
       // Fill required fields
       fireEvent.change(screen.getByLabelText(/Name/i), {
-        target: { value: 'John Doe' },
+        target: { value: "John Doe" },
       });
       fireEvent.change(screen.getByLabelText(/Email/i), {
-        target: { value: 'john@example.com' },
+        target: { value: "john@example.com" },
       });
       fireEvent.change(screen.getByLabelText(/Quantity/i), {
-        target: { value: '100 pcs' },
+        target: { value: "100 pcs" },
       });
     });
 
-    it('handles network error gracefully', async () => {
-      mockFetch.mockRejectedValueOnce(new Error('Network error'));
+    it("handles network error gracefully", async () => {
+      mockFetch.mockRejectedValueOnce(new Error("Network error"));
 
       render(
         <ProductInquiryForm
-          productName='Test Product'
-          productSlug='test-product'
+          productName="Test Product"
+          productSlug="test-product"
         />,
       );
 
       // Enable turnstile
-      fireEvent.click(screen.getByTestId('turnstile-success-trigger'));
+      fireEvent.click(screen.getByTestId("turnstile-success-trigger"));
     });
 
-    it('includes optional fields in submission', async () => {
+    it("includes optional fields in submission", async () => {
       mockFetch.mockResolvedValueOnce({
         ok: true,
         json: async () => ({ success: true }),
@@ -575,59 +563,59 @@ describe('ProductInquiryForm', () => {
 
       render(
         <ProductInquiryForm
-          productName='Test Product'
-          productSlug='test-product'
+          productName="Test Product"
+          productSlug="test-product"
         />,
       );
 
       // Enable turnstile
-      fireEvent.click(screen.getByTestId('turnstile-success-trigger'));
+      fireEvent.click(screen.getByTestId("turnstile-success-trigger"));
 
       // Fill all fields including optional ones
       fireEvent.change(screen.getByLabelText(/Name/i), {
-        target: { value: 'John Doe' },
+        target: { value: "John Doe" },
       });
       fireEvent.change(screen.getByLabelText(/Email/i), {
-        target: { value: 'john@example.com' },
+        target: { value: "john@example.com" },
       });
       fireEvent.change(screen.getByLabelText(/Company/i), {
-        target: { value: 'Test Corp' },
+        target: { value: "Test Corp" },
       });
       fireEvent.change(screen.getByLabelText(/Quantity/i), {
-        target: { value: '100 pcs' },
+        target: { value: "100 pcs" },
       });
       fireEvent.change(screen.getByLabelText(/Target Price/i), {
-        target: { value: '$10/pc' },
+        target: { value: "$10/pc" },
       });
       fireEvent.change(screen.getByLabelText(/Requirements/i), {
-        target: { value: 'Special packaging needed' },
+        target: { value: "Special packaging needed" },
       });
 
       // Verify form is ready
-      const submitButton = screen.getByRole('button', {
+      const submitButton = screen.getByRole("button", {
         name: /Send Inquiry/i,
       });
       expect(submitButton).not.toBeDisabled();
     });
   });
 
-  describe('turnstile error handling', () => {
-    it('resets turnstile token on error', () => {
+  describe("turnstile error handling", () => {
+    it("resets turnstile token on error", () => {
       render(
         <ProductInquiryForm
-          productName='Test Product'
-          productSlug='test-product'
+          productName="Test Product"
+          productSlug="test-product"
         />,
       );
 
       // First enable
-      fireEvent.click(screen.getByTestId('turnstile-success-trigger'));
+      fireEvent.click(screen.getByTestId("turnstile-success-trigger"));
       expect(
-        screen.getByRole('button', { name: /Send Inquiry/i }),
+        screen.getByRole("button", { name: /Send Inquiry/i }),
       ).not.toBeDisabled();
 
       // The mock doesn't have error trigger, but we test the initial disabled state
-      const submitButton = screen.getByRole('button', {
+      const submitButton = screen.getByRole("button", {
         name: /Send Inquiry/i,
       });
       expect(submitButton).toBeInTheDocument();

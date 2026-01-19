@@ -28,11 +28,11 @@ export const BREAKPOINT_2XL = 1536;
  * Matches Tailwind CSS v4 breakpoint system.
  */
 export const BREAKPOINTS = {
-  'sm': BREAKPOINT_SM,
-  'md': BREAKPOINT_MD,
-  'lg': BREAKPOINT_LG,
-  'xl': BREAKPOINT_XL,
-  '2xl': BREAKPOINT_2XL,
+  sm: BREAKPOINT_SM,
+  md: BREAKPOINT_MD,
+  lg: BREAKPOINT_LG,
+  xl: BREAKPOINT_XL,
+  "2xl": BREAKPOINT_2XL,
 } as const;
 
 export type BreakpointKey = keyof typeof BREAKPOINTS;

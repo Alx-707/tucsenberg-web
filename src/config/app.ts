@@ -6,17 +6,17 @@
  * 🔄 配合env.mjs进行类型安全的环境变量验证
  */
 
-import { env } from '@/lib/env';
-import { COUNT_PAIR, ONE } from '@/constants';
-import { MAGIC_0_1 } from '@/constants/decimal';
-import { WEB_VITALS_THRESHOLDS } from '@/constants/performance-constants';
+import { env } from "@/lib/env";
+import { COUNT_PAIR, ONE } from "@/constants";
+import { MAGIC_0_1 } from "@/constants/decimal";
+import { WEB_VITALS_THRESHOLDS } from "@/constants/performance-constants";
 import {
   HOURS_PER_DAY,
   MINUTE_MS,
   SECONDS_PER_HOUR,
   SECONDS_PER_MINUTE,
   THIRTY_SECONDS_MS,
-} from '@/constants/time';
+} from "@/constants/time";
 
 // ============================================================================
 // 网络和API配置
@@ -196,7 +196,7 @@ export const FEATURE_FLAGS = {
   /** 启用 WhatsApp 客户支持入口 */
   ENABLE_WHATSAPP_CHAT: env.ENABLE_WHATSAPP_CHAT ?? true,
   /** 启用调试模式 */
-  ENABLE_DEBUG_MODE: env.NODE_ENV === 'development',
+  ENABLE_DEBUG_MODE: env.NODE_ENV === "development",
 } as const;
 
 // ============================================================================

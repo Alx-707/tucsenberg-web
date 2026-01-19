@@ -2,12 +2,12 @@
  * @vitest-environment jsdom
  */
 
-import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
+import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 import {
   AccessibilityManager,
   KEYBOARD_KEYS,
   THEME_ANNOUNCEMENTS,
-} from '../accessibility';
+} from "../accessibility";
 
 // vi.hoisted Mock setup
 const mockLogger = vi.hoisted(() => ({
@@ -18,11 +18,11 @@ const mockLogger = vi.hoisted(() => ({
 }));
 
 // Mock modules
-vi.mock('@/lib/logger', () => ({
+vi.mock("@/lib/logger", () => ({
   logger: mockLogger,
 }));
 
-vi.mock('@/lib/colors', () => ({
+vi.mock("@/lib/colors", () => ({
   checkContrastCompliance: vi.fn().mockReturnValue(true),
   PERCENTAGE_CONSTANTS: {
     FULL: 100,
@@ -31,14 +31,14 @@ vi.mock('@/lib/colors', () => ({
 
 const originalDocumentDescriptor = Object.getOwnPropertyDescriptor(
   globalThis,
-  'document',
+  "document",
 );
 const originalWindowDescriptor = Object.getOwnPropertyDescriptor(
   globalThis,
-  'window',
+  "window",
 );
 
-describe('AccessibilityManager Core Tests', () => {
+describe("AccessibilityManager Core Tests", () => {
   let mockElement: any;
   let mockDocument: any;
   let mockWindow: any;
@@ -48,7 +48,7 @@ describe('AccessibilityManager Core Tests', () => {
 
     // Mock DOM element
     mockElement = {
-      textContent: '',
+      textContent: "",
       setAttribute: vi.fn(),
       hasAttribute: vi.fn(),
       focus: vi.fn(),
@@ -71,11 +71,11 @@ describe('AccessibilityManager Core Tests', () => {
     };
 
     // Set up global mocks
-    Object.defineProperty(globalThis, 'document', {
+    Object.defineProperty(globalThis, "document", {
       value: mockDocument,
       configurable: true,
     });
-    Object.defineProperty(globalThis, 'window', {
+    Object.defineProperty(globalThis, "window", {
       value: mockWindow,
       configurable: true,
     });
@@ -85,66 +85,66 @@ describe('AccessibilityManager Core Tests', () => {
     vi.useRealTimers();
     vi.clearAllMocks();
     if (originalDocumentDescriptor) {
-      Object.defineProperty(globalThis, 'document', originalDocumentDescriptor);
+      Object.defineProperty(globalThis, "document", originalDocumentDescriptor);
     }
     if (originalWindowDescriptor) {
-      Object.defineProperty(globalThis, 'window', originalWindowDescriptor);
+      Object.defineProperty(globalThis, "window", originalWindowDescriptor);
     }
   });
 
-  describe('Constants', () => {
-    it('should export THEME_ANNOUNCEMENTS with correct structure', () => {
-      expect(THEME_ANNOUNCEMENTS).toHaveProperty('zh');
-      expect(THEME_ANNOUNCEMENTS).toHaveProperty('en');
+  describe("Constants", () => {
+    it("should export THEME_ANNOUNCEMENTS with correct structure", () => {
+      expect(THEME_ANNOUNCEMENTS).toHaveProperty("zh");
+      expect(THEME_ANNOUNCEMENTS).toHaveProperty("en");
 
       expect(THEME_ANNOUNCEMENTS.zh).toEqual({
-        light: '已切换到明亮模式',
-        dark: '已切换到深色模式',
-        system: '已切换到系统模式',
-        switching: '正在切换主题...',
+        light: "已切换到明亮模式",
+        dark: "已切换到深色模式",
+        system: "已切换到系统模式",
+        switching: "正在切换主题...",
       });
     });
 
-    it('should export KEYBOARD_KEYS with correct values', () => {
+    it("should export KEYBOARD_KEYS with correct values", () => {
       expect(KEYBOARD_KEYS).toEqual({
-        ENTER: 'Enter',
-        SPACE: ' ',
-        ESCAPE: 'Escape',
-        TAB: 'Tab',
-        ARROW_UP: 'ArrowUp',
-        ARROW_DOWN: 'ArrowDown',
-        ARROW_LEFT: 'ArrowLeft',
-        ARROW_RIGHT: 'ArrowRight',
+        ENTER: "Enter",
+        SPACE: " ",
+        ESCAPE: "Escape",
+        TAB: "Tab",
+        ARROW_UP: "ArrowUp",
+        ARROW_DOWN: "ArrowDown",
+        ARROW_LEFT: "ArrowLeft",
+        ARROW_RIGHT: "ArrowRight",
       });
     });
   });
 
-  describe('AccessibilityManager Constructor', () => {
-    it('should create instance with default config', () => {
+  describe("AccessibilityManager Constructor", () => {
+    it("should create instance with default config", () => {
       const manager = new AccessibilityManager();
       expect(manager).toBeInstanceOf(AccessibilityManager);
     });
 
-    it('should create live region on initialization', () => {
+    it("should create live region on initialization", () => {
       new AccessibilityManager();
 
-      expect(mockDocument.createElement).toHaveBeenCalledWith('div');
+      expect(mockDocument.createElement).toHaveBeenCalledWith("div");
       expect(mockElement.setAttribute).toHaveBeenCalledWith(
-        'id',
-        'accessibility-live-region',
+        "id",
+        "accessibility-live-region",
       );
       expect(mockElement.setAttribute).toHaveBeenCalledWith(
-        'aria-live',
-        'polite',
+        "aria-live",
+        "polite",
       );
       expect(mockElement.setAttribute).toHaveBeenCalledWith(
-        'aria-atomic',
-        'true',
+        "aria-atomic",
+        "true",
       );
       expect(mockDocument.body.appendChild).toHaveBeenCalledWith(mockElement);
     });
 
-    it('should handle SSR environment gracefully', () => {
+    it("should handle SSR environment gracefully", () => {
       const globalWithDocument = globalThis as { document?: Document };
       const originalDocument = globalWithDocument.document;
       delete globalWithDocument.document;
@@ -160,59 +160,59 @@ describe('AccessibilityManager Core Tests', () => {
     });
   });
 
-  describe('announceThemeChange', () => {
-    it('should announce theme change with correct message', () => {
+  describe("announceThemeChange", () => {
+    it("should announce theme change with correct message", () => {
       // 使用中文语言配置
-      const manager = new AccessibilityManager({ language: 'zh' });
+      const manager = new AccessibilityManager({ language: "zh" });
 
-      manager.announceThemeChange('light');
+      manager.announceThemeChange("light");
 
       // 推进延迟时间以触发消息设置
       vi.advanceTimersByTime(100); // announceDelay
 
-      expect(mockElement.textContent).toBe('已切换到明亮模式');
+      expect(mockElement.textContent).toBe("已切换到明亮模式");
     });
 
-    it('should clear message after delay', () => {
+    it("should clear message after delay", () => {
       // 使用中文语言配置
-      const manager = new AccessibilityManager({ language: 'zh' });
+      const manager = new AccessibilityManager({ language: "zh" });
 
-      manager.announceThemeChange('dark');
+      manager.announceThemeChange("dark");
 
       // 推进延迟时间以触发消息设置
       vi.advanceTimersByTime(100); // announceDelay
-      expect(mockElement.textContent).toBe('已切换到深色模式');
+      expect(mockElement.textContent).toBe("已切换到深色模式");
 
       vi.advanceTimersByTime(1000); // clearDelay
-      expect(mockElement.textContent).toBe('');
+      expect(mockElement.textContent).toBe("");
     });
   });
 
-  describe('announceSwitching', () => {
-    it('should announce switching message', () => {
+  describe("announceSwitching", () => {
+    it("should announce switching message", () => {
       // 使用中文语言配置
-      const manager = new AccessibilityManager({ language: 'zh' });
+      const manager = new AccessibilityManager({ language: "zh" });
 
       manager.announceSwitching();
 
-      expect(mockElement.textContent).toBe('正在切换主题...');
+      expect(mockElement.textContent).toBe("正在切换主题...");
     });
 
-    it('should clear switching message after delay', () => {
+    it("should clear switching message after delay", () => {
       // 使用中文语言配置
-      const manager = new AccessibilityManager({ language: 'zh' });
+      const manager = new AccessibilityManager({ language: "zh" });
 
       manager.announceSwitching();
-      expect(mockElement.textContent).toBe('正在切换主题...');
+      expect(mockElement.textContent).toBe("正在切换主题...");
 
       vi.advanceTimersByTime(1000); // clearDelay
 
-      expect(mockElement.textContent).toBe('');
+      expect(mockElement.textContent).toBe("");
     });
   });
 
-  describe('cleanup', () => {
-    it('should remove live region from DOM', () => {
+  describe("cleanup", () => {
+    it("should remove live region from DOM", () => {
       const manager = new AccessibilityManager();
 
       manager.cleanup();
@@ -220,15 +220,15 @@ describe('AccessibilityManager Core Tests', () => {
       expect(mockDocument.body.removeChild).toHaveBeenCalledWith(mockElement);
     });
 
-    it('should handle cleanup errors gracefully', () => {
+    it("should handle cleanup errors gracefully", () => {
       const manager = new AccessibilityManager();
       mockDocument.body.removeChild.mockImplementation(() => {
-        throw new Error('removeChild failed');
+        throw new Error("removeChild failed");
       });
 
       expect(() => {
         manager.cleanup();
-      }).toThrow('removeChild failed');
+      }).toThrow("removeChild failed");
     });
   });
 });

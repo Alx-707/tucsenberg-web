@@ -7,23 +7,23 @@
  * - Webhook signature verification
  */
 
-import { createHmac, timingSafeEqual } from 'crypto';
-import { z } from 'zod';
-import type { SendMessageRequest } from '@/types/whatsapp';
-import { env } from '@/lib/env';
-import { logger } from '@/lib/logger';
-import { WhatsAppService } from '@/lib/whatsapp-core';
-import { resetWhatsAppClient } from '@/lib/whatsapp/client-factory';
+import { createHmac, timingSafeEqual } from "crypto";
+import { z } from "zod";
+import type { SendMessageRequest } from "@/types/whatsapp";
+import { env } from "@/lib/env";
+import { logger } from "@/lib/logger";
+import { WhatsAppService } from "@/lib/whatsapp-core";
+import { resetWhatsAppClient } from "@/lib/whatsapp/client-factory";
 
 // Re-export core service and client utilities
-export { WhatsAppService } from '@/lib/whatsapp-core';
-export { WhatsAppMessageService } from '@/lib/whatsapp-messages';
-export { WhatsAppMediaService } from '@/lib/whatsapp-media';
-export { WhatsAppUtils } from '@/lib/whatsapp-utils';
+export { WhatsAppService } from "@/lib/whatsapp-core";
+export { WhatsAppMessageService } from "@/lib/whatsapp-messages";
+export { WhatsAppMediaService } from "@/lib/whatsapp-media";
+export { WhatsAppUtils } from "@/lib/whatsapp-utils";
 export type {
   SendMessageRequest,
   WhatsAppServiceResponse,
-} from '@/types/whatsapp';
+} from "@/types/whatsapp";
 
 // Re-export client factory functions
 export {
@@ -31,7 +31,7 @@ export {
   resetWhatsAppClient,
   isMockClient,
   getClientEnvironmentInfo,
-} from '@/lib/whatsapp/client-factory';
+} from "@/lib/whatsapp/client-factory";
 
 // ==================== Webhook Schema ====================
 
@@ -108,19 +108,19 @@ function extractIncomingMessage(body: unknown): IncomingMessage | null {
 function generateAutoReply(receivedMessage: string): string {
   const lowerMessage = receivedMessage.toLowerCase();
 
-  if (lowerMessage.includes('hello') || lowerMessage.includes('hi')) {
-    return 'Hello! Thank you for contacting us. How can we help you today?';
+  if (lowerMessage.includes("hello") || lowerMessage.includes("hi")) {
+    return "Hello! Thank you for contacting us. How can we help you today?";
   }
 
-  if (lowerMessage.includes('help')) {
+  if (lowerMessage.includes("help")) {
     return "We're here to help! Please describe your question or concern.";
   }
 
-  if (lowerMessage.includes('price') || lowerMessage.includes('cost')) {
-    return 'For pricing information, please visit our website or contact our sales team.';
+  if (lowerMessage.includes("price") || lowerMessage.includes("cost")) {
+    return "For pricing information, please visit our website or contact our sales team.";
   }
 
-  return 'Thank you for your message. Our team will get back to you soon!';
+  return "Thank you for your message. Our team will get back to you soon!";
 }
 
 // ==================== Unified Service Instance ====================
@@ -155,7 +155,7 @@ export function verifyWebhook(
   token: string,
   challenge: string,
 ): string | null {
-  if (mode === 'subscribe' && token === env.WHATSAPP_WEBHOOK_VERIFY_TOKEN) {
+  if (mode === "subscribe" && token === env.WHATSAPP_WEBHOOK_VERIFY_TOKEN) {
     return challenge;
   }
   return null;
@@ -177,38 +177,38 @@ export function verifyWebhookSignature(
   // Skip verification if no signature provided (for local dev)
   if (!signature) {
     logger.warn(
-      '[WebhookSignature] No signature provided, skipping verification',
+      "[WebhookSignature] No signature provided, skipping verification",
     );
-    return !env.NODE_ENV || env.NODE_ENV !== 'production';
+    return !env.NODE_ENV || env.NODE_ENV !== "production";
   }
 
   const secret = appSecret || process.env.WHATSAPP_APP_SECRET;
   if (!secret) {
-    logger.warn('[WebhookSignature] No app secret configured');
-    return env.NODE_ENV !== 'production';
+    logger.warn("[WebhookSignature] No app secret configured");
+    return env.NODE_ENV !== "production";
   }
 
   try {
     // Signature format: sha256=<hash>
-    const [algorithm, providedHash] = signature.split('=');
-    if (algorithm !== 'sha256' || !providedHash) {
+    const [algorithm, providedHash] = signature.split("=");
+    if (algorithm !== "sha256" || !providedHash) {
       return false;
     }
 
     const payloadBuffer = Buffer.isBuffer(payload)
       ? payload
-      : Buffer.from(payload, 'utf8');
-    const expectedHash = createHmac('sha256', secret)
+      : Buffer.from(payload, "utf8");
+    const expectedHash = createHmac("sha256", secret)
       .update(payloadBuffer)
-      .digest('hex');
+      .digest("hex");
 
     return timingSafeEqual(
-      Buffer.from(providedHash, 'hex'),
-      Buffer.from(expectedHash, 'hex'),
+      Buffer.from(providedHash, "hex"),
+      Buffer.from(expectedHash, "hex"),
     );
   } catch (error) {
     logger.error(
-      '[WebhookSignature] Verification failed',
+      "[WebhookSignature] Verification failed",
       {},
       error instanceof Error ? error : new Error(String(error)),
     );
@@ -256,7 +256,7 @@ export async function handleIncomingMessage(
     return { success: true };
   } catch (error) {
     logger.error(
-      '[WhatsAppWebhook] Failed to handle incoming message',
+      "[WhatsAppWebhook] Failed to handle incoming message",
       {},
       error instanceof Error ? error : new Error(String(error)),
     );

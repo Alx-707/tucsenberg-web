@@ -1,4 +1,4 @@
-import localFont from 'next/font/local';
+import localFont from "next/font/local";
 
 /**
  * Geist Sans Latin 子集字体配置
@@ -7,10 +7,10 @@ import localFont from 'next/font/local';
  * License: SIL Open Font License（允许子集化和再分发）
  */
 export const geistSans = localFont({
-  src: './GeistSans-Latin.woff2',
-  variable: '--font-geist-sans',
-  display: 'swap',
-  weight: '100 900',
+  src: "./GeistSans-Latin.woff2",
+  variable: "--font-geist-sans",
+  display: "swap",
+  weight: "100 900",
 });
 
 /**

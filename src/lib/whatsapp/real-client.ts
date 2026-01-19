@@ -9,18 +9,18 @@
 import type {
   SendMessageRequest,
   WhatsAppServiceResponse,
-} from '@/types/whatsapp';
-import { logger } from '@/lib/logger';
-import { WhatsAppMediaService } from '@/lib/whatsapp-media';
-import { WhatsAppMessageService } from '@/lib/whatsapp-messages';
-import { WhatsAppUtils } from '@/lib/whatsapp-utils';
+} from "@/types/whatsapp";
+import { logger } from "@/lib/logger";
+import { WhatsAppMediaService } from "@/lib/whatsapp-media";
+import { WhatsAppMessageService } from "@/lib/whatsapp-messages";
+import { WhatsAppUtils } from "@/lib/whatsapp-utils";
 import type {
   WhatsAppClient,
   WhatsAppClientConfig,
   WhatsAppClientInfo,
-} from '@/lib/whatsapp/client-interface';
+} from "@/lib/whatsapp/client-interface";
 
-const DEFAULT_API_VERSION = 'v18.0';
+const DEFAULT_API_VERSION = "v18.0";
 
 /**
  * Real WhatsApp Client for production use
@@ -34,7 +34,7 @@ export class RealWhatsAppClient implements WhatsAppClient {
 
   constructor(config: WhatsAppClientConfig) {
     if (!config.accessToken || !config.phoneNumberId) {
-      throw new Error('WhatsApp access token and phone number ID are required');
+      throw new Error("WhatsApp access token and phone number ID are required");
     }
 
     this.accessToken = config.accessToken;
@@ -50,7 +50,7 @@ export class RealWhatsAppClient implements WhatsAppClient {
       this.phoneNumberId,
     );
 
-    logger.info('[RealWhatsAppClient] Initialized with real API credentials');
+    logger.info("[RealWhatsAppClient] Initialized with real API credentials");
   }
 
   sendMessage(message: SendMessageRequest): Promise<WhatsAppServiceResponse> {
@@ -115,7 +115,7 @@ export class RealWhatsAppClient implements WhatsAppClient {
 
   uploadMedia(
     file: Buffer | Blob,
-    type: 'image' | 'document' | 'audio' | 'video' | 'sticker',
+    type: "image" | "document" | "audio" | "video" | "sticker",
     filename?: string,
   ): Promise<string | null> {
     return this.mediaService.uploadMedia(file, type, filename);
@@ -127,7 +127,7 @@ export class RealWhatsAppClient implements WhatsAppClient {
 
   getClientInfo(): WhatsAppClientInfo {
     return {
-      type: 'real',
+      type: "real",
       phoneNumberId: this.phoneNumberId,
       isConfigured: this.isReady(),
       apiVersion: this.apiVersion,

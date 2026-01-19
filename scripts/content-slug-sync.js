@@ -24,15 +24,15 @@
  * @module scripts/content-slug-sync
  */
 
-const fs = require('fs');
-const path = require('path');
-const { validateMdxSlugSync } = require('./mdx-slug-sync');
+const fs = require("fs");
+const path = require("path");
+const { validateMdxSlugSync } = require("./mdx-slug-sync");
 
 // Default configuration
-const DEFAULT_COLLECTIONS = ['posts', 'pages', 'products'];
-const DEFAULT_LOCALES = ['en', 'zh'];
-const REPORT_DIR = 'reports';
-const REPORT_FILENAME = 'content-slug-sync-report.json';
+const DEFAULT_COLLECTIONS = ["posts", "pages", "products"];
+const DEFAULT_LOCALES = ["en", "zh"];
+const REPORT_DIR = "reports";
+const REPORT_FILENAME = "content-slug-sync-report.json";
 
 /**
  * Parse command line arguments
@@ -49,22 +49,22 @@ function parseArgs(args) {
   };
 
   for (const arg of args) {
-    if (arg === '--json') {
+    if (arg === "--json") {
       options.json = true;
-    } else if (arg === '--quiet') {
+    } else if (arg === "--quiet") {
       options.quiet = true;
-    } else if (arg === '--help' || arg === '-h') {
+    } else if (arg === "--help" || arg === "-h") {
       options.help = true;
-    } else if (arg.startsWith('--collections=')) {
-      const value = arg.split('=')[1];
+    } else if (arg.startsWith("--collections=")) {
+      const value = arg.split("=")[1];
       options.collections = value
-        .split(',')
+        .split(",")
         .map((s) => s.trim())
         .filter(Boolean);
-    } else if (arg.startsWith('--locales=')) {
-      const value = arg.split('=')[1];
+    } else if (arg.startsWith("--locales=")) {
+      const value = arg.split("=")[1];
       options.locales = value
-        .split(',')
+        .split(",")
         .map((s) => s.trim())
         .filter(Boolean);
     }
@@ -112,23 +112,23 @@ function printHelp() {
 function printSummary(result, options) {
   const { quiet } = options;
 
-  console.log('\n🔍 MDX Slug Sync Validation');
-  console.log('==========================\n');
+  console.log("\n🔍 MDX Slug Sync Validation");
+  console.log("==========================\n");
 
   // Print configuration
   if (!quiet) {
-    console.log(`📁 Collections: ${result.checkedCollections.join(', ')}`);
-    console.log(`🌍 Locales: ${result.checkedLocales.join(', ')}`);
+    console.log(`📁 Collections: ${result.checkedCollections.join(", ")}`);
+    console.log(`🌍 Locales: ${result.checkedLocales.join(", ")}`);
     console.log(`📄 Total files: ${result.stats.totalFiles}`);
     console.log(`🔗 Total pairs: ${result.stats.totalPairs}\n`);
   }
 
   // If no issues, print success
   if (result.ok) {
-    console.log('✅ All slug validations passed!\n');
+    console.log("✅ All slug validations passed!\n");
     if (!quiet) {
       console.log(
-        '💡 All MDX content files have consistent slugs across locales.\n',
+        "💡 All MDX content files have consistent slugs across locales.\n",
       );
     }
     return;
@@ -138,7 +138,7 @@ function printSummary(result, options) {
   const { issues } = result;
 
   // Missing pairs
-  const missingPairs = issues.filter((i) => i.type === 'missing_pair');
+  const missingPairs = issues.filter((i) => i.type === "missing_pair");
   if (missingPairs.length > 0) {
     console.log(`❌ Missing Pairs (${missingPairs.length}):`);
     for (const issue of missingPairs) {
@@ -150,11 +150,11 @@ function printSummary(result, options) {
         `   - [${issue.collection}] ${path.basename(existingFile)} (missing ${missingLocale})`,
       );
     }
-    console.log('');
+    console.log("");
   }
 
   // Slug mismatches
-  const slugMismatches = issues.filter((i) => i.type === 'slug_mismatch');
+  const slugMismatches = issues.filter((i) => i.type === "slug_mismatch");
   if (slugMismatches.length > 0) {
     console.log(`❌ Slug Mismatches (${slugMismatches.length}):`);
     for (const issue of slugMismatches) {
@@ -164,11 +164,11 @@ function printSummary(result, options) {
       console.log(`     ${issue.baseLocale}: "${issue.baseSlug}"`);
       console.log(`     ${issue.targetLocale}: "${issue.targetSlug}"`);
     }
-    console.log('');
+    console.log("");
   }
 
   // Parse errors
-  const parseErrors = issues.filter((i) => i.type === 'parse_error');
+  const parseErrors = issues.filter((i) => i.type === "parse_error");
   if (parseErrors.length > 0) {
     console.log(`❌ Parse Errors (${parseErrors.length}):`);
     for (const issue of parseErrors) {
@@ -178,18 +178,18 @@ function printSummary(result, options) {
         console.log(`     Error: ${issue.error}`);
       }
     }
-    console.log('');
+    console.log("");
   }
 
   // Summary
-  console.log('📊 Summary:');
+  console.log("📊 Summary:");
   console.log(`   Missing pairs: ${result.stats.missingPairs}`);
   console.log(`   Slug mismatches: ${result.stats.slugMismatches}`);
   console.log(`   Parse errors: ${result.stats.parseErrors}`);
   console.log(`   Total issues: ${issues.length}\n`);
 
   console.log(
-    '⚠️  Please fix the above issues to ensure i18n URL consistency.\n',
+    "⚠️  Please fix the above issues to ensure i18n URL consistency.\n",
   );
 }
 
@@ -210,8 +210,8 @@ function writeJsonReport(result, rootDir) {
   // Add metadata
   const report = {
     timestamp: new Date().toISOString(),
-    tool: 'content-slug-sync',
-    version: '1.0.0',
+    tool: "content-slug-sync",
+    version: "1.0.0",
     ...result,
   };
 
@@ -235,19 +235,19 @@ function main() {
 
   // Validate options
   if (options.collections.length === 0) {
-    console.error('❌ Error: No collections specified');
+    console.error("❌ Error: No collections specified");
     process.exitCode = 1;
     return;
   }
 
   if (options.locales.length < 2) {
-    console.error('❌ Error: At least 2 locales are required for comparison');
+    console.error("❌ Error: At least 2 locales are required for comparison");
     process.exitCode = 1;
     return;
   }
 
   // Run validation
-  const rootDir = path.join(__dirname, '..');
+  const rootDir = path.join(__dirname, "..");
   const result = validateMdxSlugSync({
     rootDir,
     collections: options.collections,

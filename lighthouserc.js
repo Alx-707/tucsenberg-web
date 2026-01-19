@@ -21,38 +21,38 @@
 
 // 关键URL优先策略：CI_DAILY=true时运行全部URL，否则仅运行关键3个URL
 // 这将CI耗时从15分钟优化至5-8分钟
-const isDaily = process.env.CI_DAILY === 'true';
+const isDaily = process.env.CI_DAILY === "true";
 
 const criticalUrls = [
-  'http://localhost:3000',
-  'http://localhost:3000/en',
-  'http://localhost:3000/zh',
+  "http://localhost:3000",
+  "http://localhost:3000/en",
+  "http://localhost:3000/zh",
 ];
 
 const allUrls = [
   ...criticalUrls,
   // Localized routes – the app uses /[locale]/... paths
-  'http://localhost:3000/en/about',
-  'http://localhost:3000/zh/about',
-  'http://localhost:3000/en/contact',
-  'http://localhost:3000/zh/contact',
-  'http://localhost:3000/en/products',
-  'http://localhost:3000/zh/products',
-  'http://localhost:3000/en/blog',
-  'http://localhost:3000/zh/blog',
+  "http://localhost:3000/en/about",
+  "http://localhost:3000/zh/about",
+  "http://localhost:3000/en/contact",
+  "http://localhost:3000/zh/contact",
+  "http://localhost:3000/en/products",
+  "http://localhost:3000/zh/products",
+  "http://localhost:3000/en/blog",
+  "http://localhost:3000/zh/blog",
   // Dynamic pages: test one product and one blog post per locale
-  'http://localhost:3000/en/products/industrial-control-panel',
-  'http://localhost:3000/zh/products/industrial-control-panel',
-  'http://localhost:3000/en/blog/welcome',
-  'http://localhost:3000/zh/blog/welcome',
+  "http://localhost:3000/en/products/industrial-control-panel",
+  "http://localhost:3000/zh/products/industrial-control-panel",
+  "http://localhost:3000/en/blog/welcome",
+  "http://localhost:3000/zh/blog/welcome",
 ];
 
 module.exports = {
   ci: {
     collect: {
       url: isDaily ? allUrls : criticalUrls,
-      startServerCommand: 'pnpm start',
-      startServerReadyPattern: 'Local:',
+      startServerCommand: "pnpm start",
+      startServerReadyPattern: "Local:",
       startServerReadyTimeout: 60000,
       numberOfRuns: 2,
     },
@@ -60,42 +60,42 @@ module.exports = {
       assertions: {
         // Phase 1 目标：Performance ≥0.85（实测 0.85-0.98，有充足安全余量）
         // 使用 optimistic 聚合取最佳运行结果，避免 CI 冷启动噪声
-        'categories:performance': [
-          'error',
-          { minScore: 0.85, aggregationMethod: 'optimistic' },
+        "categories:performance": [
+          "error",
+          { minScore: 0.85, aggregationMethod: "optimistic" },
         ],
-        'categories:accessibility': ['error', { minScore: 0.9 }],
-        'categories:best-practices': ['error', { minScore: 0.9 }],
-        'categories:seo': ['error', { minScore: 0.9 }],
-        'first-contentful-paint': ['error', { maxNumericValue: 2000 }],
+        "categories:accessibility": ["error", { minScore: 0.9 }],
+        "categories:best-practices": ["error", { minScore: 0.9 }],
+        "categories:seo": ["error", { minScore: 0.9 }],
+        "first-contentful-paint": ["error", { maxNumericValue: 2000 }],
         // Phase 1: LCP ≤4500ms（实测 2429-4331ms，有安全余量）
-        'largest-contentful-paint': ['error', { maxNumericValue: 4500 }],
+        "largest-contentful-paint": ["error", { maxNumericValue: 4500 }],
         // CLS ≤0.15（实测接近 0，符合 Good CWV 标准；Phase 3 可考虑收紧）
-        'cumulative-layout-shift': ['error', { maxNumericValue: 0.15 }],
+        "cumulative-layout-shift": ["error", { maxNumericValue: 0.15 }],
         // Phase 1: TBT ≤250ms（放宽 CI 容差；实测仅 13-54ms，有充足安全余量）
         // CI 环境冷启动波动可达 200-220ms，故阈值从 200ms 调整至 250ms
-        'total-blocking-time': ['error', { maxNumericValue: 250 }],
-        'speed-index': ['error', { maxNumericValue: 3000 }],
+        "total-blocking-time": ["error", { maxNumericValue: 250 }],
+        "speed-index": ["error", { maxNumericValue: 3000 }],
         // 'first-meaningful-paint' 已废弃，Lighthouse 不再产出该数值，移除以避免 NaN 断言
         // CI冷启动下TTI波动较大，允许最高6s，线下优化后可再收紧
-        'interactive': ['error', { maxNumericValue: 6000 }],
+        interactive: ["error", { maxNumericValue: 6000 }],
 
         // ==================== Bundle 大小监控（替代 size-limit）====================
         // Phase 3：总传输大小收紧至 490KB（允许正常波动，实测中位数 ~474-486KB）
-        'total-byte-weight': ['warn', { maxNumericValue: 490000 }],
+        "total-byte-weight": ["warn", { maxNumericValue: 490000 }],
 
         // JavaScript 启动时间：4s 阈值（解析、编译、执行时间）
-        'bootup-time': ['warn', { maxNumericValue: 4000 }],
+        "bootup-time": ["warn", { maxNumericValue: 4000 }],
 
         // 未使用的 JavaScript：150KB 警告阈值（帮助识别 tree-shaking 问题）
-        'unused-javascript': ['warn', { maxNumericValue: 153600 }],
+        "unused-javascript": ["warn", { maxNumericValue: 153600 }],
 
         // 主线程工作时间：4s 阈值
-        'mainthread-work-breakdown': ['warn', { maxNumericValue: 4000 }],
+        "mainthread-work-breakdown": ["warn", { maxNumericValue: 4000 }],
       },
     },
     upload: {
-      target: 'temporary-public-storage',
+      target: "temporary-public-storage",
     },
   },
 };

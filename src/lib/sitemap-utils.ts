@@ -5,7 +5,7 @@
  * from content timestamps or file system metadata.
  */
 
-import fs from 'fs';
+import fs from "fs";
 
 /**
  * Metadata interface for content with optional timestamps.

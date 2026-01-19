@@ -5,42 +5,44 @@
  * 使用AST解析扫描代码中的翻译键，确保翻译完整性
  */
 
-const fs = require('fs');
-const path = require('path');
-const { parse } = require('@babel/parser');
-const traverse = require('@babel/traverse').default;
-const glob = require('glob');
+const fs = require("fs");
+const path = require("path");
+const { parse } = require("@babel/parser");
+const traverse = require("@babel/traverse").default;
+const glob = require("glob");
 
-console.log('🔍 开始翻译键扫描...\n');
+console.log("🔍 开始翻译键扫描...\n");
 
 // 配置
 const CONFIG = {
   // 扫描的文件模式
-  SCAN_PATTERNS: ['src/**/*.{ts,tsx,js,jsx}', 'app/**/*.{ts,tsx,js,jsx}'],
+  SCAN_PATTERNS: ["src/**/*.{ts,tsx,js,jsx}", "app/**/*.{ts,tsx,js,jsx}"],
 
   // 排除的文件模式（传递给 glob ignore 选项）
   IGNORE_PATTERNS: [
-    '**/*.test.{ts,tsx,js,jsx}',
-    '**/*.spec.{ts,tsx,js,jsx}',
-    '**/*.d.ts',
-    '**/_templates/**',
+    "**/*.test.{ts,tsx,js,jsx}",
+    "**/*.spec.{ts,tsx,js,jsx}",
+    "**/*.d.ts",
+    "**/_templates/**",
+    // Helper files that receive pre-namespaced translation functions
+    "**/build-*-props.ts",
   ],
 
   // 翻译函数名
-  TRANSLATION_FUNCTIONS: ['t', 'useTranslations', 'getTranslations'],
+  TRANSLATION_FUNCTIONS: ["t", "useTranslations", "getTranslations"],
 
   // 输出目录
-  OUTPUT_DIR: path.join(process.cwd(), 'reports'),
+  OUTPUT_DIR: path.join(process.cwd(), "reports"),
 
   // 翻译文件目录
-  MESSAGES_DIR: path.join(process.cwd(), 'messages'),
+  MESSAGES_DIR: path.join(process.cwd(), "messages"),
 
   // 支持的语言
-  LOCALES: require('../i18n-locales.config').locales,
+  LOCALES: require("../i18n-locales.config").locales,
 
   // 允许多命名空间匹配的键（这些键在多个命名空间中重复存在，scanner 无法确定具体使用哪个）
   // 当代码中使用短键名且存在多个完整路径匹配时，跳过缺失检测
-  ALLOW_MULTI_NAMESPACE_KEYS: ['submitting'],
+  ALLOW_MULTI_NAMESPACE_KEYS: ["submitting"],
 };
 
 const scanResults = {
@@ -63,22 +65,22 @@ const scanResults = {
  */
 function scanFile(filePath) {
   try {
-    const content = fs.readFileSync(filePath, 'utf8');
+    const content = fs.readFileSync(filePath, "utf8");
     const ast = parse(content, {
-      sourceType: 'module',
+      sourceType: "module",
       plugins: [
-        'typescript',
-        'jsx',
-        'decorators-legacy',
-        'classProperties',
-        'objectRestSpread',
-        'asyncGenerators',
-        'functionBind',
-        'exportDefaultFrom',
-        'exportNamespaceFrom',
-        'dynamicImport',
-        'nullishCoalescingOperator',
-        'optionalChaining',
+        "typescript",
+        "jsx",
+        "decorators-legacy",
+        "classProperties",
+        "objectRestSpread",
+        "asyncGenerators",
+        "functionBind",
+        "exportDefaultFrom",
+        "exportNamespaceFrom",
+        "dynamicImport",
+        "nullishCoalescingOperator",
+        "optionalChaining",
       ],
     });
 
@@ -117,14 +119,14 @@ function scanFile(filePath) {
 
       if (targetPath && targetPath.isVariableDeclarator()) {
         const identifier = targetPath.node.id;
-        if (identifier && identifier.type === 'Identifier') {
+        if (identifier && identifier.type === "Identifier") {
           const binding = targetPath.scope.getBinding(identifier.name);
           setNamespaceForBinding(binding, namespace);
         }
       } else if (
         targetPath &&
         targetPath.isAssignmentExpression() &&
-        targetPath.node.left.type === 'Identifier'
+        targetPath.node.left.type === "Identifier"
       ) {
         const binding = targetPath.scope.getBinding(targetPath.node.left.name);
         setNamespaceForBinding(binding, namespace);
@@ -132,11 +134,11 @@ function scanFile(filePath) {
     }
 
     function resolveKeyWithNamespace(nodePath, calleeNode, rawKey) {
-      if (!rawKey || typeof rawKey !== 'string') {
+      if (!rawKey || typeof rawKey !== "string") {
         return null;
       }
 
-      if (calleeNode.type === 'Identifier') {
+      if (calleeNode.type === "Identifier") {
         const namespace = getNamespaceForName(nodePath, calleeNode.name);
         if (namespace) {
           if (rawKey === namespace || rawKey.startsWith(`${namespace}.`)) {
@@ -147,8 +149,8 @@ function scanFile(filePath) {
       }
 
       if (
-        calleeNode.type === 'MemberExpression' &&
-        calleeNode.object.type === 'Identifier'
+        calleeNode.type === "MemberExpression" &&
+        calleeNode.object.type === "Identifier"
       ) {
         const namespace = getNamespaceForName(nodePath, calleeNode.object.name);
         if (namespace) {
@@ -166,7 +168,7 @@ function scanFile(filePath) {
       const { node } = variablePath;
       const { id, init } = node;
 
-      if (!init || !id || id.type !== 'Identifier') {
+      if (!init || !id || id.type !== "Identifier") {
         return;
       }
 
@@ -175,7 +177,7 @@ function scanFile(filePath) {
         return;
       }
 
-      if (init.type === 'Identifier') {
+      if (init.type === "Identifier") {
         const namespace = getNamespaceForName(variablePath, init.name);
         if (namespace) {
           setNamespaceForBinding(targetBinding, namespace);
@@ -184,17 +186,17 @@ function scanFile(filePath) {
       }
 
       if (
-        init.type === 'ArrowFunctionExpression' ||
-        init.type === 'FunctionExpression'
+        init.type === "ArrowFunctionExpression" ||
+        init.type === "FunctionExpression"
       ) {
         const { body: initialBody } = init;
         let body = initialBody;
 
-        if (body.type === 'BlockStatement') {
+        if (body.type === "BlockStatement") {
           const { body: statements } = body;
           const returnStatement = statements.find(
             (statement) =>
-              statement.type === 'ReturnStatement' && statement.argument,
+              statement.type === "ReturnStatement" && statement.argument,
           );
           if (!returnStatement) {
             return;
@@ -202,8 +204,8 @@ function scanFile(filePath) {
           body = returnStatement.argument;
         }
 
-        if (body && body.type === 'CallExpression') {
-          if (body.callee.type === 'Identifier') {
+        if (body && body.type === "CallExpression") {
+          if (body.callee.type === "Identifier") {
             const namespace = getNamespaceForName(
               variablePath,
               body.callee.name,
@@ -212,8 +214,8 @@ function scanFile(filePath) {
               setNamespaceForBinding(targetBinding, namespace);
             }
           } else if (
-            body.callee.type === 'MemberExpression' &&
-            body.callee.object.type === 'Identifier'
+            body.callee.type === "MemberExpression" &&
+            body.callee.object.type === "Identifier"
           ) {
             const namespace = getNamespaceForName(
               variablePath,
@@ -242,7 +244,7 @@ function scanFile(filePath) {
       }
 
       if (bindingPath.isVariableDeclarator()) {
-        const initPath = bindingPath.get('init');
+        const initPath = bindingPath.get("init");
         if (
           initPath &&
           !Array.isArray(initPath) &&
@@ -258,7 +260,7 @@ function scanFile(filePath) {
           initPath.isCallExpression() &&
           initPath.node.arguments.length > 0
         ) {
-          const firstArgPath = initPath.get('arguments.0');
+          const firstArgPath = initPath.get("arguments.0");
           if (
             firstArgPath &&
             !Array.isArray(firstArgPath) &&
@@ -279,9 +281,9 @@ function scanFile(filePath) {
       const { node } = attributePath;
 
       if (
-        node.name.type !== 'JSXIdentifier' ||
-        node.value?.type !== 'JSXExpressionContainer' ||
-        node.value.expression.type !== 'Identifier'
+        node.name.type !== "JSXIdentifier" ||
+        node.value?.type !== "JSXExpressionContainer" ||
+        node.value.expression.type !== "Identifier"
       ) {
         return;
       }
@@ -297,7 +299,7 @@ function scanFile(filePath) {
         deferredJsxBindings.push({
           attributePath,
           componentName:
-            attributePath.parent?.name?.type === 'JSXIdentifier'
+            attributePath.parent?.name?.type === "JSXIdentifier"
               ? attributePath.parent.name.name
               : null,
           propName,
@@ -309,8 +311,8 @@ function scanFile(filePath) {
       const openingElement = attributePath.parent;
       if (
         !openingElement ||
-        openingElement.type !== 'JSXOpeningElement' ||
-        openingElement.name.type !== 'JSXIdentifier'
+        openingElement.type !== "JSXOpeningElement" ||
+        openingElement.name.type !== "JSXIdentifier"
       ) {
         return;
       }
@@ -346,19 +348,19 @@ function scanFile(filePath) {
 
       if (bindingPath.isAssignmentPattern()) {
         const right = bindingPath.node.right;
-        if (right && right.type === 'StringLiteral') {
+        if (right && right.type === "StringLiteral") {
           return right.value;
         }
 
         const left = bindingPath.node.left;
-        if (left && left.type === 'ObjectPattern' && identifierName) {
+        if (left && left.type === "ObjectPattern" && identifierName) {
           for (const prop of left.properties) {
             if (
-              prop.type === 'ObjectProperty' &&
-              prop.key.type === 'Identifier' &&
+              prop.type === "ObjectProperty" &&
+              prop.key.type === "Identifier" &&
               prop.key.name === identifierName &&
-              prop.value.type === 'AssignmentPattern' &&
-              prop.value.right?.type === 'StringLiteral'
+              prop.value.type === "AssignmentPattern" &&
+              prop.value.right?.type === "StringLiteral"
             ) {
               return prop.value.right.value;
             }
@@ -372,7 +374,7 @@ function scanFile(filePath) {
         bindingPath.parentPath.isAssignmentPattern()
       ) {
         const right = bindingPath.parentPath.node.right;
-        if (right && right.type === 'StringLiteral') {
+        if (right && right.type === "StringLiteral") {
           return right.value;
         }
       }
@@ -380,10 +382,10 @@ function scanFile(filePath) {
       if (
         bindingPath.isObjectProperty() &&
         bindingPath.node.value &&
-        bindingPath.node.value.type === 'AssignmentPattern'
+        bindingPath.node.value.type === "AssignmentPattern"
       ) {
         const right = bindingPath.node.value.right;
-        if (right && right.type === 'StringLiteral') {
+        if (right && right.type === "StringLiteral") {
           return right.value;
         }
       }
@@ -395,20 +397,20 @@ function scanFile(filePath) {
       const { node } = nodePath;
 
       if (
-        node.callee.type === 'Identifier' &&
-        node.callee.name === 'useTranslations' &&
+        node.callee.type === "Identifier" &&
+        node.callee.name === "useTranslations" &&
         node.arguments.length > 0 &&
-        node.arguments[0].type === 'StringLiteral'
+        node.arguments[0].type === "StringLiteral"
       ) {
         recordNamespace(nodePath, node.arguments[0].value);
         return;
       }
 
       if (
-        node.callee.type === 'Identifier' &&
-        node.callee.name === 'useTranslations' &&
+        node.callee.type === "Identifier" &&
+        node.callee.name === "useTranslations" &&
         node.arguments.length > 0 &&
-        node.arguments[0].type === 'Identifier'
+        node.arguments[0].type === "Identifier"
       ) {
         const argName = node.arguments[0].name;
         const binding = nodePath.scope.getBinding(argName);
@@ -420,26 +422,26 @@ function scanFile(filePath) {
       }
 
       if (
-        node.callee.type === 'Identifier' &&
-        (node.callee.name === 'getTranslations' ||
-          node.callee.name === 'getTranslationsCached')
+        node.callee.type === "Identifier" &&
+        (node.callee.name === "getTranslations" ||
+          node.callee.name === "getTranslationsCached")
       ) {
         const firstArg = node.arguments[0];
-        if (firstArg && firstArg.type === 'ObjectExpression') {
+        if (firstArg && firstArg.type === "ObjectExpression") {
           const namespaceProperty = firstArg.properties.find(
             (property) =>
-              property.type === 'ObjectProperty' &&
-              ((property.key.type === 'Identifier' &&
-                property.key.name === 'namespace') ||
-                (property.key.type === 'StringLiteral' &&
-                  property.key.value === 'namespace')) &&
-              property.value.type === 'StringLiteral',
+              property.type === "ObjectProperty" &&
+              ((property.key.type === "Identifier" &&
+                property.key.name === "namespace") ||
+                (property.key.type === "StringLiteral" &&
+                  property.key.value === "namespace")) &&
+              property.value.type === "StringLiteral",
           );
 
           if (namespaceProperty) {
             recordNamespace(nodePath, namespaceProperty.value.value);
           }
-        } else if (firstArg && firstArg.type === 'StringLiteral') {
+        } else if (firstArg && firstArg.type === "StringLiteral") {
           recordNamespace(nodePath, firstArg.value);
         }
       }
@@ -519,7 +521,7 @@ function scanFile(filePath) {
 
         if (
           node.arguments.length === 0 ||
-          node.arguments[0].type !== 'StringLiteral'
+          node.arguments[0].type !== "StringLiteral"
         ) {
           return;
         }
@@ -529,16 +531,16 @@ function scanFile(filePath) {
         const { value: argValue } = firstArg;
         let resolvedKey = null;
 
-        if (callee.type === 'Identifier') {
+        if (callee.type === "Identifier") {
           const namespace = getNamespaceForName(nodePath, callee.name);
-          if (namespace || callee.name === 't') {
+          if (namespace || callee.name === "t") {
             resolvedKey = resolveKeyWithNamespace(nodePath, callee, argValue);
           }
         } else if (
-          callee.type === 'MemberExpression' &&
-          callee.property.type === 'Identifier' &&
-          callee.property.name === 't' &&
-          callee.object.type === 'Identifier' &&
+          callee.type === "MemberExpression" &&
+          callee.property.type === "Identifier" &&
+          callee.property.name === "t" &&
+          callee.object.type === "Identifier" &&
           getNamespaceForName(nodePath, callee.object.name)
         ) {
           resolvedKey = resolveKeyWithNamespace(nodePath, callee, argValue);
@@ -559,7 +561,7 @@ function scanFile(filePath) {
     scanResults.errors.push({
       file: filePath,
       error: error.message,
-      type: 'parse_error',
+      type: "parse_error",
     });
     console.error(`❌ 扫描失败: ${filePath} - ${error.message}`);
     if (error && error.stack) {
@@ -590,10 +592,10 @@ function deepMerge(target, source) {
   const result = { ...target };
   for (const [key, value] of Object.entries(source)) {
     if (
-      typeof value === 'object' &&
+      typeof value === "object" &&
       value !== null &&
       !Array.isArray(value) &&
-      typeof result[key] === 'object' &&
+      typeof result[key] === "object" &&
       result[key] !== null &&
       !Array.isArray(result[key])
     ) {
@@ -617,14 +619,14 @@ function loadExistingTranslations() {
 
     // Try loading from subdirectory structure (critical.json + deferred.json)
     const localeDir = path.join(CONFIG.MESSAGES_DIR, locale);
-    const criticalPath = path.join(localeDir, 'critical.json');
-    const deferredPath = path.join(localeDir, 'deferred.json');
+    const criticalPath = path.join(localeDir, "critical.json");
+    const deferredPath = path.join(localeDir, "deferred.json");
 
     let loadedFromSubdir = false;
 
     if (fs.existsSync(criticalPath)) {
       try {
-        const content = fs.readFileSync(criticalPath, 'utf8');
+        const content = fs.readFileSync(criticalPath, "utf8");
         merged = deepMerge(merged, JSON.parse(content));
         console.log(`📖 加载翻译文件: ${locale}/critical.json`);
         loadedFromSubdir = true;
@@ -637,7 +639,7 @@ function loadExistingTranslations() {
 
     if (fs.existsSync(deferredPath)) {
       try {
-        const content = fs.readFileSync(deferredPath, 'utf8');
+        const content = fs.readFileSync(deferredPath, "utf8");
         merged = deepMerge(merged, JSON.parse(content));
         console.log(`📖 加载翻译文件: ${locale}/deferred.json`);
         loadedFromSubdir = true;
@@ -652,7 +654,7 @@ function loadExistingTranslations() {
     if (!loadedFromSubdir) {
       const flatPath = path.join(CONFIG.MESSAGES_DIR, `${locale}.json`);
       try {
-        const content = fs.readFileSync(flatPath, 'utf8');
+        const content = fs.readFileSync(flatPath, "utf8");
         merged = JSON.parse(content);
         console.log(`📖 加载翻译文件: ${locale}.json`);
       } catch (error) {
@@ -669,13 +671,13 @@ function loadExistingTranslations() {
 /**
  * 获取嵌套对象的所有键
  */
-function getAllKeys(obj, prefix = '') {
+function getAllKeys(obj, prefix = "") {
   const keys = new Set();
 
   for (const [key, value] of Object.entries(obj)) {
     const fullKey = prefix ? `${prefix}.${key}` : key;
 
-    if (typeof value === 'object' && value !== null) {
+    if (typeof value === "object" && value !== null) {
       getAllKeys(value, fullKey).forEach((k) => keys.add(k));
     } else {
       keys.add(fullKey);
@@ -688,11 +690,11 @@ function getAllKeys(obj, prefix = '') {
 /**
  * 获取所有对象路径（非叶子键）
  */
-function getAllObjectPaths(obj, prefix = '') {
+function getAllObjectPaths(obj, prefix = "") {
   const paths = new Set();
   for (const [key, value] of Object.entries(obj || {})) {
     const fullKey = prefix ? `${prefix}.${key}` : key;
-    if (value && typeof value === 'object' && !Array.isArray(value)) {
+    if (value && typeof value === "object" && !Array.isArray(value)) {
       // 当前即为对象路径
       paths.add(fullKey);
       // 继续深入
@@ -762,9 +764,9 @@ function analyzeTranslationUsage(translations) {
       const usages = scanResults.keyUsages.get(key) || [];
       if (usages.length === 0) {
         scanResults.errors.push({
-          file: '<unknown>',
+          file: "<unknown>",
           error: `object_key_misuse: ${key} (object path used as leaf key)`,
-          type: 'object_key_misuse',
+          type: "object_key_misuse",
         });
       } else {
         usages.forEach((u) =>
@@ -773,7 +775,7 @@ function analyzeTranslationUsage(translations) {
             line: u.line,
             column: u.column,
             error: `object_key_misuse: ${key} (object path used as leaf key)`,
-            type: 'object_key_misuse',
+            type: "object_key_misuse",
           }),
         );
       }
@@ -832,12 +834,12 @@ function generateScanReport(translations, analysis) {
   // 写入报告文件
   const reportPath = path.join(
     CONFIG.OUTPUT_DIR,
-    'translation-scan-report.json',
+    "translation-scan-report.json",
   );
 
   if (fs.existsSync(reportPath)) {
     try {
-      const previousContent = fs.readFileSync(reportPath, 'utf8');
+      const previousContent = fs.readFileSync(reportPath, "utf8");
       const previousReport = JSON.parse(previousContent);
       const { timestamp: previousTimestamp, ...previousRest } = previousReport;
       const { timestamp: _currentTimestamp, ...currentRest } = report;
@@ -860,7 +862,7 @@ function generateScanReport(translations, analysis) {
  * 显示扫描结果
  */
 function displayResults(analysis) {
-  console.log('\n📊 扫描统计:\n');
+  console.log("\n📊 扫描统计:\n");
   console.log(
     `   扫描文件: ${scanResults.scannedFiles}/${scanResults.totalFiles}`,
   );
@@ -873,7 +875,7 @@ function displayResults(analysis) {
 
   // 显示缺失的键
   if (analysis.missingKeys.length > 0) {
-    console.log('❌ 缺失的翻译键:');
+    console.log("❌ 缺失的翻译键:");
     analysis.missingKeys.slice(0, 10).forEach((key) => {
       const usages = scanResults.keyUsages.get(key) || [];
       console.log(`   - ${key} (使用 ${usages.length} 次)`);
@@ -886,7 +888,7 @@ function displayResults(analysis) {
 
   // 显示未使用的键
   if (analysis.unusedKeys.length > 0) {
-    console.log('⚠️  未使用的翻译键:');
+    console.log("⚠️  未使用的翻译键:");
     analysis.unusedKeys.slice(0, 10).forEach((key) => {
       console.log(`   - ${key}`);
     });
@@ -937,17 +939,17 @@ async function main() {
     const hasMissingKeys = analysis.missingKeys.length > 0;
 
     if (!hasErrors && !hasMissingKeys) {
-      console.log('✅ 翻译键扫描通过！所有翻译键都已正确定义。\n');
+      console.log("✅ 翻译键扫描通过！所有翻译键都已正确定义。\n");
       process.exit(0);
     } else if (!hasErrors && hasMissingKeys) {
-      console.log('⚠️  翻译键扫描完成，但发现缺失的翻译键。\n');
+      console.log("⚠️  翻译键扫描完成，但发现缺失的翻译键。\n");
       process.exit(1);
     } else {
-      console.log('❌ 翻译键扫描失败！存在解析错误。\n');
+      console.log("❌ 翻译键扫描失败！存在解析错误。\n");
       process.exit(1);
     }
   } catch (error) {
-    console.error('💥 翻译键扫描失败:', error.message);
+    console.error("💥 翻译键扫描失败:", error.message);
     process.exit(1);
   }
 }

@@ -1,5 +1,5 @@
-import { redirect } from 'next/navigation';
-import { routing } from '@/i18n/routing-config';
+import { redirect } from "next/navigation";
+import { routing } from "@/i18n/routing-config";
 
 /**
  * Root path handler for Next.js 16 Turbopack compatibility.

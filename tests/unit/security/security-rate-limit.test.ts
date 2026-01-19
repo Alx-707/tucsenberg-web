@@ -1,4 +1,4 @@
-import { afterEach, describe, expect, it, vi } from 'vitest';
+import { afterEach, describe, expect, it, vi } from "vitest";
 import {
   cleanupSlidingWindow,
   getRateLimitStatus,
@@ -6,16 +6,16 @@ import {
   rateLimitWithTier,
   resetRateLimit,
   slidingWindowRateLimit,
-} from '@/lib/security-rate-limit';
+} from "@/lib/security-rate-limit";
 
-describe('security-rate-limit', () => {
+describe("security-rate-limit", () => {
   afterEach(() => {
     vi.useRealTimers();
   });
 
-  it('resets window after expiry', () => {
+  it("resets window after expiry", () => {
     vi.useFakeTimers();
-    const id = 'user-reset-window';
+    const id = "user-reset-window";
 
     expect(rateLimit(id, 2, 1000)).toBe(true);
     expect(rateLimit(id, 2, 1000)).toBe(true);
@@ -26,8 +26,8 @@ describe('security-rate-limit', () => {
     expect(rateLimit(id, 2, 1000)).toBe(true);
   });
 
-  it('provides remaining quota in status', () => {
-    const id = 'user-status';
+  it("provides remaining quota in status", () => {
+    const id = "user-status";
     resetRateLimit(id);
     expect(rateLimit(id, 3, 5000)).toBe(true);
     expect(rateLimit(id, 3, 5000)).toBe(true);
@@ -46,17 +46,17 @@ describe('security-rate-limit', () => {
     resetRateLimit(id);
   });
 
-  it('supports predefined tiers', () => {
-    const id = 'user-tier';
+  it("supports predefined tiers", () => {
+    const id = "user-tier";
     for (let i = 0; i < 5; i++) {
-      expect(rateLimitWithTier(id, 'strict')).toBe(true);
+      expect(rateLimitWithTier(id, "strict")).toBe(true);
     }
-    expect(rateLimitWithTier(id, 'strict')).toBe(false);
+    expect(rateLimitWithTier(id, "strict")).toBe(false);
   });
 
-  it('enforces sliding window limits and recovers after cleanup', () => {
+  it("enforces sliding window limits and recovers after cleanup", () => {
     vi.useFakeTimers();
-    const id = 'sliding-user';
+    const id = "sliding-user";
 
     expect(slidingWindowRateLimit(id, 2, 1000)).toBe(true);
     expect(slidingWindowRateLimit(id, 2, 1000)).toBe(true);

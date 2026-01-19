@@ -2,9 +2,9 @@
  * @vitest-environment jsdom
  * Tests for CookieBanner component
  */
-import { fireEvent, render, screen } from '@testing-library/react';
-import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
-import { CookieBanner } from '../cookie-banner';
+import { fireEvent, render, screen } from "@testing-library/react";
+import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
+import { CookieBanner } from "../cookie-banner";
 
 // Mock dependencies
 const { mockUseCookieConsent, mockUseTranslations } = vi.hoisted(() => ({
@@ -12,15 +12,15 @@ const { mockUseCookieConsent, mockUseTranslations } = vi.hoisted(() => ({
   mockUseTranslations: vi.fn(),
 }));
 
-vi.mock('@/lib/cookie-consent', () => ({
+vi.mock("@/lib/cookie-consent", () => ({
   useCookieConsent: mockUseCookieConsent,
 }));
 
-vi.mock('next-intl', () => ({
+vi.mock("next-intl", () => ({
   useTranslations: mockUseTranslations,
 }));
 
-vi.mock('next/link', () => ({
+vi.mock("next/link", () => ({
   default: ({
     children,
     href,
@@ -32,29 +32,29 @@ vi.mock('next/link', () => ({
 
 function createMockTranslations() {
   const translations: Record<string, string> = {
-    'title': 'Cookie Consent',
-    'description': 'We use cookies to improve your experience.',
-    'learnMore': 'Learn more',
-    'manage': 'Manage',
-    'rejectAll': 'Reject All',
-    'acceptAll': 'Accept All',
-    'close': 'Close',
-    'cancel': 'Cancel',
-    'savePreferences': 'Save Preferences',
-    'preferences.title': 'Cookie Preferences',
-    'preferences.description': 'Choose which cookies you want to allow.',
-    'categories.necessary': 'Necessary',
-    'categories.necessaryDesc': 'Required for basic functionality.',
-    'categories.analytics': 'Analytics',
-    'categories.analyticsDesc': 'Help us understand how you use our site.',
-    'categories.marketing': 'Marketing',
-    'categories.marketingDesc': 'Used for personalized ads.',
+    title: "Cookie Consent",
+    description: "We use cookies to improve your experience.",
+    learnMore: "Learn more",
+    manage: "Manage",
+    rejectAll: "Reject All",
+    acceptAll: "Accept All",
+    close: "Close",
+    cancel: "Cancel",
+    savePreferences: "Save Preferences",
+    "preferences.title": "Cookie Preferences",
+    "preferences.description": "Choose which cookies you want to allow.",
+    "categories.necessary": "Necessary",
+    "categories.necessaryDesc": "Required for basic functionality.",
+    "categories.analytics": "Analytics",
+    "categories.analyticsDesc": "Help us understand how you use our site.",
+    "categories.marketing": "Marketing",
+    "categories.marketingDesc": "Used for personalized ads.",
   };
 
   return (key: string) => translations[key] || key;
 }
 
-describe('CookieBanner', () => {
+describe("CookieBanner", () => {
   let mockAcceptAll: ReturnType<typeof vi.fn>;
   let mockRejectAll: ReturnType<typeof vi.fn>;
   let mockSavePreferences: ReturnType<typeof vi.fn>;
@@ -81,14 +81,14 @@ describe('CookieBanner', () => {
     vi.restoreAllMocks();
   });
 
-  describe('visibility', () => {
-    it('renders when ready and not consented', () => {
+  describe("visibility", () => {
+    it("renders when ready and not consented", () => {
       render(<CookieBanner />);
 
-      expect(screen.getByRole('dialog')).toBeInTheDocument();
+      expect(screen.getByRole("dialog")).toBeInTheDocument();
     });
 
-    it('does not render when not ready', () => {
+    it("does not render when not ready", () => {
       mockUseCookieConsent.mockReturnValue({
         hasConsented: false,
         ready: false,
@@ -99,10 +99,10 @@ describe('CookieBanner', () => {
 
       render(<CookieBanner />);
 
-      expect(screen.queryByRole('dialog')).not.toBeInTheDocument();
+      expect(screen.queryByRole("dialog")).not.toBeInTheDocument();
     });
 
-    it('does not render when already consented', () => {
+    it("does not render when already consented", () => {
       mockUseCookieConsent.mockReturnValue({
         hasConsented: true,
         ready: true,
@@ -113,165 +113,165 @@ describe('CookieBanner', () => {
 
       render(<CookieBanner />);
 
-      expect(screen.queryByRole('dialog')).not.toBeInTheDocument();
+      expect(screen.queryByRole("dialog")).not.toBeInTheDocument();
     });
   });
 
-  describe('main banner', () => {
-    it('renders title and description', () => {
+  describe("main banner", () => {
+    it("renders title and description", () => {
       render(<CookieBanner />);
 
-      expect(screen.getByText('Cookie Consent')).toBeInTheDocument();
+      expect(screen.getByText("Cookie Consent")).toBeInTheDocument();
       expect(screen.getByText(/We use cookies/)).toBeInTheDocument();
     });
 
-    it('renders privacy policy link', () => {
+    it("renders privacy policy link", () => {
       render(<CookieBanner />);
 
-      const link = screen.getByRole('link', { name: 'Learn more' });
-      expect(link).toHaveAttribute('href', '/privacy');
+      const link = screen.getByRole("link", { name: "Learn more" });
+      expect(link).toHaveAttribute("href", "/privacy");
     });
 
-    it('renders all action buttons', () => {
+    it("renders all action buttons", () => {
       render(<CookieBanner />);
 
       expect(
-        screen.getByRole('button', { name: 'Manage' }),
+        screen.getByRole("button", { name: "Manage" }),
       ).toBeInTheDocument();
       expect(
-        screen.getByRole('button', { name: 'Reject All' }),
+        screen.getByRole("button", { name: "Reject All" }),
       ).toBeInTheDocument();
       expect(
-        screen.getByRole('button', { name: 'Accept All' }),
+        screen.getByRole("button", { name: "Accept All" }),
       ).toBeInTheDocument();
     });
 
-    it('calls acceptAll when Accept All button is clicked', () => {
+    it("calls acceptAll when Accept All button is clicked", () => {
       render(<CookieBanner />);
 
-      fireEvent.click(screen.getByRole('button', { name: 'Accept All' }));
+      fireEvent.click(screen.getByRole("button", { name: "Accept All" }));
 
       expect(mockAcceptAll).toHaveBeenCalled();
     });
 
-    it('calls rejectAll when Reject All button is clicked', () => {
+    it("calls rejectAll when Reject All button is clicked", () => {
       render(<CookieBanner />);
 
-      fireEvent.click(screen.getByRole('button', { name: 'Reject All' }));
+      fireEvent.click(screen.getByRole("button", { name: "Reject All" }));
 
       expect(mockRejectAll).toHaveBeenCalled();
     });
   });
 
-  describe('preferences panel', () => {
-    it('shows preferences panel when Manage is clicked', () => {
+  describe("preferences panel", () => {
+    it("shows preferences panel when Manage is clicked", () => {
       render(<CookieBanner />);
 
-      fireEvent.click(screen.getByRole('button', { name: 'Manage' }));
+      fireEvent.click(screen.getByRole("button", { name: "Manage" }));
 
-      expect(screen.getByText('Cookie Preferences')).toBeInTheDocument();
+      expect(screen.getByText("Cookie Preferences")).toBeInTheDocument();
     });
 
-    it('shows all cookie categories', () => {
+    it("shows all cookie categories", () => {
       render(<CookieBanner />);
 
-      fireEvent.click(screen.getByRole('button', { name: 'Manage' }));
+      fireEvent.click(screen.getByRole("button", { name: "Manage" }));
 
-      expect(screen.getByText('Necessary')).toBeInTheDocument();
-      expect(screen.getByText('Analytics')).toBeInTheDocument();
-      expect(screen.getByText('Marketing')).toBeInTheDocument();
+      expect(screen.getByText("Necessary")).toBeInTheDocument();
+      expect(screen.getByText("Analytics")).toBeInTheDocument();
+      expect(screen.getByText("Marketing")).toBeInTheDocument();
     });
 
-    it('necessary cookies checkbox is disabled and checked', () => {
+    it("necessary cookies checkbox is disabled and checked", () => {
       render(<CookieBanner />);
 
-      fireEvent.click(screen.getByRole('button', { name: 'Manage' }));
+      fireEvent.click(screen.getByRole("button", { name: "Manage" }));
 
       // Use role selector for checkbox
-      const checkboxes = screen.getAllByRole('checkbox');
+      const checkboxes = screen.getAllByRole("checkbox");
       // First checkbox is Necessary (checked, disabled)
       expect(checkboxes[0]).toBeChecked();
       expect(checkboxes[0]).toBeDisabled();
     });
 
-    it('analytics checkbox is unchecked by default', () => {
+    it("analytics checkbox is unchecked by default", () => {
       render(<CookieBanner />);
 
-      fireEvent.click(screen.getByRole('button', { name: 'Manage' }));
+      fireEvent.click(screen.getByRole("button", { name: "Manage" }));
 
-      const checkboxes = screen.getAllByRole('checkbox');
+      const checkboxes = screen.getAllByRole("checkbox");
       // Second checkbox is Analytics
       expect(checkboxes[1]).not.toBeChecked();
       expect(checkboxes[1]).not.toBeDisabled();
     });
 
-    it('marketing checkbox is unchecked by default', () => {
+    it("marketing checkbox is unchecked by default", () => {
       render(<CookieBanner />);
 
-      fireEvent.click(screen.getByRole('button', { name: 'Manage' }));
+      fireEvent.click(screen.getByRole("button", { name: "Manage" }));
 
-      const checkboxes = screen.getAllByRole('checkbox');
+      const checkboxes = screen.getAllByRole("checkbox");
       // Third checkbox is Marketing
       expect(checkboxes[2]).not.toBeChecked();
       expect(checkboxes[2]).not.toBeDisabled();
     });
 
-    it('can toggle analytics checkbox', () => {
+    it("can toggle analytics checkbox", () => {
       render(<CookieBanner />);
 
-      fireEvent.click(screen.getByRole('button', { name: 'Manage' }));
+      fireEvent.click(screen.getByRole("button", { name: "Manage" }));
 
-      const checkboxes = screen.getAllByRole('checkbox');
+      const checkboxes = screen.getAllByRole("checkbox");
       const analyticsCheckbox = checkboxes[1]!;
       fireEvent.click(analyticsCheckbox);
 
       expect(checkboxes[1]).toBeChecked();
     });
 
-    it('can toggle marketing checkbox', () => {
+    it("can toggle marketing checkbox", () => {
       render(<CookieBanner />);
 
-      fireEvent.click(screen.getByRole('button', { name: 'Manage' }));
+      fireEvent.click(screen.getByRole("button", { name: "Manage" }));
 
-      const checkboxes = screen.getAllByRole('checkbox');
+      const checkboxes = screen.getAllByRole("checkbox");
       const marketingCheckbox = checkboxes[2]!;
       fireEvent.click(marketingCheckbox);
 
       expect(checkboxes[2]).toBeChecked();
     });
 
-    it('closes preferences panel when close button is clicked', () => {
+    it("closes preferences panel when close button is clicked", () => {
       render(<CookieBanner />);
 
-      fireEvent.click(screen.getByRole('button', { name: 'Manage' }));
-      expect(screen.getByText('Cookie Preferences')).toBeInTheDocument();
+      fireEvent.click(screen.getByRole("button", { name: "Manage" }));
+      expect(screen.getByText("Cookie Preferences")).toBeInTheDocument();
 
-      fireEvent.click(screen.getByRole('button', { name: 'Close' }));
-      expect(screen.queryByText('Cookie Preferences')).not.toBeInTheDocument();
+      fireEvent.click(screen.getByRole("button", { name: "Close" }));
+      expect(screen.queryByText("Cookie Preferences")).not.toBeInTheDocument();
     });
 
-    it('closes preferences panel when cancel button is clicked', () => {
+    it("closes preferences panel when cancel button is clicked", () => {
       render(<CookieBanner />);
 
-      fireEvent.click(screen.getByRole('button', { name: 'Manage' }));
-      expect(screen.getByText('Cookie Preferences')).toBeInTheDocument();
+      fireEvent.click(screen.getByRole("button", { name: "Manage" }));
+      expect(screen.getByText("Cookie Preferences")).toBeInTheDocument();
 
-      fireEvent.click(screen.getByRole('button', { name: 'Cancel' }));
-      expect(screen.queryByText('Cookie Preferences')).not.toBeInTheDocument();
+      fireEvent.click(screen.getByRole("button", { name: "Cancel" }));
+      expect(screen.queryByText("Cookie Preferences")).not.toBeInTheDocument();
     });
 
-    it('saves preferences with selected values', () => {
+    it("saves preferences with selected values", () => {
       render(<CookieBanner />);
 
-      fireEvent.click(screen.getByRole('button', { name: 'Manage' }));
+      fireEvent.click(screen.getByRole("button", { name: "Manage" }));
 
       // Enable analytics (second checkbox)
-      const checkboxes = screen.getAllByRole('checkbox');
+      const checkboxes = screen.getAllByRole("checkbox");
       const analyticsCheckbox = checkboxes[1]!;
       fireEvent.click(analyticsCheckbox);
 
       // Save preferences
-      fireEvent.click(screen.getByRole('button', { name: 'Save Preferences' }));
+      fireEvent.click(screen.getByRole("button", { name: "Save Preferences" }));
 
       expect(mockSavePreferences).toHaveBeenCalledWith({
         analytics: true,
@@ -279,38 +279,38 @@ describe('CookieBanner', () => {
       });
     });
 
-    it('closes preferences panel after saving', () => {
+    it("closes preferences panel after saving", () => {
       render(<CookieBanner />);
 
-      fireEvent.click(screen.getByRole('button', { name: 'Manage' }));
-      fireEvent.click(screen.getByRole('button', { name: 'Save Preferences' }));
+      fireEvent.click(screen.getByRole("button", { name: "Manage" }));
+      fireEvent.click(screen.getByRole("button", { name: "Save Preferences" }));
 
-      expect(screen.queryByText('Cookie Preferences')).not.toBeInTheDocument();
+      expect(screen.queryByText("Cookie Preferences")).not.toBeInTheDocument();
     });
   });
 
-  describe('accessibility', () => {
-    it('has dialog role', () => {
+  describe("accessibility", () => {
+    it("has dialog role", () => {
       render(<CookieBanner />);
 
-      const dialog = screen.getByRole('dialog');
-      expect(dialog).toHaveAttribute('aria-modal', 'false');
+      const dialog = screen.getByRole("dialog");
+      expect(dialog).toHaveAttribute("aria-modal", "false");
     });
 
-    it('has aria-label', () => {
+    it("has aria-label", () => {
       render(<CookieBanner />);
 
-      const dialog = screen.getByRole('dialog');
-      expect(dialog).toHaveAttribute('aria-label', 'Cookie Consent');
+      const dialog = screen.getByRole("dialog");
+      expect(dialog).toHaveAttribute("aria-label", "Cookie Consent");
     });
   });
 
-  describe('custom className', () => {
-    it('applies custom className', () => {
-      render(<CookieBanner className='custom-class' />);
+  describe("custom className", () => {
+    it("applies custom className", () => {
+      render(<CookieBanner className="custom-class" />);
 
-      const dialog = screen.getByRole('dialog');
-      expect(dialog).toHaveClass('custom-class');
+      const dialog = screen.getByRole("dialog");
+      expect(dialog).toHaveClass("custom-class");
     });
   });
 });

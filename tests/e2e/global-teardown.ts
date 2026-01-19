@@ -1,8 +1,8 @@
-import type { FullConfig } from '@playwright/test';
-import { cleanupTestEnvironment } from './test-environment-setup';
+import type { FullConfig } from "@playwright/test";
+import { cleanupTestEnvironment } from "./test-environment-setup";
 
 async function globalTeardown(_config: FullConfig) {
-  console.log('🧹 Starting global teardown for Playwright tests...');
+  console.log("🧹 Starting global teardown for Playwright tests...");
 
   try {
     // Perform any global cleanup tasks here
@@ -11,9 +11,9 @@ async function globalTeardown(_config: FullConfig) {
     // 清理测试环境
     cleanupTestEnvironment();
 
-    console.log('✅ Global teardown completed');
+    console.log("✅ Global teardown completed");
   } catch (error) {
-    console.error('❌ Global teardown failed:', error);
+    console.error("❌ Global teardown failed:", error);
     throw error;
   }
 }

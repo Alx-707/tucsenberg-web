@@ -4,9 +4,9 @@
  * Monitors scroll position and applies shadow effect to header.
  * Uses passive listener for optimal performance.
  */
-'use client';
+"use client";
 
-import { useCallback, useEffect, useState } from 'react';
+import { useCallback, useEffect, useState } from "react";
 
 interface HeaderScrollChromeProps {
   /** Scroll threshold in pixels (default: 50) */
@@ -35,9 +35,9 @@ export function HeaderScrollChrome({
       onScrollChange?.(isScrolled);
 
       // Update data attribute on header element
-      const header = document.querySelector('header');
+      const header = document.querySelector("header");
       if (header) {
-        header.setAttribute('data-scrolled', String(isScrolled));
+        header.setAttribute("data-scrolled", String(isScrolled));
       }
     }
   }, [scrolled, threshold, onScrollChange]);
@@ -48,9 +48,9 @@ export function HeaderScrollChrome({
       const isScrolled = window.scrollY > threshold;
       setScrolled(isScrolled);
 
-      const header = document.querySelector('header');
+      const header = document.querySelector("header");
       if (header) {
-        header.setAttribute('data-scrolled', String(isScrolled));
+        header.setAttribute("data-scrolled", String(isScrolled));
       }
     };
 
@@ -58,11 +58,11 @@ export function HeaderScrollChrome({
     const timeoutId = setTimeout(initialCheck, 0);
 
     // Add passive listener for performance
-    window.addEventListener('scroll', handleScroll, { passive: true });
+    window.addEventListener("scroll", handleScroll, { passive: true });
 
     return () => {
       clearTimeout(timeoutId);
-      window.removeEventListener('scroll', handleScroll);
+      window.removeEventListener("scroll", handleScroll);
     };
   }, [handleScroll, threshold]);
 

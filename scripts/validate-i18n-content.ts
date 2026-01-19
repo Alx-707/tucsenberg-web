@@ -11,16 +11,16 @@
  * 使用方法：
  * pnpm tsx scripts/validate-i18n-content.ts
  */
-import fs from 'fs';
-import path from 'path';
-import { glob } from 'glob';
+import fs from "fs";
+import path from "path";
+import { glob } from "glob";
 
 interface ValidationIssue {
   file: string;
   line: number;
-  type: 'mixed-content' | 'missing-translation' | 'hardcoded-text';
+  type: "mixed-content" | "missing-translation" | "hardcoded-text";
   message: string;
-  severity: 'error' | 'warning';
+  severity: "error" | "warning";
 }
 
 const issues: ValidationIssue[] = [];
@@ -33,47 +33,47 @@ const ENGLISH_WORD_REGEX = /\b[a-zA-Z]{3,}\b/g;
 
 // 技术术语白名单（不算作英文内容）
 const TECH_TERMS = new Set([
-  'React',
-  'Next',
-  'TypeScript',
-  'JavaScript',
-  'CSS',
-  'HTML',
-  'API',
-  'JSON',
-  'HTTP',
-  'HTTPS',
-  'URL',
-  'SEO',
-  'UI',
-  'UX',
-  'GitHub',
-  'npm',
-  'pnpm',
-  'yarn',
-  'ESLint',
-  'Prettier',
-  'Tailwind',
-  'shadcn',
-  'Radix',
-  'Lucide',
-  'Zod',
-  'MDX',
-  'Server',
-  'Client',
-  'Component',
-  'Hook',
-  'Props',
-  'State',
+  "React",
+  "Next",
+  "TypeScript",
+  "JavaScript",
+  "CSS",
+  "HTML",
+  "API",
+  "JSON",
+  "HTTP",
+  "HTTPS",
+  "URL",
+  "SEO",
+  "UI",
+  "UX",
+  "GitHub",
+  "npm",
+  "pnpm",
+  "yarn",
+  "ESLint",
+  "Prettier",
+  "Tailwind",
+  "shadcn",
+  "Radix",
+  "Lucide",
+  "Zod",
+  "MDX",
+  "Server",
+  "Client",
+  "Component",
+  "Hook",
+  "Props",
+  "State",
 ]);
 
 /**
  * 检查文件中的混合内容
  */
 function checkMixedContent(filePath: string, content: string) {
-  const lines = content.split('\n');
-  const isEnglishFile = filePath.includes('/en/') || filePath.includes('/en.');
-  const isChineseFile = filePath.includes('/zh/') || filePath.includes('/zh.');
+  const lines = content.split("\n");
+  const isEnglishFile = filePath.includes("/en/") || filePath.includes("/en.");
+  const isChineseFile = filePath.includes("/zh/") || filePath.includes("/zh.");
 
   if (!isEnglishFile && !isChineseFile) {
     return; // 跳过非语言特定文件
@@ -82,20 +82,20 @@ function checkMixedContent(filePath: string, content: string) {
   lines.forEach((line, index) => {
     // 跳过导入语句、注释、JSX 属性、代码行
     if (
-      line.trim().startsWith('import ') ||
-      line.trim().startsWith('export ') ||
-      line.trim().startsWith('//') ||
-      line.trim().startsWith('/*') ||
-      line.trim().startsWith('*') ||
-      line.includes('className=') ||
-      line.includes('data-testid=') ||
-      line.includes('const ') ||
-      line.includes('let ') ||
-      line.includes('var ') ||
-      line.includes('function ') ||
-      line.includes('=>') ||
-      line.trim().startsWith('<') ||
-      line.trim().startsWith('}')
+      line.trim().startsWith("import ") ||
+      line.trim().startsWith("export ") ||
+      line.trim().startsWith("//") ||
+      line.trim().startsWith("/*") ||
+      line.trim().startsWith("*") ||
+      line.includes("className=") ||
+      line.includes("data-testid=") ||
+      line.includes("const ") ||
+      line.includes("let ") ||
+      line.includes("var ") ||
+      line.includes("function ") ||
+      line.includes("=>") ||
+      line.trim().startsWith("<") ||
+      line.trim().startsWith("}")
     ) {
       return;
     }
@@ -112,7 +112,7 @@ function checkMixedContent(filePath: string, content: string) {
         !text ||
         /^\d+$/.test(text) ||
         text.length === 1 ||
-        text.startsWith('{')
+        text.startsWith("{")
       ) {
         continue;
       }
@@ -130,9 +130,9 @@ function checkMixedContent(filePath: string, content: string) {
         issues.push({
           file: filePath,
           line: index + 1,
-          type: 'mixed-content',
+          type: "mixed-content",
           message: `English file contains Chinese text: "${text.substring(0, 50)}"`,
-          severity: 'error',
+          severity: "error",
         });
       }
 
@@ -141,9 +141,9 @@ function checkMixedContent(filePath: string, content: string) {
         issues.push({
           file: filePath,
           line: index + 1,
-          type: 'mixed-content',
+          type: "mixed-content",
           message: `Chinese file contains English text: "${text.substring(0, 50)}"`,
-          severity: 'warning',
+          severity: "warning",
         });
       }
     }
@@ -154,16 +154,16 @@ function checkMixedContent(filePath: string, content: string) {
  * 主函数
  */
 async function main() {
-  console.log('🔍 Starting i18n content validation...\n');
+  console.log("🔍 Starting i18n content validation...\n");
 
   // 查找所有 TypeScript/TSX 文件
-  const files = await glob('src/**/*.{ts,tsx}', {
+  const files = await glob("src/**/*.{ts,tsx}", {
     ignore: [
-      '**/node_modules/**',
-      '**/*.test.{ts,tsx}',
-      '**/*.spec.{ts,tsx}',
-      '**/dist/**',
-      '**/.next/**',
+      "**/node_modules/**",
+      "**/*.test.{ts,tsx}",
+      "**/*.spec.{ts,tsx}",
+      "**/dist/**",
+      "**/.next/**",
     ],
   });
 
@@ -171,24 +171,24 @@ async function main() {
 
   // 检查每个文件
   for (const file of files) {
-    const content = fs.readFileSync(file, 'utf-8');
+    const content = fs.readFileSync(file, "utf-8");
 
     checkMixedContent(file, content);
   }
 
   // 输出结果
-  console.log('📊 Validation Results:\n');
+  console.log("📊 Validation Results:\n");
 
   if (issues.length === 0) {
     console.log(
-      '✅ No issues found! All i18n content is properly separated.\n',
+      "✅ No issues found! All i18n content is properly separated.\n",
     );
     process.exit(0);
   }
 
   // 按严重程度分组
-  const errors = issues.filter((i) => i.severity === 'error');
-  const warnings = issues.filter((i) => i.severity === 'warning');
+  const errors = issues.filter((i) => i.severity === "error");
+  const warnings = issues.filter((i) => i.severity === "warning");
 
   if (errors.length > 0) {
     console.log(`❌ Found ${errors.length} errors:\n`);
@@ -215,6 +215,6 @@ async function main() {
 }
 
 main().catch((error) => {
-  console.error('❌ Validation failed:', error);
+  console.error("❌ Validation failed:", error);
   process.exit(1);
 });

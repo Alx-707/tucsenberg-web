@@ -1,5 +1,5 @@
-import { ANIMATION_DURATION_VERY_SLOW, ZERO } from '@/constants';
-import { INPUT_VALIDATION_CONSTANTS } from '@/constants/security-constants';
+import { ANIMATION_DURATION_VERY_SLOW, ZERO } from "@/constants";
+import { INPUT_VALIDATION_CONSTANTS } from "@/constants/security-constants";
 
 /**
  * 安全验证工具
@@ -21,16 +21,16 @@ const VALIDATION_CONSTANTS = {
  * Use this for: names, messages, company names, requirements, etc.
  */
 export function sanitizePlainText(input: string): string {
-  if (typeof input !== 'string') {
-    return '';
+  if (typeof input !== "string") {
+    return "";
   }
 
   return input
-    .replace(/[<>]/g, '') // Remove angle brackets
-    .replace(/javascript:/gi, '') // Remove javascript: protocol
-    .replace(/on\w+=/gi, '') // Remove event handlers
-    .replace(/data:/gi, '') // Remove data: protocol
-    .replace(/\s+/g, ' ') // Replace multiple spaces with single space
+    .replace(/[<>]/g, "") // Remove angle brackets
+    .replace(/javascript:/gi, "") // Remove javascript: protocol
+    .replace(/on\w+=/gi, "") // Remove event handlers
+    .replace(/data:/gi, "") // Remove data: protocol
+    .replace(/\s+/g, " ") // Replace multiple spaces with single space
     .trim();
 }
 
@@ -46,17 +46,17 @@ export function sanitizePlainText(input: string): string {
  */
 export function sanitizeUrl(
   url: string,
-  allowedProtocols: readonly string[] = ['http:', 'https:'],
+  allowedProtocols: readonly string[] = ["http:", "https:"],
 ): string {
-  if (typeof url !== 'string') {
-    return '';
+  if (typeof url !== "string") {
+    return "";
   }
 
   const trimmed = url.trim();
 
   // Empty string is valid (optional URL fields)
   if (!trimmed) {
-    return '';
+    return "";
   }
 
   try {
@@ -64,18 +64,18 @@ export function sanitizeUrl(
 
     // Check protocol is allowed
     if (!allowedProtocols.includes(urlObj.protocol)) {
-      return '';
+      return "";
     }
 
     // Remove javascript: in any part
     if (/javascript:/i.test(trimmed)) {
-      return '';
+      return "";
     }
 
     return trimmed;
   } catch {
     // Not a valid URL - return empty
-    return '';
+    return "";
   }
 }
 
@@ -106,7 +106,7 @@ export function isValidEmail(email: string): boolean {
  */
 export function isValidUrl(
   url: string,
-  allowedProtocols: string[] = ['http:', 'https:'],
+  allowedProtocols: string[] = ["http:", "https:"],
 ): boolean {
   try {
     const urlObj = new URL(url);
@@ -120,15 +120,15 @@ export function isValidUrl(
  * Validate and sanitize file path to prevent path traversal attacks
  */
 export function sanitizeFilePath(filePath: string): string {
-  if (typeof filePath !== 'string') {
-    return '';
+  if (typeof filePath !== "string") {
+    return "";
   }
 
   // Remove dangerous path components
   return filePath
-    .replace(/\.\./g, '') // Remove parent directory references
-    .replace(/[<>:"|?*]/g, '') // Remove invalid filename characters
-    .replace(/^\/+/, '') // Remove leading slashes
+    .replace(/\.\./g, "") // Remove parent directory references
+    .replace(/[<>:"|?*]/g, "") // Remove invalid filename characters
+    .replace(/^\/+/, "") // Remove leading slashes
     .trim();
 }
 
@@ -140,8 +140,8 @@ export function validateInputLength(
   minLength: number = ZERO,
   maxLength: number = ANIMATION_DURATION_VERY_SLOW,
 ): { valid: boolean; error?: string } {
-  if (typeof input !== 'string') {
-    return { valid: false, error: 'Input must be a string' };
+  if (typeof input !== "string") {
+    return { valid: false, error: "Input must be a string" };
   }
 
   if (input.length < minLength) {
@@ -168,12 +168,12 @@ export function validateCharacters(
   input: string,
   allowedPattern: RegExp,
 ): { valid: boolean; error?: string } {
-  if (typeof input !== 'string') {
-    return { valid: false, error: 'Input must be a string' };
+  if (typeof input !== "string") {
+    return { valid: false, error: "Input must be a string" };
   }
 
   if (!allowedPattern.test(input)) {
-    return { valid: false, error: 'Input contains invalid characters' };
+    return { valid: false, error: "Input contains invalid characters" };
   }
 
   return { valid: true };
@@ -185,7 +185,7 @@ export function validateCharacters(
 export function isValidPhoneNumber(phone: string): boolean {
   // International phone number validation
   const phoneRegex = /^[+]?[1-9][\d]{0,15}$/;
-  const cleanPhone = phone.replace(/[\s\-()]/g, '');
+  const cleanPhone = phone.replace(/[\s\-()]/g, "");
   return phoneRegex.test(cleanPhone);
 }
 
@@ -193,12 +193,12 @@ export function isValidPhoneNumber(phone: string): boolean {
  * Validate and sanitize HTML content
  */
 export function sanitizeHtml(html: string): string {
-  if (typeof html !== 'string') {
-    return '';
+  if (typeof html !== "string") {
+    return "";
   }
 
   // 移除特定标签（非正则实现，避免不安全正则）
-  const stripTag = (input: string, tag: 'script' | 'iframe'): string => {
+  const stripTag = (input: string, tag: "script" | "iframe"): string => {
     let out = input;
     let lower = out.toLowerCase();
     let start = lower.indexOf(`<${tag}`);
@@ -212,12 +212,12 @@ export function sanitizeHtml(html: string): string {
     return out;
   };
 
-  let sanitized = stripTag(html, 'script');
-  sanitized = stripTag(sanitized, 'iframe');
+  let sanitized = stripTag(html, "script");
+  sanitized = stripTag(sanitized, "iframe");
   sanitized = sanitized
-    .replace(/on\w+\s*=\s*["'][^"']*["']/gi, '') // 移除事件处理属性
-    .replace(/javascript:/gi, '')
-    .replace(/data:/gi, '')
+    .replace(/on\w+\s*=\s*["'][^"']*["']/gi, "") // 移除事件处理属性
+    .replace(/javascript:/gi, "")
+    .replace(/data:/gi, "")
     .trim();
   return sanitized;
 }
@@ -238,15 +238,15 @@ export function isValidJson(jsonString: string): boolean {
  * Validate and sanitize user input for database queries
  */
 export function sanitizeForDatabase(input: string): string {
-  if (typeof input !== 'string') {
-    return '';
+  if (typeof input !== "string") {
+    return "";
   }
 
   // Basic SQL injection prevention
   return input
-    .replace(/['";\\]/g, '') // Remove quotes and backslashes
-    .replace(/--/g, '') // Remove SQL comments
-    .replace(/\/\*/g, '') // Remove block comment start
-    .replace(/\*\//g, '') // Remove block comment end
+    .replace(/['";\\]/g, "") // Remove quotes and backslashes
+    .replace(/--/g, "") // Remove SQL comments
+    .replace(/\/\*/g, "") // Remove block comment start
+    .replace(/\*\//g, "") // Remove block comment end
     .trim();
 }

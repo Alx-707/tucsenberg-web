@@ -8,10 +8,10 @@
  * Message reaction request
  */
 export interface MessageReactionRequest {
-  messaging_product: 'whatsapp';
-  recipient_type: 'individual';
+  messaging_product: "whatsapp";
+  recipient_type: "individual";
   to: string;
-  type: 'reaction';
+  type: "reaction";
   reaction: {
     message_id: string;
     emoji: string;
@@ -23,10 +23,10 @@ export interface MessageReactionRequest {
  * Message forwarding request
  */
 export interface MessageForwardRequest {
-  messaging_product: 'whatsapp';
-  recipient_type: 'individual';
+  messaging_product: "whatsapp";
+  recipient_type: "individual";
   to: string;
-  type: 'text';
+  type: "text";
   context: {
     message_id: string;
   };
@@ -40,10 +40,10 @@ export interface MessageForwardRequest {
  * Group message request
  */
 export interface GroupMessageRequest {
-  messaging_product: 'whatsapp';
-  recipient_type: 'group';
+  messaging_product: "whatsapp";
+  recipient_type: "group";
   to: string;
-  type: 'text' | 'image' | 'document' | 'audio' | 'video';
+  type: "text" | "image" | "document" | "audio" | "video";
   text?: {
     body: string;
   };

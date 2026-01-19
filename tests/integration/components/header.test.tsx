@@ -4,12 +4,12 @@
  * Tests for the async Server Component Header using a render helper
  * that awaits the component before passing to React Testing Library.
  */
-import { render, screen } from '@testing-library/react';
-import { beforeEach, describe, expect, it, vi } from 'vitest';
-import { Header } from '@/components/layout/header';
+import { render, screen } from "@testing-library/react";
+import { beforeEach, describe, expect, it, vi } from "vitest";
+import { Header } from "@/components/layout/header";
 
-vi.mock('next/dynamic', async () => {
-  const React = await import('react');
+vi.mock("next/dynamic", async () => {
+  const React = await import("react");
   return {
     __esModule: true,
     default: (
@@ -26,7 +26,7 @@ vi.mock('next/dynamic', async () => {
           importer().then((mod) => {
             if (!mounted) return;
             const Component =
-              typeof mod === 'function'
+              typeof mod === "function"
                 ? (mod as React.ComponentType<any>)
                 : mod.default;
             setLoaded(() => Component ?? (() => null));
@@ -43,47 +43,47 @@ vi.mock('next/dynamic', async () => {
 });
 
 // Mock child components
-vi.mock('@/components/language-toggle', () => ({
+vi.mock("@/components/language-toggle", () => ({
   LanguageToggle: () => (
-    <div data-testid='language-toggle'>Language Toggle</div>
+    <div data-testid="language-toggle">Language Toggle</div>
   ),
 }));
 
-vi.mock('@/components/layout/logo', () => ({
-  Logo: () => <div data-testid='logo'>Logo</div>,
+vi.mock("@/components/layout/logo", () => ({
+  Logo: () => <div data-testid="logo">Logo</div>,
 }));
 
-vi.mock('@/components/layout/nav-switcher', () => ({
+vi.mock("@/components/layout/nav-switcher", () => ({
   __esModule: true,
-  default: () => <div data-testid='nav-switcher'>Nav Switcher</div>,
-  NavSwitcher: () => <div data-testid='nav-switcher'>Nav Switcher</div>,
+  default: () => <div data-testid="nav-switcher">Nav Switcher</div>,
+  NavSwitcher: () => <div data-testid="nav-switcher">Nav Switcher</div>,
 }));
 
-vi.mock('@/components/layout/mobile-navigation', () => ({
+vi.mock("@/components/layout/mobile-navigation", () => ({
   MobileNavigation: () => (
-    <div data-testid='mobile-navigation'>Mobile Navigation</div>
+    <div data-testid="mobile-navigation">Mobile Navigation</div>
   ),
 }));
 
-vi.mock('@/components/layout/header-client', () => ({
+vi.mock("@/components/layout/header-client", () => ({
   MobileNavigationIsland: () => (
-    <nav data-testid='mobile-navigation'>Mobile Navigation</nav>
+    <nav data-testid="mobile-navigation">Mobile Navigation</nav>
   ),
-  NavSwitcherIsland: () => <nav data-testid='nav-switcher'>Nav Switcher</nav>,
+  NavSwitcherIsland: () => <nav data-testid="nav-switcher">Nav Switcher</nav>,
   LanguageToggleIsland: () => (
-    <div data-testid='language-toggle'>Language Toggle</div>
+    <div data-testid="language-toggle">Language Toggle</div>
   ),
 }));
 
-vi.mock('@/components/lazy/idle', () => ({
+vi.mock("@/components/lazy/idle", () => ({
   Idle: ({ children }: { children: React.ReactNode }) => <>{children}</>,
 }));
 
-vi.mock('@/components/layout/header-scroll-chrome', () => ({
+vi.mock("@/components/layout/header-scroll-chrome", () => ({
   HeaderScrollChrome: () => null,
 }));
 
-vi.mock('@/components/ui/button', () => ({
+vi.mock("@/components/ui/button", () => ({
   Button: ({
     children,
     asChild,
@@ -105,161 +105,161 @@ async function renderAsyncComponent(
   return render(resolvedElement);
 }
 
-describe('Header Integration Tests', () => {
+describe("Header Integration Tests", () => {
   beforeEach(() => {
     vi.clearAllMocks();
   });
 
-  describe('Component Integration', () => {
-    it('should render all child components correctly', async () => {
-      await renderAsyncComponent(Header({ locale: 'en' }));
+  describe("Component Integration", () => {
+    it("should render all child components correctly", async () => {
+      await renderAsyncComponent(Header({ locale: "en" }));
 
       // Verify all child components are rendered
-      expect(screen.getByTestId('logo')).toBeInTheDocument();
-      expect(screen.getByTestId('nav-switcher')).toBeInTheDocument();
-      expect(screen.getByTestId('mobile-navigation')).toBeInTheDocument();
-      expect(screen.getByTestId('language-toggle')).toBeInTheDocument();
+      expect(screen.getByTestId("logo")).toBeInTheDocument();
+      expect(screen.getByTestId("nav-switcher")).toBeInTheDocument();
+      expect(screen.getByTestId("mobile-navigation")).toBeInTheDocument();
+      expect(screen.getByTestId("language-toggle")).toBeInTheDocument();
     });
 
-    it('should have correct default structure and classes', async () => {
-      await renderAsyncComponent(Header({ locale: 'en' }));
+    it("should have correct default structure and classes", async () => {
+      await renderAsyncComponent(Header({ locale: "en" }));
 
-      const header = screen.getByRole('banner');
-      expect(header).toHaveClass('bg-background');
-      expect(header).toHaveClass('w-full');
-      expect(header).toHaveClass('border-b');
-      expect(header).toHaveClass('sticky');
-      expect(header).toHaveClass('top-0');
-      expect(header).toHaveClass('z-50');
-      expect(header).toHaveClass('transition-all');
-      expect(header).toHaveClass('duration-200');
+      const header = screen.getByRole("banner");
+      expect(header).toHaveClass("bg-background");
+      expect(header).toHaveClass("w-full");
+      expect(header).toHaveClass("border-b");
+      expect(header).toHaveClass("sticky");
+      expect(header).toHaveClass("top-0");
+      expect(header).toHaveClass("z-50");
+      expect(header).toHaveClass("transition-all");
+      expect(header).toHaveClass("duration-200");
     });
 
-    it('should apply custom className', async () => {
-      const customClass = 'custom-header-class';
+    it("should apply custom className", async () => {
+      const customClass = "custom-header-class";
       await renderAsyncComponent(
-        Header({ locale: 'en', className: customClass }),
+        Header({ locale: "en", className: customClass }),
       );
 
-      const header = screen.getByRole('banner');
+      const header = screen.getByRole("banner");
       expect(header).toHaveClass(customClass);
     });
   });
 
-  describe('Variant Behavior', () => {
-    it('should apply default variant styles', async () => {
-      await renderAsyncComponent(Header({ locale: 'en', variant: 'default' }));
+  describe("Variant Behavior", () => {
+    it("should apply default variant styles", async () => {
+      await renderAsyncComponent(Header({ locale: "en", variant: "default" }));
 
-      const header = screen.getByRole('banner');
-      expect(header).toHaveClass('sticky');
-      expect(header).toHaveClass('border-b');
-      expect(header).toHaveClass('bg-background');
+      const header = screen.getByRole("banner");
+      expect(header).toHaveClass("sticky");
+      expect(header).toHaveClass("border-b");
+      expect(header).toHaveClass("bg-background");
     });
 
-    it('should apply minimal variant styles', async () => {
-      await renderAsyncComponent(Header({ locale: 'en', variant: 'minimal' }));
+    it("should apply minimal variant styles", async () => {
+      await renderAsyncComponent(Header({ locale: "en", variant: "minimal" }));
 
-      const header = screen.getByRole('banner');
-      expect(header).toHaveClass('sticky');
-      expect(header).toHaveClass('border-b');
-      expect(header).toHaveClass('bg-background');
+      const header = screen.getByRole("banner");
+      expect(header).toHaveClass("sticky");
+      expect(header).toHaveClass("border-b");
+      expect(header).toHaveClass("bg-background");
       // Minimal variant hides center nav
-      expect(screen.queryByTestId('nav-switcher')).not.toBeInTheDocument();
+      expect(screen.queryByTestId("nav-switcher")).not.toBeInTheDocument();
     });
 
-    it('should apply transparent variant styles', async () => {
+    it("should apply transparent variant styles", async () => {
       await renderAsyncComponent(
-        Header({ locale: 'en', variant: 'transparent' }),
+        Header({ locale: "en", variant: "transparent" }),
       );
 
-      const header = screen.getByRole('banner');
-      expect(header).not.toHaveClass('sticky');
+      const header = screen.getByRole("banner");
+      expect(header).not.toHaveClass("sticky");
       // Transparent variant applies bg-transparent
-      expect(header).toHaveClass('bg-transparent');
+      expect(header).toHaveClass("bg-transparent");
     });
 
-    it('should handle sticky prop correctly', async () => {
-      await renderAsyncComponent(Header({ locale: 'en', sticky: true }));
-      const header = screen.getByRole('banner');
-      expect(header).toHaveClass('sticky');
+    it("should handle sticky prop correctly", async () => {
+      await renderAsyncComponent(Header({ locale: "en", sticky: true }));
+      const header = screen.getByRole("banner");
+      expect(header).toHaveClass("sticky");
     });
 
-    it('should handle sticky=false correctly', async () => {
-      await renderAsyncComponent(Header({ locale: 'en', sticky: false }));
-      const header = screen.getByRole('banner');
-      expect(header).not.toHaveClass('sticky');
+    it("should handle sticky=false correctly", async () => {
+      await renderAsyncComponent(Header({ locale: "en", sticky: false }));
+      const header = screen.getByRole("banner");
+      expect(header).not.toHaveClass("sticky");
     });
 
-    it('should override sticky prop for transparent variant', async () => {
+    it("should override sticky prop for transparent variant", async () => {
       await renderAsyncComponent(
-        Header({ locale: 'en', variant: 'transparent', sticky: true }),
+        Header({ locale: "en", variant: "transparent", sticky: true }),
       );
 
-      const header = screen.getByRole('banner');
+      const header = screen.getByRole("banner");
       // Transparent variant should never be sticky, even if sticky=true
-      expect(header).not.toHaveClass('sticky');
+      expect(header).not.toHaveClass("sticky");
     });
   });
 
-  describe('Responsive Behavior', () => {
-    it('should contain responsive container', async () => {
-      await renderAsyncComponent(Header({ locale: 'en' }));
+  describe("Responsive Behavior", () => {
+    it("should contain responsive container", async () => {
+      await renderAsyncComponent(Header({ locale: "en" }));
 
       const container = screen
-        .getByRole('banner')
-        .querySelector('.mx-auto.max-w-7xl');
+        .getByRole("banner")
+        .querySelector(".mx-auto.max-w-7xl");
       expect(container).toBeInTheDocument();
-      expect(container).toHaveClass('px-4');
+      expect(container).toHaveClass("px-4");
     });
 
-    it('should render both desktop and mobile navigation', async () => {
-      await renderAsyncComponent(Header({ locale: 'en' }));
+    it("should render both desktop and mobile navigation", async () => {
+      await renderAsyncComponent(Header({ locale: "en" }));
 
       // Both navigation components should be present
       // (visibility is controlled by CSS classes)
-      expect(screen.getByTestId('nav-switcher')).toBeInTheDocument();
-      expect(screen.getByTestId('mobile-navigation')).toBeInTheDocument();
+      expect(screen.getByTestId("nav-switcher")).toBeInTheDocument();
+      expect(screen.getByTestId("mobile-navigation")).toBeInTheDocument();
     });
   });
 
-  describe('Accessibility', () => {
-    it('should have proper semantic structure', async () => {
-      await renderAsyncComponent(Header({ locale: 'en' }));
+  describe("Accessibility", () => {
+    it("should have proper semantic structure", async () => {
+      await renderAsyncComponent(Header({ locale: "en" }));
 
-      const header = screen.getByRole('banner');
+      const header = screen.getByRole("banner");
       expect(header).toBeInTheDocument();
-      expect(header.tagName).toBe('HEADER');
+      expect(header.tagName).toBe("HEADER");
     });
 
-    it('should be keyboard navigable', async () => {
-      await renderAsyncComponent(Header({ locale: 'en' }));
+    it("should be keyboard navigable", async () => {
+      await renderAsyncComponent(Header({ locale: "en" }));
 
-      const header = screen.getByRole('banner');
+      const header = screen.getByRole("banner");
 
       // Header should be focusable for screen readers
       expect(header).toBeInTheDocument();
 
       // Child components should handle their own keyboard navigation
-      expect(screen.getByTestId('nav-switcher')).toBeInTheDocument();
-      expect(screen.getByTestId('language-toggle')).toBeInTheDocument();
+      expect(screen.getByTestId("nav-switcher")).toBeInTheDocument();
+      expect(screen.getByTestId("language-toggle")).toBeInTheDocument();
     });
   });
 
-  describe('Component Interaction', () => {
-    it('should maintain component hierarchy', async () => {
-      await renderAsyncComponent(Header({ locale: 'en' }));
+  describe("Component Interaction", () => {
+    it("should maintain component hierarchy", async () => {
+      await renderAsyncComponent(Header({ locale: "en" }));
 
-      const header = screen.getByRole('banner');
-      const container = header.querySelector('.mx-auto.max-w-7xl');
+      const header = screen.getByRole("banner");
+      const container = header.querySelector(".mx-auto.max-w-7xl");
 
       expect(container).toBeInTheDocument();
       expect(header).toContainElement(container as HTMLElement);
 
       // All components should be within the container
-      const logo = screen.getByTestId('logo');
-      const navSwitcher = screen.getByTestId('nav-switcher');
-      const mobileNav = screen.getByTestId('mobile-navigation');
-      const langToggle = screen.getByTestId('language-toggle');
+      const logo = screen.getByTestId("logo");
+      const navSwitcher = screen.getByTestId("nav-switcher");
+      const mobileNav = screen.getByTestId("mobile-navigation");
+      const langToggle = screen.getByTestId("language-toggle");
 
       expect(container).toContainElement(logo);
       expect(container).toContainElement(navSwitcher);
@@ -268,46 +268,46 @@ describe('Header Integration Tests', () => {
     });
   });
 
-  describe('Error Handling', () => {
-    it('should render gracefully with default variant', async () => {
-      await renderAsyncComponent(Header({ locale: 'en' }));
+  describe("Error Handling", () => {
+    it("should render gracefully with default variant", async () => {
+      await renderAsyncComponent(Header({ locale: "en" }));
 
-      const header = screen.getByRole('banner');
+      const header = screen.getByRole("banner");
       expect(header).toBeInTheDocument();
 
       // Should have default variant styles
-      expect(header).toHaveClass('sticky');
+      expect(header).toHaveClass("sticky");
     });
 
-    it('should handle invalid variant gracefully', async () => {
+    it("should handle invalid variant gracefully", async () => {
       await renderAsyncComponent(
         Header({
-          locale: 'en',
-          variant: 'invalid' as unknown as
-            | 'default'
-            | 'minimal'
-            | 'transparent',
+          locale: "en",
+          variant: "invalid" as unknown as
+            | "default"
+            | "minimal"
+            | "transparent",
         }),
       );
 
-      const header = screen.getByRole('banner');
+      const header = screen.getByRole("banner");
       expect(header).toBeInTheDocument();
 
       // Should apply default behavior
-      expect(header).toHaveClass('sticky');
+      expect(header).toHaveClass("sticky");
     });
   });
 
-  describe('Performance', () => {
-    it('should render efficiently with different props', async () => {
+  describe("Performance", () => {
+    it("should render efficiently with different props", async () => {
       // Initial render should work
-      await renderAsyncComponent(Header({ locale: 'en' }));
-      expect(screen.getByRole('banner')).toBeInTheDocument();
+      await renderAsyncComponent(Header({ locale: "en" }));
+      expect(screen.getByRole("banner")).toBeInTheDocument();
     });
 
-    it('should render minimal variant correctly', async () => {
-      await renderAsyncComponent(Header({ locale: 'en', variant: 'minimal' }));
-      expect(screen.getByRole('banner')).toBeInTheDocument();
+    it("should render minimal variant correctly", async () => {
+      await renderAsyncComponent(Header({ locale: "en", variant: "minimal" }));
+      expect(screen.getByRole("banner")).toBeInTheDocument();
     });
   });
 });

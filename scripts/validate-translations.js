@@ -11,19 +11,19 @@
  * Usage: node scripts/validate-translations.js
  */
 
-const fs = require('fs');
-const path = require('path');
+const fs = require("fs");
+const path = require("path");
 
 /**
  * Get all keys from a nested object (recursively)
  */
-function getAllKeys(obj, prefix = '') {
+function getAllKeys(obj, prefix = "") {
   const keys = [];
 
   for (const [key, value] of Object.entries(obj)) {
     const fullKey = prefix ? `${prefix}.${key}` : key;
 
-    if (typeof value === 'object' && value !== null && !Array.isArray(value)) {
+    if (typeof value === "object" && value !== null && !Array.isArray(value)) {
       keys.push(...getAllKeys(value, fullKey));
     } else {
       keys.push(fullKey);
@@ -41,17 +41,17 @@ function validateLocale(locale) {
 
   const criticalPath = path.join(
     __dirname,
-    '..',
-    'messages',
+    "..",
+    "messages",
     locale,
-    'critical.json',
+    "critical.json",
   );
   const deferredPath = path.join(
     __dirname,
-    '..',
-    'messages',
+    "..",
+    "messages",
     locale,
-    'deferred.json',
+    "deferred.json",
   );
 
   // Check if files exist
@@ -66,8 +66,8 @@ function validateLocale(locale) {
   }
 
   // Read files
-  const critical = JSON.parse(fs.readFileSync(criticalPath, 'utf-8'));
-  const deferred = JSON.parse(fs.readFileSync(deferredPath, 'utf-8'));
+  const critical = JSON.parse(fs.readFileSync(criticalPath, "utf-8"));
+  const deferred = JSON.parse(fs.readFileSync(deferredPath, "utf-8"));
 
   // Get all keys
   const criticalKeys = getAllKeys(critical);
@@ -106,12 +106,12 @@ function validateLocale(locale) {
  * Compare keys across locales
  */
 function compareLocales(localeData) {
-  console.log('\n🔍 Comparing locales...');
+  console.log("\n🔍 Comparing locales...");
 
   const locales = Object.keys(localeData);
 
   if (locales.length < 2) {
-    console.log('   ⚠️  Only one locale found, skipping comparison');
+    console.log("   ⚠️  Only one locale found, skipping comparison");
     return true;
   }
 
@@ -182,10 +182,10 @@ function compareLocales(localeData) {
  * Main execution
  */
 function main() {
-  console.log('🚀 Translation Validation');
-  console.log('==========================');
+  console.log("🚀 Translation Validation");
+  console.log("==========================");
 
-  const locales = require('../i18n-locales.config').locales;
+  const locales = require("../i18n-locales.config").locales;
   const localeData = {};
   let allValid = true;
 
@@ -201,7 +201,7 @@ function main() {
   }
 
   if (!allValid) {
-    console.error('\n❌ Validation failed!\n');
+    console.error("\n❌ Validation failed!\n");
     process.exit(1);
   }
 
@@ -209,13 +209,13 @@ function main() {
   const localesMatch = compareLocales(localeData);
 
   if (!localesMatch) {
-    console.error('\n❌ Locales do not match!\n');
+    console.error("\n❌ Locales do not match!\n");
     process.exit(1);
   }
 
-  console.log('\n✅ All validations passed!');
-  console.log('\nSummary:');
-  console.log('--------');
+  console.log("\n✅ All validations passed!");
+  console.log("\nSummary:");
+  console.log("--------");
 
   for (const [locale, data] of Object.entries(localeData)) {
     console.log(
@@ -224,7 +224,7 @@ function main() {
   }
 
   console.log(
-    '\n💡 Translation files are valid and consistent across all locales.\n',
+    "\n💡 Translation files are valid and consistent across all locales.\n",
   );
 }
 
@@ -233,7 +233,7 @@ if (require.main === module) {
   try {
     main();
   } catch (error) {
-    console.error('\n❌ Error:', error.message);
+    console.error("\n❌ Error:", error.message);
     console.error(error.stack);
     process.exit(1);
   }

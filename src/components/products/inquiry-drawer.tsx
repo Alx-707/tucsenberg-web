@@ -1,17 +1,17 @@
-'use client';
+"use client";
 
-import Image from 'next/image';
-import { useTranslations } from 'next-intl';
-import { getBlurPlaceholder } from '@/lib/image';
-import { cn } from '@/lib/utils';
-import { ProductInquiryForm } from '@/components/products/product-inquiry-form';
+import Image from "next/image";
+import { useTranslations } from "next-intl";
+import { getBlurPlaceholder } from "@/lib/image";
+import { cn } from "@/lib/utils";
+import { ProductInquiryForm } from "@/components/products/product-inquiry-form";
 import {
   Sheet,
   SheetContent,
   SheetDescription,
   SheetHeader,
   SheetTitle,
-} from '@/components/ui/sheet';
+} from "@/components/ui/sheet";
 
 export interface InquiryDrawerProps {
   /** Whether the drawer is open */
@@ -43,23 +43,23 @@ function DrawerProductHeader({
   productSku: string | undefined;
 }) {
   return (
-    <div className='flex items-start gap-4'>
+    <div className="flex items-start gap-4">
       {productImage && (
-        <div className='relative h-16 w-16 shrink-0 overflow-hidden rounded-md border bg-muted'>
+        <div className="relative h-16 w-16 shrink-0 overflow-hidden rounded-md border bg-muted">
           <Image
             src={productImage}
             alt={productName}
             fill
-            className='object-cover'
-            sizes='64px'
-            {...getBlurPlaceholder('neutral')}
+            className="object-cover"
+            sizes="64px"
+            {...getBlurPlaceholder("neutral")}
           />
         </div>
       )}
-      <div className='min-w-0 flex-1'>
-        <SheetTitle className='truncate text-base'>{productName}</SheetTitle>
+      <div className="min-w-0 flex-1">
+        <SheetTitle className="truncate text-base">{productName}</SheetTitle>
         {productSku && (
-          <p className='mt-1 text-xs text-muted-foreground'>
+          <p className="mt-1 text-xs text-muted-foreground">
             SKU: {productSku}
           </p>
         )}
@@ -83,7 +83,7 @@ export function InquiryDrawer({
   productSku,
   className,
 }: InquiryDrawerProps) {
-  const t = useTranslations('products.inquiry');
+  const t = useTranslations("products.inquiry");
 
   function handleSuccess() {
     // Keep drawer open to show success message
@@ -91,37 +91,31 @@ export function InquiryDrawer({
   }
 
   return (
-    <Sheet
-      open={open}
-      onOpenChange={onOpenChange}
-    >
+    <Sheet open={open} onOpenChange={onOpenChange}>
       <SheetContent
-        side='right'
-        className={cn('flex w-full flex-col sm:max-w-md', className)}
-        aria-describedby='inquiry-drawer-description'
+        side="right"
+        className={cn("flex w-full flex-col sm:max-w-md", className)}
+        aria-describedby="inquiry-drawer-description"
       >
-        <SheetHeader className='border-b pb-4'>
+        <SheetHeader className="border-b pb-4">
           <DrawerProductHeader
             productName={productName}
             productImage={productImage}
             productSku={productSku}
           />
-          <SheetDescription
-            id='inquiry-drawer-description'
-            className='sr-only'
-          >
-            {t('description')}
+          <SheetDescription id="inquiry-drawer-description" className="sr-only">
+            {t("description")}
           </SheetDescription>
         </SheetHeader>
 
         {/* Scrollable form container - lazy mount on open */}
-        <div className='flex-1 overflow-y-auto py-4'>
+        <div className="flex-1 overflow-y-auto py-4">
           {open && (
             <ProductInquiryForm
               productName={productName}
               productSlug={productSlug}
               onSuccess={handleSuccess}
-              className='border-0 shadow-none'
+              className="border-0 shadow-none"
             />
           )}
         </div>

@@ -1,9 +1,9 @@
-'use client';
+"use client";
 
-import { useEffect } from 'react';
-import { logger } from '@/lib/logger';
-import { Button } from '@/components/ui/button';
-import { routing } from '@/i18n/routing-config';
+import { useEffect } from "react";
+import { logger } from "@/lib/logger";
+import { Button } from "@/components/ui/button";
+import { routing } from "@/i18n/routing-config";
 
 interface GlobalErrorProps {
   error: Error & { digest?: string };
@@ -17,29 +17,29 @@ interface GlobalErrorProps {
  */
 const translations = {
   en: {
-    title: 'Something went wrong!',
+    title: "Something went wrong!",
     description:
-      'We apologize for the inconvenience. An unexpected error has occurred.',
-    tryAgain: 'Try again',
-    goHome: 'Go to homepage',
-    devDetails: 'Error Details (Development Only)',
+      "We apologize for the inconvenience. An unexpected error has occurred.",
+    tryAgain: "Try again",
+    goHome: "Go to homepage",
+    devDetails: "Error Details (Development Only)",
   },
   zh: {
-    title: '出错了！',
-    description: '非常抱歉给您带来不便。发生了意外错误。',
-    tryAgain: '重试',
-    goHome: '返回首页',
-    devDetails: '错误详情（仅开发环境）',
+    title: "出错了！",
+    description: "非常抱歉给您带来不便。发生了意外错误。",
+    tryAgain: "重试",
+    goHome: "返回首页",
+    devDetails: "错误详情（仅开发环境）",
   },
 } as const;
 
-function getLocaleFromBrowser(): 'en' | 'zh' {
-  if (typeof window === 'undefined')
-    return routing.defaultLocale as 'en' | 'zh';
+function getLocaleFromBrowser(): "en" | "zh" {
+  if (typeof window === "undefined")
+    return routing.defaultLocale as "en" | "zh";
 
-  const browserLang = navigator.language?.toLowerCase() || '';
-  if (browserLang.startsWith('zh')) return 'zh';
-  return 'en';
+  const browserLang = navigator.language?.toLowerCase() || "";
+  if (browserLang.startsWith("zh")) return "zh";
+  return "en";
 }
 
 export default function GlobalError({ error, reset }: GlobalErrorProps) {
@@ -49,47 +49,44 @@ export default function GlobalError({ error, reset }: GlobalErrorProps) {
   const t = translations[locale];
 
   useEffect(() => {
-    logger.error('Global error caught', error);
+    logger.error("Global error caught", error);
   }, [error]);
 
   return (
     <html lang={locale}>
       <body>
-        <div className='flex min-h-screen flex-col items-center justify-center bg-background px-4'>
-          <div className='mx-auto max-w-md text-center'>
-            <h1 className='mb-4 text-2xl font-bold text-foreground'>
+        <div className="flex min-h-screen flex-col items-center justify-center bg-background px-4">
+          <div className="mx-auto max-w-md text-center">
+            <h1 className="mb-4 text-2xl font-bold text-foreground">
               {t.title}
             </h1>
-            <p className='mb-6 text-muted-foreground'>{t.description}</p>
-            {process.env.NODE_ENV === 'development' && (
-              <details className='mb-6 text-left'>
-                <summary className='cursor-pointer text-sm font-medium'>
+            <p className="mb-6 text-muted-foreground">{t.description}</p>
+            {process.env.NODE_ENV === "development" && (
+              <details className="mb-6 text-left">
+                <summary className="cursor-pointer text-sm font-medium">
                   {t.devDetails}
                 </summary>
-                <pre className='mt-2 overflow-auto rounded bg-muted p-2 text-xs'>
+                <pre className="mt-2 overflow-auto rounded bg-muted p-2 text-xs">
                   {error.message}
                   {error.stack && (
                     <>
-                      {'\n\n'}
+                      {"\n\n"}
                       {error.stack}
                     </>
                   )}
                 </pre>
               </details>
             )}
-            <div className='space-y-4'>
-              <Button
-                onClick={reset}
-                className='w-full'
-              >
+            <div className="space-y-4">
+              <Button onClick={reset} className="w-full">
                 {t.tryAgain}
               </Button>
               <Button
-                variant='outline'
+                variant="outline"
                 onClick={() => {
                   window.location.href = `/${locale}`;
                 }}
-                className='w-full'
+                className="w-full"
               >
                 {t.goHome}
               </Button>

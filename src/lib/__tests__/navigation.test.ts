@@ -1,9 +1,9 @@
-import { describe, expect, it, vi } from 'vitest';
+import { describe, expect, it, vi } from "vitest";
 import {
   TEST_COUNT_CONSTANTS,
   TEST_SCREEN_CONSTANTS,
   TEST_TIMEOUT_CONSTANTS,
-} from '@/constants/test-constants';
+} from "@/constants/test-constants";
 import {
   getLocalizedHref,
   isActivePath,
@@ -13,44 +13,44 @@ import {
   NAVIGATION_ARIA,
   NAVIGATION_BREAKPOINTS,
   type NavigationItem,
-} from '../navigation';
+} from "../navigation";
 
 // Use vi.hoisted to ensure proper mock setup
 const { mockLocalesConfig } = vi.hoisted(() => ({
   mockLocalesConfig: {
-    locales: ['en', 'zh'],
+    locales: ["en", "zh"],
   },
 }));
 
 // Mock the config/paths module
-vi.mock('@/config/paths', () => ({
+vi.mock("@/config/paths", () => ({
   LOCALES_CONFIG: mockLocalesConfig,
 }));
 
-describe('navigation', () => {
-  describe('NavigationItem interface', () => {
-    it('should have valid NavigationItem structure', () => {
+describe("navigation", () => {
+  describe("NavigationItem interface", () => {
+    it("should have valid NavigationItem structure", () => {
       const item: NavigationItem = {
-        key: 'test',
-        href: '/test',
-        translationKey: 'nav.test',
-        icon: 'test-icon',
+        key: "test",
+        href: "/test",
+        translationKey: "nav.test",
+        icon: "test-icon",
         external: true,
         children: [],
       };
 
-      expect(item.key).toBe('test');
-      expect(item.href).toBe('/test');
-      expect(item.translationKey).toBe('nav.test');
-      expect(item.icon).toBe('test-icon');
+      expect(item.key).toBe("test");
+      expect(item.href).toBe("/test");
+      expect(item.translationKey).toBe("nav.test");
+      expect(item.icon).toBe("test-icon");
       expect(item.external).toBe(true);
       expect(Array.isArray(item.children)).toBe(true);
     });
   });
 
-  describe('mainNavigation', () => {
-    it('should have all required navigation items', () => {
-      const expectedKeys = ['home', 'about', 'products', 'blog'];
+  describe("mainNavigation", () => {
+    it("should have all required navigation items", () => {
+      const expectedKeys = ["home", "about", "products", "blog"];
       const actualKeys = mainNavigation.map((item) => item.key);
 
       expectedKeys.forEach((key) => {
@@ -58,7 +58,7 @@ describe('navigation', () => {
       });
     });
 
-    it('should have valid structure for all items', () => {
+    it("should have valid structure for all items", () => {
       mainNavigation.forEach((item) => {
         expect(item.key).toBeTruthy();
         expect(item.href).toBeTruthy();
@@ -68,138 +68,138 @@ describe('navigation', () => {
       });
     });
 
-    it('should have home item pointing to root', () => {
-      const homeItem = mainNavigation.find((item) => item.key === 'home');
+    it("should have home item pointing to root", () => {
+      const homeItem = mainNavigation.find((item) => item.key === "home");
       expect(homeItem).toBeDefined();
-      expect(homeItem!.href).toBe('/');
+      expect(homeItem!.href).toBe("/");
     });
 
-    it('should have unique keys', () => {
+    it("should have unique keys", () => {
       const keys = mainNavigation.map((item) => item.key);
       const uniqueKeys = new Set(keys);
       expect(keys.length).toBe(uniqueKeys.size);
     });
 
-    it('should have unique hrefs', () => {
+    it("should have unique hrefs", () => {
       const hrefs = mainNavigation.map((item) => item.href);
       const uniqueHrefs = new Set(hrefs);
       expect(hrefs.length).toBe(uniqueHrefs.size);
     });
   });
 
-  describe('mobileNavigation', () => {
-    it('should be the same as mainNavigation', () => {
+  describe("mobileNavigation", () => {
+    it("should be the same as mainNavigation", () => {
       expect(mobileNavigation).toBe(mainNavigation);
     });
   });
 
-  describe('isActivePath', () => {
-    it('should return true for exact root path match', () => {
-      expect(isActivePath('/', '/')).toBe(true);
-      expect(isActivePath('/en', '/')).toBe(true);
-      expect(isActivePath('/zh', '/')).toBe(true);
+  describe("isActivePath", () => {
+    it("should return true for exact root path match", () => {
+      expect(isActivePath("/", "/")).toBe(true);
+      expect(isActivePath("/en", "/")).toBe(true);
+      expect(isActivePath("/zh", "/")).toBe(true);
     });
 
-    it('should return false for root path when current path is not root', () => {
-      expect(isActivePath('/about', '/')).toBe(false);
-      expect(isActivePath('/en/about', '/')).toBe(false);
-      expect(isActivePath('/zh/products', '/')).toBe(false);
+    it("should return false for root path when current path is not root", () => {
+      expect(isActivePath("/about", "/")).toBe(false);
+      expect(isActivePath("/en/about", "/")).toBe(false);
+      expect(isActivePath("/zh/products", "/")).toBe(false);
     });
 
-    it('should return true for matching paths', () => {
-      expect(isActivePath('/about', '/about')).toBe(true);
-      expect(isActivePath('/en/about', '/about')).toBe(true);
-      expect(isActivePath('/zh/about', '/about')).toBe(true);
+    it("should return true for matching paths", () => {
+      expect(isActivePath("/about", "/about")).toBe(true);
+      expect(isActivePath("/en/about", "/about")).toBe(true);
+      expect(isActivePath("/zh/about", "/about")).toBe(true);
     });
 
-    it('should return true for sub-paths', () => {
-      expect(isActivePath('/about/team', '/about')).toBe(true);
-      expect(isActivePath('/en/about/team', '/about')).toBe(true);
-      expect(isActivePath('/zh/products/enterprise', '/products')).toBe(true);
+    it("should return true for sub-paths", () => {
+      expect(isActivePath("/about/team", "/about")).toBe(true);
+      expect(isActivePath("/en/about/team", "/about")).toBe(true);
+      expect(isActivePath("/zh/products/enterprise", "/products")).toBe(true);
     });
 
-    it('should return false for non-matching paths', () => {
-      expect(isActivePath('/about', '/products')).toBe(false);
-      expect(isActivePath('/en/about', '/products')).toBe(false);
-      expect(isActivePath('/zh/services', '/products')).toBe(false);
+    it("should return false for non-matching paths", () => {
+      expect(isActivePath("/about", "/products")).toBe(false);
+      expect(isActivePath("/en/about", "/products")).toBe(false);
+      expect(isActivePath("/zh/services", "/products")).toBe(false);
     });
 
-    it('should handle paths with trailing slashes', () => {
-      expect(isActivePath('/about/', '/about')).toBe(true);
-      expect(isActivePath('/en/about/', '/about')).toBe(true);
+    it("should handle paths with trailing slashes", () => {
+      expect(isActivePath("/about/", "/about")).toBe(true);
+      expect(isActivePath("/en/about/", "/about")).toBe(true);
     });
 
-    it('should handle edge cases', () => {
-      expect(isActivePath('', '/')).toBe(true);
-      expect(isActivePath('/en', '/')).toBe(true);
-      expect(isActivePath('/zh', '/')).toBe(true);
+    it("should handle edge cases", () => {
+      expect(isActivePath("", "/")).toBe(true);
+      expect(isActivePath("/en", "/")).toBe(true);
+      expect(isActivePath("/zh", "/")).toBe(true);
     });
 
-    it('should not match partial path segments', () => {
-      expect(isActivePath('/aboutus', '/about')).toBe(false);
-      expect(isActivePath('/en/aboutus', '/about')).toBe(false);
+    it("should not match partial path segments", () => {
+      expect(isActivePath("/aboutus", "/about")).toBe(false);
+      expect(isActivePath("/en/aboutus", "/about")).toBe(false);
     });
 
-    it('should handle item paths that already end with slash', () => {
+    it("should handle item paths that already end with slash", () => {
       // This test covers line 85 where cleanItemPath already ends with '/'
-      expect(isActivePath('/about/team', '/about/')).toBe(true);
-      expect(isActivePath('/en/about/team', '/about/')).toBe(true);
-      expect(isActivePath('/zh/products/enterprise', '/products/')).toBe(true);
+      expect(isActivePath("/about/team", "/about/")).toBe(true);
+      expect(isActivePath("/en/about/team", "/about/")).toBe(true);
+      expect(isActivePath("/zh/products/enterprise", "/products/")).toBe(true);
     });
   });
 
-  describe('getLocalizedHref', () => {
-    it('should return external URLs unchanged', () => {
-      expect(getLocalizedHref('https://example.com', 'en')).toBe(
-        'https://example.com',
+  describe("getLocalizedHref", () => {
+    it("should return external URLs unchanged", () => {
+      expect(getLocalizedHref("https://example.com", "en")).toBe(
+        "https://example.com",
       );
-      expect(getLocalizedHref('http://example.com', 'zh')).toBe(
-        'http://example.com',
-      );
-    });
-
-    it('should return mailto links unchanged', () => {
-      expect(getLocalizedHref('mailto:test@example.com', 'en')).toBe(
-        'mailto:test@example.com',
+      expect(getLocalizedHref("http://example.com", "zh")).toBe(
+        "http://example.com",
       );
     });
 
-    it('should return tel links unchanged', () => {
-      expect(getLocalizedHref('tel:+1234567890', 'en')).toBe('tel:+1234567890');
-    });
-
-    it('should localize root path', () => {
-      expect(getLocalizedHref('/', 'en')).toBe('/en');
-      expect(getLocalizedHref('/', 'zh')).toBe('/zh');
-    });
-
-    it('should localize internal paths', () => {
-      expect(getLocalizedHref('/about', 'en')).toBe('/en/about');
-      expect(getLocalizedHref('/about', 'zh')).toBe('/zh/about');
-      expect(getLocalizedHref('/products/enterprise', 'en')).toBe(
-        '/en/products/enterprise',
+    it("should return mailto links unchanged", () => {
+      expect(getLocalizedHref("mailto:test@example.com", "en")).toBe(
+        "mailto:test@example.com",
       );
     });
 
-    it('should handle paths with query parameters', () => {
-      expect(getLocalizedHref('/search?q=test', 'en')).toBe(
-        '/en/search?q=test',
-      );
-      expect(getLocalizedHref('/products?category=web', 'zh')).toBe(
-        '/zh/products?category=web',
+    it("should return tel links unchanged", () => {
+      expect(getLocalizedHref("tel:+1234567890", "en")).toBe("tel:+1234567890");
+    });
+
+    it("should localize root path", () => {
+      expect(getLocalizedHref("/", "en")).toBe("/en");
+      expect(getLocalizedHref("/", "zh")).toBe("/zh");
+    });
+
+    it("should localize internal paths", () => {
+      expect(getLocalizedHref("/about", "en")).toBe("/en/about");
+      expect(getLocalizedHref("/about", "zh")).toBe("/zh/about");
+      expect(getLocalizedHref("/products/enterprise", "en")).toBe(
+        "/en/products/enterprise",
       );
     });
 
-    it('should handle paths with hash fragments', () => {
-      expect(getLocalizedHref('/about#team', 'en')).toBe('/en/about#team');
-      expect(getLocalizedHref('/docs#installation', 'zh')).toBe(
-        '/zh/docs#installation',
+    it("should handle paths with query parameters", () => {
+      expect(getLocalizedHref("/search?q=test", "en")).toBe(
+        "/en/search?q=test",
+      );
+      expect(getLocalizedHref("/products?category=web", "zh")).toBe(
+        "/zh/products?category=web",
+      );
+    });
+
+    it("should handle paths with hash fragments", () => {
+      expect(getLocalizedHref("/about#team", "en")).toBe("/en/about#team");
+      expect(getLocalizedHref("/docs#installation", "zh")).toBe(
+        "/zh/docs#installation",
       );
     });
   });
 
-  describe('NAVIGATION_BREAKPOINTS', () => {
-    it('should have all required breakpoints', () => {
+  describe("NAVIGATION_BREAKPOINTS", () => {
+    it("should have all required breakpoints", () => {
       expect(NAVIGATION_BREAKPOINTS.mobile).toBe(
         TEST_SCREEN_CONSTANTS.MOBILE_WIDTH,
       );
@@ -211,7 +211,7 @@ describe('navigation', () => {
       );
     });
 
-    it('should have ascending breakpoint values', () => {
+    it("should have ascending breakpoint values", () => {
       expect(NAVIGATION_BREAKPOINTS.mobile).toBeLessThan(
         NAVIGATION_BREAKPOINTS.tablet,
       );
@@ -220,7 +220,7 @@ describe('navigation', () => {
       );
     });
 
-    it('should be readonly', () => {
+    it("should be readonly", () => {
       expect(() => {
         // @ts-expect-error - Testing readonly property
         NAVIGATION_BREAKPOINTS.mobile = 500;
@@ -228,8 +228,8 @@ describe('navigation', () => {
     });
   });
 
-  describe('NAVIGATION_ANIMATIONS', () => {
-    it('should have all required animation durations', () => {
+  describe("NAVIGATION_ANIMATIONS", () => {
+    it("should have all required animation durations", () => {
       expect(NAVIGATION_ANIMATIONS.mobileMenuToggle).toBe(
         TEST_TIMEOUT_CONSTANTS.MEDIUM_DELAY,
       );
@@ -239,14 +239,14 @@ describe('navigation', () => {
       expect(NAVIGATION_ANIMATIONS.hoverTransition).toBe(100);
     });
 
-    it('should have reasonable duration values', () => {
+    it("should have reasonable duration values", () => {
       Object.values(NAVIGATION_ANIMATIONS).forEach((duration) => {
         expect(duration).toBeGreaterThan(0);
         expect(duration).toBeLessThan(1000); // Should be under 1 second
       });
     });
 
-    it('should be readonly', () => {
+    it("should be readonly", () => {
       expect(() => {
         // @ts-expect-error - Testing readonly property
         NAVIGATION_ANIMATIONS.mobileMenuToggle = 500;
@@ -254,48 +254,48 @@ describe('navigation', () => {
     });
   });
 
-  describe('NAVIGATION_ARIA', () => {
-    it('should have all required ARIA labels', () => {
-      expect(NAVIGATION_ARIA.mainNav).toBe('Main navigation');
-      expect(NAVIGATION_ARIA.mobileMenuButton).toBe('Toggle mobile menu');
-      expect(NAVIGATION_ARIA.mobileMenu).toBe('Mobile navigation menu');
-      expect(NAVIGATION_ARIA.languageSelector).toBe('Language selector');
-      expect(NAVIGATION_ARIA.themeSelector).toBe('Theme selector');
-      expect(NAVIGATION_ARIA.skipToContent).toBe('Skip to main content');
+  describe("NAVIGATION_ARIA", () => {
+    it("should have all required ARIA labels", () => {
+      expect(NAVIGATION_ARIA.mainNav).toBe("Main navigation");
+      expect(NAVIGATION_ARIA.mobileMenuButton).toBe("Toggle mobile menu");
+      expect(NAVIGATION_ARIA.mobileMenu).toBe("Mobile navigation menu");
+      expect(NAVIGATION_ARIA.languageSelector).toBe("Language selector");
+      expect(NAVIGATION_ARIA.themeSelector).toBe("Theme selector");
+      expect(NAVIGATION_ARIA.skipToContent).toBe("Skip to main content");
     });
 
-    it('should have descriptive labels', () => {
+    it("should have descriptive labels", () => {
       Object.values(NAVIGATION_ARIA).forEach((label) => {
         expect(label.length).toBeGreaterThan(TEST_COUNT_CONSTANTS.MEDIUM);
         expect(label).toMatch(/^[A-Z]/); // Should start with capital letter
       });
     });
 
-    it('should be readonly', () => {
+    it("should be readonly", () => {
       expect(() => {
         // @ts-expect-error - Testing readonly property
-        NAVIGATION_ARIA.mainNav = 'Changed';
+        NAVIGATION_ARIA.mainNav = "Changed";
       }).toThrow();
     });
   });
 
-  describe('integration tests', () => {
-    it('should work with real navigation items', () => {
-      const aboutItem = mainNavigation.find((item) => item.key === 'about');
+  describe("integration tests", () => {
+    it("should work with real navigation items", () => {
+      const aboutItem = mainNavigation.find((item) => item.key === "about");
       expect(aboutItem).toBeDefined();
 
-      const localizedHref = getLocalizedHref(aboutItem!.href, 'en');
-      expect(localizedHref).toBe('/en/about');
+      const localizedHref = getLocalizedHref(aboutItem!.href, "en");
+      expect(localizedHref).toBe("/en/about");
 
-      const isActive = isActivePath('/en/about', aboutItem!.href);
+      const isActive = isActivePath("/en/about", aboutItem!.href);
       expect(isActive).toBe(true);
     });
 
-    it('should handle all navigation items correctly', () => {
+    it("should handle all navigation items correctly", () => {
       mainNavigation.forEach((item) => {
         // Test localization
-        const enHref = getLocalizedHref(item.href, 'en');
-        const zhHref = getLocalizedHref(item.href, 'zh');
+        const enHref = getLocalizedHref(item.href, "en");
+        const zhHref = getLocalizedHref(item.href, "zh");
 
         expect(enHref).toMatch(/^\/en/);
         expect(zhHref).toMatch(/^\/zh/);

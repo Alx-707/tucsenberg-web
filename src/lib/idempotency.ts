@@ -9,9 +9,9 @@
  * 3. 重复请求会返回缓存的结果
  */
 
-import { NextRequest, NextResponse } from 'next/server';
-import { logger } from '@/lib/logger';
-import { HTTP_BAD_REQUEST, HTTP_OK } from '@/constants';
+import { NextRequest, NextResponse } from "next/server";
+import { logger } from "@/lib/logger";
+import { HTTP_BAD_REQUEST, HTTP_OK } from "@/constants";
 
 /**
  * 幂等键缓存接口
@@ -61,7 +61,7 @@ setInterval(cleanExpiredCache, 60 * 60 * 1000);
  * 从请求中提取幂等键
  */
 export function getIdempotencyKey(request: NextRequest): string | null {
-  return request.headers.get('Idempotency-Key');
+  return request.headers.get("Idempotency-Key");
 }
 
 /**
@@ -119,7 +119,7 @@ async function handleWithIdempotencyKey<T>(
   // 检查缓存
   const cached = checkIdempotencyKey(idempotencyKey);
   if (cached) {
-    logger.info('Returning cached result for idempotency key', {
+    logger.info("Returning cached result for idempotency key", {
       key: idempotencyKey,
       age: Date.now() - cached.timestamp,
     });
@@ -136,7 +136,7 @@ async function handleWithIdempotencyKey<T>(
     saveIdempotencyKey(idempotencyKey, result, HTTP_OK);
     return NextResponse.json(result, { status: HTTP_OK });
   } catch (error) {
-    logger.error('Request handler failed', {
+    logger.error("Request handler failed", {
       error: error as Error,
       idempotencyKey,
     });
@@ -162,7 +162,7 @@ async function handleWithoutIdempotencyKey<T>(
     }
     return NextResponse.json(result, { status: HTTP_OK });
   } catch (error) {
-    logger.error('Request handler failed', { error: error as Error });
+    logger.error("Request handler failed", { error: error as Error });
     throw error;
   }
 }
@@ -210,13 +210,13 @@ export function withIdempotency<T>(
 
   // 检查是否必须提供幂等键
   if (required && !idempotencyKey) {
-    logger.warn('Missing required Idempotency-Key header');
+    logger.warn("Missing required Idempotency-Key header");
     return Promise.resolve(
       NextResponse.json(
         {
-          error: 'Missing Idempotency-Key header',
+          error: "Missing Idempotency-Key header",
           message:
-            'This endpoint requires an Idempotency-Key header to prevent duplicate requests',
+            "This endpoint requires an Idempotency-Key header to prevent duplicate requests",
         },
         { status: HTTP_BAD_REQUEST },
       ),
@@ -247,25 +247,25 @@ export function generateIdempotencyKey(): string {
   const timestamp = Date.now();
 
   if (
-    typeof crypto !== 'undefined' &&
-    typeof crypto.randomUUID === 'function'
+    typeof crypto !== "undefined" &&
+    typeof crypto.randomUUID === "function"
   ) {
-    return `${timestamp}-${crypto.randomUUID().replaceAll('-', '')}`;
+    return `${timestamp}-${crypto.randomUUID().replaceAll("-", "")}`;
   }
 
   if (
-    typeof crypto !== 'undefined' &&
-    typeof crypto.getRandomValues === 'function'
+    typeof crypto !== "undefined" &&
+    typeof crypto.getRandomValues === "function"
   ) {
     const buf = new Uint32Array(3);
     crypto.getRandomValues(buf);
     const random = Array.from(buf, (value) =>
-      value.toString(36).padStart(4, '0'),
-    ).join('');
+      value.toString(36).padStart(4, "0"),
+    ).join("");
     return `${timestamp}-${random}`;
   }
 
-  throw new Error('Secure random generator unavailable for idempotency key');
+  throw new Error("Secure random generator unavailable for idempotency key");
 }
 
 /**

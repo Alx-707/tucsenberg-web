@@ -1,5 +1,5 @@
-import { env } from '@/lib/env';
-import { logger } from '@/lib/logger';
+import { env } from "@/lib/env";
+import { logger } from "@/lib/logger";
 
 /**
  * Parse the configured Turnstile allowed hostnames.
@@ -9,7 +9,7 @@ function parseConfiguredHosts(): string[] {
   if (!hosts) return [];
 
   return hosts
-    .split(',')
+    .split(",")
     .map((value: string) => value.trim().toLowerCase())
     .filter(Boolean);
 }
@@ -26,7 +26,7 @@ function deriveFallbackHosts(): string[] {
       hosts.add(new URL(baseUrl).hostname.toLowerCase());
     } catch (error) {
       logger.warn(
-        'Failed to parse NEXT_PUBLIC_BASE_URL for Turnstile host validation',
+        "Failed to parse NEXT_PUBLIC_BASE_URL for Turnstile host validation",
         {
           baseUrl,
           error,
@@ -39,7 +39,7 @@ function deriveFallbackHosts(): string[] {
     hosts.add(env.VERCEL_URL.toLowerCase());
   }
 
-  hosts.add('localhost');
+  hosts.add("localhost");
 
   return Array.from(hosts);
 }
@@ -71,16 +71,16 @@ export function isAllowedTurnstileHostname(hostname?: string | null): boolean {
  * Can be extended via TURNSTILE_ALLOWED_ACTIONS env variable (comma-separated).
  */
 const DEFAULT_ALLOWED_ACTIONS = [
-  'contact_form',
-  'newsletter_subscribe',
-  'product_inquiry',
+  "contact_form",
+  "newsletter_subscribe",
+  "product_inquiry",
 ];
 
 const allowedActionsMemo = (() => {
   const envActions = process.env.TURNSTILE_ALLOWED_ACTIONS;
   if (envActions) {
     return envActions
-      .split(',')
+      .split(",")
       .map((a: string) => a.trim())
       .filter(Boolean);
   }
@@ -88,7 +88,7 @@ const allowedActionsMemo = (() => {
 })();
 
 const expectedActionMemo = (
-  (env.TURNSTILE_EXPECTED_ACTION as string | undefined) || 'contact_form'
+  (env.TURNSTILE_EXPECTED_ACTION as string | undefined) || "contact_form"
 ).trim();
 
 /**

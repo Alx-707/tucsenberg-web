@@ -1,11 +1,11 @@
-'use client';
+"use client";
 
-import { useCallback, useEffect, useRef, useState } from 'react';
-import Link from 'next/link';
-import { Download, MessageSquare } from 'lucide-react';
-import { cn } from '@/lib/utils';
-import { InquiryDrawer } from '@/components/products/inquiry-drawer';
-import { Button } from '@/components/ui/button';
+import { useCallback, useEffect, useRef, useState } from "react";
+import Link from "next/link";
+import { Download, MessageSquare } from "lucide-react";
+import { cn } from "@/lib/utils";
+import { InquiryDrawer } from "@/components/products/inquiry-drawer";
+import { Button } from "@/components/ui/button";
 
 export interface ProductActionsProps {
   /** Product slug for API submission */
@@ -34,40 +34,36 @@ function ActionButtons({
   pdfHref,
   requestQuoteLabel,
   downloadPdfLabel,
-  size = 'lg',
+  size = "lg",
   fullWidth = false,
 }: {
   onRequestQuote: () => void;
   pdfHref: string | undefined;
   requestQuoteLabel: string;
   downloadPdfLabel: string | undefined;
-  size?: 'default' | 'sm' | 'lg';
+  size?: "default" | "sm" | "lg";
   fullWidth?: boolean;
 }) {
   return (
-    <div className={cn('flex gap-3', fullWidth && 'flex-1')}>
+    <div className={cn("flex gap-3", fullWidth && "flex-1")}>
       <Button
         size={size}
         onClick={onRequestQuote}
-        className={cn(fullWidth && 'flex-1')}
+        className={cn(fullWidth && "flex-1")}
       >
-        <MessageSquare className='mr-2 h-4 w-4' />
+        <MessageSquare className="mr-2 h-4 w-4" />
         {requestQuoteLabel}
       </Button>
 
       {pdfHref !== undefined && downloadPdfLabel !== undefined && (
         <Button
           size={size}
-          variant='outline'
+          variant="outline"
           asChild
-          className={cn(fullWidth && 'flex-1')}
+          className={cn(fullWidth && "flex-1")}
         >
-          <Link
-            href={pdfHref}
-            target='_blank'
-            rel='noreferrer'
-          >
-            <Download className='mr-2 h-4 w-4' />
+          <Link href={pdfHref} target="_blank" rel="noreferrer">
+            <Download className="mr-2 h-4 w-4" />
             {downloadPdfLabel}
           </Link>
         </Button>
@@ -97,20 +93,20 @@ function StickyBar({
   return (
     <div
       className={cn(
-        'fixed inset-x-0 bottom-0 z-50 border-t bg-background/95 px-4 py-3 shadow-lg backdrop-blur transition-transform duration-300 supports-[backdrop-filter]:bg-background/80',
-        visible ? 'translate-y-0' : 'translate-y-full',
+        "fixed inset-x-0 bottom-0 z-50 border-t bg-background/95 px-4 py-3 shadow-lg backdrop-blur transition-transform duration-300 supports-[backdrop-filter]:bg-background/80",
+        visible ? "translate-y-0" : "translate-y-full",
       )}
     >
-      <div className='container mx-auto flex items-center justify-between gap-4'>
-        <div className='min-w-0 flex-1'>
-          <p className='truncate text-sm font-medium'>{productName}</p>
+      <div className="container mx-auto flex items-center justify-between gap-4">
+        <div className="min-w-0 flex-1">
+          <p className="truncate text-sm font-medium">{productName}</p>
         </div>
         <ActionButtons
           onRequestQuote={onRequestQuote}
           pdfHref={pdfHref}
           requestQuoteLabel={requestQuoteLabel}
           downloadPdfLabel={downloadPdfLabel}
-          size='default'
+          size="default"
         />
       </div>
     </div>
@@ -161,7 +157,7 @@ export function ProductActions({
 
     const observer = new IntersectionObserver(handleIntersection, {
       threshold: 0,
-      rootMargin: '-64px 0px 0px 0px', // Account for header height
+      rootMargin: "-64px 0px 0px 0px", // Account for header height
     });
 
     // Observe is a valid pattern for IntersectionObserver - not initializing from props
@@ -178,14 +174,14 @@ export function ProductActions({
       {/* Main CTA Buttons */}
       <div
         ref={ctaRef}
-        className={cn('flex flex-col gap-3 sm:flex-row', className)}
+        className={cn("flex flex-col gap-3 sm:flex-row", className)}
       >
         <ActionButtons
           onRequestQuote={handleRequestQuote}
           pdfHref={pdfHref}
           requestQuoteLabel={requestQuoteLabel}
           downloadPdfLabel={downloadPdfLabel}
-          size='lg'
+          size="lg"
         />
       </div>
 

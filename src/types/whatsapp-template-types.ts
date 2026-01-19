@@ -1,4 +1,4 @@
-import { ZERO } from '@/constants';
+import { ZERO } from "@/constants";
 
 /**
  * WhatsApp Template Message Type Definitions
@@ -9,7 +9,7 @@ import { ZERO } from '@/constants';
 
 // Template Parameter Types
 export interface TemplateParameter {
-  type: 'text' | 'currency' | 'date_time' | 'image' | 'document' | 'video';
+  type: "text" | "currency" | "date_time" | "image" | "document" | "video";
   text?: string;
   currency?: {
     fallback_value: string;
@@ -36,15 +36,15 @@ export interface TemplateParameter {
 
 // Template Component Types
 export interface TemplateComponent {
-  type: 'header' | 'body' | 'footer' | 'button';
-  sub_type?: 'quick_reply' | 'url' | 'phone_number';
+  type: "header" | "body" | "footer" | "button";
+  sub_type?: "quick_reply" | "url" | "phone_number";
   index?: number;
   parameters?: TemplateParameter[];
 }
 
 // Template Language Configuration
 export interface TemplateLanguage {
-  policy: 'deterministic';
+  policy: "deterministic";
   code: string;
 }
 
@@ -57,39 +57,39 @@ export interface TemplateMessage {
 
 // Extended Template Types
 export interface HeaderComponent extends TemplateComponent {
-  type: 'header';
+  type: "header";
   parameters?: Array<
     TemplateParameter & {
-      type: 'text' | 'image' | 'document' | 'video';
+      type: "text" | "image" | "document" | "video";
     }
   >;
 }
 
 export interface BodyComponent extends TemplateComponent {
-  type: 'body';
+  type: "body";
   parameters?: Array<
     TemplateParameter & {
-      type: 'text' | 'currency' | 'date_time';
+      type: "text" | "currency" | "date_time";
     }
   >;
 }
 
 export interface FooterComponent extends TemplateComponent {
-  type: 'footer';
+  type: "footer";
   parameters?: Array<
     TemplateParameter & {
-      type: 'text';
+      type: "text";
     }
   >;
 }
 
 export interface ButtonComponent extends TemplateComponent {
-  type: 'button';
-  sub_type: 'quick_reply' | 'url' | 'phone_number';
+  type: "button";
+  sub_type: "quick_reply" | "url" | "phone_number";
   index: number;
   parameters?: Array<
     TemplateParameter & {
-      type: 'text';
+      type: "text";
     }
   >;
 }
@@ -109,69 +109,69 @@ export interface TemplateValidationResult {
 
 // Template Parameter Builder Helpers
 export interface TextParameterBuilder {
-  type: 'text';
+  type: "text";
   text: string;
 }
 
 export interface CurrencyParameterBuilder {
-  type: 'currency';
+  type: "currency";
   fallback_value: string;
   code: string;
   amount_1000: number;
 }
 
 export interface DateTimeParameterBuilder {
-  type: 'date_time';
+  type: "date_time";
   fallback_value: string;
 }
 
 export interface MediaParameterBuilder {
-  type: 'image' | 'document' | 'video';
+  type: "image" | "document" | "video";
   id?: string;
   link?: string;
   filename?: string; // Only for documents
 }
 
 // Template Utility Types
-export type TemplateComponentType = TemplateComponent['type'];
-export type TemplateParameterType = TemplateParameter['type'];
-export type ButtonSubType = ButtonComponent['sub_type'];
+export type TemplateComponentType = TemplateComponent["type"];
+export type TemplateParameterType = TemplateParameter["type"];
+export type ButtonSubType = ButtonComponent["sub_type"];
 
 // Template Constants
 export const TEMPLATE_COMPONENT_TYPES = [
-  'header',
-  'body',
-  'footer',
-  'button',
+  "header",
+  "body",
+  "footer",
+  "button",
 ] as const;
 
 export const TEMPLATE_PARAMETER_TYPES = [
-  'text',
-  'currency',
-  'date_time',
-  'image',
-  'document',
-  'video',
+  "text",
+  "currency",
+  "date_time",
+  "image",
+  "document",
+  "video",
 ] as const;
 
-export const BUTTON_SUB_TYPES = ['quick_reply', 'url', 'phone_number'] as const;
+export const BUTTON_SUB_TYPES = ["quick_reply", "url", "phone_number"] as const;
 
 export const SUPPORTED_LANGUAGE_CODES = [
-  'en_US', // English (US)
-  'en_GB', // English (UK)
-  'es_ES', // Spanish (Spain)
-  'es_MX', // Spanish (Mexico)
-  'pt_BR', // Portuguese (Brazil)
-  'fr_FR', // French (France)
-  'de_DE', // German (Germany)
-  'it_IT', // Italian (Italy)
-  'ru_RU', // Russian (Russia)
-  'ar_AR', // Arabic
-  'hi_IN', // Hindi (India)
-  'zh_CN', // Chinese (Simplified)
-  'zh_TW', // Chinese (Traditional)
-  'ja_JP', // Japanese (Japan)
-  'ko_KR', // Korean (South Korea)
+  "en_US", // English (US)
+  "en_GB", // English (UK)
+  "es_ES", // Spanish (Spain)
+  "es_MX", // Spanish (Mexico)
+  "pt_BR", // Portuguese (Brazil)
+  "fr_FR", // French (France)
+  "de_DE", // German (Germany)
+  "it_IT", // Italian (Italy)
+  "ru_RU", // Russian (Russia)
+  "ar_AR", // Arabic
+  "hi_IN", // Hindi (India)
+  "zh_CN", // Chinese (Simplified)
+  "zh_TW", // Chinese (Traditional)
+  "ja_JP", // Japanese (Japan)
+  "ko_KR", // Korean (South Korea)
 ] as const;
 
 // Type Guards
@@ -204,25 +204,25 @@ export function isValidLanguageCode(
 export function isHeaderComponent(
   component: TemplateComponent,
 ): component is HeaderComponent {
-  return component.type === 'header';
+  return component.type === "header";
 }
 
 export function isBodyComponent(
   component: TemplateComponent,
 ): component is BodyComponent {
-  return component.type === 'body';
+  return component.type === "body";
 }
 
 export function isFooterComponent(
   component: TemplateComponent,
 ): component is FooterComponent {
-  return component.type === 'footer';
+  return component.type === "footer";
 }
 
 export function isButtonComponent(
   component: TemplateComponent,
 ): component is ButtonComponent {
-  return component.type === 'button';
+  return component.type === "button";
 }
 
 // Template Validation Functions
@@ -234,40 +234,40 @@ export function validateTemplateParameter(
 
   const validateText = () => {
     if (!parameter.text) {
-      errors.push('Text parameter must have text value');
+      errors.push("Text parameter must have text value");
     }
   };
 
   const validateCurrency = () => {
     if (!parameter.currency) {
-      errors.push('Currency parameter must have currency object');
+      errors.push("Currency parameter must have currency object");
       return;
     }
     if (!parameter.currency.code) {
-      errors.push('Currency parameter must have currency code');
+      errors.push("Currency parameter must have currency code");
     }
     if (!parameter.currency.fallback_value) {
-      errors.push('Currency parameter must have fallback value');
+      errors.push("Currency parameter must have fallback value");
     }
-    if (typeof parameter.currency.amount_1000 !== 'number') {
-      errors.push('Currency parameter must have numeric amount_1000');
+    if (typeof parameter.currency.amount_1000 !== "number") {
+      errors.push("Currency parameter must have numeric amount_1000");
     }
   };
 
   const validateDateTime = () => {
     if (!parameter.date_time?.fallback_value) {
-      errors.push('Date time parameter must have fallback value');
+      errors.push("Date time parameter must have fallback value");
     }
   };
 
   const validateMedia = () => {
     let media: { id?: string; link?: string } | undefined;
 
-    if (parameter.type === 'image') {
+    if (parameter.type === "image") {
       media = parameter.image;
-    } else if (parameter.type === 'document') {
+    } else if (parameter.type === "document") {
       media = parameter.document;
-    } else if (parameter.type === 'video') {
+    } else if (parameter.type === "video") {
       media = parameter.video;
     }
 
@@ -281,18 +281,18 @@ export function validateTemplateParameter(
   }
 
   switch (parameter.type) {
-    case 'text':
+    case "text":
       validateText();
       break;
-    case 'currency':
+    case "currency":
       validateCurrency();
       break;
-    case 'date_time':
+    case "date_time":
       validateDateTime();
       break;
-    case 'image':
-    case 'document':
-    case 'video':
+    case "image":
+    case "document":
+    case "video":
       validateMedia();
       break;
     default:
@@ -317,15 +317,15 @@ export function validateTemplateComponent(
     errors.push(`Invalid component type: ${component.type}`);
   }
 
-  if (component.type === 'button') {
+  if (component.type === "button") {
     if (!component.sub_type) {
-      errors.push('Button component must have sub_type');
+      errors.push("Button component must have sub_type");
     } else if (!isValidButtonSubType(component.sub_type)) {
       errors.push(`Invalid button sub_type: ${component.sub_type}`);
     }
 
-    if (typeof component.index !== 'number') {
-      errors.push('Button component must have numeric index');
+    if (typeof component.index !== "number") {
+      errors.push("Button component must have numeric index");
     }
   }
 
@@ -357,18 +357,18 @@ export function validateTemplateMessage(
   const warnings: string[] = [];
 
   if (!template.name) {
-    errors.push('Template must have a name');
+    errors.push("Template must have a name");
   }
 
   if (!template.language?.code) {
-    errors.push('Template must have language code');
+    errors.push("Template must have language code");
   } else if (!isValidLanguageCode(template.language.code)) {
     warnings.push(
       `Language code ${template.language.code} may not be supported`,
     );
   }
 
-  if (template.language?.policy !== 'deterministic') {
+  if (template.language?.policy !== "deterministic") {
     errors.push('Template language policy must be "deterministic"');
   }
 
@@ -396,7 +396,7 @@ export function validateTemplateMessage(
 // Template Builder Helper Functions
 export function createTextParameter(text: string): TextParameterBuilder {
   return {
-    type: 'text',
+    type: "text",
     text,
   };
 }
@@ -407,7 +407,7 @@ export function createCurrencyParameter(
   fallback_value: string,
 ): CurrencyParameterBuilder {
   return {
-    type: 'currency',
+    type: "currency",
     code,
     amount_1000,
     fallback_value,
@@ -418,13 +418,13 @@ export function createDateTimeParameter(
   fallback_value: string,
 ): DateTimeParameterBuilder {
   return {
-    type: 'date_time',
+    type: "date_time",
     fallback_value,
   };
 }
 
 export function createMediaParameter(
-  type: 'image' | 'document' | 'video',
+  type: "image" | "document" | "video",
   options: { id?: string; link?: string; filename?: string },
 ): MediaParameterBuilder {
   const parameter: MediaParameterBuilder = { type };

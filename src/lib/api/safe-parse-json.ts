@@ -1,8 +1,8 @@
-import type { NextRequest } from 'next/server';
-import { logger } from '@/lib/logger';
+import type { NextRequest } from "next/server";
+import { logger } from "@/lib/logger";
 
 export type SafeJsonParseSuccess<T> = { ok: true; data: T };
-export type SafeJsonParseFailure = { ok: false; error: 'INVALID_JSON' };
+export type SafeJsonParseFailure = { ok: false; error: "INVALID_JSON" };
 export type SafeJsonParseResult<T> =
   | SafeJsonParseSuccess<T>
   | SafeJsonParseFailure;
@@ -25,17 +25,17 @@ export async function safeParseJson<T>(
   try {
     const raw = await req.json();
 
-    if (raw === null || typeof raw !== 'object' || Array.isArray(raw)) {
-      return { ok: false, error: 'INVALID_JSON' };
+    if (raw === null || typeof raw !== "object" || Array.isArray(raw)) {
+      return { ok: false, error: "INVALID_JSON" };
     }
 
     return { ok: true, data: raw as T };
   } catch (error: unknown) {
-    logger.warn('Failed to parse JSON body', {
+    logger.warn("Failed to parse JSON body", {
       route: options?.route,
       error: error instanceof Error ? error.message : String(error),
     });
 
-    return { ok: false, error: 'INVALID_JSON' };
+    return { ok: false, error: "INVALID_JSON" };
   }
 }

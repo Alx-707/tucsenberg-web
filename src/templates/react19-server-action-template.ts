@@ -1,4 +1,4 @@
-'use server';
+"use server";
 
 /**
  * React 19 Server Action模板
@@ -8,8 +8,8 @@
  * @author React 19架构升级项目
  * @description 标准化的Server Action模板，包含错误处理、类型安全、日志记录等最佳实践
  */
-import { z } from 'zod';
-import { logger } from '@/lib/logger';
+import { z } from "zod";
+import { logger } from "@/lib/logger";
 import {
   createErrorResultWithLogging,
   createSuccessResultWithLogging,
@@ -17,16 +17,16 @@ import {
   getFormDataString,
   withErrorHandling,
   type ServerActionResult,
-} from '@/lib/server-action-utils';
+} from "@/lib/server-action-utils";
 
 /**
  * 通用表单数据验证Schema示例
  */
 export const genericFormSchema = z.object({
-  name: z.string().min(2, 'Name must be at least 2 characters'),
-  email: z.string().email('Invalid email address'),
-  message: z.string().min(10, 'Message must be at least 10 characters'),
-  consent: z.boolean().refine((val) => val === true, 'Consent is required'),
+  name: z.string().min(2, "Name must be at least 2 characters"),
+  email: z.string().email("Invalid email address"),
+  message: z.string().min(10, "Message must be at least 10 characters"),
+  consent: z.boolean().refine((val) => val === true, "Consent is required"),
 });
 
 export type GenericFormData = z.infer<typeof genericFormSchema>;
@@ -74,19 +74,19 @@ function validateSecureFormData<T extends object>(
   const baseValidation = schema.safeParse(data);
   if (!baseValidation.success) {
     const errorMessages = baseValidation.error.issues.map((error) => {
-      const field = error.path.join('.');
+      const field = error.path.join(".");
       return `${field}: ${error.message}`;
     });
 
     return {
       success: false,
-      error: 'Validation failed',
+      error: "Validation failed",
       details: errorMessages,
     };
   }
 
   // 时间戳验证（防止重放攻击）
-  if ('submittedAt' in data && typeof data.submittedAt === 'string') {
+  if ("submittedAt" in data && typeof data.submittedAt === "string") {
     const submittedAt = new Date(data.submittedAt);
     const now = new Date();
     const timeDiff = now.getTime() - submittedAt.getTime();
@@ -95,8 +95,8 @@ function validateSecureFormData<T extends object>(
     if (timeDiff > maxAge || timeDiff < 0) {
       return {
         success: false,
-        error: 'Form submission expired or invalid',
-        details: ['Please refresh the page and try again'],
+        error: "Form submission expired or invalid",
+        details: ["Please refresh the page and try again"],
       };
     }
   }
@@ -119,7 +119,7 @@ async function processFormSubmission(
     // 这里实现具体的业务逻辑
     // 例如：保存到数据库、发送邮件、调用外部API等
 
-    logger.info('Processing form submission', {
+    logger.info("Processing form submission", {
       name: validatedData.name,
       email: validatedData.email,
       messageLength: validatedData.message.length,
@@ -131,23 +131,23 @@ async function processFormSubmission(
     // 生成记录ID（实际应用中可能来自数据库）
     const recordId = (() => {
       if (
-        typeof crypto !== 'undefined' &&
-        typeof crypto.randomUUID === 'function'
+        typeof crypto !== "undefined" &&
+        typeof crypto.randomUUID === "function"
       ) {
-        return `record_${crypto.randomUUID().replaceAll('-', '')}`;
+        return `record_${crypto.randomUUID().replaceAll("-", "")}`;
       }
       if (
-        typeof crypto !== 'undefined' &&
-        typeof crypto.getRandomValues === 'function'
+        typeof crypto !== "undefined" &&
+        typeof crypto.getRandomValues === "function"
       ) {
         const buf = new Uint32Array(3);
         crypto.getRandomValues(buf);
         const randomPart = Array.from(buf, (value) =>
-          value.toString(36).padStart(4, '0'),
-        ).join('');
+          value.toString(36).padStart(4, "0"),
+        ).join("");
         return `record_${Date.now()}_${randomPart.substring(0, 12)}`;
       }
-      throw new Error('Secure random generator unavailable for record id');
+      throw new Error("Secure random generator unavailable for record id");
     })();
 
     return {
@@ -155,11 +155,11 @@ async function processFormSubmission(
       recordId,
       metadata: {
         processedAt: new Date().toISOString(),
-        userAgent: 'server-action',
+        userAgent: "server-action",
       },
     };
   } catch (error) {
-    logger.error('Form processing error:', error);
+    logger.error("Form processing error:", error);
     throw error;
   }
 }
@@ -182,21 +182,21 @@ async function processFormSubmission(
  */
 export const genericFormAction = withErrorHandling(
   async (_prevState, formData: FormData): Promise<ServerActionResult> => {
-    logger.info('Generic form action started');
+    logger.info("Generic form action started");
 
     try {
       // 1. 提取表单数据
       const rawData: SecureFormData = {
-        name: getFormDataString(formData, 'name'),
-        email: getFormDataString(formData, 'email'),
-        message: getFormDataString(formData, 'message'),
-        consent: getFormDataBoolean(formData, 'consent'),
-        securityToken: getFormDataString(formData, 'securityToken') || '',
+        name: getFormDataString(formData, "name"),
+        email: getFormDataString(formData, "email"),
+        message: getFormDataString(formData, "message"),
+        consent: getFormDataBoolean(formData, "consent"),
+        securityToken: getFormDataString(formData, "securityToken") || "",
         submittedAt:
-          getFormDataString(formData, 'submittedAt') ||
+          getFormDataString(formData, "submittedAt") ||
           new Date().toISOString(),
         clientFingerprint:
-          getFormDataString(formData, 'clientFingerprint') || '',
+          getFormDataString(formData, "clientFingerprint") || "",
       };
 
       // 2. 验证表单数据
@@ -206,8 +206,8 @@ export const genericFormAction = withErrorHandling(
       );
       if (!validation.success) {
         return createErrorResultWithLogging(
-          validation.error || 'Validation failed',
-          ['VALIDATION_ERROR'],
+          validation.error || "Validation failed",
+          ["VALIDATION_ERROR"],
         );
       }
 
@@ -227,11 +227,11 @@ export const genericFormAction = withErrorHandling(
       await processFormSubmission(validation.data!);
 
       // 5. 返回成功结果
-      return createSuccessResultWithLogging('Form submitted successfully');
+      return createSuccessResultWithLogging("Form submitted successfully");
     } catch (error) {
-      logger.error('Generic form action error:', error);
-      return createErrorResultWithLogging('An unexpected error occurred', [
-        'INTERNAL_ERROR',
+      logger.error("Generic form action error:", error);
+      return createErrorResultWithLogging("An unexpected error occurred", [
+        "INTERNAL_ERROR",
       ]);
     }
   },
@@ -313,11 +313,11 @@ export const USAGE_EXAMPLES = {
   basicForm: {
     schema: genericFormSchema,
     action: genericFormAction,
-    fields: ['name', 'email', 'message', 'consent'],
+    fields: ["name", "email", "message", "consent"],
   },
   customForm: {
     // 参考createCustomServerActionExample创建自定义action
     description:
-      'See createCustomServerActionExample for implementation pattern',
+      "See createCustomServerActionExample for implementation pattern",
   },
 } as const;

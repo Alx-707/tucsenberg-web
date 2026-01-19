@@ -35,7 +35,7 @@ export interface BlogPostMetadata extends ContentMetadata {
 
 // Page specific metadata
 export interface PageMetadata extends ContentMetadata {
-  layout?: 'default' | 'landing' | 'docs' | 'legal';
+  layout?: "default" | "landing" | "docs" | "legal";
   showToc?: boolean;
   lastReviewed?: string;
 }
@@ -59,6 +59,40 @@ export interface Page extends ParsedContent<PageMetadata> {
   metadata: PageMetadata;
 }
 
+/**
+ * Application category for Tucsenberg Glass products.
+ * Used for top-level product organization by use case.
+ */
+export type ApplicationCategory =
+  | "curtain-wall"
+  | "residential"
+  | "commercial"
+  | "glass";
+
+/**
+ * Australian building standards compliance.
+ */
+export interface AustralianStandards {
+  as2047?: boolean; // Windows & External Glazed Doors
+  as1288?: boolean; // Glass in Buildings
+  balRating?:
+    | "BAL-LOW"
+    | "BAL-12.5"
+    | "BAL-19"
+    | "BAL-29"
+    | "BAL-40"
+    | "BAL-FZ";
+}
+
+/**
+ * Thermal performance specifications for glazing products.
+ */
+export interface ThermalPerformance {
+  uValue?: string; // e.g., "1.8 W/m²K"
+  shgc?: string; // Solar Heat Gain Coefficient, e.g., "0.25"
+  vlt?: string; // Visible Light Transmittance, e.g., "70%"
+}
+
 // Product specific metadata (for MDX frontmatter)
 export interface ProductMetadata extends ContentMetadata {
   coverImage: string;
@@ -73,6 +107,12 @@ export interface ProductMetadata extends ContentMetadata {
   packaging?: string;
   portOfLoading?: string;
   relatedProducts?: string[];
+
+  // Tucsenberg Glass specific fields
+  applicationCategory?: ApplicationCategory;
+  productLine?: string; // e.g., "Sliding Windows", "Unitized System"
+  australianStandards?: AustralianStandards;
+  thermalPerformance?: ThermalPerformance;
 }
 
 // Product content
@@ -81,17 +121,17 @@ export interface Product extends ParsedContent<ProductMetadata> {
 }
 
 // Content collection types
-export type ContentType = 'posts' | 'pages' | 'products';
+export type ContentType = "posts" | "pages" | "products";
 export type _ContentType = ContentType;
-export type Locale = 'en' | 'zh';
+export type Locale = "en" | "zh";
 
 // Content query options
 export interface ContentQueryOptions {
   locale?: Locale;
   limit?: number;
   offset?: number;
-  sortBy?: 'publishedAt' | 'updatedAt' | 'title';
-  sortOrder?: 'asc' | 'desc';
+  sortBy?: "publishedAt" | "updatedAt" | "title";
+  sortOrder?: "asc" | "desc";
   tags?: string[];
   categories?: string[];
   featured?: boolean;
@@ -154,6 +194,10 @@ export interface ProductSummary {
   categories?: string[];
   tags?: string[];
   featured?: boolean;
+
+  // Tucsenberg Glass specific fields
+  applicationCategory?: ApplicationCategory;
+  productLine?: string;
 
   // Timestamps for SEO (sitemap lastmod)
   publishedAt: string;
@@ -233,8 +277,8 @@ export type GetProductCategoriesCachedFn = (
 export interface PostListOptions {
   limit?: number;
   offset?: number;
-  sortBy?: ContentQueryOptions['sortBy'];
-  sortOrder?: ContentQueryOptions['sortOrder'];
+  sortBy?: ContentQueryOptions["sortBy"];
+  sortOrder?: ContentQueryOptions["sortOrder"];
   tags?: string[];
   categories?: string[];
   featured?: boolean;
@@ -342,7 +386,7 @@ export class ContentError extends Error {
     public _filePath?: string,
   ) {
     super(message);
-    this.name = 'ContentError';
+    this.name = "ContentError";
   }
 }
 
@@ -352,17 +396,17 @@ export class ContentValidationError extends ContentError {
     public _validationErrors: string[],
     filePath?: string,
   ) {
-    super(message, 'VALIDATION_ERROR', filePath);
-    this.name = 'ContentValidationError';
+    super(message, "VALIDATION_ERROR", filePath);
+    this.name = "ContentValidationError";
   }
 }
 
 export class ContentNotFoundError extends ContentError {
   constructor(slug: string, locale?: Locale) {
     super(
-      `Content not found: ${slug}${locale ? ` (locale: ${locale})` : ''}`,
-      'NOT_FOUND',
+      `Content not found: ${slug}${locale ? ` (locale: ${locale})` : ""}`,
+      "NOT_FOUND",
     );
-    this.name = 'ContentNotFoundError';
+    this.name = "ContentNotFoundError";
   }
 }

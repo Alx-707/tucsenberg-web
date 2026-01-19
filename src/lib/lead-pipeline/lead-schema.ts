@@ -3,8 +3,8 @@
  * Unified Zod schema for all lead sources: contact, product inquiry, newsletter
  */
 
-import { z } from 'zod';
-import { sanitizePlainText } from '@/lib/security-validation';
+import { z } from "zod";
+import { sanitizePlainText } from "@/lib/security-validation";
 import {
   COUNT_TEN,
   MAGIC_255,
@@ -12,7 +12,7 @@ import {
   MAGIC_2500,
   ONE,
   PERCENTAGE_FULL,
-} from '@/constants';
+} from "@/constants";
 
 // Validation limits for lead fields - using named constants from project constants
 const EMAIL_MAX_LENGTH = MAGIC_255 - 1; // 254 (RFC 5321)
@@ -27,9 +27,9 @@ const REQUIREMENTS_MAX_LENGTH = MAGIC_2000;
  * Lead type discriminator
  */
 export const LEAD_TYPES = {
-  CONTACT: 'contact',
-  PRODUCT: 'product',
-  NEWSLETTER: 'newsletter',
+  CONTACT: "contact",
+  PRODUCT: "product",
+  NEWSLETTER: "newsletter",
 } as const;
 
 export type LeadType = (typeof LEAD_TYPES)[keyof typeof LEAD_TYPES];
@@ -38,10 +38,10 @@ export type LeadType = (typeof LEAD_TYPES)[keyof typeof LEAD_TYPES];
  * Subject options for contact form
  */
 export const CONTACT_SUBJECTS = {
-  PRODUCT_INQUIRY: 'product_inquiry',
-  DISTRIBUTOR: 'distributor',
-  OEM_ODM: 'oem_odm',
-  OTHER: 'other',
+  PRODUCT_INQUIRY: "product_inquiry",
+  DISTRIBUTOR: "distributor",
+  OEM_ODM: "oem_odm",
+  OTHER: "other",
 } as const;
 
 export type ContactSubject =
@@ -108,7 +108,7 @@ export const newsletterLeadSchema = z.object({
  * Unified lead schema using discriminated union
  * Allows type-safe handling of different lead types
  */
-export const leadSchema = z.discriminatedUnion('type', [
+export const leadSchema = z.discriminatedUnion("type", [
   contactLeadSchema,
   productLeadSchema,
   newsletterLeadSchema,

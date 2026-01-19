@@ -15,7 +15,7 @@ export interface OKLCHColor {
 /**
  * 颜色对比度等级
  */
-export type ContrastLevel = 'AA' | 'AAA';
+export type ContrastLevel = "AA" | "AAA";
 
 /**
  * 主题颜色定义

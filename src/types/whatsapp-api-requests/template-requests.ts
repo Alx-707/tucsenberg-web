@@ -10,13 +10,13 @@
 export interface TemplateCreateRequest {
   name: string;
   language: string;
-  category: 'AUTHENTICATION' | 'MARKETING' | 'UTILITY';
+  category: "AUTHENTICATION" | "MARKETING" | "UTILITY";
   components: Array<{
-    type: 'HEADER' | 'BODY' | 'FOOTER' | 'BUTTONS';
-    format?: 'TEXT' | 'IMAGE' | 'DOCUMENT' | 'VIDEO';
+    type: "HEADER" | "BODY" | "FOOTER" | "BUTTONS";
+    format?: "TEXT" | "IMAGE" | "DOCUMENT" | "VIDEO";
     text?: string;
     buttons?: Array<{
-      type: 'QUICK_REPLY' | 'URL' | 'PHONE_NUMBER';
+      type: "QUICK_REPLY" | "URL" | "PHONE_NUMBER";
       text: string;
       url?: string;
       phone_number?: string;
@@ -42,7 +42,7 @@ export interface TemplateDeleteRequest {
  * Template status update request
  */
 export interface TemplateStatusUpdateRequest {
-  messaging_product: 'whatsapp';
+  messaging_product: "whatsapp";
   name: string;
-  status: 'APPROVED' | 'PENDING' | 'REJECTED' | 'DISABLED';
+  status: "APPROVED" | "PENDING" | "REJECTED" | "DISABLED";
 }

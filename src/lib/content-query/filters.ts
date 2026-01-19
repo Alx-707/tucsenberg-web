@@ -7,8 +7,8 @@ import type {
   BlogPostMetadata,
   ContentQueryOptions,
   ParsedContent,
-} from '@/types/content.types';
-import { getContentConfig } from '@/lib/content-utils';
+} from "@/types/content.types";
+import { getContentConfig } from "@/lib/content-utils";
 
 /**
  * Check if draft posts are allowed based on configuration and options

@@ -12,27 +12,24 @@
  * 基础功能测试请参考 card-structure-accessibility-core.test.tsx
  */
 
-import { render, screen } from '@testing-library/react';
-import { describe, expect, it } from 'vitest';
+import { render, screen } from "@testing-library/react";
+import { describe, expect, it } from "vitest";
 import {
   Card,
   CardContent,
   CardDescription,
   CardHeader,
   CardTitle,
-} from '../card';
+} from "../card";
 
-describe('Card Structure & Accessibility Tests - Advanced', () => {
-  describe('高级可访问性特性', () => {
-    it('supports ARIA attributes', () => {
+describe("Card Structure & Accessibility Tests - Advanced", () => {
+  describe("高级可访问性特性", () => {
+    it("supports ARIA attributes", () => {
       render(
-        <Card
-          aria-labelledby='card-title'
-          aria-describedby='card-description'
-        >
+        <Card aria-labelledby="card-title" aria-describedby="card-description">
           <CardHeader>
-            <CardTitle id='card-title'>Card with ARIA</CardTitle>
-            <CardDescription id='card-description'>
+            <CardTitle id="card-title">Card with ARIA</CardTitle>
+            <CardDescription id="card-description">
               Description for screen readers
             </CardDescription>
           </CardHeader>
@@ -42,11 +39,11 @@ describe('Card Structure & Accessibility Tests - Advanced', () => {
         </Card>,
       );
 
-      const card = screen.getByLabelText('Card with ARIA');
-      expect(card).toHaveAttribute('aria-describedby', 'card-description');
+      const card = screen.getByLabelText("Card with ARIA");
+      expect(card).toHaveAttribute("aria-describedby", "card-description");
     });
 
-    it('supports keyboard navigation', () => {
+    it("supports keyboard navigation", () => {
       render(
         <Card tabIndex={0}>
           <CardHeader>
@@ -59,22 +56,19 @@ describe('Card Structure & Accessibility Tests - Advanced', () => {
       );
 
       const card = screen
-        .getByText('Keyboard Navigation Card')
+        .getByText("Keyboard Navigation Card")
         .closest('[tabindex="0"]');
-      const button = screen.getByText('Focusable Button');
+      const button = screen.getByText("Focusable Button");
 
       expect(card).toBeInTheDocument();
       expect(button).toBeInTheDocument();
     });
   });
 
-  describe('高级国际化支持', () => {
-    it('supports internationalization', () => {
+  describe("高级国际化支持", () => {
+    it("supports internationalization", () => {
       render(
-        <Card
-          lang='es'
-          dir='ltr'
-        >
+        <Card lang="es" dir="ltr">
           <CardHeader>
             <CardTitle>Tarjeta en Español</CardTitle>
             <CardDescription>Esta es una tarjeta en español</CardDescription>
@@ -83,9 +77,9 @@ describe('Card Structure & Accessibility Tests - Advanced', () => {
       );
 
       const card = screen
-        .getByText('Tarjeta en Español')
+        .getByText("Tarjeta en Español")
         .closest('[lang="es"]');
-      expect(card).toHaveAttribute('dir', 'ltr');
+      expect(card).toHaveAttribute("dir", "ltr");
     });
   });
 });

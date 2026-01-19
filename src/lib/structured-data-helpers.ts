@@ -1,12 +1,12 @@
-import { getTranslations } from 'next-intl/server';
-import { I18nPerformanceMonitor } from '@/lib/i18n-performance';
+import { getTranslations } from "next-intl/server";
+import { I18nPerformanceMonitor } from "@/lib/i18n-performance";
 import {
   generateArticleData,
   generateBreadcrumbData,
   generateOrganizationData,
   generateProductData,
   generateWebSiteData,
-} from '@/lib/structured-data-generators';
+} from "@/lib/structured-data-generators";
 import type {
   ArticleData,
   BreadcrumbData,
@@ -14,9 +14,9 @@ import type {
   OrganizationData,
   ProductData,
   WebSiteData,
-} from '@/lib/structured-data-types';
-import { SITE_CONFIG, type PageType } from '@/config/paths';
-import { generateCanonicalURL } from '@/services/url-generator';
+} from "@/lib/structured-data-types";
+import { SITE_CONFIG, type PageType } from "@/config/paths";
+import { generateCanonicalURL } from "@/services/url-generator";
 
 /**
  * 创建面包屑导航结构化数据
@@ -25,7 +25,7 @@ export function createBreadcrumbStructuredData(
   locale: Locale,
   breadcrumbs: Array<{ name: string; url: string }>,
 ) {
-  return generateLocalizedStructuredData(locale, 'BreadcrumbList', {
+  return generateLocalizedStructuredData(locale, "BreadcrumbList", {
     items: breadcrumbs.map((item, index) => ({
       name: item.name,
       url: item.url,
@@ -49,7 +49,7 @@ export function createArticleStructuredData(
     image?: string;
   },
 ) {
-  return generateLocalizedStructuredData(locale, 'Article', article);
+  return generateLocalizedStructuredData(locale, "Article", article);
 }
 
 // 兼容测试所需的便捷导出：根据测试用例命名
@@ -73,7 +73,7 @@ export function generateArticleSchema(
   locale: Locale,
 ) {
   // 为缺失的 URL 使用规范化地址（测试中已对该函数进行 mock）
-  const url = generateCanonicalURL('blog' as PageType, locale);
+  const url = generateCanonicalURL("blog" as PageType, locale);
   const now = new Date().toISOString();
   const payload: Partial<ArticleData> = {
     title: article.title,
@@ -95,7 +95,7 @@ export function generateArticleSchema(
 
   return generateLocalizedStructuredData(
     locale,
-    'Article',
+    "Article",
     payload as ArticleData,
   );
 }
@@ -115,7 +115,7 @@ export function generateProductSchema(
 ) {
   // 规范化价格为 number | undefined 以适配内部类型
   const normalizedPrice =
-    typeof product.price === 'string' ? Number(product.price) : product.price;
+    typeof product.price === "string" ? Number(product.price) : product.price;
   const payload: Partial<ProductData> = {
     name: product.name,
     description: product.description,
@@ -142,7 +142,7 @@ export function generateProductSchema(
 
   return generateLocalizedStructuredData(
     locale,
-    'Product',
+    "Product",
     payload as ProductData,
   );
 }
@@ -153,14 +153,14 @@ export function generateFAQSchema(
 ) {
   // 直接构建 FAQPage 结构以满足测试断言
   return {
-    '@context': 'https://schema.org',
-    '@type': 'FAQPage',
-    'mainEntity': faq.map((item) => ({
-      '@type': 'Question',
-      'name': item.question,
-      'acceptedAnswer': {
-        '@type': 'Answer',
-        'text': item.answer,
+    "@context": "https://schema.org",
+    "@type": "FAQPage",
+    mainEntity: faq.map((item) => ({
+      "@type": "Question",
+      name: item.question,
+      acceptedAnswer: {
+        "@type": "Answer",
+        text: item.answer,
       },
     })),
   } as Record<string, unknown>;
@@ -178,14 +178,14 @@ export function generateLocalBusinessSchema(
   _locale: Locale,
 ) {
   const schema: Record<string, unknown> = {
-    '@context': 'https://schema.org',
-    '@type': 'LocalBusiness',
-    'name': business.name,
-    'address': {
-      '@type': 'PostalAddress',
-      'streetAddress': business.address,
+    "@context": "https://schema.org",
+    "@type": "LocalBusiness",
+    name: business.name,
+    address: {
+      "@type": "PostalAddress",
+      streetAddress: business.address,
     },
-    'url': SITE_CONFIG.baseUrl,
+    url: SITE_CONFIG.baseUrl,
   };
 
   if (business.phone) {
@@ -209,32 +209,32 @@ export function generateLocalBusinessSchema(
  */
 export async function generateLocalizedStructuredData(
   locale: Locale,
-  type: 'Organization' | 'WebSite' | 'Article' | 'Product' | 'BreadcrumbList',
+  type: "Organization" | "WebSite" | "Article" | "Product" | "BreadcrumbList",
   data: unknown,
 ): Promise<Record<string, unknown>> {
   try {
     // 使用原始的getTranslations，缓存已在底层实现
-    const t = await getTranslations({ locale, namespace: 'structured-data' });
+    const t = await getTranslations({ locale, namespace: "structured-data" });
 
     switch (type) {
-      case 'Organization':
+      case "Organization":
         return generateOrganizationData(
           t,
           data as OrganizationData | undefined,
         );
-      case 'WebSite':
+      case "WebSite":
         return generateWebSiteData(t, data as WebSiteData | undefined);
-      case 'Article':
+      case "Article":
         return generateArticleData(t, locale, data as ArticleData);
-      case 'Product':
+      case "Product":
         return generateProductData(t, data as ProductData);
-      case 'BreadcrumbList':
+      case "BreadcrumbList":
         return generateBreadcrumbData(data as BreadcrumbData);
       default:
         // 对于未知类型，返回基础结构而不使用扩展运算符
         return {
-          '@context': 'https://schema.org',
-          '@type': type,
+          "@context": "https://schema.org",
+          "@type": type,
         };
     }
   } catch (error) {
@@ -245,8 +245,8 @@ export async function generateLocalizedStructuredData(
     }
     // 错误情况下也不使用扩展运算符，避免潜在的安全风险
     return {
-      '@context': 'https://schema.org',
-      '@type': type,
+      "@context": "https://schema.org",
+      "@type": type,
     };
   }
 }

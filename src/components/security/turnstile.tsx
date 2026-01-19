@@ -1,9 +1,9 @@
-'use client';
+"use client";
 
-import { useCallback, useEffect, useRef, useState } from 'react';
-import { Turnstile } from '@marsidev/react-turnstile';
-import { env } from '@/lib/env';
-import { logger } from '@/lib/logger';
+import { useCallback, useEffect, useRef, useState } from "react";
+import { Turnstile } from "@marsidev/react-turnstile";
+import { env } from "@/lib/env";
+import { logger } from "@/lib/logger";
 
 /**
  * 使用全局 logger（开发环境输出，生产环境静默）
@@ -19,8 +19,8 @@ interface TurnstileProps {
   onExpire?: () => void;
   onLoad?: () => void;
   className?: string;
-  theme?: 'light' | 'dark' | 'auto';
-  size?: 'normal' | 'compact';
+  theme?: "light" | "dark" | "auto";
+  size?: "normal" | "compact";
   tabIndex?: number;
   id?: string;
   action?: string;
@@ -37,36 +37,36 @@ export function TurnstileWidget({
   onExpire,
   onLoad,
   className,
-  theme = 'auto',
-  size = 'normal',
+  theme = "auto",
+  size = "normal",
   tabIndex,
   id,
-  action = env.NEXT_PUBLIC_TURNSTILE_ACTION || 'contact_form',
+  action = env.NEXT_PUBLIC_TURNSTILE_ACTION || "contact_form",
   cData,
 }: TurnstileProps) {
   const siteKey = env.NEXT_PUBLIC_TURNSTILE_SITE_KEY;
   const isBypassMode =
-    process.env.NODE_ENV === 'development' && env.NEXT_PUBLIC_TURNSTILE_BYPASS;
+    process.env.NODE_ENV === "development" && env.NEXT_PUBLIC_TURNSTILE_BYPASS;
   const bypassTriggeredRef = useRef(false);
 
   // All hooks must be called before any conditional returns
   useEffect(() => {
     if (!isBypassMode || bypassTriggeredRef.current) return;
     bypassTriggeredRef.current = true;
-    logger.warn('[DEV] Turnstile bypass mode enabled');
+    logger.warn("[DEV] Turnstile bypass mode enabled");
     const handler = onSuccess ?? onVerify;
     if (handler) {
-      handler('TURNSTILE_BYPASS_TOKEN');
+      handler("TURNSTILE_BYPASS_TOKEN");
     }
   }, [isBypassMode, onSuccess, onVerify]);
 
   useEffect(() => {
     if (!siteKey && !isBypassMode) {
       logger.warn(
-        'Turnstile site key not configured. Bot protection is disabled.',
+        "Turnstile site key not configured. Bot protection is disabled.",
       );
       if (onError) {
-        onError('Turnstile site key not configured');
+        onError("Turnstile site key not configured");
       }
     }
   }, [siteKey, isBypassMode, onError]);
@@ -75,12 +75,12 @@ export function TurnstileWidget({
   if (isBypassMode) {
     return (
       <div
-        className={`turnstile-bypass ${className ?? ''}`}
-        data-testid='turnstile-bypass'
-        role='status'
-        aria-live='polite'
+        className={`turnstile-bypass ${className ?? ""}`}
+        data-testid="turnstile-bypass"
+        role="status"
+        aria-live="polite"
       >
-        <div className='rounded-md border border-amber-300 bg-amber-50 p-3 text-sm text-amber-800 dark:border-amber-700 dark:bg-amber-950 dark:text-amber-200'>
+        <div className="rounded-md border border-amber-300 bg-amber-50 p-3 text-sm text-amber-800 dark:border-amber-700 dark:bg-amber-950 dark:text-amber-200">
           <strong>Dev Mode:</strong> Turnstile verification bypassed
         </div>
       </div>
@@ -90,11 +90,11 @@ export function TurnstileWidget({
   if (!siteKey) {
     return (
       <div
-        className={`turnstile-fallback ${className ?? ''}`}
-        role='status'
-        aria-live='polite'
+        className={`turnstile-fallback ${className ?? ""}`}
+        role="status"
+        aria-live="polite"
       >
-        <div className='text-sm text-destructive'>
+        <div className="text-sm text-destructive">
           Security verification is temporarily unavailable.
         </div>
       </div>
@@ -104,10 +104,10 @@ export function TurnstileWidget({
   if (env.NEXT_PUBLIC_TEST_MODE) {
     return (
       <div
-        className={`turnstile-mock ${className ?? ''}`}
-        data-testid='turnstile-mock'
+        className={`turnstile-mock ${className ?? ""}`}
+        data-testid="turnstile-mock"
       >
-        <div className='text-sm text-muted-foreground'>
+        <div className="text-sm text-muted-foreground">
           Bot protection disabled in test mode
         </div>
       </div>
@@ -122,14 +122,14 @@ export function TurnstileWidget({
   };
 
   const handleError = (error: string) => {
-    logger.error('Turnstile error:', error);
+    logger.error("Turnstile error:", error);
     if (onError) {
       onError(error);
     }
   };
 
   const handleExpire = () => {
-    logger.warn('Turnstile token expired');
+    logger.warn("Turnstile token expired");
     if (onExpire) {
       onExpire();
     }
@@ -142,7 +142,7 @@ export function TurnstileWidget({
   };
 
   return (
-    <div className={`turnstile-container ${className || ''}`}>
+    <div className={`turnstile-container ${className || ""}`}>
       <Turnstile
         siteKey={siteKey}
         onSuccess={handleSuccess}
@@ -221,4 +221,4 @@ export function useTurnstile() {
 }
 
 // Re-export for convenience
-export { Turnstile } from '@marsidev/react-turnstile';
+export { Turnstile } from "@marsidev/react-turnstile";

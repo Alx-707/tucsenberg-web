@@ -8,18 +8,18 @@
 import {
   API_ERROR_CODES,
   type ApiErrorCode,
-} from '@/constants/api-error-codes';
+} from "@/constants/api-error-codes";
 
 /**
  * Translation namespace for API error messages
  */
-export const API_ERROR_NAMESPACE = 'apiErrors' as const;
+export const API_ERROR_NAMESPACE = "apiErrors" as const;
 
 /**
  * Check if a string is a valid API error code
  */
 export function isValidErrorCode(code: unknown): code is ApiErrorCode {
-  if (typeof code !== 'string') return false;
+  if (typeof code !== "string") return false;
   return Object.values(API_ERROR_CODES).includes(code as ApiErrorCode);
 }
 

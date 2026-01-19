@@ -1,22 +1,22 @@
-import React from 'react';
-import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
-import { LanguageToggle } from '@/components/language-toggle';
-import { fireEvent, render } from '@/test/utils';
+import React from "react";
+import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
+import { LanguageToggle } from "@/components/language-toggle";
+import { fireEvent, render } from "@/test/utils";
 
 // Hoisted mock functions
 const { mockPush, mockUsePathname } = vi.hoisted(() => ({
   mockPush: vi.fn(),
-  mockUsePathname: vi.fn(() => '/'),
+  mockUsePathname: vi.fn(() => "/"),
 }));
 
 // Mock next-intl
-vi.mock('next-intl', () => ({
-  useLocale: vi.fn(() => 'en'),
+vi.mock("next-intl", () => ({
+  useLocale: vi.fn(() => "en"),
   useTranslations: vi.fn(() => (key: string) => key),
 }));
 
 // Mock i18n routing (which internally uses next/navigation)
-vi.mock('@/i18n/routing', () => ({
+vi.mock("@/i18n/routing", () => ({
   Link: ({
     children,
     href,
@@ -48,21 +48,21 @@ vi.mock('@/i18n/routing', () => ({
   usePathname: mockUsePathname,
   useRouter: vi.fn(() => ({
     push: mockPush,
-    pathname: '/',
+    pathname: "/",
   })),
 }));
 
 // Mock next/navigation as fallback
-vi.mock('next/navigation', () => ({
+vi.mock("next/navigation", () => ({
   useRouter: vi.fn(() => ({
     push: mockPush,
-    pathname: '/',
+    pathname: "/",
   })),
   usePathname: mockUsePathname,
 }));
 
 // Mock UI components
-vi.mock('@/components/ui/dropdown-menu', () => ({
+vi.mock("@/components/ui/dropdown-menu", () => ({
   DropdownMenu: ({
     children,
     open,
@@ -75,7 +75,7 @@ vi.mock('@/components/ui/dropdown-menu', () => ({
     [key: string]: any;
   }) => (
     <div
-      data-testid='language-dropdown-menu'
+      data-testid="language-dropdown-menu"
       data-open={open}
       onClick={() => onOpenChange?.(!open)}
       {...props}
@@ -86,11 +86,8 @@ vi.mock('@/components/ui/dropdown-menu', () => ({
   DropdownMenuContent: ({
     children,
     ...props
-  }: React.ComponentProps<'div'>) => (
-    <div
-      data-testid='language-dropdown-content'
-      {...props}
-    >
+  }: React.ComponentProps<"div">) => (
+    <div data-testid="language-dropdown-content" {...props}>
       {children}
     </div>
   ),
@@ -109,15 +106,12 @@ vi.mock('@/components/ui/dropdown-menu', () => ({
         children as React.ReactElement,
         {
           ...props,
-          'data-testid': 'language-dropdown-trigger',
+          "data-testid": "language-dropdown-trigger",
         } as any,
       );
     }
     return (
-      <div
-        data-testid='language-dropdown-trigger'
-        {...props}
-      >
+      <div data-testid="language-dropdown-trigger" {...props}>
         {children}
       </div>
     );
@@ -138,8 +132,8 @@ vi.mock('@/components/ui/dropdown-menu', () => ({
       return React.cloneElement(children, {
         ...(children as any).props,
         ...props,
-        'data-testid': 'language-dropdown-item',
-        'onClick': (e: Event) => {
+        "data-testid": "language-dropdown-item",
+        onClick: (e: Event) => {
           // Call both the original onClick and the DropdownMenuItem onClick
           if ((children as any).props.onClick)
             (children as any).props.onClick(e);
@@ -149,9 +143,9 @@ vi.mock('@/components/ui/dropdown-menu', () => ({
     }
     return (
       <div
-        data-testid='language-dropdown-item'
+        data-testid="language-dropdown-item"
         onClick={onClick}
-        role='menuitem'
+        role="menuitem"
         {...props}
       >
         {children}
@@ -160,48 +154,39 @@ vi.mock('@/components/ui/dropdown-menu', () => ({
   },
 }));
 
-vi.mock('@/components/ui/button', () => ({
-  Button: ({ children, ...props }: React.ComponentProps<'button'>) => (
-    <button
-      data-testid='language-toggle-button'
-      {...props}
-    >
+vi.mock("@/components/ui/button", () => ({
+  Button: ({ children, ...props }: React.ComponentProps<"button">) => (
+    <button data-testid="language-toggle-button" {...props}>
       {children}
     </button>
   ),
 }));
 
 // Mock Lucide icons
-vi.mock('lucide-react', () => ({
-  Globe: ({ ...props }: React.ComponentProps<'div'>) => (
-    <span
-      data-testid='globe-icon'
-      {...props}
-    >
+vi.mock("lucide-react", () => ({
+  Globe: ({ ...props }: React.ComponentProps<"div">) => (
+    <span data-testid="globe-icon" {...props}>
       🌐
     </span>
   ),
-  ChevronDown: ({ ...props }: React.ComponentProps<'div'>) => (
-    <span
-      data-testid='chevron-down-icon'
-      {...props}
-    >
+  ChevronDown: ({ ...props }: React.ComponentProps<"div">) => (
+    <span data-testid="chevron-down-icon" {...props}>
       ⌄
     </span>
   ),
-  Loader2: ({ ...props }: React.ComponentProps<'div'>) => (
+  Loader2: ({ ...props }: React.ComponentProps<"div">) => (
     <span
-      data-testid='loader-icon'
-      className='h-[1.2rem] w-[1.2rem] animate-spin'
+      data-testid="loader-icon"
+      className="h-[1.2rem] w-[1.2rem] animate-spin"
       {...props}
     >
       ⟳
     </span>
   ),
-  Check: ({ ...props }: React.ComponentProps<'div'>) => (
+  Check: ({ ...props }: React.ComponentProps<"div">) => (
     <span
-      data-testid='check-icon'
-      className='ml-auto h-4 w-4 text-green-500'
+      data-testid="check-icon"
+      className="ml-auto h-4 w-4 text-green-500"
       {...props}
     >
       ✓
@@ -209,7 +194,7 @@ vi.mock('lucide-react', () => ({
   ),
 }));
 
-describe('LanguageToggle Component', () => {
+describe("LanguageToggle Component", () => {
   beforeEach(() => {
     vi.clearAllMocks();
   });
@@ -218,15 +203,15 @@ describe('LanguageToggle Component', () => {
     vi.restoreAllMocks();
   });
 
-  describe('Basic Rendering', () => {
-    it('should render without errors', () => {
+  describe("Basic Rendering", () => {
+    it("should render without errors", () => {
       expect(() => {
         const { container } = render(<LanguageToggle />);
         expect(container).toBeInTheDocument();
       }).not.toThrow();
     });
 
-    it('should render language toggle button', () => {
+    it("should render language toggle button", () => {
       render(<LanguageToggle />);
 
       const button = document.querySelector(
@@ -239,7 +224,7 @@ describe('LanguageToggle Component', () => {
       expect(globeIcon).toBeInTheDocument();
     });
 
-    it('should render dropdown menu structure', () => {
+    it("should render dropdown menu structure", () => {
       render(<LanguageToggle />);
 
       const dropdown = document.querySelector(
@@ -258,7 +243,7 @@ describe('LanguageToggle Component', () => {
       expect(content).toBeInTheDocument();
     });
 
-    it('should display current language correctly', () => {
+    it("should display current language correctly", () => {
       render(<LanguageToggle />);
 
       // Component should render without errors
@@ -269,8 +254,8 @@ describe('LanguageToggle Component', () => {
     });
   });
 
-  describe('Language Switching', () => {
-    it('should handle English language selection', () => {
+  describe("Language Switching", () => {
+    it("should handle English language selection", () => {
       render(<LanguageToggle />);
 
       // Clear previous calls
@@ -294,7 +279,7 @@ describe('LanguageToggle Component', () => {
       }
     });
 
-    it('should handle Chinese language selection', () => {
+    it("should handle Chinese language selection", () => {
       render(<LanguageToggle />);
 
       // First open the dropdown menu
@@ -315,8 +300,8 @@ describe('LanguageToggle Component', () => {
       }
     });
 
-    it('should maintain current path when switching languages', () => {
-      const testPath = '/about';
+    it("should maintain current path when switching languages", () => {
+      const testPath = "/about";
 
       // Clear mocks and reset
       vi.clearAllMocks();
@@ -350,8 +335,8 @@ describe('LanguageToggle Component', () => {
     });
   });
 
-  describe('Accessibility', () => {
-    it('should have proper ARIA attributes', () => {
+  describe("Accessibility", () => {
+    it("should have proper ARIA attributes", () => {
       render(<LanguageToggle />);
 
       const button = document.querySelector(
@@ -367,14 +352,14 @@ describe('LanguageToggle Component', () => {
       expect(chineseItem).toBeInTheDocument();
 
       if (englishItem) {
-        expect(englishItem).toHaveAttribute('role', 'menuitem');
+        expect(englishItem).toHaveAttribute("role", "menuitem");
       }
       if (chineseItem) {
-        expect(chineseItem).toHaveAttribute('role', 'menuitem');
+        expect(chineseItem).toHaveAttribute("role", "menuitem");
       }
     });
 
-    it('should be keyboard accessible', () => {
+    it("should be keyboard accessible", () => {
       render(<LanguageToggle />);
 
       const button = document.querySelector(
@@ -387,14 +372,14 @@ describe('LanguageToggle Component', () => {
       expect(document.activeElement).toBe(button);
 
       // Should handle keyboard events
-      fireEvent.keyDown(button, { key: 'Enter' });
-      fireEvent.keyDown(button, { key: ' ' });
-      fireEvent.keyDown(button, { key: 'Escape' });
+      fireEvent.keyDown(button, { key: "Enter" });
+      fireEvent.keyDown(button, { key: " " });
+      fireEvent.keyDown(button, { key: "Escape" });
     });
   });
 
-  describe('Internationalization', () => {
-    it('should use correct translations', () => {
+  describe("Internationalization", () => {
+    it("should use correct translations", () => {
       render(<LanguageToggle />);
 
       // Component should render without errors
@@ -404,23 +389,23 @@ describe('LanguageToggle Component', () => {
       expect(dropdown).toBeInTheDocument();
     });
 
-    it('should handle missing translations gracefully', () => {
+    it("should handle missing translations gracefully", () => {
       expect(() => {
         render(<LanguageToggle />);
       }).not.toThrow();
     });
   });
 
-  describe('Edge Cases', () => {
-    it('should handle invalid locale gracefully', () => {
+  describe("Edge Cases", () => {
+    it("should handle invalid locale gracefully", () => {
       expect(() => {
         render(<LanguageToggle />);
       }).not.toThrow();
     });
 
-    it('should handle navigation errors', () => {
+    it("should handle navigation errors", () => {
       mockPush.mockImplementation(() => {
-        throw new Error('Navigation failed');
+        throw new Error("Navigation failed");
       });
 
       render(<LanguageToggle />);
@@ -436,7 +421,7 @@ describe('LanguageToggle Component', () => {
       }
     });
 
-    it('should handle component unmounting', () => {
+    it("should handle component unmounting", () => {
       const { unmount } = render(<LanguageToggle />);
 
       expect(() => {

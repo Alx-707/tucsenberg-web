@@ -5,8 +5,8 @@
  * 提供统一的环境变量访问接口
  */
 
-import { createEnv } from '@t3-oss/env-nextjs';
-import { z } from 'zod';
+import { createEnv } from "@t3-oss/env-nextjs";
+import { z } from "zod";
 
 // 创建类型安全的环境变量配置
 export const env = createEnv({
@@ -54,12 +54,12 @@ export const env = createEnv({
     // Vercel
     VERCEL_URL: z.string().optional(),
     VERCEL_GIT_COMMIT_SHA: z.string().optional(),
-    VERCEL_ENV: z.enum(['development', 'preview', 'production']).optional(),
+    VERCEL_ENV: z.enum(["development", "preview", "production"]).optional(),
 
     // Node Environment
     NODE_ENV: z
-      .enum(['development', 'test', 'production'])
-      .default('development'),
+      .enum(["development", "test", "production"])
+      .default("development"),
 
     // CI/CD
     CI: z.string().optional(),
@@ -68,8 +68,8 @@ export const env = createEnv({
     // Security
     SECURITY_HEADERS_ENABLED: z
       .string()
-      .default('true')
-      .transform((val) => val === 'true'),
+      .default("true")
+      .transform((val) => val === "true"),
     CSP_REPORT_URI: z.string().url().optional(),
 
     // Network & API Configuration
@@ -135,19 +135,19 @@ export const env = createEnv({
     // Feature Flags
     ENABLE_PERFORMANCE_MONITORING: z
       .string()
-      .transform((val) => val === 'true')
+      .transform((val) => val === "true")
       .optional(),
     ENABLE_ERROR_TRACKING: z
       .string()
-      .transform((val) => val === 'true')
+      .transform((val) => val === "true")
       .optional(),
     ENABLE_AB_TESTING: z
       .string()
-      .transform((val) => val === 'true')
+      .transform((val) => val === "true")
       .optional(),
     ENABLE_WHATSAPP_CHAT: z
       .string()
-      .transform((val) => val === 'true')
+      .transform((val) => val === "true")
       .optional(),
   },
 
@@ -158,9 +158,9 @@ export const env = createEnv({
    */
   client: {
     // Base Configuration
-    NEXT_PUBLIC_BASE_URL: z.string().url().default('http://localhost:3000'),
-    NEXT_PUBLIC_APP_NAME: z.string().default('B2B Web Template'),
-    NEXT_PUBLIC_APP_VERSION: z.string().default('1.0.0'),
+    NEXT_PUBLIC_BASE_URL: z.string().url().default("http://localhost:3000"),
+    NEXT_PUBLIC_APP_NAME: z.string().default("B2B Web Template"),
+    NEXT_PUBLIC_APP_VERSION: z.string().default("1.0.0"),
 
     // Analytics & Monitoring
     NEXT_PUBLIC_VERCEL_ANALYTICS_ID: z.string().optional(),
@@ -171,46 +171,46 @@ export const env = createEnv({
     NEXT_PUBLIC_TURNSTILE_ACTION: z.string().optional(),
     NEXT_PUBLIC_TURNSTILE_BYPASS: z
       .string()
-      .default('false')
-      .transform((val) => val === 'true'),
+      .default("false")
+      .transform((val) => val === "true"),
 
     // Feature Flags
     NEXT_PUBLIC_ENABLE_ANALYTICS: z
       .string()
-      .default('true')
-      .transform((val) => val === 'true'),
+      .default("true")
+      .transform((val) => val === "true"),
     NEXT_PUBLIC_ENABLE_ERROR_REPORTING: z
       .string()
-      .default('true')
-      .transform((val) => val === 'true'),
+      .default("true")
+      .transform((val) => val === "true"),
     NEXT_PUBLIC_ENABLE_PERFORMANCE_MONITORING: z
       .string()
-      .default('true')
-      .transform((val) => val === 'true'),
+      .default("true")
+      .transform((val) => val === "true"),
 
     // Development Tools
     NEXT_PUBLIC_DISABLE_REACT_SCAN: z
       .string()
-      .default('false')
-      .transform((val) => val === 'true'),
+      .default("false")
+      .transform((val) => val === "true"),
     NEXT_PUBLIC_DISABLE_DEV_TOOLS: z
       .string()
-      .default('false')
-      .transform((val) => val === 'true'),
+      .default("false")
+      .transform((val) => val === "true"),
     NEXT_PUBLIC_TEST_MODE: z
       .string()
-      .default('false')
-      .transform((val) => val === 'true'),
+      .default("false")
+      .transform((val) => val === "true"),
 
     // Internationalization
-    NEXT_PUBLIC_DEFAULT_LOCALE: z.string().default('en'),
-    NEXT_PUBLIC_SUPPORTED_LOCALES: z.string().default('en,zh'),
+    NEXT_PUBLIC_DEFAULT_LOCALE: z.string().default("en"),
+    NEXT_PUBLIC_SUPPORTED_LOCALES: z.string().default("en,zh"),
 
     // Security
     NEXT_PUBLIC_CSP_NONCE: z.string().optional(),
     NEXT_PUBLIC_SECURITY_MODE: z
-      .enum(['strict', 'moderate', 'relaxed'])
-      .default('strict'),
+      .enum(["strict", "moderate", "relaxed"])
+      .default("strict"),
   },
 
   /**
@@ -365,7 +365,7 @@ export function getEnvVar(
 export function requireEnvVar(key: keyof typeof env): string {
   // eslint-disable-next-line security/detect-object-injection
   const value = env[key];
-  if (!value || typeof value === 'boolean' || typeof value === 'number') {
+  if (!value || typeof value === "boolean" || typeof value === "number") {
     throw new Error(
       `Required environment variable ${key} is not set or is not a string`,
     );
@@ -375,22 +375,22 @@ export function requireEnvVar(key: keyof typeof env): string {
 
 // 常用环境变量的便捷访问器
 export const envUtils = {
-  isDevelopment: () => env.NODE_ENV === 'development',
-  isProduction: () => env.NODE_ENV === 'production',
-  isTest: () => env.NODE_ENV === 'test',
+  isDevelopment: () => env.NODE_ENV === "development",
+  isProduction: () => env.NODE_ENV === "production",
+  isTest: () => env.NODE_ENV === "test",
 
   // WhatsApp相关
-  getWhatsAppToken: () => requireEnvVar('WHATSAPP_ACCESS_TOKEN'),
-  getWhatsAppPhoneId: () => requireEnvVar('WHATSAPP_PHONE_NUMBER_ID'),
+  getWhatsAppToken: () => requireEnvVar("WHATSAPP_ACCESS_TOKEN"),
+  getWhatsAppPhoneId: () => requireEnvVar("WHATSAPP_PHONE_NUMBER_ID"),
 
   // Turnstile相关
-  getTurnstileSecret: () => requireEnvVar('TURNSTILE_SECRET_KEY'),
-  getTurnstileSiteKey: () => requireEnvVar('NEXT_PUBLIC_TURNSTILE_SITE_KEY'),
+  getTurnstileSecret: () => requireEnvVar("TURNSTILE_SECRET_KEY"),
+  getTurnstileSiteKey: () => requireEnvVar("NEXT_PUBLIC_TURNSTILE_SITE_KEY"),
 
   // Resend相关
-  getResendApiKey: () => requireEnvVar('RESEND_API_KEY'),
+  getResendApiKey: () => requireEnvVar("RESEND_API_KEY"),
 
   // Airtable相关
-  getAirtableToken: () => requireEnvVar('AIRTABLE_API_KEY'),
-  getAirtableBaseId: () => requireEnvVar('AIRTABLE_BASE_ID'),
+  getAirtableToken: () => requireEnvVar("AIRTABLE_API_KEY"),
+  getAirtableBaseId: () => requireEnvVar("AIRTABLE_BASE_ID"),
 } as const;

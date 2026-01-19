@@ -1,10 +1,10 @@
-import { expect, test, type Locator } from '@playwright/test';
-import { getHeaderMobileMenuButton, getNav } from './helpers/navigation';
+import { expect, test, type Locator } from "@playwright/test";
+import { getHeaderMobileMenuButton, getNav } from "./helpers/navigation";
 import {
   removeInterferingElements,
   waitForLoadWithFallback,
   waitForStablePage,
-} from './test-environment-setup';
+} from "./test-environment-setup";
 
 interface Box {
   x: number;
@@ -36,34 +36,34 @@ async function expectBoundingBox(locator: Locator, name: string): Promise<Box> {
   return box as Box;
 }
 
-const LOCALES = ['en', 'zh'] as const;
+const LOCALES = ["en", "zh"] as const;
 
 const VIEWPORTS = [
   {
-    name: 'mobile',
+    name: "mobile",
     viewport: { width: 375, height: 800 },
     expectMobileHeader: true,
   },
   {
     // Regression guard: was previously treated as "desktop" at md (768) and caused overlap.
-    name: 'tablet',
+    name: "tablet",
     viewport: { width: 900, height: 800 },
     expectMobileHeader: true,
   },
   {
     // Desktop navigation is visible from 1024px (lg). CTA may still be hidden below wider breakpoints.
-    name: 'desktop-1024',
+    name: "desktop-1024",
     viewport: { width: 1024, height: 800 },
     expectMobileHeader: false,
   },
   {
-    name: 'desktop-1280',
+    name: "desktop-1280",
     viewport: { width: 1280, height: 800 },
     expectMobileHeader: false,
   },
 ] as const;
 
-test.describe('Header layout (bbox regression)', () => {
+test.describe("Header layout (bbox regression)", () => {
   for (const locale of LOCALES) {
     for (const { name, viewport, expectMobileHeader } of VIEWPORTS) {
       test(`${locale} / ${name}`, async ({ page }) => {
@@ -91,43 +91,43 @@ test.describe('Header layout (bbox regression)', () => {
         await expect(mobileMenuButton).not.toBeVisible({ timeout: 10_000 });
 
         const logoLink = page
-          .getByRole('link', { name: /B2B Web Template/ })
+          .getByRole("link", { name: /B2B Web Template/ })
           .first();
 
-        const logoBox = await expectBoundingBox(logoLink, 'Logo link');
-        const navBox = await expectBoundingBox(nav, 'Desktop navigation');
+        const logoBox = await expectBoundingBox(logoLink, "Logo link");
+        const navBox = await expectBoundingBox(nav, "Desktop navigation");
 
         expect(
           boxesOverlap(logoBox, navBox),
-          'Logo should not overlap desktop navigation',
+          "Logo should not overlap desktop navigation",
         ).toBe(false);
 
         // CTA is intentionally hidden on narrower desktop viewports.
-        const cta = page.getByTestId('header-cta').first();
+        const cta = page.getByTestId("header-cta").first();
         if (await cta.isVisible().catch(() => false)) {
-          const ctaBox = await expectBoundingBox(cta, 'Header CTA');
+          const ctaBox = await expectBoundingBox(cta, "Header CTA");
           expect(
             boxesOverlap(navBox, ctaBox),
-            'Desktop navigation should not overlap CTA',
+            "Desktop navigation should not overlap CTA",
           ).toBe(false);
           expect(
             boxesOverlap(logoBox, ctaBox),
-            'Logo should not overlap CTA',
+            "Logo should not overlap CTA",
           ).toBe(false);
         }
 
         // Optional: if the language toggle button is already hydrated, assert it doesn't overlap.
         const languageToggle = page
-          .getByTestId('language-toggle-button')
+          .getByTestId("language-toggle-button")
           .first();
         if (await languageToggle.isVisible().catch(() => false)) {
           const languageBox = await expectBoundingBox(
             languageToggle,
-            'Language toggle',
+            "Language toggle",
           );
           expect(
             boxesOverlap(navBox, languageBox),
-            'Desktop navigation should not overlap language toggle',
+            "Desktop navigation should not overlap language toggle",
           ).toBe(false);
         }
       });

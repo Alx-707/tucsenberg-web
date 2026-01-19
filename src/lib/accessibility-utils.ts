@@ -7,12 +7,12 @@ import {
   KEYBOARD_KEYS,
   type ColorSchemePreference,
   type WCAGLevel,
-} from '@/lib/accessibility-types';
-import { checkContrastCompliance, type OKLCHColor } from '@/lib/colors';
-import { logger } from '@/lib/logger';
-import { COUNT_TRIPLE, ONE, ZERO } from '@/constants';
-import { OPACITY_CONSTANTS } from '@/constants/app-constants';
-import { MAGIC_6 } from '@/constants/count';
+} from "@/lib/accessibility-types";
+import { checkContrastCompliance, type OKLCHColor } from "@/lib/colors";
+import { logger } from "@/lib/logger";
+import { COUNT_TRIPLE, ONE, ZERO } from "@/constants";
+import { OPACITY_CONSTANTS } from "@/constants/app-constants";
+import { MAGIC_6 } from "@/constants/count";
 
 /**
  * 无障碍性工具类
@@ -22,17 +22,17 @@ export class AccessibilityUtils {
    * 检查是否启用了减少动画偏好
    */
   static prefersReducedMotion(): boolean {
-    if (typeof window === 'undefined') return false;
+    if (typeof window === "undefined") return false;
 
     try {
-      if (!window.matchMedia || typeof window.matchMedia !== 'function') {
+      if (!window.matchMedia || typeof window.matchMedia !== "function") {
         return false;
       }
 
-      const mediaQuery = window.matchMedia('(prefers-reduced-motion: reduce)');
+      const mediaQuery = window.matchMedia("(prefers-reduced-motion: reduce)");
       return mediaQuery?.matches ?? false;
     } catch (error) {
-      logger.warn('Failed to check prefers-reduced-motion', {
+      logger.warn("Failed to check prefers-reduced-motion", {
         error: error instanceof Error ? error.message : String(error),
       });
       return false;
@@ -43,17 +43,17 @@ export class AccessibilityUtils {
    * 检查是否启用了高对比度模式
    */
   static prefersHighContrast(): boolean {
-    if (typeof window === 'undefined') return false;
+    if (typeof window === "undefined") return false;
 
     try {
-      if (!window.matchMedia || typeof window.matchMedia !== 'function') {
+      if (!window.matchMedia || typeof window.matchMedia !== "function") {
         return false;
       }
 
-      const mediaQuery = window.matchMedia('(prefers-contrast: high)');
+      const mediaQuery = window.matchMedia("(prefers-contrast: high)");
       return mediaQuery?.matches ?? false;
     } catch (error) {
-      logger.warn('Failed to check prefers-contrast', {
+      logger.warn("Failed to check prefers-contrast", {
         error: error instanceof Error ? error.message : String(error),
       });
       return false;
@@ -64,17 +64,17 @@ export class AccessibilityUtils {
    * 检查是否偏好暗色主题
    */
   static prefersDarkColorScheme(): boolean {
-    if (typeof window === 'undefined') return false;
+    if (typeof window === "undefined") return false;
 
     try {
-      if (!window.matchMedia || typeof window.matchMedia !== 'function') {
+      if (!window.matchMedia || typeof window.matchMedia !== "function") {
         return false;
       }
 
-      const mediaQuery = window.matchMedia('(prefers-color-scheme: dark)');
+      const mediaQuery = window.matchMedia("(prefers-color-scheme: dark)");
       return mediaQuery?.matches ?? false;
     } catch (error) {
-      logger.warn('Failed to check prefers-color-scheme dark', {
+      logger.warn("Failed to check prefers-color-scheme dark", {
         error: error instanceof Error ? error.message : String(error),
       });
       return false;
@@ -85,29 +85,29 @@ export class AccessibilityUtils {
    * 获取用户的颜色偏好
    */
   static getColorSchemePreference(): ColorSchemePreference {
-    if (typeof window === 'undefined') return 'no-preference';
+    if (typeof window === "undefined") return "no-preference";
 
     try {
-      if (!window.matchMedia || typeof window.matchMedia !== 'function') {
-        return 'no-preference';
+      if (!window.matchMedia || typeof window.matchMedia !== "function") {
+        return "no-preference";
       }
 
-      const darkQuery = window.matchMedia('(prefers-color-scheme: dark)');
+      const darkQuery = window.matchMedia("(prefers-color-scheme: dark)");
       if (darkQuery?.matches) {
-        return 'dark';
+        return "dark";
       }
 
-      const lightQuery = window.matchMedia('(prefers-color-scheme: light)');
+      const lightQuery = window.matchMedia("(prefers-color-scheme: light)");
       if (lightQuery?.matches) {
-        return 'light';
+        return "light";
       }
 
-      return 'no-preference';
+      return "no-preference";
     } catch (error) {
-      logger.warn('Failed to check color scheme preference', {
+      logger.warn("Failed to check color scheme preference", {
         error: error instanceof Error ? error.message : String(error),
       });
-      return 'no-preference';
+      return "no-preference";
     }
   }
 
@@ -116,24 +116,24 @@ export class AccessibilityUtils {
    */
   static manageFocus(element: HTMLElement): void {
     // 确保元素可以接收焦点
-    if (!element.hasAttribute('tabindex')) {
-      element.setAttribute('tabindex', '-1');
+    if (!element.hasAttribute("tabindex")) {
+      element.setAttribute("tabindex", "-1");
     }
 
     // 设置焦点
     element.focus();
 
     // 添加焦点指示器
-    element.style.outline = '2px solid var(--ring)';
-    element.style.outlineOffset = '2px';
+    element.style.outline = "2px solid var(--ring)";
+    element.style.outlineOffset = "2px";
   }
 
   /**
    * 移除焦点指示器
    */
   static removeFocusIndicator(element: HTMLElement): void {
-    element.style.outline = '';
-    element.style.outlineOffset = '';
+    element.style.outline = "";
+    element.style.outlineOffset = "";
   }
 
   /**
@@ -169,13 +169,13 @@ export class AccessibilityUtils {
     const OKLCH_PREFIX_LENGTH = MAGIC_6; // 'oklch('.length
     const MIN_OKLCH_PARTS = COUNT_TRIPLE;
 
-    if (!trimmed.startsWith('oklch(') || !trimmed.endsWith(')')) {
+    if (!trimmed.startsWith("oklch(") || !trimmed.endsWith(")")) {
       return null;
     }
 
     const content = trimmed.slice(OKLCH_PREFIX_LENGTH, -ONE); // 移除 'oklch(' 和 ')'
     // Use safe string splitting instead of regex to avoid ReDoS attacks
-    const parts = content.split(' ').filter((part) => part.trim() !== '');
+    const parts = content.split(" ").filter((part) => part.trim() !== "");
 
     if (parts.length < MIN_OKLCH_PARTS) {
       return null;
@@ -185,7 +185,7 @@ export class AccessibilityUtils {
     // 安全地获取alpha值，使用at方法避免对象注入
     const alphaPart = parts.at(MIN_OKLCH_PARTS);
     const alphaValue =
-      alphaPart && alphaPart.startsWith('/') ? alphaPart.slice(ONE) : undefined;
+      alphaPart && alphaPart.startsWith("/") ? alphaPart.slice(ONE) : undefined;
 
     return {
       l: lValue ? parseFloat(lValue) : ZERO,
@@ -214,13 +214,13 @@ export class AccessibilityUtils {
     // 处理常见的命名颜色和简单情况
     // 使用显式的分支而不是动态属性访问，便于安全审计并避免对象注入模式
     switch (trimmed) {
-      case 'white':
-      case '#ffffff':
-      case '#fff':
+      case "white":
+      case "#ffffff":
+      case "#fff":
         return { l: ONE, c: ZERO, h: ZERO, alpha: ONE };
-      case 'black':
-      case '#000000':
-      case '#000':
+      case "black":
+      case "#000000":
+      case "#000":
         return { l: ZERO, c: ZERO, h: ZERO, alpha: ONE };
       default:
         // 默认返回中等灰色
@@ -239,16 +239,16 @@ export class AccessibilityUtils {
   static checkColorContrast(
     foreground: string,
     background: string,
-    level: WCAGLevel = 'AA',
+    level: WCAGLevel = "AA",
   ): boolean {
     try {
       // 检查输入是否为有效颜色字符串
       if (
         !foreground ||
         !background ||
-        foreground === 'invalid' ||
-        background === 'color' ||
-        (foreground === 'invalid' && background === 'color')
+        foreground === "invalid" ||
+        background === "color" ||
+        (foreground === "invalid" && background === "color")
       ) {
         return false;
       }
@@ -259,7 +259,7 @@ export class AccessibilityUtils {
       return checkContrastCompliance(fgColor, bgColor, level);
     } catch (error) {
       // 解析失败时返回false，确保安全
-      logger.warn('颜色解析失败，返回不合规结果', {
+      logger.warn("颜色解析失败，返回不合规结果", {
         foreground,
         background,
         level,
@@ -277,10 +277,10 @@ export class AccessibilityUtils {
     isExpanded: boolean = false,
   ): Record<string, string> {
     return {
-      'aria-label': `主题切换按钮，当前主题：${theme}`,
-      'aria-pressed': 'true',
-      'aria-expanded': isExpanded.toString(),
-      'role': 'button',
+      "aria-label": `主题切换按钮，当前主题：${theme}`,
+      "aria-pressed": "true",
+      "aria-expanded": isExpanded.toString(),
+      role: "button",
     };
   }
 }

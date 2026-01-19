@@ -4,16 +4,16 @@
  * 验证错误处理测试框架的基本功能
  */
 
-import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
+import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 import {
   APIErrorSimulator,
   BoundaryConditionTester,
   commonErrorScenarios,
   ErrorRecoveryTester,
   NetworkErrorSimulator,
-} from './setup';
+} from "./setup";
 
-describe('Error Handling Framework Validation', () => {
+describe("Error Handling Framework Validation", () => {
   let networkSimulator: NetworkErrorSimulator;
   let apiSimulator: APIErrorSimulator;
   let boundaryTester: BoundaryConditionTester;
@@ -32,15 +32,15 @@ describe('Error Handling Framework Validation', () => {
     vi.restoreAllMocks();
   });
 
-  describe('Framework Components', () => {
-    it('should initialize all error testing utilities', () => {
+  describe("Framework Components", () => {
+    it("should initialize all error testing utilities", () => {
       expect(networkSimulator).toBeInstanceOf(NetworkErrorSimulator);
       expect(apiSimulator).toBeInstanceOf(APIErrorSimulator);
       expect(boundaryTester).toBeInstanceOf(BoundaryConditionTester);
       expect(recoveryTester).toBeInstanceOf(ErrorRecoveryTester);
     });
 
-    it('should provide common error scenarios', () => {
+    it("should provide common error scenarios", () => {
       expect(commonErrorScenarios).toBeDefined();
       expect(Array.isArray(commonErrorScenarios)).toBe(true);
       expect(commonErrorScenarios.length).toBeGreaterThan(0);
@@ -54,29 +54,29 @@ describe('Error Handling Framework Validation', () => {
           cleanup: () => void;
           expectedBehavior: string;
         }) => {
-          expect(scenario).toHaveProperty('name');
-          expect(scenario).toHaveProperty('type');
-          expect(scenario).toHaveProperty('description');
-          expect(scenario).toHaveProperty('setup');
-          expect(scenario).toHaveProperty('cleanup');
-          expect(scenario).toHaveProperty('expectedBehavior');
+          expect(scenario).toHaveProperty("name");
+          expect(scenario).toHaveProperty("type");
+          expect(scenario).toHaveProperty("description");
+          expect(scenario).toHaveProperty("setup");
+          expect(scenario).toHaveProperty("cleanup");
+          expect(scenario).toHaveProperty("expectedBehavior");
         },
       );
     });
   });
 
-  describe('Network Error Simulation', () => {
-    it('should simulate network timeout', () => {
+  describe("Network Error Simulation", () => {
+    it("should simulate network timeout", () => {
       expect(() => networkSimulator.simulateTimeout(1000)).not.toThrow();
       expect(global.fetch).toBeDefined();
     });
 
-    it('should simulate connection failure', () => {
+    it("should simulate connection failure", () => {
       expect(() => networkSimulator.simulateConnectionFailure()).not.toThrow();
       expect(global.fetch).toBeDefined();
     });
 
-    it('should restore original fetch', () => {
+    it("should restore original fetch", () => {
       const originalFetch = global.fetch;
       networkSimulator.simulateTimeout(1000);
       networkSimulator.restore();
@@ -84,25 +84,25 @@ describe('Error Handling Framework Validation', () => {
     });
   });
 
-  describe('API Error Simulation', () => {
-    it('should simulate HTTP errors', () => {
+  describe("API Error Simulation", () => {
+    it("should simulate HTTP errors", () => {
       expect(() => apiSimulator.simulateHTTPError(500)).not.toThrow();
       expect(() => apiSimulator.simulateServerError()).not.toThrow();
       expect(() => apiSimulator.simulateAuthError()).not.toThrow();
       expect(() => apiSimulator.simulateNotFoundError()).not.toThrow();
     });
 
-    it('should simulate invalid JSON response', () => {
+    it("should simulate invalid JSON response", () => {
       expect(() => apiSimulator.simulateInvalidJSONResponse()).not.toThrow();
     });
   });
 
-  describe('Boundary Condition Testing', () => {
-    it('should generate test data for boundary conditions', () => {
+  describe("Boundary Condition Testing", () => {
+    it("should generate test data for boundary conditions", () => {
       expect(boundaryTester.generateLargeString(100)).toHaveLength(100);
       expect(boundaryTester.generateSpecialCharString()).toBeDefined();
       expect(boundaryTester.generateUnicodeString()).toBeDefined();
-      expect(boundaryTester.generateXSSString()).toContain('<script>');
+      expect(boundaryTester.generateXSSString()).toContain("<script>");
       expect(boundaryTester.generateSQLInjectionString()).toContain("'");
       expect(boundaryTester.generateLargeNumber()).toBeGreaterThan(1000000);
       expect(boundaryTester.generateNegativeNumber()).toBeLessThan(0);
@@ -111,20 +111,20 @@ describe('Error Handling Framework Validation', () => {
     });
   });
 
-  describe('Error Recovery Testing', () => {
-    it('should test retry mechanism', async () => {
+  describe("Error Recovery Testing", () => {
+    it("should test retry mechanism", async () => {
       let attempts = 0;
       const operation = vi.fn().mockImplementation(async () => {
         attempts++;
         if (attempts < 3) {
-          throw new Error('Simulated failure');
+          throw new Error("Simulated failure");
         }
-        return 'Success';
+        return "Success";
       });
 
       const result = await recoveryTester.testRetryMechanism(
         operation,
-        'test-op',
+        "test-op",
         3,
         10,
       );
@@ -132,23 +132,23 @@ describe('Error Handling Framework Validation', () => {
       expect(result.attempts).toBe(3);
     });
 
-    it('should test fallback mechanism', () => {
+    it("should test fallback mechanism", () => {
       const primaryOp = () => {
-        throw new Error('Primary failed');
+        throw new Error("Primary failed");
       };
-      const fallbackOp = () => 'Fallback success';
+      const fallbackOp = () => "Fallback success";
 
       const result = recoveryTester.testFallbackMechanism(
         primaryOp,
         fallbackOp,
       );
-      expect(result.result).toBe('Fallback success');
+      expect(result.result).toBe("Fallback success");
       expect(result.usedFallback).toBe(true);
     });
   });
 
-  describe('Error Scenario Execution', () => {
-    it('should execute common error scenarios', () => {
+  describe("Error Scenario Execution", () => {
+    it("should execute common error scenarios", () => {
       commonErrorScenarios.forEach(
         (scenario: { setup: () => void; cleanup: () => void }) => {
           expect(() => scenario.setup()).not.toThrow();
@@ -157,11 +157,11 @@ describe('Error Handling Framework Validation', () => {
       );
     });
 
-    it('should handle scenario types correctly', () => {
+    it("should handle scenario types correctly", () => {
       const scenarioTypes = commonErrorScenarios.map(
         (s: { type: string }) => s.type,
       );
-      const expectedTypes = ['network', 'api'];
+      const expectedTypes = ["network", "api"];
 
       expectedTypes.forEach((type) => {
         expect(scenarioTypes).toContain(type);
@@ -169,15 +169,15 @@ describe('Error Handling Framework Validation', () => {
     });
   });
 
-  describe('Error Testing Integration', () => {
-    it('should handle multiple error types in sequence', async () => {
+  describe("Error Testing Integration", () => {
+    it("should handle multiple error types in sequence", async () => {
       // Test network error
       networkSimulator.simulateTimeout(100);
-      await expect(fetch('/test')).rejects.toThrow();
+      await expect(fetch("/test")).rejects.toThrow();
 
       // Test API error
       apiSimulator.simulateServerError();
-      await expect(fetch('/api/test')).resolves.toHaveProperty('ok', false);
+      await expect(fetch("/api/test")).resolves.toHaveProperty("ok", false);
 
       // Test boundary condition
       const largeString = boundaryTester.generateLargeString(1000);
@@ -186,14 +186,14 @@ describe('Error Handling Framework Validation', () => {
       // Test recovery
       const result = recoveryTester.testFallbackMechanism(
         () => {
-          throw new Error('Test');
+          throw new Error("Test");
         },
-        () => 'Recovered',
+        () => "Recovered",
       );
       expect(result.usedFallback).toBe(true);
     });
 
-    it('should maintain test isolation', () => {
+    it("should maintain test isolation", () => {
       // First test
       networkSimulator.simulateTimeout(100);
       expect(global.fetch).toBeDefined();
@@ -207,8 +207,8 @@ describe('Error Handling Framework Validation', () => {
     });
   });
 
-  describe('Performance and Reliability', () => {
-    it('should handle rapid error simulation changes', () => {
+  describe("Performance and Reliability", () => {
+    it("should handle rapid error simulation changes", () => {
       const operations = [
         () => networkSimulator.simulateTimeout(100),
         () => networkSimulator.simulateConnectionFailure(),
@@ -222,7 +222,7 @@ describe('Error Handling Framework Validation', () => {
       });
     });
 
-    it('should generate consistent boundary test data', () => {
+    it("should generate consistent boundary test data", () => {
       const data1 = boundaryTester.generateSpecialCharString();
       const data2 = boundaryTester.generateSpecialCharString();
 

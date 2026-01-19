@@ -16,7 +16,7 @@ export interface AccountInfoRequest {
  * App settings request
  */
 export interface AppSettingsRequest {
-  messaging_product: 'whatsapp';
+  messaging_product: "whatsapp";
   settings: {
     webhooks?: {
       url: string;

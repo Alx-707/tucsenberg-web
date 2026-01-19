@@ -8,8 +8,8 @@
  * - 恶意输入防护
  */
 
-import { beforeEach, describe, expect, it } from 'vitest';
-import { BoundaryConditionTester } from '@/../tests/error-scenarios/setup';
+import { beforeEach, describe, expect, it } from "vitest";
+import { BoundaryConditionTester } from "@/../tests/error-scenarios/setup";
 
 // 文件大小常量
 const FILE_SIZE_LIMITS = {
@@ -27,39 +27,39 @@ class FormValidator {
     isValid: boolean;
     error?: string;
   } {
-    if (!file.name) return { isValid: false, error: 'File name is required' };
+    if (!file.name) return { isValid: false, error: "File name is required" };
 
     // Check file size
     if (
       file.size >
       FILE_SIZE_LIMITS.MAX_FILE_SIZE_MB * FILE_SIZE_LIMITS.BYTES_PER_MB
     ) {
-      return { isValid: false, error: 'File too large' };
+      return { isValid: false, error: "File too large" };
     }
 
     // Check dangerous file types
     const dangerousTypes = [
-      'application/x-msdownload',
-      'application/javascript',
-      'application/x-bat',
-      'application/x-executable',
+      "application/x-msdownload",
+      "application/javascript",
+      "application/x-bat",
+      "application/x-executable",
     ];
 
     if (dangerousTypes.includes(file.type)) {
-      return { isValid: false, error: 'File type is dangerous' };
+      return { isValid: false, error: "File type is dangerous" };
     }
 
     // Check allowed file types
     const allowedTypes = [
-      'image/jpeg',
-      'image/png',
-      'image/gif',
-      'text/plain',
-      'application/pdf',
+      "image/jpeg",
+      "image/png",
+      "image/gif",
+      "text/plain",
+      "application/pdf",
     ];
 
     if (!allowedTypes.includes(file.type)) {
-      return { isValid: false, error: 'File type not allowed' };
+      return { isValid: false, error: "File type not allowed" };
     }
 
     return { isValid: true };
@@ -71,15 +71,15 @@ class FormValidator {
     error?: string;
   } {
     if (!content)
-      return { isValid: false, sanitized: '', error: 'Content is required' };
+      return { isValid: false, sanitized: "", error: "Content is required" };
 
     // Sanitize content by removing dangerous characters
     const sanitized = content
-      .replace(/'/g, '&#39;')
-      .replace(/"/g, '&#34;')
-      .replace(/</g, '&lt;')
-      .replace(/>/g, '&gt;')
-      .replace(/&/g, '&amp;');
+      .replace(/'/g, "&#39;")
+      .replace(/"/g, "&#34;")
+      .replace(/</g, "&lt;")
+      .replace(/>/g, "&gt;")
+      .replace(/&/g, "&amp;");
 
     // Check for SQL injection patterns
     const sqlPatterns = [
@@ -97,7 +97,7 @@ class FormValidator {
       return {
         isValid: false,
         sanitized,
-        error: 'Potential SQL injection detected',
+        error: "Potential SQL injection detected",
       };
     }
 
@@ -105,13 +105,13 @@ class FormValidator {
   }
 
   validateEmail(email: string): { isValid: boolean; error?: string } {
-    if (!email) return { isValid: false, error: 'Email is required' };
+    if (!email) return { isValid: false, error: "Email is required" };
     if (email.length > 254) {
-      return { isValid: false, error: 'Email is too long' };
+      return { isValid: false, error: "Email is too long" };
     }
     const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
     if (!emailRegex.test(email)) {
-      return { isValid: false, error: 'Invalid email format' };
+      return { isValid: false, error: "Invalid email format" };
     }
     return { isValid: true };
   }
@@ -119,54 +119,54 @@ class FormValidator {
   validatePassword(password: string): {
     isValid: boolean;
     error?: string;
-    strength?: 'weak' | 'medium' | 'strong';
+    strength?: "weak" | "medium" | "strong";
   } {
-    if (!password) return { isValid: false, error: 'Password is required' };
+    if (!password) return { isValid: false, error: "Password is required" };
     if (password.length < 8) {
-      return { isValid: false, error: 'Password too short' };
+      return { isValid: false, error: "Password too short" };
     }
     if (password.length > 128) {
-      return { isValid: false, error: 'Password is too long' };
+      return { isValid: false, error: "Password is too long" };
     }
 
     // Calculate strength
-    let strength: 'weak' | 'medium' | 'strong' = 'weak';
+    let strength: "weak" | "medium" | "strong" = "weak";
     let score = 0;
     if (/[a-z]/.test(password)) score++;
     if (/[A-Z]/.test(password)) score++;
     if (/[0-9]/.test(password)) score++;
     if (/[^a-zA-Z0-9]/.test(password)) score++;
 
-    if (score >= 4) strength = 'strong';
-    else if (score >= 3) strength = 'medium';
+    if (score >= 4) strength = "strong";
+    else if (score >= 3) strength = "medium";
 
     return { isValid: true, strength };
   }
 
   validateUsername(username: string): { isValid: boolean; error?: string } {
-    if (!username) return { isValid: false, error: 'Username is required' };
+    if (!username) return { isValid: false, error: "Username is required" };
     if (username.length < 2) {
-      return { isValid: false, error: 'Username too short' };
+      return { isValid: false, error: "Username too short" };
     }
     if (username.length > 128) {
-      return { isValid: false, error: 'Username too long' };
+      return { isValid: false, error: "Username too long" };
     }
     if (!/^[a-zA-Z0-9_-]+$/.test(username)) {
-      return { isValid: false, error: 'Invalid username format' };
+      return { isValid: false, error: "Invalid username format" };
     }
     return { isValid: true };
   }
 
   validateAge(age: number): { isValid: boolean; error?: string } {
-    if (age < 0) return { isValid: false, error: 'Age cannot be negative' };
-    if (age > 150) return { isValid: false, error: 'Age too high' };
+    if (age < 0) return { isValid: false, error: "Age cannot be negative" };
+    if (age > 150) return { isValid: false, error: "Age too high" };
     if (!Number.isInteger(age))
-      return { isValid: false, error: 'Age must be integer' };
+      return { isValid: false, error: "Age must be integer" };
     return { isValid: true };
   }
 }
 
-describe('Form Validation Security Tests', () => {
+describe("Form Validation Security Tests", () => {
   let validator: FormValidator;
   let boundaryTester: BoundaryConditionTester;
 
@@ -175,23 +175,23 @@ describe('Form Validation Security Tests', () => {
     boundaryTester = new BoundaryConditionTester();
   });
 
-  describe('File Upload Validation Tests', () => {
-    it('should validate allowed file types', () => {
+  describe("File Upload Validation Tests", () => {
+    it("should validate allowed file types", () => {
       const allowedFiles = [
         {
-          name: 'image.jpg',
+          name: "image.jpg",
           size: FILE_SIZE_LIMITS.BYTES_PER_MB,
-          type: 'image/jpeg',
+          type: "image/jpeg",
         },
         {
-          name: 'document.pdf',
+          name: "document.pdf",
           size: FILE_SIZE_LIMITS.BYTES_PER_MB * 2,
-          type: 'application/pdf',
+          type: "application/pdf",
         },
         {
-          name: 'text.txt',
+          name: "text.txt",
           size: FILE_SIZE_LIMITS.BYTES_PER_KB * 100,
-          type: 'text/plain',
+          type: "text/plain",
         },
       ];
 
@@ -202,65 +202,65 @@ describe('Form Validation Security Tests', () => {
       });
     });
 
-    it('should reject files that are too large', () => {
+    it("should reject files that are too large", () => {
       const largeFile = {
-        name: 'large-file.jpg',
+        name: "large-file.jpg",
         size:
           FILE_SIZE_LIMITS.LARGE_FILE_SIZE_MB * FILE_SIZE_LIMITS.BYTES_PER_MB,
-        type: 'image/jpeg',
+        type: "image/jpeg",
       };
 
       const result = validator.validateFileUpload(largeFile);
       expect(result.isValid).toBe(false);
-      expect(result.error).toBe('File too large');
+      expect(result.error).toBe("File too large");
     });
 
-    it('should reject dangerous file types', () => {
+    it("should reject dangerous file types", () => {
       const dangerousFiles = [
         {
-          name: 'virus.exe',
+          name: "virus.exe",
           size: FILE_SIZE_LIMITS.TINY_FILE_SIZE,
-          type: 'application/x-msdownload',
+          type: "application/x-msdownload",
         },
         {
-          name: 'script.js',
+          name: "script.js",
           size: FILE_SIZE_LIMITS.TINY_FILE_SIZE,
-          type: 'application/javascript',
+          type: "application/javascript",
         },
         {
-          name: 'batch.bat',
+          name: "batch.bat",
           size: FILE_SIZE_LIMITS.TINY_FILE_SIZE,
-          type: 'application/x-bat',
+          type: "application/x-bat",
         },
       ];
 
       dangerousFiles.forEach((file) => {
         const result = validator.validateFileUpload(file);
         expect(result.isValid).toBe(false);
-        expect(result.error).toContain('dangerous');
+        expect(result.error).toContain("dangerous");
       });
     });
 
-    it('should reject unsupported file types', () => {
+    it("should reject unsupported file types", () => {
       const unsupportedFile = {
-        name: 'document.docx',
+        name: "document.docx",
         size: FILE_SIZE_LIMITS.BYTES_PER_MB,
-        type: 'application/vnd.openxmlformats-officedocument.wordprocessingml.document',
+        type: "application/vnd.openxmlformats-officedocument.wordprocessingml.document",
       };
 
       const result = validator.validateFileUpload(unsupportedFile);
       expect(result.isValid).toBe(false);
-      expect(result.error).toBe('File type not allowed');
+      expect(result.error).toBe("File type not allowed");
     });
   });
 
-  describe('SQL Injection Prevention', () => {
-    it('should detect SQL injection attempts in text fields', () => {
+  describe("SQL Injection Prevention", () => {
+    it("should detect SQL injection attempts in text fields", () => {
       const sqlInjectionAttempts = [
         boundaryTester.generateSQLInjectionString(),
         "1' OR '1'='1",
         "'; DELETE FROM users; --",
-        '1; DROP TABLE users; --',
+        "1; DROP TABLE users; --",
         "' UNION SELECT * FROM passwords --",
       ];
 
@@ -275,33 +275,33 @@ describe('Form Validation Security Tests', () => {
       });
     });
 
-    it('should sanitize HTML content', () => {
+    it("should sanitize HTML content", () => {
       const htmlContent = '<script>alert("XSS")</script><p>Normal content</p>';
       const result = validator.validateTextContent(htmlContent);
 
-      expect(result.sanitized).toContain('&lt;script&gt;');
-      expect(result.sanitized).toContain('&lt;/script&gt;');
-      expect(result.sanitized).not.toContain('<script>');
+      expect(result.sanitized).toContain("&lt;script&gt;");
+      expect(result.sanitized).toContain("&lt;/script&gt;");
+      expect(result.sanitized).not.toContain("<script>");
     });
 
-    it('should handle malicious input patterns', () => {
+    it("should handle malicious input patterns", () => {
       const maliciousInputs = [
-        '../../../etc/passwd',
-        '..\\..\\..\\windows\\system32',
-        'javascript:alert(1)',
-        'data:text/html,<script>alert(1)</script>',
+        "../../../etc/passwd",
+        "..\\..\\..\\windows\\system32",
+        "javascript:alert(1)",
+        "data:text/html,<script>alert(1)</script>",
       ];
 
       maliciousInputs.forEach((input) => {
         const result = validator.validateTextContent(input);
         expect(result.sanitized).toBeDefined();
-        expect(result.sanitized).not.toContain('<script>');
+        expect(result.sanitized).not.toContain("<script>");
       });
     });
   });
 
-  describe('Performance Boundary Tests', () => {
-    it('should handle validation performance under load', () => {
+  describe("Performance Boundary Tests", () => {
+    it("should handle validation performance under load", () => {
       const startTime = Date.now();
       const iterations = 1000;
 
@@ -319,7 +319,7 @@ describe('Form Validation Security Tests', () => {
       expect(duration).toBeLessThan(1000);
     });
 
-    it('should handle memory usage with large inputs', () => {
+    it("should handle memory usage with large inputs", () => {
       const largeInputs = Array.from(
         { length: 100 },
         (_, i) => boundaryTester.generateLargeString(1000) + i,
@@ -332,7 +332,7 @@ describe('Form Validation Security Tests', () => {
       });
     });
 
-    it('should handle concurrent validation requests', () => {
+    it("should handle concurrent validation requests", () => {
       const promises = Array.from({ length: 50 }, (_, i) =>
         Promise.resolve().then(() => {
           validator.validateEmail(`user${i}@example.com`);
@@ -343,7 +343,7 @@ describe('Form Validation Security Tests', () => {
 
       return Promise.all(promises).then((results) => {
         expect(results).toHaveLength(50);
-        expect(results.every((r) => typeof r === 'number')).toBe(true);
+        expect(results.every((r) => typeof r === "number")).toBe(true);
       });
     });
   });

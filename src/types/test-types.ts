@@ -3,7 +3,7 @@
  * 用于替换测试文件中的any类型，提升类型安全性
  */
 
-import type { ReactNode } from 'react';
+import type { ReactNode } from "react";
 
 // ============================================================================
 // DOM Mock Types - 用于测试中的DOM元素模拟
@@ -84,7 +84,7 @@ export type MockWindowWithReact = Window & {
   __REACT_DEVTOOLS_GLOBAL_HOOK__?: unknown;
   __NEXT_DATA__?: unknown;
   __NEXT_ROUTER__?: unknown;
-  performance: Window['performance'];
+  performance: Window["performance"];
 };
 
 /**
@@ -163,16 +163,16 @@ export interface MockGlobal {
 /**
  * 主题切换模式类型
  */
-export type ThemeMode = 'light' | 'dark' | 'system';
+export type ThemeMode = "light" | "dark" | "system";
 
 /**
  * 不安全的语言代码类型 - 用于安全性测试
  * 包含可能导致原型污染的危险字符串
  */
 export type UnsafeLocaleCode =
-  | '__proto__'
-  | 'constructor'
-  | 'prototype'
+  | "__proto__"
+  | "constructor"
+  | "prototype"
   | string;
 
 /**
@@ -277,7 +277,7 @@ export interface DynamicImportModule {
 export type MockFunction<T extends (..._args: any[]) => any> = T & {
   mock: {
     calls: unknown[][];
-    results: Array<{ type: 'return' | 'throw'; value: unknown }>;
+    results: Array<{ type: "return" | "throw"; value: unknown }>;
     instances: unknown[];
   };
   mockReturnValue: (_value: ReturnType<T>) => MockFunction<T>;
@@ -325,11 +325,11 @@ export interface MockColorData {
  */
 export function isMockDOMElement(obj: unknown): obj is MockDOMElement {
   return (
-    typeof obj === 'object' &&
+    typeof obj === "object" &&
     obj !== null &&
-    'id' in obj &&
-    'textContent' in obj &&
-    'setAttribute' in obj
+    "id" in obj &&
+    "textContent" in obj &&
+    "setAttribute" in obj
   );
 }
 
@@ -338,10 +338,10 @@ export function isMockDOMElement(obj: unknown): obj is MockDOMElement {
  */
 export function isMockKeyboardEvent(obj: unknown): obj is MockKeyboardEvent {
   return (
-    typeof obj === 'object' &&
+    typeof obj === "object" &&
     obj !== null &&
-    'key' in obj &&
-    'preventDefault' in obj
+    "key" in obj &&
+    "preventDefault" in obj
   );
 }
 
@@ -349,7 +349,7 @@ export function isMockKeyboardEvent(obj: unknown): obj is MockKeyboardEvent {
  * 检查是否为有效的主题模式
  */
 export function isValidThemeMode(mode: string): mode is ThemeMode {
-  return ['light', 'dark', 'system'].includes(mode);
+  return ["light", "dark", "system"].includes(mode);
 }
 
 // ============================================================================

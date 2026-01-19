@@ -1,25 +1,25 @@
-import type { CSSProperties } from 'react';
-import { Section, Text } from '@react-email/components';
-import { ResendUtils } from '@/lib/resend-utils';
-import type { EmailTemplateData } from '@/lib/validations';
-import { EmailLayout } from '@/components/emails/EmailLayout';
-import { COLORS, FONT_SIZES, SPACING } from '@/components/emails/theme';
-import { SITE_CONFIG } from '@/config/paths/site-config';
+import type { CSSProperties } from "react";
+import { Section, Text } from "@react-email/components";
+import { ResendUtils } from "@/lib/resend-utils";
+import type { EmailTemplateData } from "@/lib/validations";
+import { EmailLayout } from "@/components/emails/EmailLayout";
+import { COLORS, FONT_SIZES, SPACING } from "@/components/emails/theme";
+import { SITE_CONFIG } from "@/config/paths/site-config";
 
 const ACCENT_COLOR = COLORS.primary;
 const CONTENT_BACKGROUND = COLORS.background;
-const PREVIEW_TEXT = 'We received your message and will reply within 24 hours.';
+const PREVIEW_TEXT = "We received your message and will reply within 24 hours.";
 const CURRENT_YEAR = new Date().getFullYear();
 const FOOTER_TEXT = `© ${CURRENT_YEAR} ${SITE_CONFIG.name}. All rights reserved.`;
 
 const paragraphStyle: CSSProperties = {
   margin: `0 0 ${SPACING.md} 0`,
   fontSize: FONT_SIZES.md,
-  lineHeight: '1.6',
+  lineHeight: "1.6",
 };
 
 const summaryLineStyle: CSSProperties = {
-  margin: '0 0 6px 0',
+  margin: "0 0 6px 0",
   fontSize: FONT_SIZES.sm,
 };
 
@@ -34,7 +34,7 @@ export function ConfirmationEmail(data: EmailTemplateData) {
 
   return (
     <EmailLayout
-      title='Thank You for Contacting Us'
+      title="Thank You for Contacting Us"
       preview={PREVIEW_TEXT}
       accentColor={ACCENT_COLOR}
       footerText={FOOTER_TEXT}
@@ -48,10 +48,7 @@ export function ConfirmationEmail(data: EmailTemplateData) {
       <Text style={paragraphStyle}>Here is a summary of your submission:</Text>
       <Section>
         {summaryLines.map((line) => (
-          <Text
-            key={line}
-            style={summaryLineStyle}
-          >
+          <Text key={line} style={summaryLineStyle}>
             - {line}
           </Text>
         ))}
@@ -65,7 +62,7 @@ export function ConfirmationEmail(data: EmailTemplateData) {
       <Text style={paragraphStyle}>Best regards,</Text>
       {/* nosemgrep: object-injection-sink-spread-operator */}
       {/* Safe: paragraphStyle is a static CSSProperties object defined in this file */}
-      <Text style={{ ...paragraphStyle, fontWeight: 'bold' }}>
+      <Text style={{ ...paragraphStyle, fontWeight: "bold" }}>
         The {SITE_CONFIG.name} Team
       </Text>
     </EmailLayout>

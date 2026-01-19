@@ -5,7 +5,7 @@ import {
   MAGIC_36,
   ONE,
   THIRTY_SECONDS_MS,
-} from '@/constants';
+} from "@/constants";
 
 /**
  * WhatsApp API 错误处理类型定义
@@ -52,9 +52,9 @@ export interface WhatsAppApiError {
  * Network error
  */
 export interface NetworkError {
-  name: 'NetworkError';
+  name: "NetworkError";
   message: string;
-  code: 'NETWORK_ERROR' | 'TIMEOUT' | 'CONNECTION_REFUSED' | 'DNS_ERROR';
+  code: "NETWORK_ERROR" | "TIMEOUT" | "CONNECTION_REFUSED" | "DNS_ERROR";
   originalError?: Error;
   retryable: boolean;
 }
@@ -64,9 +64,9 @@ export interface NetworkError {
  * Validation error
  */
 export interface ValidationError {
-  name: 'ValidationError';
+  name: "ValidationError";
   message: string;
-  code: 'INVALID_PARAMETER' | 'MISSING_PARAMETER' | 'INVALID_FORMAT';
+  code: "INVALID_PARAMETER" | "MISSING_PARAMETER" | "INVALID_FORMAT";
   field?: string;
   value?: string | number | boolean | Record<string, unknown> | unknown[];
   retryable: false;
@@ -77,9 +77,9 @@ export interface ValidationError {
  * Authentication error
  */
 export interface AuthenticationError {
-  name: 'AuthenticationError';
+  name: "AuthenticationError";
   message: string;
-  code: 'INVALID_TOKEN' | 'EXPIRED_TOKEN' | 'INSUFFICIENT_PERMISSIONS';
+  code: "INVALID_TOKEN" | "EXPIRED_TOKEN" | "INSUFFICIENT_PERMISSIONS";
   retryable: false;
 }
 
@@ -88,9 +88,9 @@ export interface AuthenticationError {
  * Rate limit error
  */
 export interface RateLimitError {
-  name: 'RateLimitError';
+  name: "RateLimitError";
   message: string;
-  code: 'RATE_LIMIT_EXCEEDED';
+  code: "RATE_LIMIT_EXCEEDED";
   retryAfter?: number;
   limit?: number;
   remaining?: number;
@@ -103,13 +103,13 @@ export interface RateLimitError {
  * Business logic error
  */
 export interface BusinessLogicError {
-  name: 'BusinessLogicError';
+  name: "BusinessLogicError";
   message: string;
   code:
-    | 'INVALID_PHONE_NUMBER'
-    | 'MESSAGE_UNDELIVERABLE'
-    | 'TEMPLATE_NOT_APPROVED'
-    | 'MEDIA_TOO_LARGE';
+    | "INVALID_PHONE_NUMBER"
+    | "MESSAGE_UNDELIVERABLE"
+    | "TEMPLATE_NOT_APPROVED"
+    | "MEDIA_TOO_LARGE";
   details?: Record<
     string,
     string | number | boolean | Record<string, unknown> | unknown[]
@@ -122,9 +122,9 @@ export interface BusinessLogicError {
  * Server error
  */
 export interface ServerError {
-  name: 'ServerError';
+  name: "ServerError";
   message: string;
-  code: 'INTERNAL_SERVER_ERROR' | 'SERVICE_UNAVAILABLE' | 'BAD_GATEWAY';
+  code: "INTERNAL_SERVER_ERROR" | "SERVICE_UNAVAILABLE" | "BAD_GATEWAY";
   statusCode: number;
   retryable: boolean;
 }
@@ -146,20 +146,20 @@ export type WhatsAppError =
  * 错误严重程度
  * Error severity
  */
-export type ErrorSeverity = 'low' | 'medium' | 'high' | 'critical';
+export type ErrorSeverity = "low" | "medium" | "high" | "critical";
 
 /**
  * 错误分类
  * Error category
  */
 export type ErrorCategory =
-  | 'network'
-  | 'authentication'
-  | 'validation'
-  | 'rate_limit'
-  | 'business_logic'
-  | 'server'
-  | 'unknown';
+  | "network"
+  | "authentication"
+  | "validation"
+  | "rate_limit"
+  | "business_logic"
+  | "server"
+  | "unknown";
 
 /**
  * 错误上下文
@@ -263,13 +263,13 @@ export interface ErrorHandlingConfig {
 export function isWhatsAppApiError(error: unknown): error is WhatsAppApiError {
   return Boolean(
     error &&
-    typeof error === 'object' &&
-    typeof (error as Record<string, unknown>).error === 'object' &&
-    'message' in
+    typeof error === "object" &&
+    typeof (error as Record<string, unknown>).error === "object" &&
+    "message" in
       ((error as Record<string, unknown>).error as Record<string, unknown>) &&
-    'type' in
+    "type" in
       ((error as Record<string, unknown>).error as Record<string, unknown>) &&
-    'code' in
+    "code" in
       ((error as Record<string, unknown>).error as Record<string, unknown>),
   );
 }
@@ -277,16 +277,16 @@ export function isWhatsAppApiError(error: unknown): error is WhatsAppApiError {
 export function isNetworkError(error: unknown): error is NetworkError {
   return Boolean(
     error &&
-    typeof error === 'object' &&
-    (error as Record<string, unknown>).name === 'NetworkError',
+    typeof error === "object" &&
+    (error as Record<string, unknown>).name === "NetworkError",
   );
 }
 
 export function isValidationError(error: unknown): error is ValidationError {
   return Boolean(
     error &&
-    typeof error === 'object' &&
-    (error as Record<string, unknown>).name === 'ValidationError',
+    typeof error === "object" &&
+    (error as Record<string, unknown>).name === "ValidationError",
   );
 }
 
@@ -295,16 +295,16 @@ export function isAuthenticationError(
 ): error is AuthenticationError {
   return Boolean(
     error &&
-    typeof error === 'object' &&
-    (error as Record<string, unknown>).name === 'AuthenticationError',
+    typeof error === "object" &&
+    (error as Record<string, unknown>).name === "AuthenticationError",
   );
 }
 
 export function isRateLimitError(error: unknown): error is RateLimitError {
   return Boolean(
     error &&
-    typeof error === 'object' &&
-    (error as Record<string, unknown>).name === 'RateLimitError',
+    typeof error === "object" &&
+    (error as Record<string, unknown>).name === "RateLimitError",
   );
 }
 
@@ -313,16 +313,16 @@ export function isBusinessLogicError(
 ): error is BusinessLogicError {
   return Boolean(
     error &&
-    typeof error === 'object' &&
-    (error as Record<string, unknown>).name === 'BusinessLogicError',
+    typeof error === "object" &&
+    (error as Record<string, unknown>).name === "BusinessLogicError",
   );
 }
 
 export function isServerError(error: unknown): error is ServerError {
   return Boolean(
     error &&
-    typeof error === 'object' &&
-    (error as Record<string, unknown>).name === 'ServerError',
+    typeof error === "object" &&
+    (error as Record<string, unknown>).name === "ServerError",
   );
 }
 
@@ -336,13 +336,13 @@ export const ErrorUtils = {
    * Categorize error
    */
   categorizeError(error: WhatsAppError): ErrorCategory {
-    if (isNetworkError(error)) return 'network';
-    if (isAuthenticationError(error)) return 'authentication';
-    if (isValidationError(error)) return 'validation';
-    if (isRateLimitError(error)) return 'rate_limit';
-    if (isBusinessLogicError(error)) return 'business_logic';
-    if (isServerError(error)) return 'server';
-    return 'unknown';
+    if (isNetworkError(error)) return "network";
+    if (isAuthenticationError(error)) return "authentication";
+    if (isValidationError(error)) return "validation";
+    if (isRateLimitError(error)) return "rate_limit";
+    if (isBusinessLogicError(error)) return "business_logic";
+    if (isServerError(error)) return "server";
+    return "unknown";
   },
 
   /**
@@ -350,16 +350,16 @@ export const ErrorUtils = {
    * Assess error severity
    */
   assessSeverity(error: WhatsAppError): ErrorSeverity {
-    if (isAuthenticationError(error)) return 'critical';
-    if (isServerError(error) && error.statusCode >= 500) return 'high';
-    if (isRateLimitError(error)) return 'medium';
-    if (isValidationError(error)) return 'low';
+    if (isAuthenticationError(error)) return "critical";
+    if (isServerError(error) && error.statusCode >= 500) return "high";
+    if (isRateLimitError(error)) return "medium";
+    if (isValidationError(error)) return "low";
     if (isBusinessLogicError(error)) {
-      if (error.code === 'INVALID_PHONE_NUMBER') return 'medium';
-      if (error.code === 'MESSAGE_UNDELIVERABLE') return 'high';
-      return 'low';
+      if (error.code === "INVALID_PHONE_NUMBER") return "medium";
+      if (error.code === "MESSAGE_UNDELIVERABLE") return "high";
+      return "low";
     }
-    return 'medium';
+    return "medium";
   },
 
   /**
@@ -389,11 +389,11 @@ export const ErrorUtils = {
       return `[${type}:${code}] ${message}`;
     }
 
-    if ('message' in error) {
+    if ("message" in error) {
       return `[${error.name}] ${error.message}`;
     }
 
-    return 'Unknown error occurred';
+    return "Unknown error occurred";
   },
 
   /**
@@ -405,11 +405,11 @@ export const ErrorUtils = {
       return error.error.code;
     }
 
-    if ('code' in error) {
+    if ("code" in error) {
       return error.code;
     }
 
-    return 'UNKNOWN';
+    return "UNKNOWN";
   },
 
   /**
@@ -462,44 +462,44 @@ export const ErrorUtils = {
 
     if (isAuthenticationError(error)) {
       suggestions.push(
-        'Check your access token',
-        'Verify token permissions',
-        'Ensure token has not expired',
+        "Check your access token",
+        "Verify token permissions",
+        "Ensure token has not expired",
       );
     }
 
     if (isValidationError(error)) {
       suggestions.push(
-        'Check request parameters',
-        'Validate input format',
-        'Review API documentation',
+        "Check request parameters",
+        "Validate input format",
+        "Review API documentation",
       );
     }
 
     if (isRateLimitError(error)) {
       suggestions.push(
-        'Implement exponential backoff',
-        'Reduce request frequency',
-        'Consider upgrading your plan',
+        "Implement exponential backoff",
+        "Reduce request frequency",
+        "Consider upgrading your plan",
       );
     }
 
     if (isNetworkError(error)) {
       suggestions.push(
-        'Check network connectivity',
-        'Verify API endpoint URL',
-        'Try again later',
+        "Check network connectivity",
+        "Verify API endpoint URL",
+        "Try again later",
       );
     }
 
     if (isBusinessLogicError(error)) {
-      if (error.code === 'INVALID_PHONE_NUMBER') {
-        suggestions.push('Verify phone number format', 'Include country code');
+      if (error.code === "INVALID_PHONE_NUMBER") {
+        suggestions.push("Verify phone number format", "Include country code");
       }
-      if (error.code === 'MESSAGE_UNDELIVERABLE') {
+      if (error.code === "MESSAGE_UNDELIVERABLE") {
         suggestions.push(
-          'Check recipient status',
-          'Verify phone number is active',
+          "Check recipient status",
+          "Verify phone number is active",
         );
       }
     }
@@ -527,31 +527,31 @@ export const ErrorUtils = {
    */
   createErrorReport(
     errorDetails: ErrorDetails,
-    environment: string = 'production',
-    version: string = '1.0.0',
+    environment: string = "production",
+    version: string = "1.0.0",
   ): ErrorReport {
     return {
       id: (() => {
         const timestamp = Date.now();
         if (
-          typeof crypto !== 'undefined' &&
-          typeof crypto.randomUUID === 'function'
+          typeof crypto !== "undefined" &&
+          typeof crypto.randomUUID === "function"
         ) {
-          return `error_${timestamp}_${crypto.randomUUID().replaceAll('-', '')}`;
+          return `error_${timestamp}_${crypto.randomUUID().replaceAll("-", "")}`;
         }
         if (
-          typeof crypto !== 'undefined' &&
-          typeof crypto.getRandomValues === 'function'
+          typeof crypto !== "undefined" &&
+          typeof crypto.getRandomValues === "function"
         ) {
           const buf = new Uint32Array(3);
           crypto.getRandomValues(buf);
           const randomPart = Array.from(buf, (value) =>
-            value.toString(MAGIC_36).padStart(COUNT_PAIR, '0'),
-          ).join('');
+            value.toString(MAGIC_36).padStart(COUNT_PAIR, "0"),
+          ).join("");
           return `error_${timestamp}_${randomPart.substring(0, MAGIC_9)}`;
         }
         throw new Error(
-          'Secure random generator unavailable for error report id',
+          "Secure random generator unavailable for error report id",
         );
       })(),
       timestamp: new Date().toISOString(),

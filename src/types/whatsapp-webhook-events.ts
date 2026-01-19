@@ -5,12 +5,12 @@
  * 提供WhatsApp webhook事件的类型定义和处理接口
  */
 
-import type { WhatsAppContact } from '@/types/whatsapp-base-types';
+import type { WhatsAppContact } from "@/types/whatsapp-base-types";
 import type {
   MessageStatusUpdate,
   WebhookError,
-} from '@/types/whatsapp-webhook-base';
-import type { IncomingWhatsAppMessage } from '@/types/whatsapp-webhook-messages';
+} from "@/types/whatsapp-webhook-base";
+import type { IncomingWhatsAppMessage } from "@/types/whatsapp-webhook-messages";
 import {
   ANIMATION_DURATION_VERY_SLOW,
   COUNT_FIVE,
@@ -25,14 +25,14 @@ import {
   MAGIC_9,
   ONE,
   SECONDS_PER_MINUTE,
-} from '@/constants';
+} from "@/constants";
 
 /**
  * 消息接收事件
  * Message received event
  */
 export interface MessageReceivedEvent {
-  type: 'message_received';
+  type: "message_received";
   timestamp: string;
   phone_number_id: string;
   from: string;
@@ -45,7 +45,7 @@ export interface MessageReceivedEvent {
  * Message status event
  */
 export interface MessageStatusEvent {
-  type: 'message_status';
+  type: "message_status";
   timestamp: string;
   phone_number_id: string;
   status_update: MessageStatusUpdate;
@@ -56,7 +56,7 @@ export interface MessageStatusEvent {
  * Webhook error event
  */
 export interface WebhookErrorEvent {
-  type: 'webhook_error';
+  type: "webhook_error";
   timestamp: string;
   phone_number_id: string;
   error: WebhookError;
@@ -67,7 +67,7 @@ export interface WebhookErrorEvent {
  * Message read event
  */
 export interface MessageReadEvent {
-  type: 'message_read';
+  type: "message_read";
   timestamp: string;
   phone_number_id: string;
   from: string;
@@ -80,7 +80,7 @@ export interface MessageReadEvent {
  * Message delivery event
  */
 export interface MessageDeliveryEvent {
-  type: 'message_delivery';
+  type: "message_delivery";
   timestamp: string;
   phone_number_id: string;
   to: string;
@@ -93,11 +93,11 @@ export interface MessageDeliveryEvent {
  * User status change event
  */
 export interface UserStatusChangeEvent {
-  type: 'user_status_change';
+  type: "user_status_change";
   timestamp: string;
   phone_number_id: string;
   from: string;
-  status: 'online' | 'offline' | 'typing' | 'recording';
+  status: "online" | "offline" | "typing" | "recording";
 }
 
 /**
@@ -105,10 +105,10 @@ export interface UserStatusChangeEvent {
  * Account update event
  */
 export interface AccountUpdateEvent {
-  type: 'account_update';
+  type: "account_update";
   timestamp: string;
   phone_number_id: string;
-  update_type: 'profile' | 'business_info' | 'settings';
+  update_type: "profile" | "business_info" | "settings";
   changes: Record<
     string,
     string | number | boolean | Record<string, unknown> | unknown[]
@@ -120,12 +120,12 @@ export interface AccountUpdateEvent {
  * Template status event
  */
 export interface TemplateStatusEvent {
-  type: 'template_status';
+  type: "template_status";
   timestamp: string;
   phone_number_id: string;
   template_id: string;
   template_name: string;
-  status: 'approved' | 'rejected' | 'pending' | 'disabled';
+  status: "approved" | "rejected" | "pending" | "disabled";
   reason?: string;
 }
 
@@ -134,12 +134,12 @@ export interface TemplateStatusEvent {
  * Phone number quality update event
  */
 export interface PhoneNumberQualityEvent {
-  type: 'phone_number_quality';
+  type: "phone_number_quality";
   timestamp: string;
   phone_number_id: string;
   quality_score: number;
-  quality_rating: 'green' | 'yellow' | 'red';
-  previous_rating?: 'green' | 'yellow' | 'red';
+  quality_rating: "green" | "yellow" | "red";
+  previous_rating?: "green" | "yellow" | "red";
 }
 
 /**
@@ -147,20 +147,20 @@ export interface PhoneNumberQualityEvent {
  * Security event
  */
 export interface SecurityEvent {
-  type: 'security_event';
+  type: "security_event";
   timestamp: string;
   phone_number_id: string;
   event_type:
-    | 'suspicious_activity'
-    | 'rate_limit_exceeded'
-    | 'unauthorized_access';
+    | "suspicious_activity"
+    | "rate_limit_exceeded"
+    | "unauthorized_access";
   details: {
     source_ip?: string;
     user_agent?: string;
     request_count?: number;
     description: string;
   };
-  severity: 'low' | 'medium' | 'high' | 'critical';
+  severity: "low" | "medium" | "high" | "critical";
 }
 
 /**
@@ -216,7 +216,7 @@ export interface EventFilter {
   };
   custom_filters?: Array<{
     field: string;
-    operator: 'equals' | 'contains' | 'starts_with' | 'ends_with' | 'regex';
+    operator: "equals" | "contains" | "starts_with" | "ends_with" | "regex";
     value: string;
   }>;
 }
@@ -233,7 +233,7 @@ export interface EventProcessingConfig {
   max_retries: number;
   retry_delay_ms: number;
   dead_letter_queue: boolean;
-  event_ordering: 'fifo' | 'priority' | 'none';
+  event_ordering: "fifo" | "priority" | "none";
 }
 
 /**
@@ -264,7 +264,7 @@ export interface EventBatch {
   events: WebhookEvent[];
   created_at: string;
   processed_at?: string;
-  status: 'pending' | 'processing' | 'completed' | 'failed';
+  status: "pending" | "processing" | "completed" | "failed";
   error?: string;
 }
 
@@ -273,31 +273,31 @@ export interface EventBatch {
  * Event constants
  */
 export const WEBHOOK_EVENT_TYPES = [
-  'message_received',
-  'message_status',
-  'message_read',
-  'message_delivery',
-  'user_status_change',
-  'account_update',
-  'template_status',
-  'phone_number_quality',
-  'security_event',
-  'webhook_error',
+  "message_received",
+  "message_status",
+  "message_read",
+  "message_delivery",
+  "user_status_change",
+  "account_update",
+  "template_status",
+  "phone_number_quality",
+  "security_event",
+  "webhook_error",
 ] as const;
 
 export const MESSAGE_EVENT_TYPES = [
-  'message_received',
-  'message_status',
-  'message_read',
-  'message_delivery',
+  "message_received",
+  "message_status",
+  "message_read",
+  "message_delivery",
 ] as const;
 
 export const SYSTEM_EVENT_TYPES = [
-  'account_update',
-  'template_status',
-  'phone_number_quality',
-  'security_event',
-  'webhook_error',
+  "account_update",
+  "template_status",
+  "phone_number_quality",
+  "security_event",
+  "webhook_error",
 ] as const;
 
 /**
@@ -315,59 +315,59 @@ export type SystemEventType = (typeof SYSTEM_EVENT_TYPES)[number];
 export function isMessageReceivedEvent(
   event: WebhookEvent,
 ): event is MessageReceivedEvent {
-  return event.type === 'message_received';
+  return event.type === "message_received";
 }
 
 export function isMessageStatusEvent(
   event: WebhookEvent,
 ): event is MessageStatusEvent {
-  return event.type === 'message_status';
+  return event.type === "message_status";
 }
 
 export function isMessageReadEvent(
   event: WebhookEvent,
 ): event is MessageReadEvent {
-  return event.type === 'message_read';
+  return event.type === "message_read";
 }
 
 export function isMessageDeliveryEvent(
   event: WebhookEvent,
 ): event is MessageDeliveryEvent {
-  return event.type === 'message_delivery';
+  return event.type === "message_delivery";
 }
 
 export function isUserStatusChangeEvent(
   event: WebhookEvent,
 ): event is UserStatusChangeEvent {
-  return event.type === 'user_status_change';
+  return event.type === "user_status_change";
 }
 
 export function isAccountUpdateEvent(
   event: WebhookEvent,
 ): event is AccountUpdateEvent {
-  return event.type === 'account_update';
+  return event.type === "account_update";
 }
 
 export function isTemplateStatusEvent(
   event: WebhookEvent,
 ): event is TemplateStatusEvent {
-  return event.type === 'template_status';
+  return event.type === "template_status";
 }
 
 export function isPhoneNumberQualityEvent(
   event: WebhookEvent,
 ): event is PhoneNumberQualityEvent {
-  return event.type === 'phone_number_quality';
+  return event.type === "phone_number_quality";
 }
 
 export function isSecurityEvent(event: WebhookEvent): event is SecurityEvent {
-  return event.type === 'security_event';
+  return event.type === "security_event";
 }
 
 export function isWebhookErrorEvent(
   event: WebhookEvent,
 ): event is WebhookErrorEvent {
-  return event.type === 'webhook_error';
+  return event.type === "webhook_error";
 }
 
 export function isMessageEvent(
@@ -397,24 +397,24 @@ export function isSystemEvent(
  */
 export function getEventPriority(event: WebhookEvent): number {
   switch (event.type) {
-    case 'security_event':
+    case "security_event":
       return ONE; // Highest priority
-    case 'webhook_error':
+    case "webhook_error":
       return COUNT_PAIR;
-    case 'message_received':
+    case "message_received":
       return COUNT_TRIPLE;
-    case 'message_status':
+    case "message_status":
       return COUNT_QUAD;
-    case 'template_status':
+    case "template_status":
       return COUNT_FIVE;
-    case 'phone_number_quality':
+    case "phone_number_quality":
       return MAGIC_6;
-    case 'account_update':
+    case "account_update":
       return DAYS_PER_WEEK;
-    case 'message_read':
-    case 'message_delivery':
+    case "message_read":
+    case "message_delivery":
       return MAGIC_8;
-    case 'user_status_change':
+    case "user_status_change":
       return MAGIC_9; // Lowest priority
     default:
       return COUNT_TEN;
@@ -423,12 +423,12 @@ export function getEventPriority(event: WebhookEvent): number {
 
 export function shouldRetryEvent(event: WebhookEvent, error: Error): boolean {
   // Don't retry security events or webhook errors
-  if (event.type === 'security_event' || event.type === 'webhook_error') {
+  if (event.type === "security_event" || event.type === "webhook_error") {
     return false;
   }
 
   // Don't retry on client errors (4xx)
-  if (error.message.includes('COUNT_QUAD')) {
+  if (error.message.includes("COUNT_QUAD")) {
     return false;
   }
 

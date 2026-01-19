@@ -1,5 +1,5 @@
-import { beforeEach, describe, expect, it, vi } from 'vitest';
-import { generateMetadata } from '../layout';
+import { beforeEach, describe, expect, it, vi } from "vitest";
+import { generateMetadata } from "../layout";
 
 // Mock dependencies using vi.hoisted - must be before module imports
 const { mockSetRequestLocale, mockNotFound, mockGenerateLocaleMetadata } =
@@ -9,47 +9,47 @@ const { mockSetRequestLocale, mockNotFound, mockGenerateLocaleMetadata } =
     mockGenerateLocaleMetadata: vi.fn(),
   }));
 
-vi.mock('next-intl/server', () => ({
+vi.mock("next-intl/server", () => ({
   setRequestLocale: mockSetRequestLocale,
 }));
 
-vi.mock('next/navigation', () => ({
+vi.mock("next/navigation", () => ({
   notFound: mockNotFound,
 }));
 
-vi.mock('@/app/[locale]/layout-metadata', () => ({
+vi.mock("@/app/[locale]/layout-metadata", () => ({
   generateLocaleMetadata: mockGenerateLocaleMetadata,
 }));
 
-vi.mock('@/i18n/routing', () => ({
+vi.mock("@/i18n/routing", () => ({
   routing: {
-    locales: ['en', 'zh'],
-    defaultLocale: 'en',
+    locales: ["en", "zh"],
+    defaultLocale: "en",
   },
 }));
 
-describe('LocaleLayout', () => {
+describe("LocaleLayout", () => {
   beforeEach(() => {
     vi.clearAllMocks();
     mockNotFound.mockImplementation(() => {
-      throw new Error('NEXT_NOT_FOUND');
+      throw new Error("NEXT_NOT_FOUND");
     });
   });
 
-  describe('generateMetadata', () => {
-    it('should export generateMetadata from layout-metadata', () => {
+  describe("generateMetadata", () => {
+    it("should export generateMetadata from layout-metadata", () => {
       expect(generateMetadata).toBe(mockGenerateLocaleMetadata);
     });
   });
 
-  describe('locale validation', () => {
-    it('should have valid locale configuration', async () => {
+  describe("locale validation", () => {
+    it("should have valid locale configuration", async () => {
       // Import routing config to verify locale setup
-      const { routing } = await import('@/i18n/routing');
+      const { routing } = await import("@/i18n/routing");
 
-      expect(routing.locales).toContain('en');
-      expect(routing.locales).toContain('zh');
-      expect(routing.defaultLocale).toBe('en');
+      expect(routing.locales).toContain("en");
+      expect(routing.locales).toContain("zh");
+      expect(routing.defaultLocale).toBe("en");
     });
   });
 });

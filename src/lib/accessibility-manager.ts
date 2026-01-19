@@ -1,4 +1,4 @@
-'use client';
+"use client";
 
 /**
  * 无障碍性支持库 - 管理器类
@@ -7,36 +7,36 @@
 import {
   THEME_ANNOUNCEMENTS,
   type ScreenReaderConfig,
-} from '@/lib/accessibility-types';
-import { logger } from '@/lib/logger';
+} from "@/lib/accessibility-types";
+import { logger } from "@/lib/logger";
 import {
   DELAY_CONSTANTS,
   PERCENTAGE_CONSTANTS,
-} from '@/constants/app-constants';
+} from "@/constants/app-constants";
 
 const createScreenReaderConfig = (
   config?: Partial<ScreenReaderConfig>,
 ): ScreenReaderConfig => ({
-  enabled: typeof config?.enabled === 'boolean' ? config.enabled : true,
-  language: config?.language ?? 'en',
+  enabled: typeof config?.enabled === "boolean" ? config.enabled : true,
+  language: config?.language ?? "en",
   announceDelay:
-    typeof config?.announceDelay === 'number'
+    typeof config?.announceDelay === "number"
       ? config.announceDelay
       : PERCENTAGE_CONSTANTS.FULL,
 });
 
-const getThemeAnnouncements = (language: ScreenReaderConfig['language']) =>
-  language === 'zh' ? THEME_ANNOUNCEMENTS.zh : THEME_ANNOUNCEMENTS.en;
+const getThemeAnnouncements = (language: ScreenReaderConfig["language"]) =>
+  language === "zh" ? THEME_ANNOUNCEMENTS.zh : THEME_ANNOUNCEMENTS.en;
 
 const applyScreenReaderConfigUpdate = (
   current: ScreenReaderConfig,
   update: Partial<ScreenReaderConfig>,
 ): ScreenReaderConfig => ({
   enabled:
-    typeof update.enabled === 'boolean' ? update.enabled : current.enabled,
+    typeof update.enabled === "boolean" ? update.enabled : current.enabled,
   language: update.language ?? current.language,
   announceDelay:
-    typeof update.announceDelay === 'number'
+    typeof update.announceDelay === "number"
       ? update.announceDelay
       : current.announceDelay,
 });
@@ -58,22 +58,22 @@ export class AccessibilityManager {
    * 初始化ARIA live region用于屏幕阅读器公告
    */
   private initializeLiveRegion(): void {
-    if (typeof document === 'undefined') return;
+    if (typeof document === "undefined") return;
 
     // 创建或获取现有的live region
-    this.liveRegion = document.getElementById('accessibility-live-region');
+    this.liveRegion = document.getElementById("accessibility-live-region");
 
     if (!this.liveRegion) {
-      this.liveRegion = document.createElement('div');
-      this.liveRegion.setAttribute('id', 'accessibility-live-region');
-      this.liveRegion.setAttribute('aria-live', 'polite');
-      this.liveRegion.setAttribute('aria-atomic', 'true');
-      this.liveRegion.setAttribute('role', 'status');
-      this.liveRegion.style.position = 'absolute';
-      this.liveRegion.style.left = '-10000px';
-      this.liveRegion.style.width = '1px';
-      this.liveRegion.style.height = '1px';
-      this.liveRegion.style.overflow = 'hidden';
+      this.liveRegion = document.createElement("div");
+      this.liveRegion.setAttribute("id", "accessibility-live-region");
+      this.liveRegion.setAttribute("aria-live", "polite");
+      this.liveRegion.setAttribute("aria-atomic", "true");
+      this.liveRegion.setAttribute("role", "status");
+      this.liveRegion.style.position = "absolute";
+      this.liveRegion.style.left = "-10000px";
+      this.liveRegion.style.width = "1px";
+      this.liveRegion.style.height = "1px";
+      this.liveRegion.style.overflow = "hidden";
 
       document.body.appendChild(this.liveRegion);
     }
@@ -88,11 +88,11 @@ export class AccessibilityManager {
     const announcements = getThemeAnnouncements(this.config.language);
     let message: string;
 
-    if (theme === 'light') {
+    if (theme === "light") {
       message = announcements.light;
-    } else if (theme === 'dark') {
+    } else if (theme === "dark") {
       message = announcements.dark;
-    } else if (theme === 'system') {
+    } else if (theme === "system") {
       message = announcements.system;
     } else {
       message = `Switched to ${theme} mode`;
@@ -105,7 +105,7 @@ export class AccessibilityManager {
           this.liveRegion.textContent = message;
         } catch (error) {
           logger.warn(
-            'Failed to set textContent for accessibility announcement',
+            "Failed to set textContent for accessibility announcement",
             {
               message,
               error: error instanceof Error ? error.message : String(error),
@@ -118,10 +118,10 @@ export class AccessibilityManager {
         setTimeout(() => {
           if (this.liveRegion) {
             try {
-              this.liveRegion.textContent = '';
+              this.liveRegion.textContent = "";
             } catch (error) {
               logger.warn(
-                'Failed to clear textContent for accessibility announcement',
+                "Failed to clear textContent for accessibility announcement",
                 {
                   error: error instanceof Error ? error.message : String(error),
                 },
@@ -145,7 +145,7 @@ export class AccessibilityManager {
     try {
       this.liveRegion.textContent = message;
     } catch (error) {
-      logger.warn('Failed to set textContent for switching announcement', {
+      logger.warn("Failed to set textContent for switching announcement", {
         message,
         error: error instanceof Error ? error.message : String(error),
       });
@@ -156,10 +156,10 @@ export class AccessibilityManager {
     setTimeout(() => {
       if (this.liveRegion) {
         try {
-          this.liveRegion.textContent = '';
+          this.liveRegion.textContent = "";
         } catch (error) {
           logger.warn(
-            'Failed to clear textContent for switching announcement',
+            "Failed to clear textContent for switching announcement",
             {
               error: error instanceof Error ? error.message : String(error),
             },
@@ -194,7 +194,7 @@ export class AccessibilityManager {
   /**
    * 设置语言
    */
-  setLanguage(language: 'zh' | 'en'): void {
+  setLanguage(language: "zh" | "en"): void {
     this.config.language = language;
   }
 
@@ -227,7 +227,7 @@ export class AccessibilityManager {
     if (this.liveRegion) {
       if (this.liveRegion.parentNode) {
         this.liveRegion.parentNode.removeChild(this.liveRegion);
-      } else if (typeof document !== 'undefined' && document.body) {
+      } else if (typeof document !== "undefined" && document.body) {
         document.body.removeChild(this.liveRegion);
       }
       this.liveRegion = null;

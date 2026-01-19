@@ -4,23 +4,23 @@
  * This module provides utility functions for content management,
  * including path validation, configuration, and constants.
  */
-import fs from 'fs';
-import path from 'path';
-import { ContentError, type ContentConfig } from '@/types/content.types';
-import type { ValidationConfig } from '@/lib/content-validation';
-import { logger } from '@/lib/logger';
-import { COUNT_TEN } from '@/constants';
-import { COUNT_160 } from '@/constants/count';
+import fs from "fs";
+import path from "path";
+import { ContentError, type ContentConfig } from "@/types/content.types";
+import type { ValidationConfig } from "@/lib/content-validation";
+import { logger } from "@/lib/logger";
+import { COUNT_TEN } from "@/constants";
+import { COUNT_160 } from "@/constants/count";
 
 // Content directory paths
-export const CONTENT_DIR = path.join(process.cwd(), 'content');
-export const POSTS_DIR = path.join(CONTENT_DIR, 'posts');
-export const PAGES_DIR = path.join(CONTENT_DIR, 'pages');
-export const PRODUCTS_DIR = path.join(CONTENT_DIR, 'products');
-export const CONFIG_DIR = path.join(CONTENT_DIR, 'config');
+export const CONTENT_DIR = path.join(process.cwd(), "content");
+export const POSTS_DIR = path.join(CONTENT_DIR, "posts");
+export const PAGES_DIR = path.join(CONTENT_DIR, "pages");
+export const PRODUCTS_DIR = path.join(CONTENT_DIR, "products");
+export const CONFIG_DIR = path.join(CONTENT_DIR, "config");
 
 // Allowed file extensions for security
-export const ALLOWED_EXTENSIONS = ['.md', '.mdx', '.json'];
+export const ALLOWED_EXTENSIONS = [".md", ".mdx", ".json"];
 
 /**
  * Determine if drafts should be enabled based on environment.
@@ -35,10 +35,10 @@ export const ALLOWED_EXTENSIONS = ['.md', '.mdx', '.json'];
 function resolveDraftsEnabled(configValue?: boolean): boolean {
   const envOverride = process.env.CONTENT_ENABLE_DRAFTS;
   if (envOverride !== undefined) {
-    return envOverride === 'true';
+    return envOverride === "true";
   }
 
-  if (process.env.NODE_ENV === 'development') {
+  if (process.env.NODE_ENV === "development") {
     return true;
   }
 
@@ -47,16 +47,16 @@ function resolveDraftsEnabled(configValue?: boolean): boolean {
 
 // Default content configuration
 const DEFAULT_CONFIG: ContentConfig = {
-  defaultLocale: 'en',
-  supportedLocales: ['en', 'zh'],
+  defaultLocale: "en",
+  supportedLocales: ["en", "zh"],
   postsPerPage: COUNT_TEN,
   enableDrafts: resolveDraftsEnabled(),
   enableSearch: true,
   enableComments: false,
   autoGenerateExcerpt: true,
   excerptLength: COUNT_160,
-  dateFormat: 'YYYY-MM-DD',
-  timeZone: 'UTC',
+  dateFormat: "YYYY-MM-DD",
+  timeZone: "UTC",
 };
 
 /**
@@ -97,10 +97,10 @@ export function validateFilePath(
   filePath: string,
   allowedBaseDir: string,
 ): string {
-  if (!filePath || typeof filePath !== 'string') {
+  if (!filePath || typeof filePath !== "string") {
     throw new ContentError(
-      'Invalid file path: path must be a non-empty string',
-      'INVALID_PATH',
+      "Invalid file path: path must be a non-empty string",
+      "INVALID_PATH",
     );
   }
 
@@ -108,10 +108,10 @@ export function validateFilePath(
   const normalizedPath = path.normalize(filePath);
 
   // Check for directory traversal attempts
-  if (normalizedPath.includes('..')) {
+  if (normalizedPath.includes("..")) {
     throw new ContentError(
-      'Invalid file path: directory traversal detected',
-      'DIRECTORY_TRAVERSAL',
+      "Invalid file path: directory traversal detected",
+      "DIRECTORY_TRAVERSAL",
     );
   }
 
@@ -127,7 +127,7 @@ export function validateFilePath(
   if (!resolvedPath.startsWith(resolvedBaseDir)) {
     throw new ContentError(
       `File path outside allowed directory: ${resolvedPath}`,
-      'PATH_OUTSIDE_BASE',
+      "PATH_OUTSIDE_BASE",
     );
   }
 
@@ -135,8 +135,8 @@ export function validateFilePath(
   const ext = path.extname(resolvedPath);
   if (ext && !ALLOWED_EXTENSIONS.includes(ext)) {
     throw new ContentError(
-      `File extension not allowed: ${ext}. Allowed extensions: ${ALLOWED_EXTENSIONS.join(', ')}`,
-      'INVALID_EXTENSION',
+      `File extension not allowed: ${ext}. Allowed extensions: ${ALLOWED_EXTENSIONS.join(", ")}`,
+      "INVALID_EXTENSION",
     );
   }
 
@@ -148,14 +148,14 @@ export function validateFilePath(
  */
 export function getContentConfig(): ContentConfig {
   try {
-    const configPath = path.join(CONFIG_DIR, 'content.json');
+    const configPath = path.join(CONFIG_DIR, "content.json");
     // Validate config file path for security
     const validatedConfigPath = validateFilePath(configPath, CONTENT_DIR);
 
     // eslint-disable-next-line security/detect-non-literal-fs-filename
     if (fs.existsSync(validatedConfigPath)) {
       // eslint-disable-next-line security/detect-non-literal-fs-filename
-      const configContent = fs.readFileSync(validatedConfigPath, 'utf-8');
+      const configContent = fs.readFileSync(validatedConfigPath, "utf-8");
       const config = JSON.parse(configContent) as Partial<ContentConfig>;
 
       // 通过显式字段白名单方式合并配置，防止在 ContentConfig 之外静默注入额外键
@@ -164,7 +164,7 @@ export function getContentConfig(): ContentConfig {
       return mergedConfig;
     }
   } catch (error) {
-    logger.warn('Failed to load content config, using defaults', { error });
+    logger.warn("Failed to load content config, using defaults", { error });
   }
 
   return DEFAULT_CONFIG;
@@ -177,11 +177,11 @@ export function getContentConfig(): ContentConfig {
 export function warnIfDraftsInProduction(): void {
   const config = getContentConfig();
 
-  if (config.enableDrafts && process.env.NODE_ENV === 'production') {
+  if (config.enableDrafts && process.env.NODE_ENV === "production") {
     logger.warn(
-      'CONTENT_WARNING: Drafts are enabled in production build. ' +
-        'Draft content may be exposed to users. ' +
-        'Set CONTENT_ENABLE_DRAFTS=false or remove the env var to disable.',
+      "CONTENT_WARNING: Drafts are enabled in production build. " +
+        "Draft content may be exposed to users. " +
+        "Set CONTENT_ENABLE_DRAFTS=false or remove the env var to disable.",
     );
   }
 }
@@ -239,23 +239,23 @@ export function getValidationConfig(): ValidationConfig {
   };
 
   try {
-    const configPath = path.join(CONFIG_DIR, 'content.json');
+    const configPath = path.join(CONFIG_DIR, "content.json");
     const validatedConfigPath = validateFilePath(configPath, CONTENT_DIR);
 
     // eslint-disable-next-line security/detect-non-literal-fs-filename
     if (!fs.existsSync(validatedConfigPath)) return fallback;
 
     // eslint-disable-next-line security/detect-non-literal-fs-filename
-    const configContent = fs.readFileSync(validatedConfigPath, 'utf-8');
+    const configContent = fs.readFileSync(validatedConfigPath, "utf-8");
     const config = JSON.parse(configContent) as Record<string, unknown>;
-    const validation = config['validation'] as
+    const validation = config["validation"] as
       | Partial<ValidationConfig>
       | undefined;
     if (!validation) return fallback;
 
     return buildMergedValidationConfig(validation);
   } catch (error) {
-    logger.warn('Failed to load validation config, using defaults', { error });
+    logger.warn("Failed to load validation config, using defaults", { error });
   }
   return fallback;
 }

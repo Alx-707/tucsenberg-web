@@ -8,14 +8,14 @@
  * - 输出：reports/architecture/cross-domain.json
  */
 
-const fs = require('fs');
-const path = require('path');
-const { execSync } = require('child_process');
+const fs = require("fs");
+const path = require("path");
+const { execSync } = require("child_process");
 
-const REPORT_DIR = path.join(process.cwd(), 'reports', 'architecture');
-const REPORT_PATH = path.join(REPORT_DIR, 'cross-domain.json');
+const REPORT_DIR = path.join(process.cwd(), "reports", "architecture");
+const REPORT_PATH = path.join(REPORT_DIR, "cross-domain.json");
 const DC_COMMAND =
-  'pnpm exec dependency-cruiser src --config .dependency-cruiser.js -T json';
+  "pnpm exec dependency-cruiser src --config .dependency-cruiser.js -T json";
 
 function ensureReportDir() {
   if (!fs.existsSync(REPORT_DIR)) {
@@ -25,15 +25,15 @@ function ensureReportDir() {
 
 function runDependencyCruiser() {
   const output = execSync(DC_COMMAND, {
-    encoding: 'utf8',
-    stdio: ['ignore', 'pipe', 'pipe'],
+    encoding: "utf8",
+    stdio: ["ignore", "pipe", "pipe"],
     maxBuffer: 20 * 1024 * 1024,
   });
   return JSON.parse(output);
 }
 
 function getDomain(filePath) {
-  const match = /^src\/lib\/([^/]+)/.exec(filePath || '');
+  const match = /^src\/lib\/([^/]+)/.exec(filePath || "");
   return match ? match[1] : null;
 }
 
@@ -82,7 +82,7 @@ function main() {
     samples: report.samples,
   };
 
-  fs.writeFileSync(REPORT_PATH, JSON.stringify(payload, null, 2), 'utf8');
+  fs.writeFileSync(REPORT_PATH, JSON.stringify(payload, null, 2), "utf8");
   console.log(`跨域报告已生成: ${REPORT_PATH}`);
   console.log(JSON.stringify(payload, null, 2));
 }
@@ -91,7 +91,7 @@ if (require.main === module) {
   try {
     main();
   } catch (error) {
-    console.error('生成跨域报告失败:', error.message);
+    console.error("生成跨域报告失败:", error.message);
     process.exit(1);
   }
 }

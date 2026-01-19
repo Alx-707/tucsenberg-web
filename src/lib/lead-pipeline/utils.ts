@@ -2,9 +2,9 @@
  * Lead Pipeline Utility Functions
  */
 
-import { randomBytes } from 'crypto';
-import { sanitizePlainText } from '@/lib/security-validation';
-import { ONE, ZERO } from '@/constants';
+import { randomBytes } from "crypto";
+import { sanitizePlainText } from "@/lib/security-validation";
+import { ONE, ZERO } from "@/constants";
 
 /**
  * Result of name splitting operation
@@ -34,7 +34,7 @@ export function splitName(fullName: string): SplitNameResult {
   const trimmed = fullName.trim();
 
   if (!trimmed) {
-    return { firstName: '', lastName: '' };
+    return { firstName: "", lastName: "" };
   }
 
   // Split by whitespace
@@ -45,13 +45,13 @@ export function splitName(fullName: string): SplitNameResult {
     // nosemgrep: object-injection-sink-dynamic-property -- ZERO is a trusted constant (value: 0)
     // eslint-disable-next-line security/detect-object-injection -- safe array access with constant index
     const firstPart = parts[ZERO];
-    return { firstName: firstPart ?? '', lastName: '' };
+    return { firstName: firstPart ?? "", lastName: "" };
   }
 
   // Multiple words: last word becomes lastName, rest becomes firstName
   const lastIndex = parts.length - ONE;
-  const lastName = parts.at(lastIndex) ?? '';
-  const firstName = parts.slice(ZERO, -ONE).join(' ');
+  const lastName = parts.at(lastIndex) ?? "";
+  const firstName = parts.slice(ZERO, -ONE).join(" ");
 
   return { firstName, lastName };
 }
@@ -64,7 +64,7 @@ export function splitName(fullName: string): SplitNameResult {
  * @returns Formatted quantity string
  */
 export function formatQuantity(quantity: string | number): string {
-  if (typeof quantity === 'number') {
+  if (typeof quantity === "number") {
     return quantity.toString();
   }
   return quantity.trim();
@@ -92,7 +92,7 @@ export function generateProductInquiryMessage(
     lines.push(`Requirements: ${requirements.trim()}`);
   }
 
-  return lines.join('\n');
+  return lines.join("\n");
 }
 
 /**
@@ -120,7 +120,7 @@ export function sanitizeInput(input: string): string {
  */
 export function generateLeadReferenceId(type: string): string {
   const timestamp = Date.now().toString(36);
-  const random = randomBytes(4).toString('hex');
+  const random = randomBytes(4).toString("hex");
   const prefix = type.substring(ZERO, 3).toUpperCase();
   return `${prefix}-${timestamp}-${random}`;
 }

@@ -1,5 +1,5 @@
-import { type ReactNode } from 'react';
-import { cn } from '@/lib/utils';
+import { type ReactNode } from "react";
+import { cn } from "@/lib/utils";
 
 /**
  * CSS-First Responsive Layout Component
@@ -22,40 +22,40 @@ import { cn } from '@/lib/utils';
 
 interface ResponsiveLayoutProps {
   /** Main content (always rendered) */
-  'children': ReactNode;
+  children: ReactNode;
   /** Additional CSS classes */
-  'className'?: string;
+  className?: string;
   /** Content shown only on mobile (< md breakpoint) */
-  'mobileContent'?: ReactNode;
+  mobileContent?: ReactNode;
   /** Content shown only on tablet (md - lg breakpoints) */
-  'tabletContent'?: ReactNode;
+  tabletContent?: ReactNode;
   /** Content shown only on desktop (>= lg breakpoint) */
-  'desktopContent'?: ReactNode;
+  desktopContent?: ReactNode;
   // Legacy props for backwards compatibility
   /** @deprecated Use mobileContent instead */
-  'mobileLayout'?: ReactNode;
+  mobileLayout?: ReactNode;
   /** @deprecated Use tabletContent instead */
-  'tabletLayout'?: ReactNode;
+  tabletLayout?: ReactNode;
   /** @deprecated Use desktopContent instead */
-  'desktopLayout'?: ReactNode;
+  desktopLayout?: ReactNode;
   /** @deprecated Use mobileContent instead */
-  'mobileNavigation'?: ReactNode;
+  mobileNavigation?: ReactNode;
   /** @deprecated Use tabletContent instead */
-  'tabletSidebar'?: ReactNode;
+  tabletSidebar?: ReactNode;
   /** @deprecated Use desktopContent instead */
-  'desktopSidebar'?: ReactNode;
+  desktopSidebar?: ReactNode;
   // Event handlers (JS-required use cases)
-  'onTouchStart'?: () => void;
-  'onTouchEnd'?: () => void;
-  'onMouseEnter'?: () => void;
-  'onMouseLeave'?: () => void;
+  onTouchStart?: () => void;
+  onTouchEnd?: () => void;
+  onMouseEnter?: () => void;
+  onMouseLeave?: () => void;
   /** @deprecated Layout detection is now CSS-based; callback provided for migration period */
-  'onLayoutChange'?: (_layout: string) => void;
+  onLayoutChange?: (_layout: string) => void;
   // Accessibility
-  'role'?: string;
-  'aria-label'?: string;
-  'data-testid'?: string;
-  'tabIndex'?: number;
+  role?: string;
+  "aria-label"?: string;
+  "data-testid"?: string;
+  tabIndex?: number;
 }
 
 /**
@@ -67,7 +67,7 @@ function ResponsiveSlot({
   show,
 }: {
   children: ReactNode;
-  show: 'mobile' | 'tablet' | 'desktop';
+  show: "mobile" | "tablet" | "desktop";
 }) {
   if (!children) {
     return null;
@@ -76,17 +76,17 @@ function ResponsiveSlot({
   // Static class mapping to avoid dynamic object injection
   let visibilityClass: string;
   switch (show) {
-    case 'mobile':
-      visibilityClass = 'block md:hidden';
+    case "mobile":
+      visibilityClass = "block md:hidden";
       break;
-    case 'tablet':
-      visibilityClass = 'hidden md:block lg:hidden';
+    case "tablet":
+      visibilityClass = "hidden md:block lg:hidden";
       break;
-    case 'desktop':
-      visibilityClass = 'hidden lg:block';
+    case "desktop":
+      visibilityClass = "hidden lg:block";
       break;
     default:
-      visibilityClass = '';
+      visibilityClass = "";
   }
 
   return <div className={visibilityClass}>{children}</div>;
@@ -94,7 +94,7 @@ function ResponsiveSlot({
 
 export function ResponsiveLayout({
   children,
-  className = '',
+  className = "",
   mobileContent,
   tabletContent,
   desktopContent,
@@ -110,11 +110,11 @@ export function ResponsiveLayout({
   onTouchEnd,
   onMouseEnter,
   onMouseLeave,
-  'onLayoutChange': _onLayoutChange,
+  onLayoutChange: _onLayoutChange,
   // Accessibility
   role,
-  'aria-label': ariaLabel,
-  'data-testid': dataTestId,
+  "aria-label": ariaLabel,
+  "data-testid": dataTestId,
   tabIndex,
 }: ResponsiveLayoutProps) {
   // Resolve legacy props to new props
@@ -138,9 +138,9 @@ export function ResponsiveLayout({
         data-testid={dataTestId}
         tabIndex={tabIndex}
       >
-        <ResponsiveSlot show='mobile'>{resolvedMobile}</ResponsiveSlot>
-        <ResponsiveSlot show='tablet'>{resolvedTablet}</ResponsiveSlot>
-        <ResponsiveSlot show='desktop'>{resolvedDesktop}</ResponsiveSlot>
+        <ResponsiveSlot show="mobile">{resolvedMobile}</ResponsiveSlot>
+        <ResponsiveSlot show="tablet">{resolvedTablet}</ResponsiveSlot>
+        <ResponsiveSlot show="desktop">{resolvedDesktop}</ResponsiveSlot>
         {/* Fallback to children if no slot matches */}
         {!resolvedMobile && !resolvedTablet && !resolvedDesktop && children}
       </div>

@@ -4,13 +4,13 @@
 
 /* eslint-disable security/detect-object-injection -- 路径配置工具需要动态访问配置对象，所有访问都通过hasOwnProperty安全检查 */
 
-import { LOCALES_CONFIG } from '@/config/paths/locales-config';
+import { LOCALES_CONFIG } from "@/config/paths/locales-config";
 import {
   DYNAMIC_PATHS_CONFIG,
   PATHS_CONFIG,
-} from '@/config/paths/paths-config';
-import type { Locale, PageType } from '@/config/paths/types';
-import { ZERO } from '@/constants';
+} from "@/config/paths/paths-config";
+import type { Locale, PageType } from "@/config/paths/types";
+import { ZERO } from "@/constants";
 
 /**
  * 获取本地化路径
@@ -18,10 +18,10 @@ import { ZERO } from '@/constants';
 export function getLocalizedPath(pageType: PageType, locale: Locale): string {
   // 严格验证输入参数
   if (pageType === null || pageType === undefined) {
-    throw new Error('Page type cannot be null or undefined');
+    throw new Error("Page type cannot be null or undefined");
   }
   if (locale === null || locale === undefined) {
-    throw new Error('Locale cannot be null or undefined');
+    throw new Error("Locale cannot be null or undefined");
   }
 
   if (!Object.prototype.hasOwnProperty.call(PATHS_CONFIG, pageType)) {
@@ -42,16 +42,16 @@ export function getLocalizedPath(pageType: PageType, locale: Locale): string {
  */
 export function getPathnames(): Record<string, string> {
   return {
-    '/': '/',
-    '/about': '/about',
-    '/contact': '/contact',
-    '/blog': '/blog',
-    '/blog/[slug]': '/blog/[slug]',
-    '/products': '/products',
-    '/products/[slug]': '/products/[slug]',
-    '/faq': '/faq',
-    '/privacy': '/privacy',
-    '/terms': '/terms',
+    "/": "/",
+    "/about": "/about",
+    "/contact": "/contact",
+    "/blog": "/blog",
+    "/blog/[slug]": "/blog/[slug]",
+    "/products": "/products",
+    "/products/[slug]": "/products/[slug]",
+    "/faq": "/faq",
+    "/privacy": "/privacy",
+    "/terms": "/terms",
   };
 }
 
@@ -76,15 +76,15 @@ export function getPageTypeFromPath(
 ): PageType | null {
   // 严格验证输入参数
   if (path === null || path === undefined) {
-    throw new Error('Path cannot be null or undefined');
+    throw new Error("Path cannot be null or undefined");
   }
   if (locale === null || locale === undefined) {
-    throw new Error('Locale cannot be null or undefined');
+    throw new Error("Locale cannot be null or undefined");
   }
 
   // 处理根路径
-  if (path === '/' || path === '') {
-    return 'home';
+  if (path === "/" || path === "") {
+    return "home";
   }
 
   // 查找匹配的页面类型
@@ -145,7 +145,7 @@ export function validatePathsConfig(): { isValid: boolean; errors: string[] } {
     LOCALES_CONFIG.locales.forEach((locale) => {
       if (Object.prototype.hasOwnProperty.call(paths, locale)) {
         const path = paths[locale];
-        if (pageType !== 'home' && !path.startsWith('/')) {
+        if (pageType !== "home" && !path.startsWith("/")) {
           errors.push(
             `Invalid path format for ${pageType}.${locale}: ${path} (should start with /)`,
           );
@@ -169,6 +169,6 @@ export function getRoutingConfig() {
     defaultLocale: LOCALES_CONFIG.defaultLocale,
     pathnames: getPathnames(),
     // 使用 'always' 模式确保所有语言都有前缀，这是使用 pathnames 时的最佳实践
-    localePrefix: 'always' as const,
+    localePrefix: "always" as const,
   };
 }

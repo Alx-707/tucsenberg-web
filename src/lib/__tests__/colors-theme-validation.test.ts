@@ -15,41 +15,41 @@ import {
   oklchToCSS,
   validateThemeContrast,
   type OKLCHColor,
-} from '../colors';
+} from "../colors";
 
-describe('Color Theme Validation and Edge Cases Tests', () => {
-  describe('ColorSystem工具类', () => {
-    it('should provide access to light theme colors', () => {
+describe("Color Theme Validation and Edge Cases Tests", () => {
+  describe("ColorSystem工具类", () => {
+    it("should provide access to light theme colors", () => {
       expect(ColorSystem.light).toBe(lightThemeColors);
     });
 
-    it('should provide access to dark theme colors', () => {
+    it("should provide access to dark theme colors", () => {
       expect(ColorSystem.dark).toBe(darkThemeColors);
     });
 
-    it('should provide utility functions', () => {
+    it("should provide utility functions", () => {
       expect(ColorSystem.generateVariables).toBe(generateCSSVariables);
       expect(ColorSystem.validate).toBe(validateThemeContrast);
     });
   });
 
-  describe('主题颜色定义验证', () => {
-    it('should have consistent color keys between light and dark themes', () => {
+  describe("主题颜色定义验证", () => {
+    it("should have consistent color keys between light and dark themes", () => {
       const lightKeys = Object.keys(lightThemeColors).sort();
       const darkKeys = Object.keys(darkThemeColors).sort();
 
       expect(lightKeys).toEqual(darkKeys);
     });
 
-    it('should have valid OKLCH values in light theme', () => {
+    it("should have valid OKLCH values in light theme", () => {
       Object.entries(lightThemeColors).forEach(([_key, color]) => {
-        expect(color).toHaveProperty('l');
-        expect(color).toHaveProperty('c');
-        expect(color).toHaveProperty('h');
+        expect(color).toHaveProperty("l");
+        expect(color).toHaveProperty("c");
+        expect(color).toHaveProperty("h");
 
-        expect(typeof color.l).toBe('number');
-        expect(typeof color.c).toBe('number');
-        expect(typeof color.h).toBe('number');
+        expect(typeof color.l).toBe("number");
+        expect(typeof color.c).toBe("number");
+        expect(typeof color.h).toBe("number");
 
         // Basic sanity checks
         expect(color.l).toBeGreaterThanOrEqual(0);
@@ -59,15 +59,15 @@ describe('Color Theme Validation and Edge Cases Tests', () => {
       });
     });
 
-    it('should have valid OKLCH values in dark theme', () => {
+    it("should have valid OKLCH values in dark theme", () => {
       Object.entries(darkThemeColors).forEach(([_key, color]) => {
-        expect(color).toHaveProperty('l');
-        expect(color).toHaveProperty('c');
-        expect(color).toHaveProperty('h');
+        expect(color).toHaveProperty("l");
+        expect(color).toHaveProperty("c");
+        expect(color).toHaveProperty("h");
 
-        expect(typeof color.l).toBe('number');
-        expect(typeof color.c).toBe('number');
-        expect(typeof color.h).toBe('number');
+        expect(typeof color.l).toBe("number");
+        expect(typeof color.c).toBe("number");
+        expect(typeof color.h).toBe("number");
 
         // Basic sanity checks
         expect(color.l).toBeGreaterThanOrEqual(0);
@@ -77,7 +77,7 @@ describe('Color Theme Validation and Edge Cases Tests', () => {
       });
     });
 
-    it('should have reasonable lightness values', () => {
+    it("should have reasonable lightness values", () => {
       const allColors = { ...lightThemeColors, ...darkThemeColors };
 
       Object.entries(allColors).forEach(([_key, color]) => {
@@ -87,7 +87,7 @@ describe('Color Theme Validation and Edge Cases Tests', () => {
       });
     });
 
-    it('should have reasonable chroma values', () => {
+    it("should have reasonable chroma values", () => {
       const allColors = { ...lightThemeColors, ...darkThemeColors };
       const maxReasonableChroma = 0.5; // Most colors should have chroma <= 0.5
 
@@ -97,8 +97,8 @@ describe('Color Theme Validation and Edge Cases Tests', () => {
     });
   });
 
-  describe('边缘情况处理', () => {
-    it('should handle extreme lightness values', () => {
+  describe("边缘情况处理", () => {
+    it("should handle extreme lightness values", () => {
       const extremeLight: OKLCHColor = { l: 1, c: 0, h: 0 };
       const extremeDark: OKLCHColor = { l: 0, c: 0, h: 0 };
 
@@ -106,7 +106,7 @@ describe('Color Theme Validation and Edge Cases Tests', () => {
       expect(() => oklchToCSS(extremeDark)).not.toThrow();
     });
 
-    it('should handle extreme chroma values', () => {
+    it("should handle extreme chroma values", () => {
       const highChroma: OKLCHColor = { l: 0.5, c: 1, h: 180 };
       const zeroChroma: OKLCHColor = { l: 0.5, c: 0, h: 180 };
 
@@ -114,7 +114,7 @@ describe('Color Theme Validation and Edge Cases Tests', () => {
       expect(() => oklchToCSS(zeroChroma)).not.toThrow();
     });
 
-    it('should handle extreme hue values', () => {
+    it("should handle extreme hue values", () => {
       const negativeHue: OKLCHColor = { l: 0.5, c: 0.2, h: -180 };
       const largeHue: OKLCHColor = { l: 0.5, c: 0.2, h: 720 };
 
@@ -122,7 +122,7 @@ describe('Color Theme Validation and Edge Cases Tests', () => {
       expect(() => oklchToCSS(largeHue)).not.toThrow();
     });
 
-    it('should handle fractional alpha values', () => {
+    it("should handle fractional alpha values", () => {
       const colors = [
         { l: 0.5, c: 0.1, h: 180, alpha: 0.1 },
         { l: 0.5, c: 0.1, h: 180, alpha: 0.5 },
@@ -134,7 +134,7 @@ describe('Color Theme Validation and Edge Cases Tests', () => {
       });
     });
 
-    it('should handle very small numeric values', () => {
+    it("should handle very small numeric values", () => {
       const tinyColor: OKLCHColor = {
         l: 0.000001,
         c: 0.000001,
@@ -145,7 +145,7 @@ describe('Color Theme Validation and Edge Cases Tests', () => {
       expect(() => oklchToCSS(tinyColor)).not.toThrow();
     });
 
-    it('should handle very large numeric values', () => {
+    it("should handle very large numeric values", () => {
       const hugeColor: OKLCHColor = {
         l: 999999,
         c: 999999,
@@ -156,7 +156,7 @@ describe('Color Theme Validation and Edge Cases Tests', () => {
       expect(() => oklchToCSS(hugeColor)).not.toThrow();
     });
 
-    it('should handle scientific notation values', () => {
+    it("should handle scientific notation values", () => {
       const scientificColor: OKLCHColor = {
         l: 1e-10,
         c: 1e-5,
@@ -167,7 +167,7 @@ describe('Color Theme Validation and Edge Cases Tests', () => {
       expect(() => oklchToCSS(scientificColor)).not.toThrow();
     });
 
-    it('should handle mixed extreme values', () => {
+    it("should handle mixed extreme values", () => {
       const mixedColor: OKLCHColor = {
         l: Infinity,
         c: 0,
@@ -178,48 +178,48 @@ describe('Color Theme Validation and Edge Cases Tests', () => {
       expect(() => oklchToCSS(mixedColor)).not.toThrow();
     });
 
-    it('should handle undefined properties gracefully', () => {
+    it("should handle undefined properties gracefully", () => {
       const partialColor = { l: 0.5, c: 0.1 } as OKLCHColor;
 
       expect(() => oklchToCSS(partialColor)).not.toThrow();
     });
 
-    it('should handle null and undefined color objects', () => {
+    it("should handle null and undefined color objects", () => {
       expect(() => oklchToCSS(null as unknown as OKLCHColor)).toThrow();
       expect(() => oklchToCSS(undefined as unknown as OKLCHColor)).toThrow();
     });
 
-    it('should handle empty color object', () => {
+    it("should handle empty color object", () => {
       const emptyColor = {} as OKLCHColor;
 
       expect(() => oklchToCSS(emptyColor)).not.toThrow();
     });
 
-    it('should handle color object with extra properties', () => {
+    it("should handle color object with extra properties", () => {
       const extendedColor = {
         l: 0.5,
         c: 0.1,
         h: 180,
         alpha: 0.8,
-        extraProperty: 'should be ignored',
+        extraProperty: "should be ignored",
         anotherExtra: 123,
       } as OKLCHColor;
 
       expect(() => oklchToCSS(extendedColor)).not.toThrow();
     });
 
-    it('should handle string values in numeric properties', () => {
+    it("should handle string values in numeric properties", () => {
       const stringColor = {
-        l: '0.5' as unknown,
-        c: '0.1' as unknown,
-        h: '180' as unknown,
-        alpha: '0.8' as unknown,
+        l: "0.5" as unknown,
+        c: "0.1" as unknown,
+        h: "180" as unknown,
+        alpha: "0.8" as unknown,
       } as OKLCHColor;
 
       expect(() => oklchToCSS(stringColor)).not.toThrow();
     });
 
-    it('should handle boolean values in numeric properties', () => {
+    it("should handle boolean values in numeric properties", () => {
       const booleanColor = {
         l: true as unknown,
         c: false as unknown,
@@ -230,7 +230,7 @@ describe('Color Theme Validation and Edge Cases Tests', () => {
       expect(() => oklchToCSS(booleanColor)).not.toThrow();
     });
 
-    it('should handle array values in numeric properties', () => {
+    it("should handle array values in numeric properties", () => {
       const arrayColor = {
         l: [0.5] as unknown,
         c: [0.1, 0.2] as unknown,
@@ -241,18 +241,18 @@ describe('Color Theme Validation and Edge Cases Tests', () => {
       expect(() => oklchToCSS(arrayColor)).not.toThrow();
     });
 
-    it('should handle object values in numeric properties', () => {
+    it("should handle object values in numeric properties", () => {
       const objectColor = {
         l: { value: 0.5 } as unknown,
         c: { nested: { value: 0.1 } } as unknown,
-        h: { toString: () => '180' } as unknown,
+        h: { toString: () => "180" } as unknown,
         alpha: { valueOf: () => 0.8 } as unknown,
       } as OKLCHColor;
 
       expect(() => oklchToCSS(objectColor)).not.toThrow();
     });
 
-    it('should handle function values in numeric properties', () => {
+    it("should handle function values in numeric properties", () => {
       const functionColor = {
         l: (() => 0.5) as unknown,
         c: Math.sin as unknown,
@@ -263,18 +263,18 @@ describe('Color Theme Validation and Edge Cases Tests', () => {
       expect(() => oklchToCSS(functionColor)).not.toThrow();
     });
 
-    it('should handle Symbol values in numeric properties', () => {
+    it("should handle Symbol values in numeric properties", () => {
       const symbolColor = {
-        l: Symbol('lightness') as unknown,
+        l: Symbol("lightness") as unknown,
         c: Symbol.iterator as unknown,
-        h: Symbol.for('hue') as unknown,
+        h: Symbol.for("hue") as unknown,
         alpha: Symbol.toPrimitive as unknown,
       } as OKLCHColor;
 
       expect(() => oklchToCSS(symbolColor)).not.toThrow();
     });
 
-    it('should handle BigInt values in numeric properties', () => {
+    it("should handle BigInt values in numeric properties", () => {
       const bigintColor = {
         l: BigInt(1) as unknown,
         c: BigInt(0) as unknown,

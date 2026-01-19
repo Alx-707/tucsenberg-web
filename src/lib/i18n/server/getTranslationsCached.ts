@@ -1,5 +1,5 @@
-import { cache } from 'react';
-import { getTranslations } from 'next-intl/server';
+import { cache } from "react";
+import { getTranslations } from "next-intl/server";
 
 /**
  * Cached wrapper around next-intl/server getTranslations to avoid

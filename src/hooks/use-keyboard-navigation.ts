@@ -1,12 +1,12 @@
-'use client';
+"use client";
 
-import React, { useCallback, useEffect, useMemo, useRef } from 'react';
-import { ONE, ZERO } from '@/constants';
+import React, { useCallback, useEffect, useMemo, useRef } from "react";
+import { ONE, ZERO } from "@/constants";
 
 export interface KeyboardNavigationOptions {
   enabled?: boolean;
   loop?: boolean;
-  orientation?: 'horizontal' | 'vertical' | 'both';
+  orientation?: "horizontal" | "vertical" | "both";
   selector?: string;
   onNavigate?: (_element: HTMLElement, _direction: string) => void;
 }
@@ -26,7 +26,7 @@ export type KeyboardNavigationConfig = Required<KeyboardNavigationOptions>;
 const defaultOptions: Required<KeyboardNavigationOptions> = {
   enabled: true,
   loop: true,
-  orientation: 'both',
+  orientation: "both",
   selector:
     '[tabindex]:not([tabindex="-1"]), button:not([disabled]), input:not([disabled]), select:not([disabled]), textarea:not([disabled]), a[href], [contenteditable="true"]',
   // eslint-disable-next-line no-empty-function -- 默认的空回调函数，用户可选择性覆盖
@@ -60,28 +60,28 @@ function handleArrowKey(config: ArrowKeyConfig): boolean {
   const { key, isHorizontal, isVertical, event, focusNext, focusPrevious } =
     config;
   switch (key) {
-    case 'ArrowRight':
+    case "ArrowRight":
       if (isHorizontal) {
         event.preventDefault();
         focusNext();
         return true;
       }
       break;
-    case 'ArrowLeft':
+    case "ArrowLeft":
       if (isHorizontal) {
         event.preventDefault();
         focusPrevious();
         return true;
       }
       break;
-    case 'ArrowDown':
+    case "ArrowDown":
       if (isVertical) {
         event.preventDefault();
         focusNext();
         return true;
       }
       break;
-    case 'ArrowUp':
+    case "ArrowUp":
       if (isVertical) {
         event.preventDefault();
         focusPrevious();
@@ -103,7 +103,7 @@ function handleTabKey(args: {
   getCurrentFocusIndex: () => number;
 }): boolean {
   const { event, config, getFocusableElements, getCurrentFocusIndex } = args;
-  const direction = event.shiftKey ? 'previous' : 'next';
+  const direction = event.shiftKey ? "previous" : "next";
   const elements = getFocusableElements();
   const currentIndex = getCurrentFocusIndex();
   const indexDelta = event.shiftKey ? -ONE : ONE;
@@ -147,7 +147,7 @@ function useFocusManagement(
         const element = elements.at(index);
         if (element) {
           element.focus();
-          config.onNavigate(element, 'direct');
+          config.onNavigate(element, "direct");
         }
       }
     },
@@ -239,9 +239,9 @@ function useKeyboardHandler(args: {
 
       const { key } = event;
       const isHorizontal =
-        config.orientation === 'horizontal' || config.orientation === 'both';
+        config.orientation === "horizontal" || config.orientation === "both";
       const isVertical =
-        config.orientation === 'vertical' || config.orientation === 'both';
+        config.orientation === "vertical" || config.orientation === "both";
 
       // 处理箭头键
       const arrowHandled = handleArrowKey({
@@ -265,10 +265,10 @@ function useKeyboardHandler(args: {
       if (tabHandled) return;
 
       // 处理Home/End键
-      if (key === 'Home') {
+      if (key === "Home") {
         event.preventDefault();
         navigationActions.focusFirst();
-      } else if (key === 'End') {
+      } else if (key === "End") {
         event.preventDefault();
         navigationActions.focusLast();
       }
@@ -309,8 +309,8 @@ export function useKeyboardNavigation(
     const container = containerRef.current;
     if (!container || !config.enabled) return undefined;
 
-    container.addEventListener('keydown', handleKeyDown);
-    return () => container.removeEventListener('keydown', handleKeyDown);
+    container.addEventListener("keydown", handleKeyDown);
+    return () => container.removeEventListener("keydown", handleKeyDown);
   }, [handleKeyDown, config.enabled]);
 
   return {

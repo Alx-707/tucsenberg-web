@@ -1,10 +1,10 @@
-import { cn } from '@/lib/utils';
+import { cn } from "@/lib/utils";
 import {
   Card,
   CardContent,
   CardFooter,
   CardHeader,
-} from '@/components/ui/card';
+} from "@/components/ui/card";
 
 export interface PostCardSkeletonProps {
   /** Whether to show the cover image skeleton */
@@ -23,39 +23,39 @@ export function PostCardSkeleton({
   className,
 }: PostCardSkeletonProps) {
   return (
-    <Card className={cn('h-full overflow-hidden', className)}>
+    <Card className={cn("h-full overflow-hidden", className)}>
       {/* Cover Image Skeleton */}
       {showCoverImage && (
-        <div className='relative aspect-[16/9] w-full animate-pulse bg-muted' />
+        <div className="relative aspect-[16/9] w-full animate-pulse bg-muted" />
       )}
 
-      <CardHeader className='gap-3'>
+      <CardHeader className="gap-3">
         {/* Tags Skeleton */}
-        <div className='flex gap-1.5'>
-          <div className='h-5 w-12 animate-pulse rounded-full bg-muted' />
-          <div className='h-5 w-16 animate-pulse rounded-full bg-muted' />
+        <div className="flex gap-1.5">
+          <div className="h-5 w-12 animate-pulse rounded-full bg-muted" />
+          <div className="h-5 w-16 animate-pulse rounded-full bg-muted" />
         </div>
 
         {/* Title Skeleton */}
-        <div className='space-y-2'>
-          <div className='h-5 w-full animate-pulse rounded bg-muted' />
-          <div className='h-5 w-3/4 animate-pulse rounded bg-muted' />
+        <div className="space-y-2">
+          <div className="h-5 w-full animate-pulse rounded bg-muted" />
+          <div className="h-5 w-3/4 animate-pulse rounded bg-muted" />
         </div>
       </CardHeader>
 
       {/* Description Skeleton */}
-      <CardContent className='pt-0'>
-        <div className='space-y-2'>
-          <div className='h-4 w-full animate-pulse rounded bg-muted' />
-          <div className='h-4 w-full animate-pulse rounded bg-muted' />
-          <div className='h-4 w-2/3 animate-pulse rounded bg-muted' />
+      <CardContent className="pt-0">
+        <div className="space-y-2">
+          <div className="h-4 w-full animate-pulse rounded bg-muted" />
+          <div className="h-4 w-full animate-pulse rounded bg-muted" />
+          <div className="h-4 w-2/3 animate-pulse rounded bg-muted" />
         </div>
       </CardContent>
 
       {/* Footer Skeleton */}
-      <CardFooter className='mt-auto gap-4'>
-        <div className='h-4 w-24 animate-pulse rounded bg-muted' />
-        <div className='h-4 w-16 animate-pulse rounded bg-muted' />
+      <CardFooter className="mt-auto gap-4">
+        <div className="h-4 w-24 animate-pulse rounded bg-muted" />
+        <div className="h-4 w-16 animate-pulse rounded bg-muted" />
       </CardFooter>
     </Card>
   );
@@ -83,7 +83,7 @@ export function PostGridSkeleton({
   return (
     <div
       className={cn(
-        'grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-3',
+        "grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-3",
         className,
       )}
     >

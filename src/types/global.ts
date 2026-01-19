@@ -68,43 +68,43 @@ export type Brand<T, TBrand> = T & { [brand]: TBrand };
 /**
  * 用户ID类型 - 使用品牌类型确保类型安全
  */
-export type UserId = Brand<string, 'UserId'>;
+export type UserId = Brand<string, "UserId">;
 
 /**
  * 邮箱类型 - 使用品牌类型确保类型安全
  */
-export type Email = Brand<string, 'Email'>;
+export type Email = Brand<string, "Email">;
 
 /**
  * 主题类型
  */
-export type Theme = 'light' | 'dark' | 'system';
+export type Theme = "light" | "dark" | "system";
 
 /**
  * 语言类型
  */
-export type Locale = 'en' | 'zh';
+export type Locale = "en" | "zh";
 
 /**
  * 环境类型
  */
-export type Environment = 'development' | 'production' | 'test';
+export type Environment = "development" | "production" | "test";
 
 /**
  * 错误类型枚举
  */
 export type ErrorType =
-  | 'validation'
-  | 'authentication'
-  | 'authorization'
-  | 'not_found'
-  | 'server_error'
-  | 'network_error';
+  | "validation"
+  | "authentication"
+  | "authorization"
+  | "not_found"
+  | "server_error"
+  | "network_error";
 
 /**
  * 加载状态类型
  */
-export type LoadingState = 'idle' | 'loading' | 'success' | 'error';
+export type LoadingState = "idle" | "loading" | "success" | "error";
 
 /**
  * 表单状态接口

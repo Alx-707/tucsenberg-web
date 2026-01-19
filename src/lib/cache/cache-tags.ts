@@ -7,7 +7,7 @@
  * @see openspec/changes/p1-cache-tag-invalidation/proposal.md
  */
 
-import type { Locale } from '@/types/content.types';
+import type { Locale } from "@/types/content.types";
 
 /**
  * Valid cache tag domains.
@@ -15,13 +15,13 @@ import type { Locale } from '@/types/content.types';
  */
 export const CACHE_DOMAINS = {
   /** i18n translation messages */
-  I18N: 'i18n',
+  I18N: "i18n",
   /** Content (blog posts, pages) */
-  CONTENT: 'content',
+  CONTENT: "content",
   /** Product data */
-  PRODUCT: 'product',
+  PRODUCT: "product",
   /** SEO metadata */
-  SEO: 'seo',
+  SEO: "seo",
 } as const;
 
 export type CacheDomain = (typeof CACHE_DOMAINS)[keyof typeof CACHE_DOMAINS];
@@ -32,27 +32,27 @@ export type CacheDomain = (typeof CACHE_DOMAINS)[keyof typeof CACHE_DOMAINS];
 export const CACHE_ENTITIES = {
   /** i18n entities */
   I18N: {
-    CRITICAL: 'critical',
-    DEFERRED: 'deferred',
-    ALL: 'all',
+    CRITICAL: "critical",
+    DEFERRED: "deferred",
+    ALL: "all",
   },
   /** Content entities */
   CONTENT: {
-    BLOG: 'blog',
-    PAGE: 'page',
-    LIST: 'list',
+    BLOG: "blog",
+    PAGE: "page",
+    LIST: "list",
   },
   /** Product entities */
   PRODUCT: {
-    DETAIL: 'detail',
-    LIST: 'list',
-    CATEGORY: 'category',
-    FEATURED: 'featured',
+    DETAIL: "detail",
+    LIST: "list",
+    CATEGORY: "category",
+    FEATURED: "featured",
   },
   /** SEO entities */
   SEO: {
-    METADATA: 'metadata',
-    SITEMAP: 'sitemap',
+    METADATA: "metadata",
+    SITEMAP: "sitemap",
   },
 } as const;
 
@@ -82,7 +82,7 @@ function buildTag(options: BuildTagOptions): string {
     parts.push(locale);
   }
 
-  return parts.join(':');
+  return parts.join(":");
 }
 
 /**
@@ -140,7 +140,7 @@ export const contentTags = {
     return buildTag({
       domain: CACHE_DOMAINS.CONTENT,
       entity: CACHE_ENTITIES.CONTENT.LIST,
-      identifier: 'blog',
+      identifier: "blog",
       locale,
     });
   },
@@ -182,7 +182,7 @@ export const productTags = {
 
   /** Tag for product list */
   list(locale: Locale, category?: string): string {
-    const identifier = category ?? 'all';
+    const identifier = category ?? "all";
     return buildTag({
       domain: CACHE_DOMAINS.PRODUCT,
       entity: CACHE_ENTITIES.PRODUCT.LIST,

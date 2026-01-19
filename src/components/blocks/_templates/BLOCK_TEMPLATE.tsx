@@ -15,16 +15,16 @@
  *   cp src/components/blocks/_templates/BLOCK_TEMPLATE.tsx src/components/blocks/[category]/[name]-block.tsx
  */
 
-'use client';
+"use client";
 
-import { useTranslations } from 'next-intl';
-import { cn } from '@/lib/utils';
-import { Container } from '@/components/ui/container';
-import { Section } from '@/components/ui/section';
-import { siteFacts } from '@/config/site-facts';
-import { COUNT_700 } from '@/constants/count';
-import { MAGIC_0_2 } from '@/constants/decimal';
-import { useIntersectionObserver } from '@/hooks/use-intersection-observer';
+import { useTranslations } from "next-intl";
+import { cn } from "@/lib/utils";
+import { Container } from "@/components/ui/container";
+import { Section } from "@/components/ui/section";
+import { siteFacts } from "@/config/site-facts";
+import { COUNT_700 } from "@/constants/count";
+import { MAGIC_0_2 } from "@/constants/decimal";
+import { useIntersectionObserver } from "@/hooks/use-intersection-observer";
 
 // ============================================================================
 // Types
@@ -73,13 +73,13 @@ const UI_CONSTANTS = {
 function BlockItemCard({ item, index }: { item: BlockItem; index: number }) {
   return (
     <div
-      className='rounded-lg border bg-card p-6 shadow-sm transition-shadow hover:shadow-md'
+      className="rounded-lg border bg-card p-6 shadow-sm transition-shadow hover:shadow-md"
       style={{
         transitionDelay: `${index * 100}ms`,
       }}
     >
-      <h3 className='mb-2 text-lg font-semibold'>{item.title}</h3>
-      <p className='text-sm text-muted-foreground'>{item.description}</p>
+      <h3 className="mb-2 text-lg font-semibold">{item.title}</h3>
+      <p className="text-sm text-muted-foreground">{item.description}</p>
     </div>
   );
 }
@@ -95,16 +95,16 @@ function BlockItemCard({ item, index }: { item: BlockItem; index: number }) {
 function getDefaultItems(t: (key: string) => string): BlockItem[] {
   return [
     {
-      title: t('items.item1.title'),
-      description: t('items.item1.description'),
+      title: t("items.item1.title"),
+      description: t("items.item1.description"),
     },
     {
-      title: t('items.item2.title'),
-      description: t('items.item2.description'),
+      title: t("items.item2.title"),
+      description: t("items.item2.description"),
     },
     {
-      title: t('items.item3.title'),
-      description: t('items.item3.description'),
+      title: t("items.item3.title"),
+      description: t("items.item3.description"),
     },
   ];
 }
@@ -125,7 +125,7 @@ function getDefaultItems(t: (key: string) => string): BlockItem[] {
  */
 export function BlockTemplate({
   items,
-  i18nNamespace = 'blockTemplate', // Change to your actual namespace
+  i18nNamespace = "blockTemplate", // Change to your actual namespace
   className,
 }: BlockTemplateProps) {
   // Translation hook with configurable namespace
@@ -141,47 +141,39 @@ export function BlockTemplate({
   const resolvedItems = items ?? getDefaultItems(t);
 
   return (
-    <Section
-      spacing='xl'
-      background='default'
-      className={className}
-    >
-      <Container size='xl'>
+    <Section spacing="xl" background="default" className={className}>
+      <Container size="xl">
         <div
           ref={ref}
           className={cn(
-            'transition-all ease-out',
-            isVisible ? 'translate-y-0 opacity-100' : 'translate-y-8 opacity-0',
+            "transition-all ease-out",
+            isVisible ? "translate-y-0 opacity-100" : "translate-y-8 opacity-0",
           )}
           style={{
             transitionDuration: `${UI_CONSTANTS.ANIMATION_DURATION}ms`,
           }}
         >
           {/* Header */}
-          <div className='mb-12 text-center'>
-            <h2 className='mb-4 text-3xl font-bold tracking-tight sm:text-4xl'>
-              {t('title')}
+          <div className="mb-12 text-center">
+            <h2 className="mb-4 text-3xl font-bold tracking-tight sm:text-4xl">
+              {t("title")}
             </h2>
-            <p className='mx-auto max-w-2xl text-lg text-muted-foreground'>
-              {t('subtitle')}
+            <p className="mx-auto max-w-2xl text-lg text-muted-foreground">
+              {t("subtitle")}
             </p>
           </div>
 
           {/* Content Grid */}
-          <div className='grid gap-6 sm:grid-cols-2 lg:grid-cols-3'>
+          <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
             {resolvedItems.map((item, index) => (
-              <BlockItemCard
-                key={index}
-                item={item}
-                index={index}
-              />
+              <BlockItemCard key={index} item={item} index={index} />
             ))}
           </div>
 
           {/* Example: Using siteFacts for business data */}
-          <div className='mt-12 text-center text-sm text-muted-foreground'>
+          <div className="mt-12 text-center text-sm text-muted-foreground">
             <p>
-              {t('footer', {
+              {t("footer", {
                 companyName: siteFacts.company.name,
                 yearsInBusiness:
                   new Date().getFullYear() - siteFacts.company.established,

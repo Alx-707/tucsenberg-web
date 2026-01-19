@@ -9,8 +9,8 @@
  * 2. Falls back to Turnstile allowed hosts for consistency
  */
 
-import { env } from '@/lib/env';
-import { getAllowedTurnstileHosts } from '@/lib/security/turnstile-config';
+import { env } from "@/lib/env";
+import { getAllowedTurnstileHosts } from "@/lib/security/turnstile-config";
 
 /**
  * Parse CORS_ALLOWED_ORIGINS environment variable.
@@ -21,7 +21,7 @@ function parseCorsEnvOrigins(): string[] {
   if (!origins) return [];
 
   return origins
-    .split(',')
+    .split(",")
     .map((o) => o.trim().toLowerCase())
     .filter(Boolean);
 }
@@ -35,8 +35,8 @@ function deriveOriginsFromTurnstileHosts(): string[] {
   const origins: string[] = [];
 
   for (const host of hosts) {
-    if (host === 'localhost') {
-      origins.push('http://localhost:3000');
+    if (host === "localhost") {
+      origins.push("http://localhost:3000");
     } else {
       origins.push(`https://${host}`);
     }
@@ -123,7 +123,7 @@ export function isSameOrigin(
 
   try {
     const originUrl = new URL(origin);
-    const hostWithoutPort = host.split(':')[0];
+    const hostWithoutPort = host.split(":")[0];
     return originUrl.hostname.toLowerCase() === hostWithoutPort?.toLowerCase();
   } catch {
     return false;
@@ -135,10 +135,10 @@ export function isSameOrigin(
  */
 export const CORS_CONFIG = {
   /** Allowed HTTP methods for form endpoints */
-  allowedMethods: ['POST', 'OPTIONS'],
+  allowedMethods: ["POST", "OPTIONS"],
 
   /** Allowed headers for form requests */
-  allowedHeaders: ['Content-Type', 'Idempotency-Key'],
+  allowedHeaders: ["Content-Type", "Idempotency-Key"],
 
   /** Preflight cache duration in seconds (1 hour) */
   maxAge: 3600,

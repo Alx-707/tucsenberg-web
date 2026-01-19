@@ -4,15 +4,15 @@
  * This module provides navigation configuration, route definitions,
  * and utility functions for the responsive navigation system.
  */
-import type { Locale } from '@/types/i18n';
-import { LOCALES_CONFIG } from '@/config/paths';
+import type { Locale } from "@/types/i18n";
+import { LOCALES_CONFIG } from "@/config/paths";
 import {
   BREAKPOINT_MD,
   BREAKPOINT_XL,
   BYTES_PER_KB,
   PERCENTAGE_FULL,
-} from '@/constants';
-import { COUNT_250 } from '@/constants/count';
+} from "@/constants";
+import { COUNT_250 } from "@/constants/count";
 
 // Navigation item interface
 export interface NavigationItem {
@@ -28,34 +28,34 @@ export interface NavigationItem {
 // 导航顺序：首页、产品、博客、FAQ、关于、隐私政策
 export const mainNavigation: NavigationItem[] = [
   {
-    key: 'home',
-    href: '/',
-    translationKey: 'navigation.home',
+    key: "home",
+    href: "/",
+    translationKey: "navigation.home",
   },
   {
-    key: 'products',
-    href: '/products',
-    translationKey: 'navigation.products',
+    key: "products",
+    href: "/products",
+    translationKey: "navigation.products",
   },
   {
-    key: 'blog',
-    href: '/blog',
-    translationKey: 'navigation.blog',
+    key: "blog",
+    href: "/blog",
+    translationKey: "navigation.blog",
   },
   {
-    key: 'faq',
-    href: '/faq',
-    translationKey: 'navigation.faq',
+    key: "faq",
+    href: "/faq",
+    translationKey: "navigation.faq",
   },
   {
-    key: 'about',
-    href: '/about',
-    translationKey: 'navigation.about',
+    key: "about",
+    href: "/about",
+    translationKey: "navigation.about",
   },
   {
-    key: 'privacy',
-    href: '/privacy',
-    translationKey: 'navigation.privacy',
+    key: "privacy",
+    href: "/privacy",
+    translationKey: "navigation.privacy",
   },
   // Note: contact page is accessible via direct URL but not shown in navigation
 ];
@@ -66,30 +66,30 @@ export const mobileNavigation: NavigationItem[] = mainNavigation;
 // Utility function to check if a path is active
 export function isActivePath(currentPath: string, itemPath: string): boolean {
   // Handle empty string as root path
-  let cleanCurrentPath = currentPath || '/';
+  let cleanCurrentPath = currentPath || "/";
 
   // Remove locale prefix for comparison using safe string matching
   for (const locale of LOCALES_CONFIG.locales) {
     const localePrefix = `/${locale}`;
     if (cleanCurrentPath.startsWith(localePrefix)) {
-      cleanCurrentPath = cleanCurrentPath.slice(localePrefix.length) || '/';
+      cleanCurrentPath = cleanCurrentPath.slice(localePrefix.length) || "/";
       break;
     }
   }
 
-  const cleanItemPath = itemPath === '/' ? '/' : itemPath;
+  const cleanItemPath = itemPath === "/" ? "/" : itemPath;
 
   // Handle root path matching
-  if (cleanItemPath === '/') {
-    return cleanCurrentPath === '/';
+  if (cleanItemPath === "/") {
+    return cleanCurrentPath === "/";
   }
 
   // Ensure we match complete path segments, not partial matches
   // Add trailing slash to both paths for comparison to avoid partial matches
-  const normalizedCurrentPath = cleanCurrentPath.endsWith('/')
+  const normalizedCurrentPath = cleanCurrentPath.endsWith("/")
     ? cleanCurrentPath
     : `${cleanCurrentPath}/`;
-  const normalizedItemPath = cleanItemPath.endsWith('/')
+  const normalizedItemPath = cleanItemPath.endsWith("/")
     ? cleanItemPath
     : `${cleanItemPath}/`;
 
@@ -99,15 +99,15 @@ export function isActivePath(currentPath: string, itemPath: string): boolean {
 // Utility function to get localized href
 export function getLocalizedHref(href: string, locale: Locale): string {
   if (
-    href.startsWith('http') ||
-    href.startsWith('mailto:') ||
-    href.startsWith('tel:')
+    href.startsWith("http") ||
+    href.startsWith("mailto:") ||
+    href.startsWith("tel:")
   ) {
     return href;
   }
 
   // For root path, return just the locale
-  if (href === '/') {
+  if (href === "/") {
     return `/${locale}`;
   }
 
@@ -131,10 +131,10 @@ export const NAVIGATION_ANIMATIONS = Object.freeze({
 
 // ARIA labels and accessibility
 export const NAVIGATION_ARIA = Object.freeze({
-  mainNav: 'Main navigation',
-  mobileMenuButton: 'Toggle mobile menu',
-  mobileMenu: 'Mobile navigation menu',
-  languageSelector: 'Language selector',
-  themeSelector: 'Theme selector',
-  skipToContent: 'Skip to main content',
+  mainNav: "Main navigation",
+  mobileMenuButton: "Toggle mobile menu",
+  mobileMenu: "Mobile navigation menu",
+  languageSelector: "Language selector",
+  themeSelector: "Theme selector",
+  skipToContent: "Skip to main content",
 } as const);

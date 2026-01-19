@@ -44,17 +44,17 @@ declare global {
   interface Window {
     dataLayer: unknown[];
     gtag: {
-      (command: 'js', date: Date): void;
-      (command: 'config', targetId: string, config?: GtagConfigParams): void;
+      (command: "js", date: Date): void;
+      (command: "config", targetId: string, config?: GtagConfigParams): void;
       (
-        command: 'event',
+        command: "event",
         eventName: string,
         eventParams?: GtagEventParams,
       ): void;
-      (command: 'set', params: Record<string, unknown>): void;
+      (command: "set", params: Record<string, unknown>): void;
       (
-        command: 'consent',
-        action: 'default' | 'update',
+        command: "consent",
+        action: "default" | "update",
         params: Record<string, string>,
       ): void;
       (...args: unknown[]): void;

@@ -1,6 +1,6 @@
-'use client';
+"use client";
 
-import { useEffect, useState } from 'react';
+import { useEffect, useState } from "react";
 
 /**
  * Hook to detect user's motion preference
@@ -9,17 +9,17 @@ import { useEffect, useState } from 'react';
 export function useReducedMotion(): boolean {
   const [prefersReducedMotion, setPrefersReducedMotion] = useState(() => {
     // SSR or missing window support
-    if (typeof window === 'undefined') {
+    if (typeof window === "undefined") {
       return false;
     }
 
     try {
       // Safe window access - check if window and matchMedia exist
-      if (!window || typeof window.matchMedia !== 'function') {
+      if (!window || typeof window.matchMedia !== "function") {
         return false;
       }
 
-      const mediaQuery = window.matchMedia('(prefers-reduced-motion: reduce)');
+      const mediaQuery = window.matchMedia("(prefers-reduced-motion: reduce)");
       // Handle case where matchMedia returns null (some SSR scenarios)
       return mediaQuery?.matches ?? false;
     } catch {
@@ -30,7 +30,7 @@ export function useReducedMotion(): boolean {
 
   useEffect(() => {
     // Check if we're in the browser and matchMedia is available
-    if (typeof window === 'undefined') {
+    if (typeof window === "undefined") {
       return undefined;
     }
 
@@ -38,12 +38,12 @@ export function useReducedMotion(): boolean {
 
     try {
       // Safe window access - double check window exists and has matchMedia
-      if (!window || typeof window.matchMedia !== 'function') {
+      if (!window || typeof window.matchMedia !== "function") {
         return undefined;
       }
 
       // Create media query
-      mediaQuery = window.matchMedia('(prefers-reduced-motion: reduce)');
+      mediaQuery = window.matchMedia("(prefers-reduced-motion: reduce)");
 
       // Handle case where matchMedia returns null
       if (!mediaQuery) {
@@ -55,14 +55,14 @@ export function useReducedMotion(): boolean {
         // Handle malformed events gracefully - check for event existence and matches property
         if (
           event &&
-          typeof event === 'object' &&
-          typeof event.matches === 'boolean'
+          typeof event === "object" &&
+          typeof event.matches === "boolean"
         ) {
           setPrefersReducedMotion(event.matches);
         } else {
           // Fallback: re-query the media query if event is malformed
           try {
-            if (mediaQuery && typeof mediaQuery.matches === 'boolean') {
+            if (mediaQuery && typeof mediaQuery.matches === "boolean") {
               setPrefersReducedMotion(mediaQuery.matches);
             }
           } catch {
@@ -74,18 +74,18 @@ export function useReducedMotion(): boolean {
       // Add listener if addEventListener is available
       if (
         mediaQuery.addEventListener &&
-        typeof mediaQuery.addEventListener === 'function'
+        typeof mediaQuery.addEventListener === "function"
       ) {
-        mediaQuery.addEventListener('change', handleChange);
+        mediaQuery.addEventListener("change", handleChange);
       }
 
       // Cleanup
       return () => {
         if (
           mediaQuery?.removeEventListener &&
-          typeof mediaQuery.removeEventListener === 'function'
+          typeof mediaQuery.removeEventListener === "function"
         ) {
-          mediaQuery.removeEventListener('change', handleChange);
+          mediaQuery.removeEventListener("change", handleChange);
         }
       };
     } catch {

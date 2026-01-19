@@ -6,7 +6,7 @@
 import {
   IDLE_CALLBACK_FALLBACK_DELAY,
   IDLE_CALLBACK_TIMEOUT,
-} from '@/constants/time';
+} from "@/constants/time";
 
 /**
  * 类型安全的requestIdleCallback调用
@@ -33,7 +33,7 @@ export function requestIdleCallback(
 ): () => void {
   const { timeout = IDLE_CALLBACK_TIMEOUT } = options;
 
-  if (typeof window === 'undefined') {
+  if (typeof window === "undefined") {
     // SSR环境，立即执行
     callback();
     return () => {

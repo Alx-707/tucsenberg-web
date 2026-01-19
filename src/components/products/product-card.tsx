@@ -1,10 +1,10 @@
-import Image from 'next/image';
-import Link from 'next/link';
-import { Clock, Factory, Package } from 'lucide-react';
-import type { ProductSummary } from '@/types/content.types';
-import { getBlurPlaceholder } from '@/lib/image';
-import { cn } from '@/lib/utils';
-import { Badge } from '@/components/ui/badge';
+import Image from "next/image";
+import Link from "next/link";
+import { Clock, Factory, Package } from "lucide-react";
+import type { ProductSummary } from "@/types/content.types";
+import { getBlurPlaceholder } from "@/lib/image";
+import { cn } from "@/lib/utils";
+import { Badge } from "@/components/ui/badge";
 import {
   Card,
   CardContent,
@@ -12,7 +12,7 @@ import {
   CardFooter,
   CardHeader,
   CardTitle,
-} from '@/components/ui/card';
+} from "@/components/ui/card";
 
 export interface ProductCardProps {
   product: ProductSummary;
@@ -38,10 +38,10 @@ export interface ProductCardLabels {
 }
 
 const DEFAULT_LABELS: ProductCardLabels = {
-  moq: 'MOQ',
-  leadTime: 'Lead Time',
-  supplyCapacity: 'Capacity',
-  featured: 'Featured',
+  moq: "MOQ",
+  leadTime: "Lead Time",
+  supplyCapacity: "Capacity",
+  featured: "Featured",
 };
 
 interface CoverImageProps {
@@ -53,17 +53,17 @@ interface CoverImageProps {
 
 function CoverImage({ src, alt, featured, featuredLabel }: CoverImageProps) {
   return (
-    <div className='relative aspect-[4/3] w-full overflow-hidden'>
+    <div className="relative aspect-[4/3] w-full overflow-hidden">
       <Image
         src={src}
         alt={alt}
         fill
-        sizes='(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 33vw'
-        className='object-cover transition-transform duration-300 group-hover:scale-105'
-        {...getBlurPlaceholder('neutral')}
+        sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 33vw"
+        className="object-cover transition-transform duration-300 group-hover:scale-105"
+        {...getBlurPlaceholder("neutral")}
       />
       {featured === true && (
-        <Badge className='absolute top-3 left-3 bg-primary text-primary-foreground'>
+        <Badge className="absolute top-3 left-3 bg-primary text-primary-foreground">
           {featuredLabel}
         </Badge>
       )}
@@ -87,32 +87,23 @@ function TradeInfo({ moq, leadTime, supplyCapacity, labels }: TradeInfoProps) {
   }
 
   return (
-    <CardFooter className='mt-auto flex-wrap gap-x-4 gap-y-2 text-xs text-muted-foreground'>
+    <CardFooter className="mt-auto flex-wrap gap-x-4 gap-y-2 text-xs text-muted-foreground">
       {moq !== undefined && (
-        <span className='flex items-center gap-1'>
-          <Package
-            className='h-3.5 w-3.5'
-            aria-hidden='true'
-          />
-          <span className='font-medium'>{labels.moq}:</span> {moq}
+        <span className="flex items-center gap-1">
+          <Package className="h-3.5 w-3.5" aria-hidden="true" />
+          <span className="font-medium">{labels.moq}:</span> {moq}
         </span>
       )}
       {leadTime !== undefined && (
-        <span className='flex items-center gap-1'>
-          <Clock
-            className='h-3.5 w-3.5'
-            aria-hidden='true'
-          />
-          <span className='font-medium'>{labels.leadTime}:</span> {leadTime}
+        <span className="flex items-center gap-1">
+          <Clock className="h-3.5 w-3.5" aria-hidden="true" />
+          <span className="font-medium">{labels.leadTime}:</span> {leadTime}
         </span>
       )}
       {supplyCapacity !== undefined && (
-        <span className='flex items-center gap-1'>
-          <Factory
-            className='h-3.5 w-3.5'
-            aria-hidden='true'
-          />
-          <span className='font-medium'>{labels.supplyCapacity}:</span>{' '}
+        <span className="flex items-center gap-1">
+          <Factory className="h-3.5 w-3.5" aria-hidden="true" />
+          <span className="font-medium">{labels.supplyCapacity}:</span>{" "}
           {supplyCapacity}
         </span>
       )}
@@ -128,7 +119,7 @@ function TradeInfo({ moq, leadTime, supplyCapacity, labels }: TradeInfoProps) {
  */
 export function ProductCard({
   product,
-  linkPrefix = '/products',
+  linkPrefix = "/products",
   showCoverImage = true,
   showCategory = true,
   showTradeInfo = true,
@@ -156,13 +147,13 @@ export function ProductCard({
     <article>
       <Link
         href={`${linkPrefix}/${slug}`}
-        className='group block h-full rounded-xl focus:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2'
+        className="group block h-full rounded-xl focus:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2"
       >
         <Card
           className={cn(
-            'h-full overflow-hidden transition-all duration-200',
-            'hover:border-primary/20 hover:shadow-md',
-            'group-focus-visible:border-primary/20 group-focus-visible:shadow-md',
+            "h-full overflow-hidden transition-all duration-200",
+            "hover:border-primary/20 hover:shadow-md",
+            "group-focus-visible:border-primary/20 group-focus-visible:shadow-md",
             className,
           )}
         >
@@ -175,23 +166,20 @@ export function ProductCard({
             />
           )}
 
-          <CardHeader className='gap-3'>
+          <CardHeader className="gap-3">
             {showCategory && (
-              <Badge
-                variant='secondary'
-                className='w-fit text-xs'
-              >
+              <Badge variant="secondary" className="w-fit text-xs">
                 {category}
               </Badge>
             )}
-            <CardTitle className='line-clamp-2 text-lg leading-snug transition-colors group-hover:text-primary'>
+            <CardTitle className="line-clamp-2 text-lg leading-snug transition-colors group-hover:text-primary">
               {title}
             </CardTitle>
           </CardHeader>
 
           {description !== undefined && (
-            <CardContent className='pt-0'>
-              <CardDescription className='line-clamp-2'>
+            <CardContent className="pt-0">
+              <CardDescription className="line-clamp-2">
                 {description}
               </CardDescription>
             </CardContent>

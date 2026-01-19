@@ -1,6 +1,6 @@
-'use client';
+"use client";
 
-import dynamic from 'next/dynamic';
+import dynamic from "next/dynamic";
 
 interface CookieBannerProps {
   className?: string;
@@ -8,7 +8,7 @@ interface CookieBannerProps {
 
 const DynamicCookieBanner = dynamic<CookieBannerProps>(
   () =>
-    import('@/components/cookie/cookie-banner').then((mod) => mod.CookieBanner),
+    import("@/components/cookie/cookie-banner").then((mod) => mod.CookieBanner),
   { ssr: false, loading: () => null },
 );
 

@@ -13,21 +13,21 @@ import {
   type LeadInput,
   type NewsletterLeadInput,
   type ProductLeadInput,
-} from '@/lib/lead-pipeline/lead-schema';
+} from "@/lib/lead-pipeline/lead-schema";
 import {
   categorizeError,
   createLatencyTimer,
   leadPipelineMetrics,
   METRIC_SERVICES,
   type PipelineSummary,
-} from '@/lib/lead-pipeline/metrics';
+} from "@/lib/lead-pipeline/metrics";
 import {
   generateLeadReferenceId,
   generateProductInquiryMessage,
   splitName,
-} from '@/lib/lead-pipeline/utils';
-import { logger, sanitizeEmail } from '@/lib/logger';
-import { CONTACT_FORM_CONFIG } from '@/config/contact-form-config';
+} from "@/lib/lead-pipeline/utils";
+import { logger, sanitizeEmail } from "@/lib/logger";
+import { CONTACT_FORM_CONFIG } from "@/config/contact-form-config";
 
 /**
  * Result of lead processing operation
@@ -37,7 +37,7 @@ export interface LeadResult {
   emailSent: boolean;
   recordCreated: boolean;
   referenceId?: string | undefined;
-  error?: 'VALIDATION_ERROR' | 'PROCESSING_FAILED' | string | undefined;
+  error?: "VALIDATION_ERROR" | "PROCESSING_FAILED" | string | undefined;
 }
 
 /**
@@ -87,14 +87,14 @@ async function processContactLead(
   const { firstName, lastName } = splitName(lead.fullName);
 
   // Lazy import to avoid circular dependencies
-  const { resendService } = await import('@/lib/resend');
-  const { airtableService } = await import('@/lib/airtable');
+  const { resendService } = await import("@/lib/resend");
+  const { airtableService } = await import("@/lib/airtable");
 
   const emailData = {
     firstName,
     lastName,
     email: lead.email,
-    company: lead.company ?? '',
+    company: lead.company ?? "",
     subject: lead.subject,
     message: lead.message,
     submittedAt: lead.submittedAt || new Date().toISOString(),
@@ -108,7 +108,7 @@ async function processContactLead(
     withTimeout(
       resendService.sendContactFormEmail(emailData),
       OPERATION_TIMEOUT_MS,
-      'Email send',
+      "Email send",
     ),
     withTimeout(
       airtableService.createLead(LEAD_TYPES.CONTACT, {
@@ -122,32 +122,32 @@ async function processContactLead(
         referenceId,
       }),
       OPERATION_TIMEOUT_MS,
-      'CRM record',
+      "CRM record",
     ),
   ]);
 
   // Send confirmation email if enabled (fire-and-forget, non-blocking)
   if (CONTACT_FORM_CONFIG.features.sendConfirmationEmail) {
     resendService.sendConfirmationEmail(emailData).catch((error) => {
-      logger.warn('Confirmation email failed (non-blocking)', {
-        error: error instanceof Error ? error.message : 'Unknown error',
+      logger.warn("Confirmation email failed (non-blocking)", {
+        error: error instanceof Error ? error.message : "Unknown error",
         email: sanitizeEmail(lead.email),
       });
     });
   }
 
   const emailLatency =
-    emailSettled.status === 'fulfilled'
+    emailSettled.status === "fulfilled"
       ? emailSettled.value.latencyMs
       : emailTimer.stop();
   const crmLatency =
-    crmSettled.status === 'fulfilled'
+    crmSettled.status === "fulfilled"
       ? crmSettled.value.latencyMs
       : crmTimer.stop();
 
   return {
     emailResult:
-      emailSettled.status === 'fulfilled'
+      emailSettled.status === "fulfilled"
         ? {
             success: true,
             id: emailSettled.value.result,
@@ -159,7 +159,7 @@ async function processContactLead(
             latencyMs: emailLatency,
           },
     crmResult:
-      crmSettled.status === 'fulfilled'
+      crmSettled.status === "fulfilled"
         ? {
             success: true,
             id: crmSettled.value.result?.id,
@@ -184,8 +184,8 @@ async function processProductLead(
   );
 
   // Lazy import to avoid circular dependencies
-  const { resendService } = await import('@/lib/resend');
-  const { airtableService } = await import('@/lib/airtable');
+  const { resendService } = await import("@/lib/resend");
+  const { airtableService } = await import("@/lib/airtable");
 
   const emailTimer = createLatencyTimer();
   const crmTimer = createLatencyTimer();
@@ -204,7 +204,7 @@ async function processProductLead(
         marketingConsent: lead.marketingConsent,
       }),
       OPERATION_TIMEOUT_MS,
-      'Email send',
+      "Email send",
     ),
     withTimeout(
       airtableService.createLead(LEAD_TYPES.PRODUCT, {
@@ -221,22 +221,22 @@ async function processProductLead(
         referenceId,
       }),
       OPERATION_TIMEOUT_MS,
-      'CRM record',
+      "CRM record",
     ),
   ]);
 
   const emailLatency =
-    emailSettled.status === 'fulfilled'
+    emailSettled.status === "fulfilled"
       ? emailSettled.value.latencyMs
       : emailTimer.stop();
   const crmLatency =
-    crmSettled.status === 'fulfilled'
+    crmSettled.status === "fulfilled"
       ? crmSettled.value.latencyMs
       : crmTimer.stop();
 
   return {
     emailResult:
-      emailSettled.status === 'fulfilled'
+      emailSettled.status === "fulfilled"
         ? {
             success: true,
             id: emailSettled.value.result,
@@ -248,7 +248,7 @@ async function processProductLead(
             latencyMs: emailLatency,
           },
     crmResult:
-      crmSettled.status === 'fulfilled'
+      crmSettled.status === "fulfilled"
         ? {
             success: true,
             id: crmSettled.value.result?.id,
@@ -266,7 +266,7 @@ async function processNewsletterLead(
   referenceId: string,
 ): Promise<{ emailResult: ServiceResult; crmResult: ServiceResult }> {
   // Lazy import to avoid circular dependencies
-  const { airtableService } = await import('@/lib/airtable');
+  const { airtableService } = await import("@/lib/airtable");
 
   const crmTimer = createLatencyTimer();
 
@@ -278,12 +278,12 @@ async function processNewsletterLead(
         referenceId,
       }),
       OPERATION_TIMEOUT_MS,
-      'CRM record',
+      "CRM record",
     ),
   ]);
 
   const crmLatency =
-    crmSettled.status === 'fulfilled'
+    crmSettled.status === "fulfilled"
       ? crmSettled.value.latencyMs
       : crmTimer.stop();
 
@@ -291,7 +291,7 @@ async function processNewsletterLead(
     // Newsletter has no email operation - success depends solely on CRM
     emailResult: { success: false, latencyMs: DEFAULT_LATENCY },
     crmResult:
-      crmSettled.status === 'fulfilled'
+      crmSettled.status === "fulfilled"
         ? {
             success: true,
             id: crmSettled.value.result?.id,
@@ -404,21 +404,21 @@ export async function processLead(rawInput: unknown): Promise<LeadResult> {
   const validationResult = leadSchema.safeParse(rawInput);
 
   if (!validationResult.success) {
-    logger.warn('Lead validation failed', {
+    logger.warn("Lead validation failed", {
       errors: validationResult.error.issues,
     });
     return {
       success: false,
       emailSent: false,
       recordCreated: false,
-      error: 'VALIDATION_ERROR',
+      error: "VALIDATION_ERROR",
     };
   }
 
   const lead: LeadInput = validationResult.data;
   const referenceId = generateLeadReferenceId(lead.type);
 
-  logger.info('Processing lead', {
+  logger.info("Processing lead", {
     type: lead.type,
     email: sanitizeEmail(lead.email),
     referenceId,
@@ -438,7 +438,7 @@ export async function processLead(rawInput: unknown): Promise<LeadResult> {
       hasEmailOperation = false;
     } else {
       // This should never happen due to discriminated union
-      throw new Error('Unknown lead type');
+      throw new Error("Unknown lead type");
     }
 
     const { emailResult, crmResult } = results;
@@ -449,7 +449,7 @@ export async function processLead(rawInput: unknown): Promise<LeadResult> {
 
     // Log individual failures
     if (hasEmailOperation && !emailResult.success) {
-      logger.error('Lead email send failed', {
+      logger.error("Lead email send failed", {
         type: lead.type,
         referenceId,
         error: emailResult.error?.message,
@@ -457,7 +457,7 @@ export async function processLead(rawInput: unknown): Promise<LeadResult> {
     }
 
     if (!crmResult.success) {
-      logger.error('Lead CRM record failed', {
+      logger.error("Lead CRM record failed", {
         type: lead.type,
         referenceId,
         error: crmResult.error?.message,
@@ -478,14 +478,14 @@ export async function processLead(rawInput: unknown): Promise<LeadResult> {
     });
 
     if (success) {
-      logger.info('Lead processed successfully', {
+      logger.info("Lead processed successfully", {
         type: lead.type,
         referenceId,
         emailSent: emailResult.success,
         recordCreated: crmResult.success,
       });
     } else {
-      logger.error('Lead processing failed completely', {
+      logger.error("Lead processing failed completely", {
         type: lead.type,
         referenceId,
         emailError: emailResult.error?.message,
@@ -498,15 +498,15 @@ export async function processLead(rawInput: unknown): Promise<LeadResult> {
       emailSent: emailResult.success,
       recordCreated: crmResult.success,
       referenceId: success ? referenceId : undefined,
-      error: success ? undefined : 'PROCESSING_FAILED',
+      error: success ? undefined : "PROCESSING_FAILED",
     };
   } catch (error) {
     const totalLatencyMs = pipelineTimer.stop();
 
-    logger.error('Lead processing unexpected error', {
+    logger.error("Lead processing unexpected error", {
       type: lead.type,
       referenceId,
-      error: error instanceof Error ? error.message : 'Unknown error',
+      error: error instanceof Error ? error.message : "Unknown error",
       totalLatencyMs,
     });
 
@@ -515,7 +515,7 @@ export async function processLead(rawInput: unknown): Promise<LeadResult> {
       emailSent: false,
       recordCreated: false,
       referenceId,
-      error: 'PROCESSING_FAILED',
+      error: "PROCESSING_FAILED",
     };
   }
 }

@@ -3,15 +3,15 @@
  * Provides structured metrics, latency tracking, and failure alerting
  */
 
-import { logger } from '@/lib/logger';
-import { COUNT_FIVE, TEN_SECONDS_MS } from '@/constants';
+import { logger } from "@/lib/logger";
+import { COUNT_FIVE, TEN_SECONDS_MS } from "@/constants";
 
 /**
  * Service identifiers for metrics
  */
 export const METRIC_SERVICES = {
-  RESEND: 'resend',
-  AIRTABLE: 'airtable',
+  RESEND: "resend",
+  AIRTABLE: "airtable",
 } as const;
 
 export type MetricService =
@@ -21,8 +21,8 @@ export type MetricService =
  * Metric event types
  */
 export const METRIC_TYPES = {
-  SUCCESS: 'success',
-  FAILURE: 'failure',
+  SUCCESS: "success",
+  FAILURE: "failure",
 } as const;
 
 export type MetricType = (typeof METRIC_TYPES)[keyof typeof METRIC_TYPES];
@@ -31,12 +31,12 @@ export type MetricType = (typeof METRIC_TYPES)[keyof typeof METRIC_TYPES];
  * Error categories for failure metrics
  */
 export const ERROR_TYPES = {
-  TIMEOUT: 'timeout',
-  NETWORK: 'network',
-  VALIDATION: 'validation',
-  RATE_LIMIT: 'rate_limit',
-  AUTH: 'auth',
-  UNKNOWN: 'unknown',
+  TIMEOUT: "timeout",
+  NETWORK: "network",
+  VALIDATION: "validation",
+  RATE_LIMIT: "rate_limit",
+  AUTH: "auth",
+  UNKNOWN: "unknown",
 } as const;
 
 export type ErrorType = (typeof ERROR_TYPES)[keyof typeof ERROR_TYPES];
@@ -102,32 +102,32 @@ export function categorizeError(error: Error | unknown): ErrorType {
 
   const message = error.message.toLowerCase();
 
-  if (message.includes('timeout') || message.includes('timed out')) {
+  if (message.includes("timeout") || message.includes("timed out")) {
     return ERROR_TYPES.TIMEOUT;
   }
 
   if (
-    message.includes('network') ||
-    message.includes('econnrefused') ||
-    message.includes('enotfound') ||
-    message.includes('fetch failed')
+    message.includes("network") ||
+    message.includes("econnrefused") ||
+    message.includes("enotfound") ||
+    message.includes("fetch failed")
   ) {
     return ERROR_TYPES.NETWORK;
   }
 
-  if (message.includes('rate limit') || message.includes('too many')) {
+  if (message.includes("rate limit") || message.includes("too many")) {
     return ERROR_TYPES.RATE_LIMIT;
   }
 
   if (
-    message.includes('unauthorized') ||
-    message.includes('authentication') ||
-    message.includes('api key')
+    message.includes("unauthorized") ||
+    message.includes("authentication") ||
+    message.includes("api key")
   ) {
     return ERROR_TYPES.AUTH;
   }
 
-  if (message.includes('validation') || message.includes('invalid')) {
+  if (message.includes("validation") || message.includes("invalid")) {
     return ERROR_TYPES.VALIDATION;
   }
 
@@ -162,15 +162,15 @@ export class LeadPipelineMetrics {
    */
   emitMetric(metric: ServiceMetric): void {
     const metricLog = {
-      event: 'lead_pipeline_metric',
+      event: "lead_pipeline_metric",
       ...metric,
     };
 
     if (metric.type === METRIC_TYPES.SUCCESS) {
-      logger.info('Lead pipeline metric', metricLog);
+      logger.info("Lead pipeline metric", metricLog);
       this.resetFailureCount(metric.service);
     } else {
-      logger.error('Lead pipeline metric', metricLog);
+      logger.error("Lead pipeline metric", metricLog);
       this.incrementFailureCount(metric.service, metric.errorType);
     }
   }
@@ -212,16 +212,16 @@ export class LeadPipelineMetrics {
    * Log pipeline processing summary
    */
   logPipelineSummary(summary: PipelineSummary): void {
-    const level = summary.overallSuccess ? 'info' : 'error';
+    const level = summary.overallSuccess ? "info" : "error";
     const logData = {
-      event: 'lead_pipeline_summary',
+      event: "lead_pipeline_summary",
       ...summary,
     };
 
-    if (level === 'info') {
-      logger.info('Lead pipeline completed', logData);
+    if (level === "info") {
+      logger.info("Lead pipeline completed", logData);
     } else {
-      logger.error('Lead pipeline completed', logData);
+      logger.error("Lead pipeline completed", logData);
     }
   }
 
@@ -276,8 +276,8 @@ export class LeadPipelineMetrics {
     failureCount: number,
     errorType?: ErrorType,
   ): void {
-    logger.error('Lead pipeline alert: consecutive failures', {
-      event: 'lead_pipeline_alert',
+    logger.error("Lead pipeline alert: consecutive failures", {
+      event: "lead_pipeline_alert",
       service,
       consecutiveFailures: failureCount,
       threshold: this.alertConfig.consecutiveFailureThreshold,

@@ -24,7 +24,7 @@
  * ```
  */
 
-import { SITE_CONFIG } from '@/config/paths/site-config';
+import { SITE_CONFIG } from "@/config/paths/site-config";
 
 export interface CompanyInfo {
   name: string;
@@ -95,8 +95,8 @@ export const siteFacts: SiteFacts = {
     name: SITE_CONFIG.name,
     established: 2020,
     location: {
-      country: 'United States',
-      city: 'San Francisco',
+      country: "United States",
+      city: "San Francisco",
     },
   },
   contact: {
@@ -104,14 +104,14 @@ export const siteFacts: SiteFacts = {
     email: SITE_CONFIG.contact.email,
     whatsapp: SITE_CONFIG.contact.whatsappNumber,
     businessHours: {
-      weekdays: '9:00 - 18:00',
-      saturday: '10:00 - 16:00',
+      weekdays: "9:00 - 18:00",
+      saturday: "10:00 - 16:00",
       sundayClosed: true,
     },
   },
   certifications: [
-    { name: 'ISO 9001', file: '/certs/iso9001.pdf' },
-    { name: 'ISO 14001' },
+    { name: "ISO 9001", file: "/certs/iso9001.pdf" },
+    { name: "ISO 14001" },
   ],
   stats: {
     exportCountries: 50,

@@ -1,4 +1,4 @@
-import { z } from 'zod';
+import { z } from "zod";
 import {
   ANIMATION_DURATION_VERY_SLOW,
   COUNT_FIVE,
@@ -7,8 +7,8 @@ import {
   PERCENTAGE_FULL,
   PERCENTAGE_HALF,
   SECONDS_PER_MINUTE,
-} from '@/constants';
-import { MAGIC_15 } from '@/constants/count';
+} from "@/constants";
+import { MAGIC_15 } from "@/constants/count";
 
 /* eslint-disable security/detect-object-injection */
 
@@ -16,27 +16,27 @@ import { MAGIC_15 } from '@/constants/count';
  * 表单字段枚举键值
  */
 export const CONTACT_FORM_FIELD_KEYS = [
-  'firstName',
-  'lastName',
-  'email',
-  'company',
-  'phone',
-  'subject',
-  'message',
-  'acceptPrivacy',
-  'marketingConsent',
-  'website',
+  "firstName",
+  "lastName",
+  "email",
+  "company",
+  "phone",
+  "subject",
+  "message",
+  "acceptPrivacy",
+  "marketingConsent",
+  "website",
 ] as const;
 
 export type ContactFormFieldKey = (typeof CONTACT_FORM_FIELD_KEYS)[number];
 
 export type ContactFormFieldType =
-  | 'text'
-  | 'email'
-  | 'tel'
-  | 'textarea'
-  | 'checkbox'
-  | 'hidden';
+  | "text"
+  | "email"
+  | "tel"
+  | "textarea"
+  | "checkbox"
+  | "hidden";
 
 /**
  * 单字段配置
@@ -118,84 +118,84 @@ const DEFAULT_FIELD_CONFIGS: Record<
   ContactFormFieldConfig
 > = {
   firstName: {
-    key: 'firstName',
+    key: "firstName",
     enabled: true,
     required: true,
-    type: 'text',
+    type: "text",
     order: 1,
-    i18nKey: 'firstName',
+    i18nKey: "firstName",
   },
   lastName: {
-    key: 'lastName',
+    key: "lastName",
     enabled: true,
     required: true,
-    type: 'text',
+    type: "text",
     order: 2,
-    i18nKey: 'lastName',
+    i18nKey: "lastName",
   },
   email: {
-    key: 'email',
+    key: "email",
     enabled: true,
     required: true,
-    type: 'email',
+    type: "email",
     order: 3,
-    i18nKey: 'email',
+    i18nKey: "email",
   },
   company: {
-    key: 'company',
+    key: "company",
     enabled: true,
     required: true,
-    type: 'text',
+    type: "text",
     order: 4,
-    i18nKey: 'company',
+    i18nKey: "company",
   },
   phone: {
-    key: 'phone',
+    key: "phone",
     enabled: false, // Disabled per Lead Pipeline requirements - simplify form
     required: false,
-    type: 'tel',
+    type: "tel",
     order: 5,
-    i18nKey: 'phone',
+    i18nKey: "phone",
   },
   subject: {
-    key: 'subject',
+    key: "subject",
     enabled: true,
     required: false,
-    type: 'text',
+    type: "text",
     order: 6,
-    i18nKey: 'subject',
+    i18nKey: "subject",
   },
   message: {
-    key: 'message',
+    key: "message",
     enabled: true,
     required: true,
-    type: 'textarea',
+    type: "textarea",
     order: 7,
-    i18nKey: 'message',
+    i18nKey: "message",
   },
   acceptPrivacy: {
-    key: 'acceptPrivacy',
+    key: "acceptPrivacy",
     enabled: true,
     required: true,
-    type: 'checkbox',
+    type: "checkbox",
     order: 8,
-    i18nKey: 'acceptPrivacy',
+    i18nKey: "acceptPrivacy",
   },
   marketingConsent: {
-    key: 'marketingConsent',
+    key: "marketingConsent",
     enabled: true,
     required: false,
-    type: 'checkbox',
+    type: "checkbox",
     order: 9,
-    i18nKey: 'marketingConsent',
+    i18nKey: "marketingConsent",
   },
   website: {
-    key: 'website',
+    key: "website",
     enabled: true,
     required: false,
-    type: 'hidden',
+    type: "hidden",
     order: 10,
-    i18nKey: 'website',
+    i18nKey: "website",
   },
 };
 
@@ -220,7 +220,7 @@ const FIELD_CONFIG_SCHEMA = z.object({
   key: z.enum(CONTACT_FORM_FIELD_KEYS as readonly string[]),
   enabled: z.boolean(),
   required: z.boolean(),
-  type: z.enum(['text', 'email', 'tel', 'textarea', 'checkbox', 'hidden']),
+  type: z.enum(["text", "email", "tel", "textarea", "checkbox", "hidden"]),
   order: z.number().int().nonnegative(),
   i18nKey: z.string().min(1),
 });
@@ -240,7 +240,7 @@ const VALIDATION_SCHEMA = z
     messageMaxLength: z.number().int().positive(),
   })
   .refine((value) => value.messageMinLength <= value.messageMaxLength, {
-    message: 'messageMinLength must be <= messageMaxLength',
+    message: "messageMinLength must be <= messageMaxLength",
   });
 
 const CONTACT_FORM_FIELD_KEYS_ENUM = z.enum(
@@ -251,7 +251,7 @@ const CONTACT_FORM_FIELD_KEYS_ENUM = z.enum(
 const FIELDS_SCHEMA = z
   .record(CONTACT_FORM_FIELD_KEYS_ENUM, FIELD_CONFIG_SCHEMA)
   .refine((value) => CONTACT_FORM_FIELD_KEYS.every((key) => key in value), {
-    message: 'Missing required field configs',
+    message: "Missing required field configs",
   });
 
 export const contactFormConfigSchema = z.object({
@@ -269,26 +269,26 @@ export interface ContactFormFieldDescriptor extends ContactFormFieldConfig {
 }
 
 const PLACEHOLDER_KEYS: Partial<Record<ContactFormFieldKey, string>> = {
-  firstName: 'firstNamePlaceholder',
-  lastName: 'lastNamePlaceholder',
-  email: 'emailPlaceholder',
-  company: 'companyPlaceholder',
-  phone: 'phonePlaceholder',
-  subject: 'subjectPlaceholder',
-  message: 'messagePlaceholder',
+  firstName: "firstNamePlaceholder",
+  lastName: "lastNamePlaceholder",
+  email: "emailPlaceholder",
+  company: "companyPlaceholder",
+  phone: "phonePlaceholder",
+  subject: "subjectPlaceholder",
+  message: "messagePlaceholder",
 };
 
 function shouldRenderField(
   field: ContactFormFieldConfig,
   features: ContactFormFeatures,
 ): boolean {
-  if (field.key === 'acceptPrivacy' && !features.showPrivacyCheckbox) {
+  if (field.key === "acceptPrivacy" && !features.showPrivacyCheckbox) {
     return false;
   }
-  if (field.key === 'marketingConsent' && !features.showMarketingConsent) {
+  if (field.key === "marketingConsent" && !features.showMarketingConsent) {
     return false;
   }
-  if (field.key === 'website' && !features.useWebsiteHoneypot) {
+  if (field.key === "website" && !features.useWebsiteHoneypot) {
     return false;
   }
   return field.enabled;
@@ -312,8 +312,8 @@ export function buildFormFieldsFromConfig(
       // Safe lookup: PLACEHOLDER_KEYS is keyed by ContactFormFieldKey union type,
       // and field.key is a trusted enum-like key from config, not user input.
       placeholderKey: PLACEHOLDER_KEYS[field.key],
-      isCheckbox: field.type === 'checkbox',
-      isHoneypot: field.key === 'website',
+      isCheckbox: field.type === "checkbox",
+      isHoneypot: field.key === "website",
     }));
 }
 

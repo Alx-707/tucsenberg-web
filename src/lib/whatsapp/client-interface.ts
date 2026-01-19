@@ -8,7 +8,7 @@
 import type {
   SendMessageRequest,
   WhatsAppServiceResponse,
-} from '@/types/whatsapp';
+} from "@/types/whatsapp";
 
 /**
  * WhatsApp Client Interface
@@ -107,7 +107,7 @@ export interface WhatsAppClient {
    */
   uploadMedia(
     file: Buffer | Blob,
-    type: 'image' | 'document' | 'audio' | 'video' | 'sticker',
+    type: "image" | "document" | "audio" | "video" | "sticker",
     filename?: string,
   ): Promise<string | null>;
 
@@ -127,7 +127,7 @@ export interface WhatsAppClient {
  * Client information for debugging and monitoring
  */
 export interface WhatsAppClientInfo {
-  type: 'real' | 'mock';
+  type: "real" | "mock";
   phoneNumberId: string;
   isConfigured: boolean;
   apiVersion?: string;
@@ -145,4 +145,4 @@ export interface WhatsAppClientConfig {
 /**
  * Environment type for client selection
  */
-export type WhatsAppEnvironment = 'production' | 'development' | 'test';
+export type WhatsAppEnvironment = "production" | "development" | "test";

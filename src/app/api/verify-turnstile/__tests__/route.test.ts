@@ -1,27 +1,27 @@
-import { NextRequest } from 'next/server';
-import { beforeEach, describe, expect, it, vi } from 'vitest';
-import { GET, POST } from '@/app/api/verify-turnstile/route';
+import { NextRequest } from "next/server";
+import { beforeEach, describe, expect, it, vi } from "vitest";
+import { GET, POST } from "@/app/api/verify-turnstile/route";
 
 // Mock global fetch
 const mockFetch = vi.fn();
 global.fetch = mockFetch;
 
 // Mock environment variables
-vi.mock('@/lib/env', () => ({
+vi.mock("@/lib/env", () => ({
   env: {
-    TURNSTILE_SECRET_KEY: 'test-secret-key',
-    TURNSTILE_SITE_KEY: 'test-site-key',
-    TURNSTILE_ALLOWED_HOSTS: 'localhost',
-    TURNSTILE_EXPECTED_ACTION: 'contact_form',
-    NEXT_PUBLIC_BASE_URL: 'http://localhost:3000',
-    NEXT_PUBLIC_TURNSTILE_ACTION: 'contact_form',
+    TURNSTILE_SECRET_KEY: "test-secret-key",
+    TURNSTILE_SITE_KEY: "test-site-key",
+    TURNSTILE_ALLOWED_HOSTS: "localhost",
+    TURNSTILE_EXPECTED_ACTION: "contact_form",
+    NEXT_PUBLIC_BASE_URL: "http://localhost:3000",
+    NEXT_PUBLIC_TURNSTILE_ACTION: "contact_form",
   },
 }));
 
-describe('Verify Turnstile API Route', () => {
+describe("Verify Turnstile API Route", () => {
   const validRequestBody = {
-    token: 'valid-turnstile-token',
-    remoteip: '127.0.0.1',
+    token: "valid-turnstile-token",
+    remoteip: "127.0.0.1",
   };
 
   beforeEach(() => {
@@ -29,28 +29,28 @@ describe('Verify Turnstile API Route', () => {
     mockFetch.mockClear();
   });
 
-  describe('POST /api/verify-turnstile', () => {
-    it('应该成功验证有效的Turnstile token', async () => {
+  describe("POST /api/verify-turnstile", () => {
+    it("应该成功验证有效的Turnstile token", async () => {
       // Mock successful Cloudflare response
       mockFetch.mockResolvedValue({
         ok: true,
         json: () =>
           Promise.resolve({
             success: true,
-            challenge_ts: '2024-01-01T00:00:00.000Z',
-            hostname: 'localhost',
-            action: 'contact_form',
+            challenge_ts: "2024-01-01T00:00:00.000Z",
+            hostname: "localhost",
+            action: "contact_form",
           }),
       });
 
       const request = new NextRequest(
-        'http://localhost:3000/api/verify-turnstile',
+        "http://localhost:3000/api/verify-turnstile",
         {
-          method: 'POST',
+          method: "POST",
           body: JSON.stringify(validRequestBody),
           headers: {
-            'content-type': 'application/json',
-            'x-forwarded-for': '127.0.0.1',
+            "content-type": "application/json",
+            "x-forwarded-for": "127.0.0.1",
           },
         },
       );
@@ -60,36 +60,36 @@ describe('Verify Turnstile API Route', () => {
 
       expect(response.status).toBe(200);
       expect(data.success).toBe(true);
-      expect(data.message).toBe('Verification successful');
+      expect(data.message).toBe("Verification successful");
       expect(mockFetch).toHaveBeenCalledWith(
-        'https://challenges.cloudflare.com/turnstile/v0/siteverify',
+        "https://challenges.cloudflare.com/turnstile/v0/siteverify",
         expect.objectContaining({
-          method: 'POST',
+          method: "POST",
           headers: {
-            'Content-Type': 'application/x-www-form-urlencoded',
+            "Content-Type": "application/x-www-form-urlencoded",
           },
         }),
       );
     });
 
-    it('应该处理Turnstile验证失败', async () => {
+    it("应该处理Turnstile验证失败", async () => {
       // Mock failed Cloudflare response
       mockFetch.mockResolvedValue({
         ok: true,
         json: () =>
           Promise.resolve({
-            'success': false,
-            'error-codes': ['invalid-input-response'],
+            success: false,
+            "error-codes": ["invalid-input-response"],
           }),
       });
 
       const request = new NextRequest(
-        'http://localhost:3000/api/verify-turnstile',
+        "http://localhost:3000/api/verify-turnstile",
         {
-          method: 'POST',
+          method: "POST",
           body: JSON.stringify(validRequestBody),
           headers: {
-            'content-type': 'application/json',
+            "content-type": "application/json",
           },
         },
       );
@@ -99,18 +99,18 @@ describe('Verify Turnstile API Route', () => {
 
       expect(response.status).toBe(400);
       expect(data.success).toBe(false);
-      expect(data.error).toBe('Verification failed');
-      expect(data.errorCodes).toEqual(['invalid-input-response']);
+      expect(data.error).toBe("Verification failed");
+      expect(data.errorCodes).toEqual(["invalid-input-response"]);
     });
 
-    it('应该处理缺少token的请求', async () => {
+    it("应该处理缺少token的请求", async () => {
       const request = new NextRequest(
-        'http://localhost:3000/api/verify-turnstile',
+        "http://localhost:3000/api/verify-turnstile",
         {
-          method: 'POST',
+          method: "POST",
           body: JSON.stringify({}),
           headers: {
-            'content-type': 'application/json',
+            "content-type": "application/json",
           },
         },
       );
@@ -120,17 +120,17 @@ describe('Verify Turnstile API Route', () => {
 
       expect(response.status).toBe(400);
       expect(data.success).toBe(false);
-      expect(data.error).toBe('Missing token');
+      expect(data.error).toBe("Missing token");
     });
 
-    it('应该处理空token的请求', async () => {
+    it("应该处理空token的请求", async () => {
       const request = new NextRequest(
-        'http://localhost:3000/api/verify-turnstile',
+        "http://localhost:3000/api/verify-turnstile",
         {
-          method: 'POST',
-          body: JSON.stringify({ token: '' }),
+          method: "POST",
+          body: JSON.stringify({ token: "" }),
           headers: {
-            'content-type': 'application/json',
+            "content-type": "application/json",
           },
         },
       );
@@ -140,17 +140,17 @@ describe('Verify Turnstile API Route', () => {
 
       expect(response.status).toBe(400);
       expect(data.success).toBe(false);
-      expect(data.error).toBe('Missing token');
+      expect(data.error).toBe("Missing token");
     });
 
-    it('应该处理无效的JSON请求体', async () => {
+    it("应该处理无效的JSON请求体", async () => {
       const request = new NextRequest(
-        'http://localhost:3000/api/verify-turnstile',
+        "http://localhost:3000/api/verify-turnstile",
         {
-          method: 'POST',
-          body: 'invalid-json',
+          method: "POST",
+          body: "invalid-json",
           headers: {
-            'content-type': 'application/json',
+            "content-type": "application/json",
           },
         },
       );
@@ -161,20 +161,20 @@ describe('Verify Turnstile API Route', () => {
       // 使用 safeParseJson 后，无效 JSON 应返回 400 + INVALID_JSON
       expect(response.status).toBe(400);
       expect(data.success).toBe(false);
-      expect(data.error).toBe('INVALID_JSON');
+      expect(data.error).toBe("INVALID_JSON");
     });
 
-    it('应该处理Cloudflare API网络错误', async () => {
+    it("应该处理Cloudflare API网络错误", async () => {
       // Mock network error
-      mockFetch.mockRejectedValue(new Error('Network error'));
+      mockFetch.mockRejectedValue(new Error("Network error"));
 
       const request = new NextRequest(
-        'http://localhost:3000/api/verify-turnstile',
+        "http://localhost:3000/api/verify-turnstile",
         {
-          method: 'POST',
+          method: "POST",
           body: JSON.stringify(validRequestBody),
           headers: {
-            'content-type': 'application/json',
+            "content-type": "application/json",
           },
         },
       );
@@ -184,24 +184,24 @@ describe('Verify Turnstile API Route', () => {
 
       expect(response.status).toBe(500);
       expect(data.success).toBe(false);
-      expect(data.error).toBe('Verification request failed');
+      expect(data.error).toBe("Verification request failed");
     });
 
-    it('应该处理Cloudflare API响应错误', async () => {
+    it("应该处理Cloudflare API响应错误", async () => {
       // Mock HTTP error response
       mockFetch.mockResolvedValue({
         ok: false,
         status: 500,
-        statusText: 'Internal Server Error',
+        statusText: "Internal Server Error",
       });
 
       const request = new NextRequest(
-        'http://localhost:3000/api/verify-turnstile',
+        "http://localhost:3000/api/verify-turnstile",
         {
-          method: 'POST',
+          method: "POST",
           body: JSON.stringify(validRequestBody),
           headers: {
-            'content-type': 'application/json',
+            "content-type": "application/json",
           },
         },
       );
@@ -211,29 +211,29 @@ describe('Verify Turnstile API Route', () => {
 
       expect(response.status).toBe(500);
       expect(data.success).toBe(false);
-      expect(data.error).toBe('Verification request failed');
+      expect(data.error).toBe("Verification request failed");
     });
 
-    it('应该正确提取客户端IP地址', async () => {
+    it("应该正确提取客户端IP地址", async () => {
       mockFetch.mockResolvedValue({
         ok: true,
         json: () =>
           Promise.resolve({
             success: true,
-            hostname: 'localhost',
-            action: 'contact_form',
+            hostname: "localhost",
+            action: "contact_form",
           }),
       });
 
       const request = new NextRequest(
-        'http://localhost:3000/api/verify-turnstile',
+        "http://localhost:3000/api/verify-turnstile",
         {
-          method: 'POST',
-          body: JSON.stringify({ token: 'test-token' }),
+          method: "POST",
+          body: JSON.stringify({ token: "test-token" }),
           headers: {
-            'content-type': 'application/json',
-            'x-forwarded-for': '192.168.1.1, 10.0.0.1',
-            'x-real-ip': '192.168.1.1',
+            "content-type": "application/json",
+            "x-forwarded-for": "192.168.1.1, 10.0.0.1",
+            "x-real-ip": "192.168.1.1",
           },
         },
       );
@@ -244,10 +244,10 @@ describe('Verify Turnstile API Route', () => {
       const fetchCall = mockFetch.mock.calls[0];
       const formData = fetchCall?.[1]?.body;
       const formDataString = formData?.toString();
-      expect(formDataString).toContain('remoteip=192.168.1.1%2C+10.0.0.1'); // URL encoded "192.168.1.1, 10.0.0.1"
+      expect(formDataString).toContain("remoteip=192.168.1.1%2C+10.0.0.1"); // URL encoded "192.168.1.1, 10.0.0.1"
     });
 
-    it('应该忽略客户端提供的remoteip参数（安全措施）', async () => {
+    it("应该忽略客户端提供的remoteip参数（安全措施）", async () => {
       // SECURITY: Client-provided remoteip is intentionally ignored to prevent IP spoofing
       // The server MUST use server-derived IP from request headers
       mockFetch.mockResolvedValue({
@@ -255,24 +255,24 @@ describe('Verify Turnstile API Route', () => {
         json: () =>
           Promise.resolve({
             success: true,
-            hostname: 'localhost',
-            action: 'contact_form',
+            hostname: "localhost",
+            action: "contact_form",
           }),
       });
 
       const requestWithRemoteIp = {
-        token: 'test-token',
-        remoteip: '203.0.113.1', // This should be ignored
+        token: "test-token",
+        remoteip: "203.0.113.1", // This should be ignored
       };
 
       const request = new NextRequest(
-        'http://localhost:3000/api/verify-turnstile',
+        "http://localhost:3000/api/verify-turnstile",
         {
-          method: 'POST',
+          method: "POST",
           body: JSON.stringify(requestWithRemoteIp),
           headers: {
-            'content-type': 'application/json',
-            'x-forwarded-for': '192.168.1.1',
+            "content-type": "application/json",
+            "x-forwarded-for": "192.168.1.1",
           },
         },
       );
@@ -283,45 +283,45 @@ describe('Verify Turnstile API Route', () => {
       const fetchCall = mockFetch.mock.calls[0];
       const formData = fetchCall?.[1]?.body;
       const formDataString = formData?.toString();
-      expect(formDataString).toContain('remoteip=192.168.1.1'); // 使用服务端派生的IP
-      expect(formDataString).not.toContain('203.0.113.1'); // 客户端提供的IP被忽略
+      expect(formDataString).toContain("remoteip=192.168.1.1"); // 使用服务端派生的IP
+      expect(formDataString).not.toContain("203.0.113.1"); // 客户端提供的IP被忽略
     });
   });
 
-  describe('GET /api/verify-turnstile', () => {
-    it('应该返回健康检查信息（配置已启用）', async () => {
+  describe("GET /api/verify-turnstile", () => {
+    it("应该返回健康检查信息（配置已启用）", async () => {
       // GET request doesn't need request object
 
       const response = await GET();
       const data = await response.json();
 
       expect(response.status).toBe(200);
-      expect(data.status).toBe('Turnstile verification endpoint active');
+      expect(data.status).toBe("Turnstile verification endpoint active");
       expect(data.configured).toBe(true);
       expect(data.timestamp).toBeDefined();
     });
   });
 
-  describe('配置验证', () => {
-    it('应该处理未配置Turnstile的情况', async () => {
+  describe("配置验证", () => {
+    it("应该处理未配置Turnstile的情况", async () => {
       // 直接mock env模块的TURNSTILE_SECRET_KEY为空字符串
-      const envModule = await import('@/lib/env');
+      const envModule = await import("@/lib/env");
       const originalSecretKey = envModule.env.TURNSTILE_SECRET_KEY;
 
       // 临时修改env对象
-      Object.defineProperty(envModule.env, 'TURNSTILE_SECRET_KEY', {
-        value: '',
+      Object.defineProperty(envModule.env, "TURNSTILE_SECRET_KEY", {
+        value: "",
         writable: true,
         configurable: true,
       });
 
       const request = new NextRequest(
-        'http://localhost:3000/api/verify-turnstile',
+        "http://localhost:3000/api/verify-turnstile",
         {
-          method: 'POST',
+          method: "POST",
           body: JSON.stringify(validRequestBody),
           headers: {
-            'content-type': 'application/json',
+            "content-type": "application/json",
           },
         },
       );
@@ -331,10 +331,10 @@ describe('Verify Turnstile API Route', () => {
 
       expect(response.status).toBe(500);
       expect(data.success).toBe(false);
-      expect(data.error).toBe('Turnstile not configured');
+      expect(data.error).toBe("Turnstile not configured");
 
       // 恢复原始值
-      Object.defineProperty(envModule.env, 'TURNSTILE_SECRET_KEY', {
+      Object.defineProperty(envModule.env, "TURNSTILE_SECRET_KEY", {
         value: originalSecretKey,
         writable: true,
         configurable: true,
@@ -342,29 +342,29 @@ describe('Verify Turnstile API Route', () => {
     });
   });
 
-  describe('安全性测试', () => {
-    it('应该记录验证尝试', async () => {
-      const consoleSpy = vi.spyOn(console, 'info').mockImplementation(() => {});
+  describe("安全性测试", () => {
+    it("应该记录验证尝试", async () => {
+      const consoleSpy = vi.spyOn(console, "info").mockImplementation(() => {});
 
       mockFetch.mockResolvedValue({
         ok: true,
         json: () =>
           Promise.resolve({
             success: true,
-            hostname: 'localhost',
-            challenge_ts: '2024-01-01T00:00:00.000Z',
-            action: 'contact_form',
+            hostname: "localhost",
+            challenge_ts: "2024-01-01T00:00:00.000Z",
+            action: "contact_form",
           }),
       });
 
       const request = new NextRequest(
-        'http://localhost:3000/api/verify-turnstile',
+        "http://localhost:3000/api/verify-turnstile",
         {
-          method: 'POST',
+          method: "POST",
           body: JSON.stringify(validRequestBody),
           headers: {
-            'content-type': 'application/json',
-            'x-forwarded-for': '127.0.0.1',
+            "content-type": "application/json",
+            "x-forwarded-for": "127.0.0.1",
           },
         },
       );
@@ -372,37 +372,37 @@ describe('Verify Turnstile API Route', () => {
       await POST(request);
 
       expect(consoleSpy).toHaveBeenCalledWith(
-        'Turnstile verification attempt',
+        "Turnstile verification attempt",
         expect.objectContaining({
           success: true,
-          hostname: 'localhost',
-          clientIP: '[REDACTED_IP]',
+          hostname: "localhost",
+          clientIP: "[REDACTED_IP]",
         }),
       );
 
       consoleSpy.mockRestore();
     });
 
-    it('应该记录验证失败', async () => {
-      const consoleSpy = vi.spyOn(console, 'warn').mockImplementation(() => {});
+    it("应该记录验证失败", async () => {
+      const consoleSpy = vi.spyOn(console, "warn").mockImplementation(() => {});
 
       mockFetch.mockResolvedValue({
         ok: true,
         json: () =>
           Promise.resolve({
-            'success': false,
-            'error-codes': ['timeout-or-duplicate'],
+            success: false,
+            "error-codes": ["timeout-or-duplicate"],
           }),
       });
 
       const request = new NextRequest(
-        'http://localhost:3000/api/verify-turnstile',
+        "http://localhost:3000/api/verify-turnstile",
         {
-          method: 'POST',
+          method: "POST",
           body: JSON.stringify(validRequestBody),
           headers: {
-            'content-type': 'application/json',
-            'x-forwarded-for': '127.0.0.1',
+            "content-type": "application/json",
+            "x-forwarded-for": "127.0.0.1",
           },
         },
       );
@@ -410,10 +410,10 @@ describe('Verify Turnstile API Route', () => {
       await POST(request);
 
       expect(consoleSpy).toHaveBeenCalledWith(
-        'Turnstile verification failed:',
+        "Turnstile verification failed:",
         expect.objectContaining({
-          errorCodes: ['timeout-or-duplicate'],
-          clientIP: '[REDACTED_IP]',
+          errorCodes: ["timeout-or-duplicate"],
+          clientIP: "[REDACTED_IP]",
         }),
       );
 

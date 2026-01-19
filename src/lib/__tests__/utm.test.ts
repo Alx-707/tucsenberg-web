@@ -1,4 +1,4 @@
-import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
+import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 // Import after mocking
 import {
   appendAttributionToFormData,
@@ -7,7 +7,7 @@ import {
   getAttributionAsObject,
   getAttributionSnapshot,
   storeAttributionData,
-} from '../utm';
+} from "../utm";
 
 // Mock window and sessionStorage before importing the module
 const mockSessionStorage = {
@@ -24,24 +24,24 @@ const mockSessionStorage = {
   }),
 };
 
-Object.defineProperty(global, 'window', {
+Object.defineProperty(global, "window", {
   value: {
     location: {
-      search: '',
-      pathname: '/test-page',
-      href: 'https://example.com/test-page',
+      search: "",
+      pathname: "/test-page",
+      href: "https://example.com/test-page",
     },
     sessionStorage: mockSessionStorage,
   },
   writable: true,
 });
 
-Object.defineProperty(global, 'sessionStorage', {
+Object.defineProperty(global, "sessionStorage", {
   value: mockSessionStorage,
   writable: true,
 });
 
-describe('UTM Parameter Tracking', () => {
+describe("UTM Parameter Tracking", () => {
   beforeEach(() => {
     mockSessionStorage.clear();
     mockSessionStorage.getItem.mockClear();
@@ -50,58 +50,58 @@ describe('UTM Parameter Tracking', () => {
   });
 
   afterEach(() => {
-    window.location.search = '';
+    window.location.search = "";
   });
 
-  describe('captureUtmParams', () => {
-    it('should capture all UTM parameters from URL', () => {
+  describe("captureUtmParams", () => {
+    it("should capture all UTM parameters from URL", () => {
       window.location.search =
-        '?utm_source=google&utm_medium=cpc&utm_campaign=spring_sale&utm_term=shoes&utm_content=banner1';
+        "?utm_source=google&utm_medium=cpc&utm_campaign=spring_sale&utm_term=shoes&utm_content=banner1";
 
       const params = captureUtmParams();
 
       expect(params).toEqual({
-        utmSource: 'google',
-        utmMedium: 'cpc',
-        utmCampaign: 'spring_sale',
-        utmTerm: 'shoes',
-        utmContent: 'banner1',
+        utmSource: "google",
+        utmMedium: "cpc",
+        utmCampaign: "spring_sale",
+        utmTerm: "shoes",
+        utmContent: "banner1",
       });
     });
 
-    it('should return empty object when no UTM params present', () => {
-      window.location.search = '';
+    it("should return empty object when no UTM params present", () => {
+      window.location.search = "";
 
       const params = captureUtmParams();
 
       expect(params).toEqual({});
     });
 
-    it('should capture partial UTM parameters', () => {
-      window.location.search = '?utm_source=newsletter&utm_medium=email';
+    it("should capture partial UTM parameters", () => {
+      window.location.search = "?utm_source=newsletter&utm_medium=email";
 
       const params = captureUtmParams();
 
       expect(params).toEqual({
-        utmSource: 'newsletter',
-        utmMedium: 'email',
+        utmSource: "newsletter",
+        utmMedium: "email",
       });
     });
 
-    it('should sanitize invalid characters', () => {
+    it("should sanitize invalid characters", () => {
       window.location.search =
-        '?utm_source=valid_source-123&utm_medium=<script>';
+        "?utm_source=valid_source-123&utm_medium=<script>";
 
       const params = captureUtmParams();
 
       expect(params).toEqual({
-        utmSource: 'valid_source-123',
+        utmSource: "valid_source-123",
       });
       expect(params.utmMedium).toBeUndefined();
     });
 
-    it('should truncate long values', () => {
-      const longValue = 'a'.repeat(300);
+    it("should truncate long values", () => {
+      const longValue = "a".repeat(300);
       window.location.search = `?utm_source=${longValue}`;
 
       const params = captureUtmParams();
@@ -110,50 +110,50 @@ describe('UTM Parameter Tracking', () => {
     });
   });
 
-  describe('captureClickIds', () => {
-    it('should capture Google click ID (gclid)', () => {
-      window.location.search = '?gclid=abc123xyz';
+  describe("captureClickIds", () => {
+    it("should capture Google click ID (gclid)", () => {
+      window.location.search = "?gclid=abc123xyz";
 
       const ids = captureClickIds();
 
       expect(ids).toEqual({
-        gclid: 'abc123xyz',
+        gclid: "abc123xyz",
       });
     });
 
-    it('should capture Facebook click ID (fbclid)', () => {
-      window.location.search = '?fbclid=fb_click_123';
+    it("should capture Facebook click ID (fbclid)", () => {
+      window.location.search = "?fbclid=fb_click_123";
 
       const ids = captureClickIds();
 
       expect(ids).toEqual({
-        fbclid: 'fb_click_123',
+        fbclid: "fb_click_123",
       });
     });
 
-    it('should capture Microsoft click ID (msclkid)', () => {
-      window.location.search = '?msclkid=ms_click_456';
+    it("should capture Microsoft click ID (msclkid)", () => {
+      window.location.search = "?msclkid=ms_click_456";
 
       const ids = captureClickIds();
 
       expect(ids).toEqual({
-        msclkid: 'ms_click_456',
+        msclkid: "ms_click_456",
       });
     });
 
-    it('should capture multiple click IDs', () => {
-      window.location.search = '?gclid=g123&fbclid=f456';
+    it("should capture multiple click IDs", () => {
+      window.location.search = "?gclid=g123&fbclid=f456";
 
       const ids = captureClickIds();
 
       expect(ids).toEqual({
-        gclid: 'g123',
-        fbclid: 'f456',
+        gclid: "g123",
+        fbclid: "f456",
       });
     });
 
-    it('should return empty object when no click IDs present', () => {
-      window.location.search = '';
+    it("should return empty object when no click IDs present", () => {
+      window.location.search = "";
 
       const ids = captureClickIds();
 
@@ -161,39 +161,39 @@ describe('UTM Parameter Tracking', () => {
     });
   });
 
-  describe('storeAttributionData', () => {
-    it('should store attribution data in sessionStorage', () => {
-      window.location.search = '?utm_source=google&gclid=abc123';
+  describe("storeAttributionData", () => {
+    it("should store attribution data in sessionStorage", () => {
+      window.location.search = "?utm_source=google&gclid=abc123";
 
       storeAttributionData();
 
       expect(mockSessionStorage.setItem).toHaveBeenCalled();
       const storedData = JSON.parse(
-        mockSessionStorage.store['marketing_attribution'] as string,
+        mockSessionStorage.store["marketing_attribution"] as string,
       );
-      expect(storedData.utmSource).toBe('google');
-      expect(storedData.gclid).toBe('abc123');
-      expect(storedData.landingPage).toBe('/test-page');
+      expect(storedData.utmSource).toBe("google");
+      expect(storedData.gclid).toBe("abc123");
+      expect(storedData.landingPage).toBe("/test-page");
       expect(storedData.capturedAt).toBeDefined();
     });
 
-    it('should not overwrite existing attribution data (first-touch)', () => {
-      mockSessionStorage.store['marketing_attribution'] = JSON.stringify({
-        utmSource: 'original',
+    it("should not overwrite existing attribution data (first-touch)", () => {
+      mockSessionStorage.store["marketing_attribution"] = JSON.stringify({
+        utmSource: "original",
       });
 
-      window.location.search = '?utm_source=new_source';
+      window.location.search = "?utm_source=new_source";
 
       storeAttributionData();
 
       const storedData = JSON.parse(
-        mockSessionStorage.store['marketing_attribution'],
+        mockSessionStorage.store["marketing_attribution"],
       );
-      expect(storedData.utmSource).toBe('original');
+      expect(storedData.utmSource).toBe("original");
     });
 
-    it('should not store if no attribution data present', () => {
-      window.location.search = '';
+    it("should not store if no attribution data present", () => {
+      window.location.search = "";
 
       storeAttributionData();
 
@@ -201,160 +201,160 @@ describe('UTM Parameter Tracking', () => {
     });
   });
 
-  describe('getAttributionSnapshot', () => {
-    it('should return stored attribution data', () => {
-      mockSessionStorage.store['marketing_attribution'] = JSON.stringify({
-        utmSource: 'google',
-        utmMedium: 'cpc',
-        gclid: 'abc123',
+  describe("getAttributionSnapshot", () => {
+    it("should return stored attribution data", () => {
+      mockSessionStorage.store["marketing_attribution"] = JSON.stringify({
+        utmSource: "google",
+        utmMedium: "cpc",
+        gclid: "abc123",
       });
 
       const snapshot = getAttributionSnapshot();
 
       expect(snapshot).toEqual({
-        utmSource: 'google',
-        utmMedium: 'cpc',
-        gclid: 'abc123',
+        utmSource: "google",
+        utmMedium: "cpc",
+        gclid: "abc123",
       });
     });
 
-    it('should fallback to current URL params if no stored data', () => {
-      window.location.search = '?utm_source=fallback&fbclid=fb123';
+    it("should fallback to current URL params if no stored data", () => {
+      window.location.search = "?utm_source=fallback&fbclid=fb123";
 
       const snapshot = getAttributionSnapshot();
 
-      expect(snapshot.utmSource).toBe('fallback');
-      expect(snapshot.fbclid).toBe('fb123');
+      expect(snapshot.utmSource).toBe("fallback");
+      expect(snapshot.fbclid).toBe("fb123");
     });
 
-    it('should return empty object if no data available', () => {
-      window.location.search = '';
+    it("should return empty object if no data available", () => {
+      window.location.search = "";
 
       const snapshot = getAttributionSnapshot();
 
       expect(snapshot).toEqual({});
     });
 
-    it('should handle invalid JSON in sessionStorage gracefully', () => {
-      mockSessionStorage.store['marketing_attribution'] = 'invalid-json{';
-      window.location.search = '?utm_source=fallback_source';
+    it("should handle invalid JSON in sessionStorage gracefully", () => {
+      mockSessionStorage.store["marketing_attribution"] = "invalid-json{";
+      window.location.search = "?utm_source=fallback_source";
 
       const snapshot = getAttributionSnapshot();
 
       // Should fallback to URL params when JSON parse fails
-      expect(snapshot.utmSource).toBe('fallback_source');
+      expect(snapshot.utmSource).toBe("fallback_source");
     });
   });
 
-  describe('getAttributionAsObject', () => {
-    it('should return attribution as plain object', () => {
-      mockSessionStorage.store['marketing_attribution'] = JSON.stringify({
-        utmSource: 'google',
-        utmMedium: 'cpc',
-        landingPage: '/test',
-        capturedAt: '2024-01-01',
+  describe("getAttributionAsObject", () => {
+    it("should return attribution as plain object", () => {
+      mockSessionStorage.store["marketing_attribution"] = JSON.stringify({
+        utmSource: "google",
+        utmMedium: "cpc",
+        landingPage: "/test",
+        capturedAt: "2024-01-01",
       });
 
       const obj = getAttributionAsObject();
 
       expect(obj).toEqual({
-        utmSource: 'google',
-        utmMedium: 'cpc',
+        utmSource: "google",
+        utmMedium: "cpc",
       });
       // Should not include non-attribution fields
-      expect(obj).not.toHaveProperty('landingPage');
-      expect(obj).not.toHaveProperty('capturedAt');
+      expect(obj).not.toHaveProperty("landingPage");
+      expect(obj).not.toHaveProperty("capturedAt");
     });
   });
 
-  describe('appendAttributionToFormData', () => {
-    it('should append attribution data to FormData', () => {
-      mockSessionStorage.store['marketing_attribution'] = JSON.stringify({
-        utmSource: 'google',
-        utmMedium: 'cpc',
-        gclid: 'abc123',
+  describe("appendAttributionToFormData", () => {
+    it("should append attribution data to FormData", () => {
+      mockSessionStorage.store["marketing_attribution"] = JSON.stringify({
+        utmSource: "google",
+        utmMedium: "cpc",
+        gclid: "abc123",
       });
 
       const formData = new FormData();
       appendAttributionToFormData(formData);
 
-      expect(formData.get('utmSource')).toBe('google');
-      expect(formData.get('utmMedium')).toBe('cpc');
-      expect(formData.get('gclid')).toBe('abc123');
+      expect(formData.get("utmSource")).toBe("google");
+      expect(formData.get("utmMedium")).toBe("cpc");
+      expect(formData.get("gclid")).toBe("abc123");
     });
 
-    it('should not append undefined values', () => {
-      mockSessionStorage.store['marketing_attribution'] = JSON.stringify({
-        utmSource: 'google',
+    it("should not append undefined values", () => {
+      mockSessionStorage.store["marketing_attribution"] = JSON.stringify({
+        utmSource: "google",
       });
 
       const formData = new FormData();
       appendAttributionToFormData(formData);
 
-      expect(formData.get('utmSource')).toBe('google');
-      expect(formData.get('utmMedium')).toBeNull();
+      expect(formData.get("utmSource")).toBe("google");
+      expect(formData.get("utmMedium")).toBeNull();
     });
 
-    it('should append all attribution fields when present', () => {
-      mockSessionStorage.store['marketing_attribution'] = JSON.stringify({
-        utmSource: 'google',
-        utmMedium: 'cpc',
-        utmCampaign: 'spring_sale',
-        utmTerm: 'shoes',
-        utmContent: 'banner1',
-        gclid: 'g123',
-        fbclid: 'f456',
-        msclkid: 'm789',
+    it("should append all attribution fields when present", () => {
+      mockSessionStorage.store["marketing_attribution"] = JSON.stringify({
+        utmSource: "google",
+        utmMedium: "cpc",
+        utmCampaign: "spring_sale",
+        utmTerm: "shoes",
+        utmContent: "banner1",
+        gclid: "g123",
+        fbclid: "f456",
+        msclkid: "m789",
       });
 
       const formData = new FormData();
       appendAttributionToFormData(formData);
 
-      expect(formData.get('utmSource')).toBe('google');
-      expect(formData.get('utmMedium')).toBe('cpc');
-      expect(formData.get('utmCampaign')).toBe('spring_sale');
-      expect(formData.get('utmTerm')).toBe('shoes');
-      expect(formData.get('utmContent')).toBe('banner1');
-      expect(formData.get('gclid')).toBe('g123');
-      expect(formData.get('fbclid')).toBe('f456');
-      expect(formData.get('msclkid')).toBe('m789');
+      expect(formData.get("utmSource")).toBe("google");
+      expect(formData.get("utmMedium")).toBe("cpc");
+      expect(formData.get("utmCampaign")).toBe("spring_sale");
+      expect(formData.get("utmTerm")).toBe("shoes");
+      expect(formData.get("utmContent")).toBe("banner1");
+      expect(formData.get("gclid")).toBe("g123");
+      expect(formData.get("fbclid")).toBe("f456");
+      expect(formData.get("msclkid")).toBe("m789");
     });
   });
 
-  describe('getAttributionAsObject - complete coverage', () => {
-    it('should return all attribution fields when present', () => {
-      mockSessionStorage.store['marketing_attribution'] = JSON.stringify({
-        utmSource: 'google',
-        utmMedium: 'cpc',
-        utmCampaign: 'spring_sale',
-        utmTerm: 'shoes',
-        utmContent: 'banner1',
-        gclid: 'g123',
-        fbclid: 'f456',
-        msclkid: 'm789',
-        landingPage: '/test',
-        capturedAt: '2024-01-01',
+  describe("getAttributionAsObject - complete coverage", () => {
+    it("should return all attribution fields when present", () => {
+      mockSessionStorage.store["marketing_attribution"] = JSON.stringify({
+        utmSource: "google",
+        utmMedium: "cpc",
+        utmCampaign: "spring_sale",
+        utmTerm: "shoes",
+        utmContent: "banner1",
+        gclid: "g123",
+        fbclid: "f456",
+        msclkid: "m789",
+        landingPage: "/test",
+        capturedAt: "2024-01-01",
       });
 
       const obj = getAttributionAsObject();
 
       expect(obj).toEqual({
-        utmSource: 'google',
-        utmMedium: 'cpc',
-        utmCampaign: 'spring_sale',
-        utmTerm: 'shoes',
-        utmContent: 'banner1',
-        gclid: 'g123',
-        fbclid: 'f456',
-        msclkid: 'm789',
+        utmSource: "google",
+        utmMedium: "cpc",
+        utmCampaign: "spring_sale",
+        utmTerm: "shoes",
+        utmContent: "banner1",
+        gclid: "g123",
+        fbclid: "f456",
+        msclkid: "m789",
       });
       // Should not include non-attribution fields
-      expect(obj).not.toHaveProperty('landingPage');
-      expect(obj).not.toHaveProperty('capturedAt');
+      expect(obj).not.toHaveProperty("landingPage");
+      expect(obj).not.toHaveProperty("capturedAt");
     });
 
-    it('should return empty object when no attribution data', () => {
-      window.location.search = '';
+    it("should return empty object when no attribution data", () => {
+      window.location.search = "";
 
       const obj = getAttributionAsObject();
 

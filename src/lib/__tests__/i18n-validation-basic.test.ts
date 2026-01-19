@@ -1,5 +1,5 @@
-import { beforeEach, describe, expect, it, vi } from 'vitest';
-import { validateTranslations } from '@/lib/i18n-validation';
+import { beforeEach, describe, expect, it, vi } from "vitest";
+import { validateTranslations } from "@/lib/i18n-validation";
 import {
   mockEnTranslations,
   mockJaIncomplete,
@@ -9,24 +9,24 @@ import {
   mockZhWithPlaceholderMismatch,
   resetMockConfig,
   setMockConfig,
-} from './mocks/translations';
+} from "./mocks/translations";
 
 // Mock routing
-vi.mock('@/i18n/routing', () => ({
+vi.mock("@/i18n/routing", () => ({
   routing: {
-    locales: ['en', 'zh'],
+    locales: ["en", "zh"],
   },
 }));
 
-describe('i18n-validation Basic Tests', () => {
+describe("i18n-validation Basic Tests", () => {
   beforeEach(() => {
     vi.clearAllMocks();
     // 重置Mock配置为默认状态（zh使用不完整数据）
     resetMockConfig();
   });
 
-  describe('Basic validateTranslations', () => {
-    it('should validate complete translations successfully', async () => {
+  describe("Basic validateTranslations", () => {
+    it("should validate complete translations successfully", async () => {
       // 设置完整的翻译数据
       setMockConfig({
         en: mockEnTranslations,
@@ -41,7 +41,7 @@ describe('i18n-validation Basic Tests', () => {
       expect(result.missingKeys).toHaveLength(0);
     });
 
-    it('should detect missing translation keys', async () => {
+    it("should detect missing translation keys", async () => {
       // 设置不完整的翻译数据（缺少contact键）
       setMockConfig({
         en: mockEnTranslations,
@@ -52,9 +52,9 @@ describe('i18n-validation Basic Tests', () => {
 
       expect(result.isValid).toBe(false);
       expect(result.missingKeys.length).toBeGreaterThan(0);
-      expect(result.missingKeys).toContain('zh.navigation.contact');
-      expect(result.missingKeys).toContain('zh.pages.home.hero.title');
-      expect(result.missingKeys).toContain('zh.pages.home.hero.subtitle');
+      expect(result.missingKeys).toContain("zh.navigation.contact");
+      expect(result.missingKeys).toContain("zh.pages.home.hero.title");
+      expect(result.missingKeys).toContain("zh.pages.home.hero.subtitle");
 
       // 基于我们的Mock数据计算：
       // EN: common(11) + navigation(6) + forms(2) + pages.home.hero(2) = 21 keys
@@ -65,7 +65,7 @@ describe('i18n-validation Basic Tests', () => {
       expect(result.coverage).toBeCloseTo(92.86, 1);
     });
 
-    it('should handle validation errors gracefully', async () => {
+    it("should handle validation errors gracefully", async () => {
       // 设置空的翻译文件来模拟错误情况
       setMockConfig({
         en: mockEnTranslations,
@@ -81,7 +81,7 @@ describe('i18n-validation Basic Tests', () => {
       expect(result.errors.length).toBeGreaterThan(0);
     });
 
-    it('should identify inconsistent placeholder usage', async () => {
+    it("should identify inconsistent placeholder usage", async () => {
       // 设置占位符不匹配的翻译数据
       setMockConfig({
         en: mockEnTranslations,
@@ -94,13 +94,13 @@ describe('i18n-validation Basic Tests', () => {
       expect(
         result.warnings.some(
           (warning) =>
-            warning.type === 'placeholder_mismatch' &&
-            warning.key === 'common.welcome',
+            warning.type === "placeholder_mismatch" &&
+            warning.key === "common.welcome",
         ),
       ).toBe(true);
     });
 
-    it('should detect empty translation values', async () => {
+    it("should detect empty translation values", async () => {
       // 设置包含空值的翻译数据
       setMockConfig({
         en: mockEnTranslations,
@@ -112,14 +112,14 @@ describe('i18n-validation Basic Tests', () => {
       expect(
         result.errors.some(
           (error) =>
-            error.type === 'empty_value' &&
-            error.key === 'common.hello' &&
-            error.locale === 'zh',
+            error.type === "empty_value" &&
+            error.key === "common.hello" &&
+            error.locale === "zh",
         ),
       ).toBe(true);
     });
 
-    it('should handle nested translation structures', async () => {
+    it("should handle nested translation structures", async () => {
       // 设置不完整的翻译数据（缺少pages.home.hero.subtitle）
       setMockConfig({
         en: mockEnTranslations,
@@ -128,14 +128,14 @@ describe('i18n-validation Basic Tests', () => {
 
       const result = await validateTranslations();
 
-      expect(result.missingKeys).toContain('zh.pages.home.hero.subtitle');
+      expect(result.missingKeys).toContain("zh.pages.home.hero.subtitle");
     });
 
-    it('should validate translation completeness across all locales', async () => {
+    it("should validate translation completeness across all locales", async () => {
       // Mock routing配置包含多个语言
-      vi.doMock('@/i18n/routing', () => ({
+      vi.doMock("@/i18n/routing", () => ({
         routing: {
-          locales: ['en', 'zh', 'ja'],
+          locales: ["en", "zh", "ja"],
         },
       }));
 
@@ -154,24 +154,24 @@ describe('i18n-validation Basic Tests', () => {
     });
   });
 
-  describe('TranslationValidationResult interface', () => {
-    it('should have correct structure', async () => {
+  describe("TranslationValidationResult interface", () => {
+    it("should have correct structure", async () => {
       const result = await validateTranslations();
 
-      expect(result).toHaveProperty('isValid');
-      expect(result).toHaveProperty('coverage');
-      expect(result).toHaveProperty('errors');
-      expect(result).toHaveProperty('warnings');
-      expect(result).toHaveProperty('missingKeys');
+      expect(result).toHaveProperty("isValid");
+      expect(result).toHaveProperty("coverage");
+      expect(result).toHaveProperty("errors");
+      expect(result).toHaveProperty("warnings");
+      expect(result).toHaveProperty("missingKeys");
 
-      expect(typeof result.isValid).toBe('boolean');
-      expect(typeof result.coverage).toBe('number');
+      expect(typeof result.isValid).toBe("boolean");
+      expect(typeof result.coverage).toBe("number");
       expect(Array.isArray(result.errors)).toBe(true);
       expect(Array.isArray(result.warnings)).toBe(true);
       expect(Array.isArray(result.missingKeys)).toBe(true);
     });
 
-    it('should have correct error structure', async () => {
+    it("should have correct error structure", async () => {
       // 设置会产生错误的配置
       setMockConfig({
         en: mockEnTranslations,
@@ -182,18 +182,18 @@ describe('i18n-validation Basic Tests', () => {
 
       if (result.errors.length > 0) {
         const error = result.errors[0];
-        expect(error).toHaveProperty('type');
-        expect(error).toHaveProperty('key');
-        expect(error).toHaveProperty('locale');
-        expect(error).toHaveProperty('message');
+        expect(error).toHaveProperty("type");
+        expect(error).toHaveProperty("key");
+        expect(error).toHaveProperty("locale");
+        expect(error).toHaveProperty("message");
 
-        expect(['missing_key', 'empty_value', 'invalid_format']).toContain(
+        expect(["missing_key", "empty_value", "invalid_format"]).toContain(
           error?.type,
         );
       }
     });
 
-    it('should have correct warning structure', async () => {
+    it("should have correct warning structure", async () => {
       // 设置会产生警告的配置（占位符不匹配）
       setMockConfig({
         en: mockEnTranslations,
@@ -204,23 +204,23 @@ describe('i18n-validation Basic Tests', () => {
 
       if (result.warnings.length > 0) {
         const warning = result.warnings[0];
-        expect(warning).toHaveProperty('type');
-        expect(warning).toHaveProperty('key');
-        expect(warning).toHaveProperty('locale');
-        expect(warning).toHaveProperty('message');
+        expect(warning).toHaveProperty("type");
+        expect(warning).toHaveProperty("key");
+        expect(warning).toHaveProperty("locale");
+        expect(warning).toHaveProperty("message");
 
         expect([
-          'untranslated',
-          'length_mismatch',
-          'format_inconsistency',
-          'placeholder_mismatch',
+          "untranslated",
+          "length_mismatch",
+          "format_inconsistency",
+          "placeholder_mismatch",
         ]).toContain(warning?.type);
       }
     });
   });
 
-  describe('Coverage calculation', () => {
-    it('should calculate coverage correctly for complete translations', async () => {
+  describe("Coverage calculation", () => {
+    it("should calculate coverage correctly for complete translations", async () => {
       setMockConfig({
         en: mockEnTranslations,
         zh: mockZhComplete,
@@ -231,7 +231,7 @@ describe('i18n-validation Basic Tests', () => {
       expect(result.coverage).toBeCloseTo(100, 1);
     });
 
-    it('should calculate coverage correctly for incomplete translations', async () => {
+    it("should calculate coverage correctly for incomplete translations", async () => {
       setMockConfig({
         en: mockEnTranslations,
         zh: mockZhIncomplete,
@@ -243,7 +243,7 @@ describe('i18n-validation Basic Tests', () => {
       expect(result.coverage).toBeCloseTo(92.86, 1);
     });
 
-    it('should handle zero coverage gracefully', async () => {
+    it("should handle zero coverage gracefully", async () => {
       setMockConfig({
         en: mockEnTranslations,
         zh: {},
@@ -256,30 +256,30 @@ describe('i18n-validation Basic Tests', () => {
     });
   });
 
-  describe('Error handling', () => {
-    it('should handle malformed translation files', async () => {
+  describe("Error handling", () => {
+    it("should handle malformed translation files", async () => {
       // Mock a malformed translation file
-      vi.doMock('../../messages/zh.json', () => {
-        throw new Error('Malformed JSON');
+      vi.doMock("../../messages/zh.json", () => {
+        throw new Error("Malformed JSON");
       });
 
       const result = await validateTranslations();
 
       expect(result).toBeDefined();
-      expect(typeof result.isValid).toBe('boolean');
+      expect(typeof result.isValid).toBe("boolean");
       expect(Array.isArray(result.errors)).toBe(true);
     });
 
-    it('should handle missing translation files', async () => {
+    it("should handle missing translation files", async () => {
       // Mock missing translation file
-      vi.doMock('../../messages/zh.json', () => {
-        throw new Error('Module not found');
+      vi.doMock("../../messages/zh.json", () => {
+        throw new Error("Module not found");
       });
 
       const result = await validateTranslations();
 
       expect(result).toBeDefined();
-      expect(typeof result.isValid).toBe('boolean');
+      expect(typeof result.isValid).toBe("boolean");
     });
   });
 });

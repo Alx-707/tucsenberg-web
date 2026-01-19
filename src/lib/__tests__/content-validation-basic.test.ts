@@ -7,9 +7,9 @@
  * - 基本数据类型验证
  */
 
-import { describe, expect, it } from 'vitest';
-import type { _ContentType } from '@/types/content.types';
-import { validateContentMetadata } from '@/lib/content-validation';
+import { describe, expect, it } from "vitest";
+import type { _ContentType } from "@/types/content.types";
+import { validateContentMetadata } from "@/lib/content-validation";
 
 // 注释未使用的导入，保留以备将来使用
 // import {
@@ -17,92 +17,92 @@ import { validateContentMetadata } from '@/lib/content-validation';
 //   TEST_COUNT_CONSTANTS,
 // } from '@/constants/test-constants';
 
-describe('Content Validation - Basic Tests', () => {
-  describe('validateContentMetadata - Basic Validation', () => {
+describe("Content Validation - Basic Tests", () => {
+  describe("validateContentMetadata - Basic Validation", () => {
     const validMetadata = {
-      title: 'Test Article',
-      slug: 'test-article',
-      publishedAt: '2024-01-01T00:00:00Z',
-      updatedAt: '2024-01-02T00:00:00Z',
-      excerpt: 'This is a test excerpt',
-      tags: ['test', 'article'],
+      title: "Test Article",
+      slug: "test-article",
+      publishedAt: "2024-01-01T00:00:00Z",
+      updatedAt: "2024-01-02T00:00:00Z",
+      excerpt: "This is a test excerpt",
+      tags: ["test", "article"],
       seo: {
-        title: 'SEO Title',
-        description: 'SEO description for the article',
+        title: "SEO Title",
+        description: "SEO description for the article",
       },
     };
 
-    describe('required fields validation', () => {
-      it('should pass validation with all required fields', () => {
-        const result = validateContentMetadata(validMetadata, 'posts');
+    describe("required fields validation", () => {
+      it("should pass validation with all required fields", () => {
+        const result = validateContentMetadata(validMetadata, "posts");
 
         expect(result.isValid).toBe(true);
         expect(result.errors).toHaveLength(0);
       });
 
-      it('should fail validation when title is missing', () => {
+      it("should fail validation when title is missing", () => {
         const { title: _title, ...metadataWithoutTitle } = validMetadata;
 
-        const result = validateContentMetadata(metadataWithoutTitle, 'posts');
+        const result = validateContentMetadata(metadataWithoutTitle, "posts");
 
         expect(result.isValid).toBe(false);
-        expect(result.errors).toContain('Title is required');
+        expect(result.errors).toContain("Title is required");
       });
 
-      it('should fail validation when publishedAt is missing', () => {
+      it("should fail validation when publishedAt is missing", () => {
         const { publishedAt: _publishedAt, ...metadataWithoutPublishedAt } =
           validMetadata;
 
         const result = validateContentMetadata(
           metadataWithoutPublishedAt,
-          'posts',
+          "posts",
         );
 
         expect(result.isValid).toBe(false);
-        expect(result.errors).toContain('Published date is required');
+        expect(result.errors).toContain("Published date is required");
       });
 
-      it('should handle missing updatedAt gracefully', () => {
+      it("should handle missing updatedAt gracefully", () => {
         const { updatedAt: _updatedAt, ...metadataWithoutUpdatedAt } =
           validMetadata;
 
         const result = validateContentMetadata(
           metadataWithoutUpdatedAt,
-          'posts',
+          "posts",
         );
 
         expect(result.isValid).toBe(true);
         expect(result.errors).toHaveLength(0);
       });
 
-      it('should fail validation when title is empty string', () => {
+      it("should fail validation when title is empty string", () => {
         const metadataWithEmptyTitle = {
           ...validMetadata,
-          title: '',
+          title: "",
         };
 
-        const result = validateContentMetadata(metadataWithEmptyTitle, 'posts');
+        const result = validateContentMetadata(metadataWithEmptyTitle, "posts");
 
         expect(result.isValid).toBe(false);
-        expect(result.errors).toContain('Title is required');
+        expect(result.errors).toContain("Title is required");
       });
 
-      it('should fail validation when title is only whitespace', () => {
+      it("should fail validation when title is only whitespace", () => {
         const metadataWithWhitespaceTitle = {
           ...validMetadata,
-          title: '   ',
+          title: "   ",
         };
 
         const result = validateContentMetadata(
           metadataWithWhitespaceTitle,
-          'posts',
+          "posts",
         );
 
         expect(result.isValid).toBe(false);
-        expect(result.errors).toContain('Title is required');
+        expect(result.errors).toContain("Title is required");
       });
 
-      it('should fail validation when multiple required fields are missing', () => {
+      it("should fail validation when multiple required fields are missing", () => {
         const {
           title: _title,
           publishedAt: _publishedAt,
@@ -111,169 +111,169 @@ describe('Content Validation - Basic Tests', () => {
 
         const result = validateContentMetadata(
           metadataWithoutMultiple,
-          'posts',
+          "posts",
         );
 
         expect(result.isValid).toBe(false);
-        expect(result.errors).toContain('Title is required');
-        expect(result.errors).toContain('Published date is required');
+        expect(result.errors).toContain("Title is required");
+        expect(result.errors).toContain("Published date is required");
       });
     });
 
-    describe('date validation', () => {
-      it('should pass validation with valid ISO date strings', () => {
+    describe("date validation", () => {
+      it("should pass validation with valid ISO date strings", () => {
         const metadata = {
           ...validMetadata,
-          publishedAt: '2024-01-01T00:00:00Z',
-          updatedAt: '2024-01-02T12:30:45Z',
+          publishedAt: "2024-01-01T00:00:00Z",
+          updatedAt: "2024-01-02T12:30:45Z",
         };
 
-        const result = validateContentMetadata(metadata, 'posts');
+        const result = validateContentMetadata(metadata, "posts");
 
         expect(result.isValid).toBe(true);
         expect(result.errors).toHaveLength(0);
       });
 
-      it('should fail validation with invalid publishedAt date format', () => {
+      it("should fail validation with invalid publishedAt date format", () => {
         const metadata = {
           ...validMetadata,
-          publishedAt: 'invalid-date',
+          publishedAt: "invalid-date",
         };
 
-        const result = validateContentMetadata(metadata, 'posts');
+        const result = validateContentMetadata(metadata, "posts");
 
         expect(result.isValid).toBe(false);
         expect(result.errors).toContain(
-          'Published date must be a valid ISO date',
+          "Published date must be a valid ISO date",
         );
       });
 
-      it('should fail validation with invalid updatedAt date format', () => {
+      it("should fail validation with invalid updatedAt date format", () => {
         const metadata = {
           ...validMetadata,
-          updatedAt: 'not-a-date',
+          updatedAt: "not-a-date",
         };
 
-        const result = validateContentMetadata(metadata, 'posts');
+        const result = validateContentMetadata(metadata, "posts");
 
         expect(result.isValid).toBe(false);
         expect(result.errors).toContain(
-          'Updated date must be a valid ISO date',
+          "Updated date must be a valid ISO date",
         );
       });
 
-      it('should fail validation when updatedAt is before publishedAt', () => {
+      it("should fail validation when updatedAt is before publishedAt", () => {
         const metadata = {
           ...validMetadata,
-          publishedAt: '2024-01-02T00:00:00Z',
-          updatedAt: '2024-01-01T00:00:00Z',
+          publishedAt: "2024-01-02T00:00:00Z",
+          updatedAt: "2024-01-01T00:00:00Z",
         };
 
-        const result = validateContentMetadata(metadata, 'posts');
+        const result = validateContentMetadata(metadata, "posts");
 
         expect(result.isValid).toBe(false);
         expect(result.errors).toContain(
-          'Updated date must be after published date',
+          "Updated date must be after published date",
         );
       });
 
-      it('should pass validation when updatedAt equals publishedAt', () => {
+      it("should pass validation when updatedAt equals publishedAt", () => {
         const metadata = {
           ...validMetadata,
-          publishedAt: '2024-01-01T00:00:00Z',
-          updatedAt: '2024-01-01T00:00:00Z',
+          publishedAt: "2024-01-01T00:00:00Z",
+          updatedAt: "2024-01-01T00:00:00Z",
         };
 
-        const result = validateContentMetadata(metadata, 'posts');
+        const result = validateContentMetadata(metadata, "posts");
 
         expect(result.isValid).toBe(true);
         expect(result.errors).toHaveLength(0);
       });
 
-      it('should handle dates with different timezone formats', () => {
+      it("should handle dates with different timezone formats", () => {
         const metadata = {
           ...validMetadata,
-          publishedAt: '2024-01-01T00:00:00+00:00',
-          updatedAt: '2024-01-02T00:00:00-05:00',
+          publishedAt: "2024-01-01T00:00:00+00:00",
+          updatedAt: "2024-01-02T00:00:00-05:00",
         };
 
-        const result = validateContentMetadata(metadata, 'posts');
+        const result = validateContentMetadata(metadata, "posts");
 
         expect(result.isValid).toBe(true);
         expect(result.errors).toHaveLength(0);
       });
 
-      it('should fail validation with timestamp numbers', () => {
+      it("should fail validation with timestamp numbers", () => {
         const metadata = {
           ...validMetadata,
           publishedAt: 1704067200000 as unknown as string, // timestamp
         };
 
-        const result = validateContentMetadata(metadata, 'posts');
+        const result = validateContentMetadata(metadata, "posts");
 
         expect(result.isValid).toBe(false);
         expect(result.errors).toContain(
-          'Published date must be a valid ISO date',
+          "Published date must be a valid ISO date",
         );
       });
     });
 
-    describe('basic data type validation', () => {
-      it('should fail validation when title is not a string', () => {
+    describe("basic data type validation", () => {
+      it("should fail validation when title is not a string", () => {
         const metadata = {
           ...validMetadata,
           title: 123 as unknown as string,
         };
 
-        const result = validateContentMetadata(metadata, 'posts');
+        const result = validateContentMetadata(metadata, "posts");
 
         expect(result.isValid).toBe(false);
-        expect(result.errors).toContain('Title must be a string');
+        expect(result.errors).toContain("Title must be a string");
       });
 
-      it('should fail validation when tags is not an array', () => {
+      it("should fail validation when tags is not an array", () => {
         const metadata = {
           ...validMetadata,
-          tags: 'not-an-array' as unknown as string[],
+          tags: "not-an-array" as unknown as string[],
         };
 
-        const result = validateContentMetadata(metadata, 'posts');
+        const result = validateContentMetadata(metadata, "posts");
 
         expect(result.isValid).toBe(false);
-        expect(result.errors).toContain('Tags must be an array');
+        expect(result.errors).toContain("Tags must be an array");
       });
 
-      it('should fail validation when excerpt is not a string', () => {
+      it("should fail validation when excerpt is not a string", () => {
         const metadata = {
           ...validMetadata,
           excerpt: 456 as unknown as string,
         };
 
-        const result = validateContentMetadata(metadata, 'posts');
+        const result = validateContentMetadata(metadata, "posts");
 
         expect(result.isValid).toBe(false);
-        expect(result.errors).toContain('Excerpt must be a string');
+        expect(result.errors).toContain("Excerpt must be a string");
       });
 
-      it('should validate array elements in tags', () => {
+      it("should validate array elements in tags", () => {
         const metadata = {
           ...validMetadata,
-          tags: ['valid-tag', 123, 'another-valid-tag'] as unknown as string[],
+          tags: ["valid-tag", 123, "another-valid-tag"] as unknown as string[],
         };
 
-        const result = validateContentMetadata(metadata, 'posts');
+        const result = validateContentMetadata(metadata, "posts");
 
         expect(result.isValid).toBe(false);
-        expect(result.errors).toContain('All tags must be strings');
+        expect(result.errors).toContain("All tags must be strings");
       });
 
-      it('should handle empty arrays in tags', () => {
+      it("should handle empty arrays in tags", () => {
         const metadata = {
           ...validMetadata,
           tags: [],
         };
 
-        const result = validateContentMetadata(metadata, 'posts');
+        const result = validateContentMetadata(metadata, "posts");
 
         // Empty tags array should be valid
         expect(result.isValid).toBe(true);

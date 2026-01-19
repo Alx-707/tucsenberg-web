@@ -1,6 +1,6 @@
-'use client';
+"use client";
 
-import { ContactForm as EnhancedContactForm } from '@/components/forms/contact-form';
+import { ContactForm as EnhancedContactForm } from "@/components/forms/contact-form";
 
 /**
  * 联系表单组件

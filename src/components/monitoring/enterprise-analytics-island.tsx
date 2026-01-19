@@ -1,18 +1,18 @@
-'use client';
+"use client";
 
-import { useEffect, useRef } from 'react';
-import dynamic from 'next/dynamic';
-import { usePathname, useSearchParams } from 'next/navigation';
-import Script from 'next/script';
-import { useCookieConsentOptional } from '@/lib/cookie-consent';
+import { useEffect, useRef } from "react";
+import dynamic from "next/dynamic";
+import { usePathname, useSearchParams } from "next/navigation";
+import Script from "next/script";
+import { useCookieConsentOptional } from "@/lib/cookie-consent";
 
 const Analytics = dynamic(
-  () => import('@vercel/analytics/next').then((mod) => mod.Analytics),
+  () => import("@vercel/analytics/next").then((mod) => mod.Analytics),
   { ssr: false },
 );
 
 const SpeedInsights = dynamic(
-  () => import('@vercel/speed-insights/next').then((mod) => mod.SpeedInsights),
+  () => import("@vercel/speed-insights/next").then((mod) => mod.SpeedInsights),
   { ssr: false },
 );
 
@@ -22,13 +22,13 @@ function ensureGa4QueueInitialized(measurementId: string): void {
   if (!Array.isArray(window.dataLayer)) {
     window.dataLayer = [];
   }
-  if (typeof window.gtag !== 'function') {
+  if (typeof window.gtag !== "function") {
     window.gtag = (...args: unknown[]) => {
       window.dataLayer.push(args);
     };
   }
-  window.gtag('js', new Date());
-  window.gtag('config', measurementId, {
+  window.gtag("js", new Date());
+  window.gtag("config", measurementId, {
     page_path: window.location.pathname,
     send_page_view: false,
   });
@@ -37,7 +37,7 @@ function ensureGa4QueueInitialized(measurementId: string): void {
 export function EnterpriseAnalyticsIsland() {
   const pathname = usePathname();
   const searchParams = useSearchParams();
-  const isProd = process.env.NODE_ENV === 'production';
+  const isProd = process.env.NODE_ENV === "production";
   const cookieConsent = useCookieConsentOptional();
 
   const analyticsAllowed = cookieConsent
@@ -56,11 +56,11 @@ export function EnterpriseAnalyticsIsland() {
   }, [gaEnabled]);
 
   useEffect(() => {
-    if (!gaEnabled || typeof window.gtag !== 'function') return;
+    if (!gaEnabled || typeof window.gtag !== "function") return;
     const url =
       pathname +
-      (searchParams?.toString() ? `?${searchParams.toString()}` : '');
-    window.gtag('config', GA_MEASUREMENT_ID!, {
+      (searchParams?.toString() ? `?${searchParams.toString()}` : "");
+    window.gtag("config", GA_MEASUREMENT_ID!, {
       page_path: url,
       page_location: window.location.href,
     });
@@ -73,7 +73,7 @@ export function EnterpriseAnalyticsIsland() {
       {gaEnabled && (
         <Script
           src={`https://www.googletagmanager.com/gtag/js?id=${GA_MEASUREMENT_ID}`}
-          strategy='afterInteractive'
+          strategy="afterInteractive"
         />
       )}
       {isProd && <Analytics />}

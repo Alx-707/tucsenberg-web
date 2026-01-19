@@ -3,7 +3,7 @@
  * WhatsApp Webhook Utility Interface Definitions
  */
 
-import type { WebhookEvent } from '@/types/whatsapp-webhook-events';
+import type { WebhookEvent } from "@/types/whatsapp-webhook-events";
 
 /**
  * Webhook解析结果
@@ -47,7 +47,7 @@ export interface SignatureVerificationConfig {
   signature_header: string;
   timestamp_header?: string;
   max_timestamp_age_seconds?: number;
-  algorithm: 'sha1' | 'sha256';
+  algorithm: "sha1" | "sha256";
 }
 
 /**
@@ -75,7 +75,7 @@ export interface WebhookResponseConfig {
   include_processing_time: boolean;
   include_event_count: boolean;
   custom_headers?: Record<string, string>;
-  response_format: 'json' | 'text' | 'empty';
+  response_format: "json" | "text" | "empty";
 }
 
 /**
@@ -86,7 +86,7 @@ export interface DeduplicationConfig {
   enabled: boolean;
   key_fields: string[];
   window_minutes: number;
-  storage_type: 'memory' | 'redis' | 'database';
+  storage_type: "memory" | "redis" | "database";
   max_entries: number;
 }
 
@@ -99,7 +99,7 @@ export interface RateLimitConfig {
   max_requests_per_minute: number;
   max_requests_per_hour: number;
   burst_limit: number;
-  key_generator: 'ip' | 'phone_number' | 'custom';
+  key_generator: "ip" | "phone_number" | "custom";
   custom_key_function?: (context: WebhookProcessingContext) => string;
 }
 
@@ -108,7 +108,7 @@ export interface RateLimitConfig {
  * Webhook health check result
  */
 export interface WebhookHealthCheck {
-  status: 'healthy' | 'degraded' | 'unhealthy';
+  status: "healthy" | "degraded" | "unhealthy";
   checks: {
     endpoint_reachable: boolean;
     signature_verification: boolean;

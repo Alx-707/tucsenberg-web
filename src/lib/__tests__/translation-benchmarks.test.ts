@@ -1,37 +1,37 @@
-import { beforeEach, describe, expect, it } from 'vitest';
-import type { Locale } from '@/types/i18n';
-import { TranslationBenchmarks } from '@/lib/translation-benchmarks';
-import type { QualityBenchmark } from '@/lib/translation-quality-types';
+import { beforeEach, describe, expect, it } from "vitest";
+import type { Locale } from "@/types/i18n";
+import { TranslationBenchmarks } from "@/lib/translation-benchmarks";
+import type { QualityBenchmark } from "@/lib/translation-quality-types";
 
-describe('TranslationBenchmarks', () => {
+describe("TranslationBenchmarks", () => {
   let benchmarks: TranslationBenchmarks;
 
   beforeEach(() => {
     benchmarks = new TranslationBenchmarks();
   });
 
-  describe('initialize', () => {
-    it('should initialize with default benchmarks', () => {
+  describe("initialize", () => {
+    it("should initialize with default benchmarks", () => {
       benchmarks.initialize();
 
-      const enBenchmark = benchmarks.getBenchmark('en' as Locale);
-      const zhBenchmark = benchmarks.getBenchmark('zh' as Locale);
+      const enBenchmark = benchmarks.getBenchmark("en" as Locale);
+      const zhBenchmark = benchmarks.getBenchmark("zh" as Locale);
 
       expect(enBenchmark).toBeDefined();
       expect(zhBenchmark).toBeDefined();
-      expect(enBenchmark?.locale).toBe('en');
-      expect(zhBenchmark?.locale).toBe('zh');
+      expect(enBenchmark?.locale).toBe("en");
+      expect(zhBenchmark?.locale).toBe("zh");
     });
 
-    it('should load English benchmark with correct values', () => {
+    it("should load English benchmark with correct values", () => {
       benchmarks.initialize();
 
-      const enBenchmark = benchmarks.getBenchmark('en' as Locale);
+      const enBenchmark = benchmarks.getBenchmark("en" as Locale);
 
       expect(enBenchmark).toEqual({
-        locale: 'en',
+        locale: "en",
         averageScore: 85,
-        benchmarkDate: '2024-01-01',
+        benchmarkDate: "2024-01-01",
         sampleSize: 1000,
         categories: {
           grammar: 88,
@@ -42,15 +42,15 @@ describe('TranslationBenchmarks', () => {
       });
     });
 
-    it('should load Chinese benchmark with correct values', () => {
+    it("should load Chinese benchmark with correct values", () => {
       benchmarks.initialize();
 
-      const zhBenchmark = benchmarks.getBenchmark('zh' as Locale);
+      const zhBenchmark = benchmarks.getBenchmark("zh" as Locale);
 
       expect(zhBenchmark).toEqual({
-        locale: 'zh',
+        locale: "zh",
         averageScore: 82,
-        benchmarkDate: '2024-01-01',
+        benchmarkDate: "2024-01-01",
         sampleSize: 800,
         categories: {
           grammar: 85,
@@ -62,12 +62,12 @@ describe('TranslationBenchmarks', () => {
     });
   });
 
-  describe('setBenchmark and getBenchmark', () => {
-    it('should set and get benchmark correctly', () => {
+  describe("setBenchmark and getBenchmark", () => {
+    it("should set and get benchmark correctly", () => {
       const customBenchmark: QualityBenchmark = {
-        locale: 'fr' as Locale,
+        locale: "fr" as Locale,
         averageScore: 80,
-        benchmarkDate: '2024-02-01',
+        benchmarkDate: "2024-02-01",
         sampleSize: 500,
         categories: {
           grammar: 82,
@@ -77,24 +77,24 @@ describe('TranslationBenchmarks', () => {
         },
       };
 
-      benchmarks.setBenchmark('fr' as Locale, customBenchmark);
-      const retrieved = benchmarks.getBenchmark('fr' as Locale);
+      benchmarks.setBenchmark("fr" as Locale, customBenchmark);
+      const retrieved = benchmarks.getBenchmark("fr" as Locale);
 
       expect(retrieved).toEqual(customBenchmark);
     });
 
-    it('should return undefined for non-existent benchmark', () => {
-      const result = benchmarks.getBenchmark('de' as Locale);
+    it("should return undefined for non-existent benchmark", () => {
+      const result = benchmarks.getBenchmark("de" as Locale);
       expect(result).toBeUndefined();
     });
 
-    it('should overwrite existing benchmark', () => {
+    it("should overwrite existing benchmark", () => {
       benchmarks.initialize();
 
       const newEnBenchmark: QualityBenchmark = {
-        locale: 'en' as Locale,
+        locale: "en" as Locale,
         averageScore: 90,
-        benchmarkDate: '2024-03-01',
+        benchmarkDate: "2024-03-01",
         sampleSize: 1200,
         categories: {
           grammar: 92,
@@ -104,20 +104,20 @@ describe('TranslationBenchmarks', () => {
         },
       };
 
-      benchmarks.setBenchmark('en' as Locale, newEnBenchmark);
-      const retrieved = benchmarks.getBenchmark('en' as Locale);
+      benchmarks.setBenchmark("en" as Locale, newEnBenchmark);
+      const retrieved = benchmarks.getBenchmark("en" as Locale);
 
       expect(retrieved).toEqual(newEnBenchmark);
       expect(retrieved?.averageScore).toBe(90);
     });
   });
 
-  describe('compareWithBenchmark', () => {
+  describe("compareWithBenchmark", () => {
     beforeEach(() => {
       benchmarks.initialize();
     });
 
-    it('should compare current score with benchmark and calculate improvement', () => {
+    it("should compare current score with benchmark and calculate improvement", () => {
       const currentScore = {
         score: 90,
         confidence: 0.9,
@@ -131,17 +131,17 @@ describe('TranslationBenchmarks', () => {
 
       const comparison = benchmarks.compareWithBenchmark(
         currentScore,
-        'en' as Locale,
+        "en" as Locale,
       );
 
       expect(comparison.current).toEqual(currentScore);
-      expect(comparison.benchmark.locale).toBe('en');
+      expect(comparison.benchmark.locale).toBe("en");
       expect(comparison.improvement).toBeCloseTo(5.88, 1); // (90-85)/85 * 100
       expect(comparison.recommendations).toBeDefined();
       expect(Array.isArray(comparison.recommendations)).toBe(true);
     });
 
-    it('should throw error for non-existent benchmark', () => {
+    it("should throw error for non-existent benchmark", () => {
       const currentScore = {
         score: 85,
         confidence: 0.8,
@@ -154,11 +154,11 @@ describe('TranslationBenchmarks', () => {
       };
 
       expect(() => {
-        benchmarks.compareWithBenchmark(currentScore, 'de' as Locale);
-      }).toThrow('No benchmark available for locale: de');
+        benchmarks.compareWithBenchmark(currentScore, "de" as Locale);
+      }).toThrow("No benchmark available for locale: de");
     });
 
-    it('should generate positive recommendations for high scores', () => {
+    it("should generate positive recommendations for high scores", () => {
       const currentScore = {
         score: 95,
         confidence: 0.95,
@@ -172,16 +172,16 @@ describe('TranslationBenchmarks', () => {
 
       const comparison = benchmarks.compareWithBenchmark(
         currentScore,
-        'en' as Locale,
+        "en" as Locale,
       );
 
       expect(comparison.improvement).toBeGreaterThan(10);
       expect(comparison.recommendations).toContain(
-        'Excellent quality! Above benchmark standards.',
+        "Excellent quality! Above benchmark standards.",
       );
     });
 
-    it('should generate improvement recommendations for low scores', () => {
+    it("should generate improvement recommendations for low scores", () => {
       const currentScore = {
         score: 70,
         confidence: 0.7,
@@ -195,16 +195,16 @@ describe('TranslationBenchmarks', () => {
 
       const comparison = benchmarks.compareWithBenchmark(
         currentScore,
-        'en' as Locale,
+        "en" as Locale,
       );
 
       expect(comparison.improvement).toBeLessThan(-10);
       expect(comparison.recommendations).toContain(
-        'Overall quality is significantly below benchmark. Consider comprehensive review.',
+        "Overall quality is significantly below benchmark. Consider comprehensive review.",
       );
     });
 
-    it('should generate specific category recommendations', () => {
+    it("should generate specific category recommendations", () => {
       const currentScore = {
         score: 85,
         confidence: 0.85,
@@ -218,24 +218,24 @@ describe('TranslationBenchmarks', () => {
 
       const comparison = benchmarks.compareWithBenchmark(
         currentScore,
-        'en' as Locale,
+        "en" as Locale,
       );
 
       expect(comparison.recommendations).toContain(
-        'Grammar score below benchmark. Review grammatical accuracy.',
+        "Grammar score below benchmark. Review grammatical accuracy.",
       );
       expect(comparison.recommendations).toContain(
-        'Consistency score below benchmark. Ensure terminology consistency.',
+        "Consistency score below benchmark. Ensure terminology consistency.",
       );
       expect(comparison.recommendations).not.toContain(
-        'Terminology score below benchmark. Review domain-specific terms.',
+        "Terminology score below benchmark. Review domain-specific terms.",
       );
       expect(comparison.recommendations).not.toContain(
-        'Fluency score below benchmark. Improve natural language flow.',
+        "Fluency score below benchmark. Improve natural language flow.",
       );
     });
 
-    it('should handle moderate improvement correctly', () => {
+    it("should handle moderate improvement correctly", () => {
       const currentScore = {
         score: 82,
         confidence: 0.82,
@@ -249,12 +249,12 @@ describe('TranslationBenchmarks', () => {
 
       const comparison = benchmarks.compareWithBenchmark(
         currentScore,
-        'en' as Locale,
+        "en" as Locale,
       );
 
       expect(comparison.improvement).toBeCloseTo(-3.53, 1); // (82-85)/85 * 100
       expect(comparison.recommendations).toContain(
-        'Quality is below benchmark. Focus on identified issues.',
+        "Quality is below benchmark. Focus on identified issues.",
       );
     });
   });

@@ -1,6 +1,6 @@
-import type { Page } from '@playwright/test';
+import type { Page } from "@playwright/test";
 
-type LocatorClickOptions = Parameters<ReturnType<Page['locator']>['click']>[0];
+type LocatorClickOptions = Parameters<ReturnType<Page["locator"]>["click"]>[0];
 
 // import { FullConfig } from '@playwright/test'; // TODO: Use when needed
 
@@ -15,25 +15,25 @@ type LocatorClickOptions = Parameters<ReturnType<Page['locator']>['click']>[0];
  */
 export const TEST_ENV_VARS = {
   // 禁用 React Scan 以避免 DOM 干扰
-  NEXT_PUBLIC_DISABLE_REACT_SCAN: 'true',
+  NEXT_PUBLIC_DISABLE_REACT_SCAN: "true",
 
   // 设置测试环境标识
-  NODE_ENV: 'test',
-  PLAYWRIGHT_TEST: 'true',
+  NODE_ENV: "test",
+  PLAYWRIGHT_TEST: "true",
 
   // 禁用其他可能干扰测试的开发工具
-  NEXT_PUBLIC_DISABLE_DEV_TOOLS: 'true',
-  NEXT_PUBLIC_DISABLE_PERFORMANCE_MONITOR: 'true',
+  NEXT_PUBLIC_DISABLE_DEV_TOOLS: "true",
+  NEXT_PUBLIC_DISABLE_PERFORMANCE_MONITOR: "true",
 
   // 测试专用配置
-  NEXT_PUBLIC_TEST_MODE: 'true',
+  NEXT_PUBLIC_TEST_MODE: "true",
 } as const;
 
 /**
  * 为测试环境配置环境变量
  */
 export function setupTestEnvironment() {
-  console.log('🧪 Setting up test environment...');
+  console.log("🧪 Setting up test environment...");
 
   // 设置测试环境变量
   Object.entries(TEST_ENV_VARS).forEach(([key, value]) => {
@@ -41,21 +41,21 @@ export function setupTestEnvironment() {
     console.log(`   ${key}=${value}`);
   });
 
-  console.log('✅ Test environment configured');
+  console.log("✅ Test environment configured");
 }
 
 /**
  * 清理测试环境
  */
 export function cleanupTestEnvironment() {
-  console.log('🧹 Cleaning up test environment...');
+  console.log("🧹 Cleaning up test environment...");
 
   // 清理测试环境变量（可选）
   Object.keys(TEST_ENV_VARS).forEach((key) => {
     delete process.env[key];
   });
 
-  console.log('✅ Test environment cleaned up');
+  console.log("✅ Test environment cleaned up");
 }
 
 /**
@@ -63,10 +63,10 @@ export function cleanupTestEnvironment() {
  */
 export async function checkForInterferingElements(page: Page) {
   const interferingElements = [
-    '#react-scan-toolbar-root',
+    "#react-scan-toolbar-root",
     '[data-testid="react-scan-indicator"]',
     '[data-testid="react-scan-control-panel"]',
-    '.react-scan-overlay',
+    ".react-scan-overlay",
   ];
 
   const foundElements: string[] = [];
@@ -84,7 +84,7 @@ export async function checkForInterferingElements(page: Page) {
   }
 
   if (foundElements.length > 0) {
-    console.warn('⚠️  Found interfering elements:', foundElements);
+    console.warn("⚠️  Found interfering elements:", foundElements);
     return foundElements;
   }
 
@@ -95,14 +95,14 @@ export async function checkForInterferingElements(page: Page) {
  * 移除页面中的干扰元素
  */
 export async function removeInterferingElements(page: Page) {
-  console.log('🧹 Removing interfering elements...');
+  console.log("🧹 Removing interfering elements...");
 
   const interferingSelectors = [
-    '#react-scan-toolbar-root',
+    "#react-scan-toolbar-root",
     '[data-testid="react-scan-indicator"]',
     '[data-testid="react-scan-control-panel"]',
-    '.react-scan-overlay',
-    '.react-scan-toolbar',
+    ".react-scan-overlay",
+    ".react-scan-toolbar",
   ];
 
   for (const selector of interferingSelectors) {
@@ -116,14 +116,14 @@ export async function removeInterferingElements(page: Page) {
     }
   }
 
-  console.log('✅ Interfering elements removed');
+  console.log("✅ Interfering elements removed");
 }
 
 /**
  * 等待页面稳定（无干扰元素）
  */
 export async function waitForStablePage(page: Page, timeout = 5000) {
-  console.log('⏳ Waiting for page to stabilize...');
+  console.log("⏳ Waiting for page to stabilize...");
 
   const startTime = Date.now();
 
@@ -131,7 +131,7 @@ export async function waitForStablePage(page: Page, timeout = 5000) {
     const interferingElements = await checkForInterferingElements(page);
 
     if (interferingElements.length === 0) {
-      console.log('✅ Page is stable');
+      console.log("✅ Page is stable");
       return true;
     }
 
@@ -142,7 +142,7 @@ export async function waitForStablePage(page: Page, timeout = 5000) {
     await page.waitForTimeout(100);
   }
 
-  console.warn('⚠️  Page did not stabilize within timeout');
+  console.warn("⚠️  Page did not stabilize within timeout");
   return false;
 }
 
@@ -162,11 +162,11 @@ export async function waitForLoadWithFallback(
   const { loadTimeout = 5_000, fallbackDelay = 1_000, context } = options;
 
   try {
-    await page.waitForLoadState('load', { timeout: loadTimeout });
+    await page.waitForLoadState("load", { timeout: loadTimeout });
   } catch (error) {
     console.warn(
       `⚠️ waitForLoadState("load") timed out${
-        context ? ` (${context})` : ''
+        context ? ` (${context})` : ""
       }, falling back to ${fallbackDelay}ms delay`,
       error instanceof Error ? error.message : error,
     );
@@ -189,7 +189,7 @@ export async function safeClick(
   await removeInterferingElements(page);
 
   // 等待元素可见
-  await page.waitForSelector(selector, { state: 'visible', timeout: 5000 });
+  await page.waitForSelector(selector, { state: "visible", timeout: 5000 });
 
   // 使用 .first() 确保只操作第一个匹配的元素
   const targetElement = page.locator(selector).first();

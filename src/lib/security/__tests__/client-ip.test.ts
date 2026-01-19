@@ -1,6 +1,6 @@
-import { NextRequest } from 'next/server';
-import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
-import { getClientIP, getIPChain } from '../client-ip';
+import { NextRequest } from "next/server";
+import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
+import { getClientIP, getIPChain } from "../client-ip";
 
 /**
  * Type-safe environment variable helper for tests.
@@ -15,17 +15,17 @@ function setEnv(key: string, value: string | undefined): void {
   }
 }
 
-describe('client-ip', () => {
+describe("client-ip", () => {
   const originalEnv = process.env;
 
   beforeEach(() => {
     vi.clearAllMocks();
     // Reset environment
     process.env = { ...originalEnv };
-    setEnv('DEPLOYMENT_PLATFORM', undefined);
-    setEnv('VERCEL', undefined);
-    setEnv('CF_PAGES', undefined);
-    setEnv('NODE_ENV', undefined);
+    setEnv("DEPLOYMENT_PLATFORM", undefined);
+    setEnv("VERCEL", undefined);
+    setEnv("CF_PAGES", undefined);
+    setEnv("NODE_ENV", undefined);
   });
 
   afterEach(() => {
@@ -39,13 +39,13 @@ describe('client-ip', () => {
       ip?: string;
     } = {},
   ): NextRequest {
-    const url = 'http://localhost/api/test';
+    const url = "http://localhost/api/test";
     const headers = new Headers(options.headers);
     const request = new NextRequest(url, { headers });
 
     // Mock request.ip (Next.js property)
     if (options.ip) {
-      Object.defineProperty(request, 'ip', {
+      Object.defineProperty(request, "ip", {
         value: options.ip,
         writable: false,
       });
@@ -54,322 +54,322 @@ describe('client-ip', () => {
     return request;
   }
 
-  describe('getClientIP', () => {
-    describe('no platform configured', () => {
-      it('should fallback to request.ip when no platform', () => {
-        const request = createMockRequest({ ip: '10.0.0.50' });
+  describe("getClientIP", () => {
+    describe("no platform configured", () => {
+      it("should fallback to request.ip when no platform", () => {
+        const request = createMockRequest({ ip: "10.0.0.50" });
         const ip = getClientIP(request);
-        expect(ip).toBe('10.0.0.50');
+        expect(ip).toBe("10.0.0.50");
       });
 
-      it('should return fallback IP when no request.ip', () => {
+      it("should return fallback IP when no request.ip", () => {
         const request = createMockRequest();
         const ip = getClientIP(request);
-        expect(ip).toBe('0.0.0.0');
+        expect(ip).toBe("0.0.0.0");
       });
 
-      it('should NOT trust x-forwarded-for without platform', () => {
+      it("should NOT trust x-forwarded-for without platform", () => {
         const request = createMockRequest({
-          headers: { 'x-forwarded-for': '1.2.3.4' },
-          ip: '10.0.0.50',
+          headers: { "x-forwarded-for": "1.2.3.4" },
+          ip: "10.0.0.50",
         });
         const ip = getClientIP(request);
         // Should use request.ip, not x-forwarded-for
-        expect(ip).toBe('10.0.0.50');
+        expect(ip).toBe("10.0.0.50");
       });
     });
 
-    describe('Vercel platform', () => {
+    describe("Vercel platform", () => {
       beforeEach(() => {
-        setEnv('VERCEL', '1');
+        setEnv("VERCEL", "1");
       });
 
-      it('should extract IP from x-real-ip header', () => {
+      it("should extract IP from x-real-ip header", () => {
         const request = createMockRequest({
-          headers: { 'x-real-ip': '203.0.113.50' },
+          headers: { "x-real-ip": "203.0.113.50" },
         });
         const ip = getClientIP(request);
-        expect(ip).toBe('203.0.113.50');
+        expect(ip).toBe("203.0.113.50");
       });
 
-      it('should extract first IP from x-forwarded-for', () => {
+      it("should extract first IP from x-forwarded-for", () => {
         const request = createMockRequest({
-          headers: { 'x-forwarded-for': '203.0.113.50, 10.0.0.1, 172.16.0.1' },
+          headers: { "x-forwarded-for": "203.0.113.50, 10.0.0.1, 172.16.0.1" },
         });
         const ip = getClientIP(request);
-        expect(ip).toBe('203.0.113.50');
+        expect(ip).toBe("203.0.113.50");
       });
 
-      it('should prefer x-real-ip over x-forwarded-for', () => {
+      it("should prefer x-real-ip over x-forwarded-for", () => {
         const request = createMockRequest({
           headers: {
-            'x-real-ip': '198.51.100.10',
-            'x-forwarded-for': '203.0.113.50',
+            "x-real-ip": "198.51.100.10",
+            "x-forwarded-for": "203.0.113.50",
           },
         });
         const ip = getClientIP(request);
-        expect(ip).toBe('198.51.100.10');
+        expect(ip).toBe("198.51.100.10");
       });
 
-      it('should fallback to request.ip when no headers', () => {
-        const request = createMockRequest({ ip: '10.0.0.99' });
+      it("should fallback to request.ip when no headers", () => {
+        const request = createMockRequest({ ip: "10.0.0.99" });
         const ip = getClientIP(request);
-        expect(ip).toBe('10.0.0.99');
+        expect(ip).toBe("10.0.0.99");
       });
     });
 
-    describe('Cloudflare platform', () => {
+    describe("Cloudflare platform", () => {
       beforeEach(() => {
-        setEnv('CF_PAGES', '1');
+        setEnv("CF_PAGES", "1");
       });
 
-      it('should extract IP from cf-connecting-ip header', () => {
+      it("should extract IP from cf-connecting-ip header", () => {
         const request = createMockRequest({
-          headers: { 'cf-connecting-ip': '192.0.2.100' },
+          headers: { "cf-connecting-ip": "192.0.2.100" },
         });
         const ip = getClientIP(request);
-        expect(ip).toBe('192.0.2.100');
+        expect(ip).toBe("192.0.2.100");
       });
 
-      it('should prefer cf-connecting-ip over x-forwarded-for', () => {
+      it("should prefer cf-connecting-ip over x-forwarded-for", () => {
         const request = createMockRequest({
           headers: {
-            'cf-connecting-ip': '192.0.2.100',
-            'x-forwarded-for': '203.0.113.50',
+            "cf-connecting-ip": "192.0.2.100",
+            "x-forwarded-for": "203.0.113.50",
           },
         });
         const ip = getClientIP(request);
-        expect(ip).toBe('192.0.2.100');
+        expect(ip).toBe("192.0.2.100");
       });
     });
 
-    describe('development platform', () => {
+    describe("development platform", () => {
       beforeEach(() => {
-        setEnv('NODE_ENV', 'development');
+        setEnv("NODE_ENV", "development");
       });
 
-      it('should trust x-forwarded-for in development', () => {
+      it("should trust x-forwarded-for in development", () => {
         const request = createMockRequest({
-          headers: { 'x-forwarded-for': '192.168.1.100' },
+          headers: { "x-forwarded-for": "192.168.1.100" },
         });
         const ip = getClientIP(request);
-        expect(ip).toBe('192.168.1.100');
+        expect(ip).toBe("192.168.1.100");
       });
 
-      it('should return localhost when no IP available', () => {
+      it("should return localhost when no IP available", () => {
         const request = createMockRequest();
         const ip = getClientIP(request);
-        expect(ip).toBe('127.0.0.1');
+        expect(ip).toBe("127.0.0.1");
       });
     });
 
-    describe('explicit DEPLOYMENT_PLATFORM', () => {
-      it('should respect explicit platform over auto-detection', () => {
-        setEnv('DEPLOYMENT_PLATFORM', 'cloudflare');
-        setEnv('VERCEL', '1'); // Would normally trigger Vercel
+    describe("explicit DEPLOYMENT_PLATFORM", () => {
+      it("should respect explicit platform over auto-detection", () => {
+        setEnv("DEPLOYMENT_PLATFORM", "cloudflare");
+        setEnv("VERCEL", "1"); // Would normally trigger Vercel
 
         const request = createMockRequest({
           headers: {
-            'cf-connecting-ip': '192.0.2.100',
-            'x-real-ip': '198.51.100.10',
+            "cf-connecting-ip": "192.0.2.100",
+            "x-real-ip": "198.51.100.10",
           },
         });
         const ip = getClientIP(request);
         // Should use Cloudflare config, not Vercel
-        expect(ip).toBe('192.0.2.100');
+        expect(ip).toBe("192.0.2.100");
       });
     });
 
-    describe('IP validation and normalization', () => {
+    describe("IP validation and normalization", () => {
       beforeEach(() => {
-        setEnv('VERCEL', '1');
+        setEnv("VERCEL", "1");
       });
 
-      it('should reject invalid IP addresses', () => {
+      it("should reject invalid IP addresses", () => {
         const request = createMockRequest({
-          headers: { 'x-real-ip': 'not-an-ip' },
-          ip: '10.0.0.1',
+          headers: { "x-real-ip": "not-an-ip" },
+          ip: "10.0.0.1",
         });
         const ip = getClientIP(request);
         // Should fallback to request.ip
-        expect(ip).toBe('10.0.0.1');
+        expect(ip).toBe("10.0.0.1");
       });
 
-      it('should strip port from IPv4 address', () => {
+      it("should strip port from IPv4 address", () => {
         const request = createMockRequest({
-          headers: { 'x-real-ip': '192.168.1.100:8080' },
+          headers: { "x-real-ip": "192.168.1.100:8080" },
         });
         const ip = getClientIP(request);
-        expect(ip).toBe('192.168.1.100');
+        expect(ip).toBe("192.168.1.100");
       });
 
-      it('should strip port from bracketed IPv6 address', () => {
+      it("should strip port from bracketed IPv6 address", () => {
         const request = createMockRequest({
-          headers: { 'x-real-ip': '[::1]:8080' },
+          headers: { "x-real-ip": "[::1]:8080" },
         });
         const ip = getClientIP(request);
-        expect(ip).toBe('::1');
+        expect(ip).toBe("::1");
       });
 
-      it('should handle IPv6 without brackets', () => {
+      it("should handle IPv6 without brackets", () => {
         const request = createMockRequest({
-          headers: { 'x-real-ip': '2001:db8::1' },
+          headers: { "x-real-ip": "2001:db8::1" },
         });
         const ip = getClientIP(request);
-        expect(ip).toBe('2001:db8::1');
+        expect(ip).toBe("2001:db8::1");
       });
 
-      it('should reject malformed IP with invalid octets', () => {
+      it("should reject malformed IP with invalid octets", () => {
         const request = createMockRequest({
-          headers: { 'x-real-ip': '256.256.256.256' },
-          ip: '10.0.0.1',
+          headers: { "x-real-ip": "256.256.256.256" },
+          ip: "10.0.0.1",
         });
         const ip = getClientIP(request);
         // Should fallback to request.ip due to invalid octet values
-        expect(ip).toBe('10.0.0.1');
+        expect(ip).toBe("10.0.0.1");
       });
 
       it('should handle "unknown" value in header', () => {
         const request = createMockRequest({
-          headers: { 'x-forwarded-for': 'unknown, 192.168.1.1' },
+          headers: { "x-forwarded-for": "unknown, 192.168.1.1" },
         });
         const ip = getClientIP(request);
         // First value "unknown" is invalid, should try next header or fallback
-        expect(ip).not.toBe('unknown');
+        expect(ip).not.toBe("unknown");
       });
     });
 
-    describe('x-forwarded-for parsing', () => {
+    describe("x-forwarded-for parsing", () => {
       beforeEach(() => {
-        setEnv('VERCEL', '1');
+        setEnv("VERCEL", "1");
       });
 
-      it('should extract first IP from comma-separated list', () => {
+      it("should extract first IP from comma-separated list", () => {
         const request = createMockRequest({
-          headers: { 'x-forwarded-for': '203.0.113.1, 10.0.0.1, 172.16.0.1' },
+          headers: { "x-forwarded-for": "203.0.113.1, 10.0.0.1, 172.16.0.1" },
         });
         const ip = getClientIP(request);
-        expect(ip).toBe('203.0.113.1');
+        expect(ip).toBe("203.0.113.1");
       });
 
-      it('should trim whitespace from IPs', () => {
+      it("should trim whitespace from IPs", () => {
         const request = createMockRequest({
-          headers: { 'x-forwarded-for': '  203.0.113.50  , 10.0.0.1' },
+          headers: { "x-forwarded-for": "  203.0.113.50  , 10.0.0.1" },
         });
         const ip = getClientIP(request);
-        expect(ip).toBe('203.0.113.50');
+        expect(ip).toBe("203.0.113.50");
       });
 
-      it('should strip port from first IP in chain', () => {
+      it("should strip port from first IP in chain", () => {
         const request = createMockRequest({
-          headers: { 'x-forwarded-for': '203.0.113.50:12345, 10.0.0.1' },
+          headers: { "x-forwarded-for": "203.0.113.50:12345, 10.0.0.1" },
         });
         const ip = getClientIP(request);
-        expect(ip).toBe('203.0.113.50');
+        expect(ip).toBe("203.0.113.50");
       });
     });
   });
 
-  describe('getIPChain', () => {
+  describe("getIPChain", () => {
     beforeEach(() => {
-      setEnv('VERCEL', '1');
+      setEnv("VERCEL", "1");
     });
 
-    it('should return empty array when no IPs', () => {
+    it("should return empty array when no IPs", () => {
       const request = createMockRequest();
       const chain = getIPChain(request);
       expect(chain).toEqual([]);
     });
 
-    it('should collect IPs from x-forwarded-for', () => {
+    it("should collect IPs from x-forwarded-for", () => {
       const request = createMockRequest({
-        headers: { 'x-forwarded-for': '203.0.113.1, 10.0.0.1' },
+        headers: { "x-forwarded-for": "203.0.113.1, 10.0.0.1" },
       });
       const chain = getIPChain(request);
-      expect(chain).toContain('203.0.113.1');
-      expect(chain).toContain('10.0.0.1');
+      expect(chain).toContain("203.0.113.1");
+      expect(chain).toContain("10.0.0.1");
     });
 
-    it('should include x-real-ip in chain', () => {
+    it("should include x-real-ip in chain", () => {
       const request = createMockRequest({
-        headers: { 'x-real-ip': '198.51.100.10' },
+        headers: { "x-real-ip": "198.51.100.10" },
       });
       const chain = getIPChain(request);
-      expect(chain).toContain('198.51.100.10');
+      expect(chain).toContain("198.51.100.10");
     });
 
-    it('should prioritize cf-connecting-ip at start', () => {
+    it("should prioritize cf-connecting-ip at start", () => {
       const request = createMockRequest({
         headers: {
-          'cf-connecting-ip': '192.0.2.100',
-          'x-forwarded-for': '203.0.113.1',
+          "cf-connecting-ip": "192.0.2.100",
+          "x-forwarded-for": "203.0.113.1",
         },
       });
       const chain = getIPChain(request);
-      expect(chain[0]).toBe('192.0.2.100');
+      expect(chain[0]).toBe("192.0.2.100");
     });
 
-    it('should deduplicate IPs', () => {
+    it("should deduplicate IPs", () => {
       const request = createMockRequest({
         headers: {
-          'x-forwarded-for': '203.0.113.1, 10.0.0.1',
-          'x-real-ip': '203.0.113.1', // Duplicate
+          "x-forwarded-for": "203.0.113.1, 10.0.0.1",
+          "x-real-ip": "203.0.113.1", // Duplicate
         },
       });
       const chain = getIPChain(request);
-      const occurrences = chain.filter((ip) => ip === '203.0.113.1').length;
+      const occurrences = chain.filter((ip) => ip === "203.0.113.1").length;
       expect(occurrences).toBe(1);
     });
 
-    it('should include request.ip in chain', () => {
+    it("should include request.ip in chain", () => {
       const request = createMockRequest({
-        headers: { 'x-forwarded-for': '203.0.113.1' },
-        ip: '10.0.0.50',
+        headers: { "x-forwarded-for": "203.0.113.1" },
+        ip: "10.0.0.50",
       });
       const chain = getIPChain(request);
-      expect(chain).toContain('10.0.0.50');
+      expect(chain).toContain("10.0.0.50");
     });
 
-    it('should filter out invalid IPs', () => {
+    it("should filter out invalid IPs", () => {
       const request = createMockRequest({
-        headers: { 'x-forwarded-for': 'invalid, 203.0.113.1, unknown' },
+        headers: { "x-forwarded-for": "invalid, 203.0.113.1, unknown" },
       });
       const chain = getIPChain(request);
-      expect(chain).toContain('203.0.113.1');
-      expect(chain).not.toContain('invalid');
-      expect(chain).not.toContain('unknown');
+      expect(chain).toContain("203.0.113.1");
+      expect(chain).not.toContain("invalid");
+      expect(chain).not.toContain("unknown");
     });
   });
 
-  describe('edge cases', () => {
-    it('should handle empty string IP', () => {
-      setEnv('VERCEL', '1');
+  describe("edge cases", () => {
+    it("should handle empty string IP", () => {
+      setEnv("VERCEL", "1");
       const request = createMockRequest({
-        headers: { 'x-real-ip': '' },
-        ip: '10.0.0.1',
+        headers: { "x-real-ip": "" },
+        ip: "10.0.0.1",
       });
       const ip = getClientIP(request);
-      expect(ip).toBe('10.0.0.1');
+      expect(ip).toBe("10.0.0.1");
     });
 
-    it('should handle whitespace-only IP', () => {
-      setEnv('VERCEL', '1');
+    it("should handle whitespace-only IP", () => {
+      setEnv("VERCEL", "1");
       const request = createMockRequest({
-        headers: { 'x-forwarded-for': '   ' },
-        ip: '10.0.0.1',
+        headers: { "x-forwarded-for": "   " },
+        ip: "10.0.0.1",
       });
       const ip = getClientIP(request);
-      expect(ip).toBe('10.0.0.1');
+      expect(ip).toBe("10.0.0.1");
     });
 
-    it('should handle empty x-forwarded-for list', () => {
-      setEnv('VERCEL', '1');
+    it("should handle empty x-forwarded-for list", () => {
+      setEnv("VERCEL", "1");
       const request = createMockRequest({
-        headers: { 'x-forwarded-for': ',,' },
-        ip: '10.0.0.1',
+        headers: { "x-forwarded-for": ",," },
+        ip: "10.0.0.1",
       });
       const ip = getClientIP(request);
-      expect(ip).toBe('10.0.0.1');
+      expect(ip).toBe("10.0.0.1");
     });
   });
 });

@@ -6,7 +6,7 @@
 import type {
   WebhookEntry,
   WebhookPayload,
-} from '@/types/whatsapp-webhook-base';
+} from "@/types/whatsapp-webhook-base";
 import {
   WEBHOOK_EVENT_TYPES,
   type EventFilter,
@@ -14,14 +14,14 @@ import {
   type MessageReceivedEvent,
   type WebhookEvent,
   type WebhookEventType,
-} from '@/types/whatsapp-webhook-events';
-import type { IncomingWhatsAppMessage } from '@/types/whatsapp-webhook-messages';
+} from "@/types/whatsapp-webhook-events";
+import type { IncomingWhatsAppMessage } from "@/types/whatsapp-webhook-messages";
 import type {
   SignatureVerificationConfig,
   WebhookParsingResult,
   WebhookValidationResult,
-} from '@/types/whatsapp-webhook-utils/interfaces';
-import { MAGIC_0_95, MAGIC_0_99, ONE, ZERO } from '@/constants';
+} from "@/types/whatsapp-webhook-utils/interfaces";
+import { MAGIC_0_95, MAGIC_0_99, ONE, ZERO } from "@/constants";
 
 /**
  * Webhook工具函数
@@ -63,7 +63,7 @@ export class WebhookUtils {
           errors.push({
             entry_id: entry.id,
             error:
-              error instanceof Error ? error.message : 'Unknown parsing error',
+              error instanceof Error ? error.message : "Unknown parsing error",
             raw_data: entry as unknown as Record<string, unknown>,
           });
         }
@@ -89,7 +89,7 @@ export class WebhookUtils {
             error:
               error instanceof Error
                 ? error.message
-                : 'Failed to parse webhook payload',
+                : "Failed to parse webhook payload",
             raw_data: payload as unknown as Record<string, unknown>,
           },
         ],
@@ -120,7 +120,7 @@ export class WebhookUtils {
         for (const message of value.messages) {
           const contact = value.contacts?.find((c) => c.wa_id === message.from);
           const messageEvent: MessageReceivedEvent = {
-            type: 'message_received',
+            type: "message_received",
             timestamp,
             phone_number_id: phoneNumberId,
             from: message.from,
@@ -140,7 +140,7 @@ export class WebhookUtils {
       if (value.statuses) {
         for (const status of value.statuses) {
           events.push({
-            type: 'message_status',
+            type: "message_status",
             timestamp,
             phone_number_id: phoneNumberId,
             status_update: status,
@@ -152,7 +152,7 @@ export class WebhookUtils {
       if (value.errors) {
         for (const error of value.errors) {
           events.push({
-            type: 'webhook_error',
+            type: "webhook_error",
             timestamp,
             phone_number_id: phoneNumberId,
             error,
@@ -173,20 +173,20 @@ export class WebhookUtils {
     const warnings: string[] = [];
 
     // 基本结构验证
-    if (!payload || typeof payload !== 'object') {
-      errors.push('Payload must be an object');
+    if (!payload || typeof payload !== "object") {
+      errors.push("Payload must be an object");
       return { is_valid: false, errors, warnings };
     }
 
     if (
       (payload as Record<string, unknown>).object !==
-      'whatsapp_business_account'
+      "whatsapp_business_account"
     ) {
       errors.push('Invalid object type, expected "whatsapp_business_account"');
     }
 
     if (!Array.isArray((payload as Record<string, unknown>).entry)) {
-      errors.push('Entry must be an array');
+      errors.push("Entry must be an array");
     } else {
       // 验证每个条目
       (
@@ -236,16 +236,16 @@ export class WebhookUtils {
     config: SignatureVerificationConfig,
   ): boolean {
     try {
-      const crypto = require('crypto');
+      const crypto = require("crypto");
       const expectedSignature = crypto
         .createHmac(config.algorithm, config.app_secret)
         .update(payload)
-        .digest('hex');
+        .digest("hex");
 
-      const receivedSignature = signature.replace(/^sha\d+=/, '');
+      const receivedSignature = signature.replace(/^sha\d+=/, "");
       return crypto.timingSafeEqual(
-        Buffer.from(expectedSignature, 'hex'),
-        Buffer.from(receivedSignature, 'hex'),
+        Buffer.from(expectedSignature, "hex"),
+        Buffer.from(receivedSignature, "hex"),
       );
     } catch {
       return false;
@@ -258,9 +258,9 @@ export class WebhookUtils {
    */
   static generateEventKey(event: WebhookEvent): string {
     switch (event.type) {
-      case 'message_received':
+      case "message_received":
         return `msg_${event.message.id}_${event.timestamp}`;
-      case 'message_status':
+      case "message_status":
         return `status_${event.status_update.id}_${event.status_update.status}_${event.timestamp}`;
       default:
         return `${event.type}_${event.phone_number_id}_${event.timestamp}`;
@@ -290,7 +290,7 @@ export class WebhookUtils {
       }
 
       // 发送者过滤
-      if (filter.sender_filters && 'from' in event) {
+      if (filter.sender_filters && "from" in event) {
         const from = (event as unknown as Record<string, unknown>)
           .from as string;
         if (
@@ -335,34 +335,34 @@ export class WebhookUtils {
         return;
       }
       switch (eventType) {
-        case 'message_received':
+        case "message_received":
           eventsByType.message_received += ONE;
           break;
-        case 'message_status':
+        case "message_status":
           eventsByType.message_status += ONE;
           break;
-        case 'message_read':
+        case "message_read":
           eventsByType.message_read += ONE;
           break;
-        case 'message_delivery':
+        case "message_delivery":
           eventsByType.message_delivery += ONE;
           break;
-        case 'user_status_change':
+        case "user_status_change":
           eventsByType.user_status_change += ONE;
           break;
-        case 'account_update':
+        case "account_update":
           eventsByType.account_update += ONE;
           break;
-        case 'template_status':
+        case "template_status":
           eventsByType.template_status += ONE;
           break;
-        case 'phone_number_quality':
+        case "phone_number_quality":
           eventsByType.phone_number_quality += ONE;
           break;
-        case 'security_event':
+        case "security_event":
           eventsByType.security_event += ONE;
           break;
-        case 'webhook_error':
+        case "webhook_error":
           eventsByType.webhook_error += ONE;
           break;
         default:
@@ -371,8 +371,8 @@ export class WebhookUtils {
       // 模拟处理时间（实际应用中应该记录真实的处理时间）
       const duration = (() => {
         if (
-          typeof crypto !== 'undefined' &&
-          typeof crypto.getRandomValues === 'function'
+          typeof crypto !== "undefined" &&
+          typeof crypto.getRandomValues === "function"
         ) {
           const buf = new Uint32Array(1);
           crypto.getRandomValues(buf);
@@ -398,7 +398,7 @@ export class WebhookUtils {
       return processingTimes.at(index) ?? ZERO;
     };
 
-    const eventsByTypeResult: EventStatistics['events_by_type'] = {
+    const eventsByTypeResult: EventStatistics["events_by_type"] = {
       message_received: eventsByType.message_received,
       message_status: eventsByType.message_status,
       message_read: eventsByType.message_read,

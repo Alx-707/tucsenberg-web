@@ -3,23 +3,23 @@
  * Contact form API routes
  */
 
-import { NextRequest, NextResponse } from 'next/server';
-import { createCorsPreflightResponse } from '@/lib/api/cors-utils';
-import { getApiMessages } from '@/lib/api/get-request-locale';
-import { safeParseJson } from '@/lib/api/safe-parse-json';
-import { logger, sanitizeIP, sanitizeLogContext } from '@/lib/logger';
+import { NextRequest, NextResponse } from "next/server";
+import { createCorsPreflightResponse } from "@/lib/api/cors-utils";
+import { getApiMessages } from "@/lib/api/get-request-locale";
+import { safeParseJson } from "@/lib/api/safe-parse-json";
+import { logger, sanitizeIP, sanitizeLogContext } from "@/lib/logger";
 import {
   checkDistributedRateLimit,
   createRateLimitHeaders,
   type RateLimitPreset,
-} from '@/lib/security/distributed-rate-limit';
-import { getClientIP } from '@/app/api/contact/contact-api-utils';
+} from "@/lib/security/distributed-rate-limit";
+import { getClientIP } from "@/app/api/contact/contact-api-utils";
 import {
   getContactFormStats,
   processFormSubmission,
   validateAdminAccess,
   validateFormData,
-} from '@/app/api/contact/contact-api-validation';
+} from "@/app/api/contact/contact-api-validation";
 
 /**
  * Check rate limit and return early response if exceeded
@@ -34,7 +34,7 @@ async function checkRateLimitOrFail(
 }> {
   const rateLimitResult = await checkDistributedRateLimit(clientIP, preset);
   if (!rateLimitResult.allowed) {
-    logger.warn('Rate limit exceeded', {
+    logger.warn("Rate limit exceeded", {
       ip: sanitizeIP(clientIP),
       retryAfter: rateLimitResult.retryAfter,
     });
@@ -63,13 +63,13 @@ export async function POST(request: NextRequest) {
   try {
     const { rateLimitResult, errorResponse } = await checkRateLimitOrFail(
       clientIP,
-      'contact',
+      "contact",
       messages.rateLimit,
     );
     if (errorResponse) return errorResponse;
 
     const parsedBody = await safeParseJson<unknown>(request, {
-      route: '/api/contact',
+      route: "/api/contact",
     });
     if (!parsedBody.ok) {
       return NextResponse.json(
@@ -87,7 +87,7 @@ export async function POST(request: NextRequest) {
     const processingTime = Date.now() - startTime;
 
     logger.info(
-      'Contact form submitted successfully',
+      "Contact form submitted successfully",
       sanitizeLogContext({
         email: validation.data.email,
         company: validation.data.company,
@@ -108,8 +108,8 @@ export async function POST(request: NextRequest) {
       { headers: createRateLimitHeaders(rateLimitResult) },
     );
   } catch (error) {
-    logger.error('Contact form submission failed', {
-      error: error instanceof Error ? error.message : 'Unknown error',
+    logger.error("Contact form submission failed", {
+      error: error instanceof Error ? error.message : "Unknown error",
       stack: error instanceof Error ? error.stack : undefined,
       ip: sanitizeIP(clientIP),
       processingTime: Date.now() - startTime,
@@ -135,10 +135,10 @@ export async function GET(request: NextRequest) {
 
   try {
     // 验证管理员权限
-    const authHeader = request.headers.get('authorization');
+    const authHeader = request.headers.get("authorization");
 
     if (!validateAdminAccess(authHeader)) {
-      logger.warn('Unauthorized access attempt to contact statistics');
+      logger.warn("Unauthorized access attempt to contact statistics");
       return NextResponse.json(
         { success: false, error: messages.unauthorized },
         { status: 401 },
@@ -150,8 +150,8 @@ export async function GET(request: NextRequest) {
 
     return NextResponse.json(statsResult);
   } catch (error) {
-    logger.error('Failed to get contact statistics', {
-      error: error instanceof Error ? error.message : 'Unknown error',
+    logger.error("Failed to get contact statistics", {
+      error: error instanceof Error ? error.message : "Unknown error",
     });
 
     return NextResponse.json(
@@ -167,5 +167,5 @@ export async function GET(request: NextRequest) {
  * Handle CORS preflight requests
  */
 export function OPTIONS(request: NextRequest) {
-  return createCorsPreflightResponse(request, ['GET'], ['Authorization']);
+  return createCorsPreflightResponse(request, ["GET"], ["Authorization"]);
 }

@@ -9,14 +9,14 @@
  * - 错误恢复机制
  */
 
-import React, { type ReactElement } from 'react';
-import { render, type RenderOptions } from '@testing-library/react';
-import { vi } from 'vitest';
+import React, { type ReactElement } from "react";
+import { render, type RenderOptions } from "@testing-library/react";
+import { vi } from "vitest";
 
 // 错误类型定义
 export interface ErrorScenario {
   name: string;
-  type: 'network' | 'api' | 'validation' | 'boundary' | 'system';
+  type: "network" | "api" | "validation" | "boundary" | "system";
   description: string;
   setup: () => void;
   cleanup: () => void;
@@ -36,7 +36,7 @@ export class NetworkErrorSimulator {
     global.fetch = vi.fn().mockImplementation(
       () =>
         new Promise((_, reject) => {
-          setTimeout(() => reject(new Error('Network timeout')), delay);
+          setTimeout(() => reject(new Error("Network timeout")), delay);
         }),
     );
   }
@@ -46,7 +46,7 @@ export class NetworkErrorSimulator {
     global.fetch = vi
       .fn()
       .mockRejectedValue(
-        new Error('Failed to fetch: Network connection failed'),
+        new Error("Failed to fetch: Network connection failed"),
       );
   }
 
@@ -57,7 +57,7 @@ export class NetworkErrorSimulator {
         crypto &&
         crypto.getRandomValues(new Uint32Array(1))[0]! / 2 ** 32 < failureRate
       ) {
-        return Promise.reject(new Error('Intermittent network failure'));
+        return Promise.reject(new Error("Intermittent network failure"));
       }
       return this.originalFetch(url, options);
     });
@@ -98,27 +98,27 @@ export class APIErrorSimulator {
 
   // 模拟服务器内部错误
   simulateServerError(): void {
-    this.simulateHTTPError(500, 'Internal Server Error');
+    this.simulateHTTPError(500, "Internal Server Error");
   }
 
   // 模拟认证错误
   simulateAuthError(): void {
-    this.simulateHTTPError(401, 'Unauthorized');
+    this.simulateHTTPError(401, "Unauthorized");
   }
 
   // 模拟权限错误
   simulatePermissionError(): void {
-    this.simulateHTTPError(403, 'Forbidden');
+    this.simulateHTTPError(403, "Forbidden");
   }
 
   // 模拟资源不存在错误
   simulateNotFoundError(): void {
-    this.simulateHTTPError(404, 'Resource not found');
+    this.simulateHTTPError(404, "Resource not found");
   }
 
   // 模拟请求过于频繁错误
   simulateRateLimitError(): void {
-    this.simulateHTTPError(429, 'Too Many Requests');
+    this.simulateHTTPError(429, "Too Many Requests");
   }
 
   // 模拟无效JSON响应
@@ -128,9 +128,9 @@ export class APIErrorSimulator {
       status: 200,
       headers: new Headers(),
       redirected: false,
-      statusText: 'OK',
-      type: 'basic' as Response['type'],
-      url: '',
+      statusText: "OK",
+      type: "basic" as Response["type"],
+      url: "",
       body: null,
       bodyUsed: false,
       clone: vi.fn(),
@@ -140,37 +140,37 @@ export class APIErrorSimulator {
       text: vi.fn(),
       bytes: vi.fn().mockResolvedValue(new Uint8Array()),
       json: async () => {
-        throw new Error('Unexpected token in JSON');
+        throw new Error("Unexpected token in JSON");
       },
     } as Response);
   }
 
   private getStatusText(status: number): string {
     const statusTexts = new Map([
-      [400, 'Bad Request'],
-      [401, 'Unauthorized'],
-      [403, 'Forbidden'],
-      [404, 'Not Found'],
-      [429, 'Too Many Requests'],
-      [500, 'Internal Server Error'],
-      [502, 'Bad Gateway'],
-      [503, 'Service Unavailable'],
+      [400, "Bad Request"],
+      [401, "Unauthorized"],
+      [403, "Forbidden"],
+      [404, "Not Found"],
+      [429, "Too Many Requests"],
+      [500, "Internal Server Error"],
+      [502, "Bad Gateway"],
+      [503, "Service Unavailable"],
     ]);
-    return statusTexts.get(status) || 'Unknown Error';
+    return statusTexts.get(status) || "Unknown Error";
   }
 
   private getDefaultErrorMessage(status: number): string {
     const messages = new Map([
-      [400, 'The request was invalid'],
-      [401, 'Authentication required'],
-      [403, 'Access denied'],
-      [404, 'The requested resource was not found'],
-      [429, 'Too many requests, please try again later'],
-      [500, 'An internal server error occurred'],
-      [502, 'Bad gateway'],
-      [503, 'Service temporarily unavailable'],
+      [400, "The request was invalid"],
+      [401, "Authentication required"],
+      [403, "Access denied"],
+      [404, "The requested resource was not found"],
+      [429, "Too many requests, please try again later"],
+      [500, "An internal server error occurred"],
+      [502, "Bad gateway"],
+      [503, "Service temporarily unavailable"],
     ]);
-    return messages.get(status) || 'An unknown error occurred';
+    return messages.get(status) || "An unknown error occurred";
   }
 }
 
@@ -178,17 +178,17 @@ export class APIErrorSimulator {
 export class BoundaryConditionTester {
   // 生成极大字符串
   generateLargeString(size: number): string {
-    return 'a'.repeat(size);
+    return "a".repeat(size);
   }
 
   // 生成特殊字符字符串
   generateSpecialCharString(): string {
-    return '!@#$%^&*()_+-=[]{}|;:,.<>?`~\'"\\';
+    return "!@#$%^&*()_+-=[]{}|;:,.<>?`~'\"\\";
   }
 
   // 生成Unicode字符串
   generateUnicodeString(): string {
-    return '你好世界🌍🚀💻🎉';
+    return "你好世界🌍🚀💻🎉";
   }
 
   // 生成SQL注入尝试字符串
@@ -213,12 +213,12 @@ export class BoundaryConditionTester {
 
   // 生成无效日期
   generateInvalidDate(): string {
-    return '2023-13-45';
+    return "2023-13-45";
   }
 
   // 生成空值变体
   generateNullVariants(): Array<unknown> {
-    return [null, undefined, '', 0, false, NaN, {}, []];
+    return [null, undefined, "", 0, false, NaN, {}, []];
   }
 }
 
@@ -242,16 +242,16 @@ export function createTestErrorBoundary() {
 
     override componentDidCatch(error: Error, errorInfo: React.ErrorInfo) {
       this.props.onError?.(error);
-      console.error('Test Error Boundary caught error:', error, errorInfo);
+      console.error("Test Error Boundary caught error:", error, errorInfo);
     }
 
     override render() {
       if (this.state.hasError) {
         return React.createElement(
-          'div',
-          { 'data-testid': 'test-error-boundary' },
-          React.createElement('h2', null, 'Test Error Boundary'),
-          React.createElement('p', null, `Error: ${this.state.error?.message}`),
+          "div",
+          { "data-testid": "test-error-boundary" },
+          React.createElement("h2", null, "Test Error Boundary"),
+          React.createElement("p", null, `Error: ${this.state.error?.message}`),
         );
       }
 
@@ -344,28 +344,28 @@ export const errorTestingUtils = {
 // 常用错误场景预设
 export const commonErrorScenarios: ErrorScenario[] = [
   {
-    name: 'Network Timeout',
-    type: 'network',
-    description: 'Simulates network request timeout',
+    name: "Network Timeout",
+    type: "network",
+    description: "Simulates network request timeout",
     setup: () => new NetworkErrorSimulator().simulateTimeout(),
     cleanup: () => new NetworkErrorSimulator().restore(),
-    expectedBehavior: 'Should show timeout error message and retry option',
+    expectedBehavior: "Should show timeout error message and retry option",
   },
   {
-    name: 'Server Error',
-    type: 'api',
-    description: 'Simulates 500 Internal Server Error',
+    name: "Server Error",
+    type: "api",
+    description: "Simulates 500 Internal Server Error",
     setup: () => new APIErrorSimulator().simulateServerError(),
     cleanup: () => vi.restoreAllMocks(),
     expectedBehavior:
-      'Should show generic error message and contact support option',
+      "Should show generic error message and contact support option",
   },
   {
-    name: 'Authentication Error',
-    type: 'api',
-    description: 'Simulates 401 Unauthorized error',
+    name: "Authentication Error",
+    type: "api",
+    description: "Simulates 401 Unauthorized error",
     setup: () => new APIErrorSimulator().simulateAuthError(),
     cleanup: () => vi.restoreAllMocks(),
-    expectedBehavior: 'Should redirect to login page',
+    expectedBehavior: "Should redirect to login page",
   },
 ];

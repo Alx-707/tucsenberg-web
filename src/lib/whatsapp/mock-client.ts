@@ -8,13 +8,13 @@
 import type {
   SendMessageRequest,
   WhatsAppServiceResponse,
-} from '@/types/whatsapp';
-import { logger } from '@/lib/logger';
-import { WhatsAppUtils } from '@/lib/whatsapp-utils';
+} from "@/types/whatsapp";
+import { logger } from "@/lib/logger";
+import { WhatsAppUtils } from "@/lib/whatsapp-utils";
 import type {
   WhatsAppClient,
   WhatsAppClientInfo,
-} from '@/lib/whatsapp/client-interface';
+} from "@/lib/whatsapp/client-interface";
 
 /**
  * Mock WhatsApp Client for development/testing
@@ -22,9 +22,9 @@ import type {
 export class MockWhatsAppClient implements WhatsAppClient {
   private readonly phoneNumberId: string;
 
-  constructor(phoneNumberId: string = 'mock-phone-id') {
+  constructor(phoneNumberId: string = "mock-phone-id") {
     this.phoneNumberId = phoneNumberId;
-    logger.info('[MockWhatsAppClient] Initialized mock WhatsApp client');
+    logger.info("[MockWhatsAppClient] Initialized mock WhatsApp client");
   }
 
   private generateMockMessageId(): string {
@@ -35,15 +35,15 @@ export class MockWhatsAppClient implements WhatsAppClient {
     return {
       success: true,
       data: {
-        messaging_product: 'whatsapp',
-        contacts: [{ input: 'mock-input', wa_id: 'mock-wa-id' }],
+        messaging_product: "whatsapp",
+        contacts: [{ input: "mock-input", wa_id: "mock-wa-id" }],
         messages: [{ id: this.generateMockMessageId() }],
       },
     };
   }
 
   sendMessage(_message: SendMessageRequest): Promise<WhatsAppServiceResponse> {
-    logger.info('[MockWhatsAppClient] sendMessage called (mock)');
+    logger.info("[MockWhatsAppClient] sendMessage called (mock)");
     return Promise.resolve(this.createSuccessResponse());
   }
 
@@ -117,12 +117,12 @@ export class MockWhatsAppClient implements WhatsAppClient {
 
   downloadMedia(mediaId: string): Promise<Buffer | null> {
     logger.info(`[MockWhatsAppClient] downloadMedia mediaId=${mediaId}`);
-    return Promise.resolve(Buffer.from('mock-media-content'));
+    return Promise.resolve(Buffer.from("mock-media-content"));
   }
 
   uploadMedia(
     _file: Buffer | Blob,
-    type: 'image' | 'document' | 'audio' | 'video' | 'sticker',
+    type: "image" | "document" | "audio" | "video" | "sticker",
     filename?: string,
   ): Promise<string | null> {
     logger.info(
@@ -137,10 +137,10 @@ export class MockWhatsAppClient implements WhatsAppClient {
 
   getClientInfo(): WhatsAppClientInfo {
     return {
-      type: 'mock',
+      type: "mock",
       phoneNumberId: this.phoneNumberId,
       isConfigured: true,
-      apiVersion: 'mock-v1',
+      apiVersion: "mock-v1",
     };
   }
 

@@ -1,20 +1,20 @@
-import { NextRequest, NextResponse } from 'next/server';
-import { createCorsPreflightResponse } from '@/lib/api/cors-utils';
-import { safeParseJson as safeParseJsonHelper } from '@/lib/api/safe-parse-json';
-import { withIdempotency } from '@/lib/idempotency';
-import { processLead, type LeadResult } from '@/lib/lead-pipeline';
-import { LEAD_TYPES } from '@/lib/lead-pipeline/lead-schema';
-import { logger, sanitizeEmail, sanitizeIP } from '@/lib/logger';
+import { NextRequest, NextResponse } from "next/server";
+import { createCorsPreflightResponse } from "@/lib/api/cors-utils";
+import { safeParseJson as safeParseJsonHelper } from "@/lib/api/safe-parse-json";
+import { withIdempotency } from "@/lib/idempotency";
+import { processLead, type LeadResult } from "@/lib/lead-pipeline";
+import { LEAD_TYPES } from "@/lib/lead-pipeline/lead-schema";
+import { logger, sanitizeEmail, sanitizeIP } from "@/lib/logger";
 import {
   checkDistributedRateLimit,
   createRateLimitHeaders,
-} from '@/lib/security/distributed-rate-limit';
+} from "@/lib/security/distributed-rate-limit";
 import {
   getClientIP,
   verifyTurnstile,
-} from '@/app/api/contact/contact-api-utils';
-import { HTTP_BAD_REQUEST_CONST } from '@/constants';
-import { API_ERROR_CODES } from '@/constants/api-error-codes';
+} from "@/app/api/contact/contact-api-utils";
+import { HTTP_BAD_REQUEST_CONST } from "@/constants";
+import { API_ERROR_CODES } from "@/constants/api-error-codes";
 
 // HTTP status codes as named constants
 const HTTP_INTERNAL_ERROR = 500;
@@ -27,14 +27,14 @@ function safeParseJson<T>(
   req: NextRequest,
 ): Promise<SafeParseSuccess<T> | SafeParseFailure> {
   // 复用通用 safeParseJson helper，统一 JSON 解析行为和 INVALID_JSON 语义
-  return safeParseJsonHelper<T>(req, { route: '/api/subscribe' });
+  return safeParseJsonHelper<T>(req, { route: "/api/subscribe" });
 }
 
 /**
  * Create success response for newsletter subscription
  */
 function createSuccessResponse(result: LeadResult, email: string): object {
-  logger.info('Newsletter subscription successful', {
+  logger.info("Newsletter subscription successful", {
     referenceId: result.referenceId,
     email: sanitizeEmail(email),
   });
@@ -51,9 +51,9 @@ function createSuccessResponse(result: LeadResult, email: string): object {
  * Create error response for failed subscription
  */
 function createErrorResponse(result: LeadResult): NextResponse {
-  logger.warn('Newsletter subscription failed', { error: result.error });
+  logger.warn("Newsletter subscription failed", { error: result.error });
 
-  const isValidationError = result.error === 'VALIDATION_ERROR';
+  const isValidationError = result.error === "VALIDATION_ERROR";
   return NextResponse.json(
     {
       success: false,
@@ -73,10 +73,10 @@ export async function POST(request: NextRequest) {
   // Check distributed rate limit (3 requests per minute for newsletter)
   const rateLimitResult = await checkDistributedRateLimit(
     clientIP,
-    'subscribe',
+    "subscribe",
   );
   if (!rateLimitResult.allowed) {
-    logger.warn('Newsletter rate limit exceeded', {
+    logger.warn("Newsletter rate limit exceeded", {
       ip: sanitizeIP(clientIP),
       retryAfter: rateLimitResult.retryAfter,
     });
@@ -111,7 +111,7 @@ export async function POST(request: NextRequest) {
     const email = parsedBody.data?.email;
     const turnstileToken = parsedBody.data?.turnstileToken;
 
-    if (email === undefined || email === '') {
+    if (email === undefined || email === "") {
       return NextResponse.json(
         {
           success: false,
@@ -123,7 +123,7 @@ export async function POST(request: NextRequest) {
 
     // Verify Turnstile token
     if (!turnstileToken) {
-      logger.warn('Newsletter subscription missing Turnstile token', {
+      logger.warn("Newsletter subscription missing Turnstile token", {
         ip: sanitizeIP(clientIP),
       });
       return NextResponse.json(
@@ -137,7 +137,7 @@ export async function POST(request: NextRequest) {
 
     const isValidTurnstile = await verifyTurnstile(turnstileToken, clientIP);
     if (!isValidTurnstile) {
-      logger.warn('Newsletter Turnstile verification failed', {
+      logger.warn("Newsletter Turnstile verification failed", {
         ip: sanitizeIP(clientIP),
       });
       return NextResponse.json(

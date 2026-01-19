@@ -3,15 +3,15 @@
  * Contact form API utility functions
  */
 
-import { NextRequest } from 'next/server';
-import { env } from '@/lib/env';
-import { logger, sanitizeIP } from '@/lib/logger';
+import { NextRequest } from "next/server";
+import { env } from "@/lib/env";
+import { logger, sanitizeIP } from "@/lib/logger";
 import {
   getAllowedTurnstileHosts,
   getExpectedTurnstileAction,
   isAllowedTurnstileAction,
   isAllowedTurnstileHostname,
-} from '@/lib/security/turnstile-config';
+} from "@/lib/security/turnstile-config";
 import {
   COUNT_FIVE,
   COUNT_PAIR,
@@ -19,8 +19,8 @@ import {
   MAGIC_36,
   ONE,
   ZERO,
-} from '@/constants';
-import { MINUTE_MS } from '@/constants/time';
+} from "@/constants";
+import { MINUTE_MS } from "@/constants/time";
 
 // 常量定义
 export const RATE_LIMIT_CONFIG = {
@@ -35,10 +35,10 @@ export const RATE_LIMIT_CONFIG = {
 const rateLimitStore = new Map<string, { count: number; resetTime: number }>();
 
 interface TurnstileVerificationResult {
-  'success': boolean;
-  'hostname'?: string;
-  'action'?: string;
-  'error-codes'?: string[];
+  success: boolean;
+  hostname?: string;
+  action?: string;
+  "error-codes"?: string[];
 }
 
 function buildTurnstilePayload(
@@ -51,8 +51,8 @@ function buildTurnstilePayload(
     response: token,
   });
 
-  if (ip && ip !== 'unknown') {
-    payload.set('remoteip', ip);
+  if (ip && ip !== "unknown") {
+    payload.set("remoteip", ip);
   }
 
   return payload;
@@ -62,11 +62,11 @@ async function requestTurnstileVerification(
   payload: URLSearchParams,
 ): Promise<TurnstileVerificationResult> {
   const response = await fetch(
-    'https://challenges.cloudflare.com/turnstile/v0/siteverify',
+    "https://challenges.cloudflare.com/turnstile/v0/siteverify",
     {
-      method: 'POST',
+      method: "POST",
       headers: {
-        'Content-Type': 'application/x-www-form-urlencoded',
+        "Content-Type": "application/x-www-form-urlencoded",
       },
       body: payload,
     },
@@ -89,7 +89,7 @@ function validateTurnstileHostnameResponse(
     return true;
   }
 
-  logger.warn('Turnstile verification rejected due to unexpected hostname', {
+  logger.warn("Turnstile verification rejected due to unexpected hostname", {
     hostname: result.hostname,
     allowed: getAllowedTurnstileHosts(),
     ip: sanitizeIP(ip),
@@ -106,7 +106,7 @@ function validateTurnstileActionResponse(
   }
 
   const expectedAction = getExpectedTurnstileAction();
-  logger.warn('Turnstile verification rejected due to mismatched action', {
+  logger.warn("Turnstile verification rejected due to mismatched action", {
     action: result.action,
     expectedAction,
     ip: sanitizeIP(ip),
@@ -146,11 +146,11 @@ export function checkRateLimit(
  * Check if Turnstile verification should be bypassed (development mode only)
  */
 function shouldBypassTurnstile(ip: string): boolean {
-  const isDevelopment = env.NODE_ENV === 'development';
-  const isBypassEnabled = process.env.TURNSTILE_BYPASS === 'true';
+  const isDevelopment = env.NODE_ENV === "development";
+  const isBypassEnabled = process.env.TURNSTILE_BYPASS === "true";
 
   if (isDevelopment && isBypassEnabled) {
-    logger.warn('[DEV] Turnstile verification bypassed', {
+    logger.warn("[DEV] Turnstile verification bypassed", {
       ip: sanitizeIP(ip),
     });
     return true;
@@ -177,11 +177,11 @@ function handleTurnstileFailure(
   result: TurnstileVerificationResult,
   ip: string,
 ): { success: false; errorCodes?: string[] } {
-  logger.warn('Turnstile verification failed:', {
-    errorCodes: result['error-codes'],
+  logger.warn("Turnstile verification failed:", {
+    errorCodes: result["error-codes"],
     clientIP: sanitizeIP(ip),
   });
-  const errorCodes = result['error-codes'];
+  const errorCodes = result["error-codes"];
   return errorCodes ? { success: false, errorCodes } : { success: false };
 }
 
@@ -201,8 +201,8 @@ export async function verifyTurnstileDetailed(
     const secretKey = env.TURNSTILE_SECRET_KEY;
 
     if (!secretKey) {
-      logger.warn('Turnstile secret key not configured');
-      return { success: false, errorCodes: ['not-configured'] };
+      logger.warn("Turnstile secret key not configured");
+      return { success: false, errorCodes: ["not-configured"] };
     }
 
     const payload = buildTurnstilePayload(token, ip, secretKey);
@@ -213,15 +213,15 @@ export async function verifyTurnstileDetailed(
     }
 
     if (!validateTurnstileHostnameResponse(result, ip)) {
-      return { success: false, errorCodes: ['invalid-hostname'] };
+      return { success: false, errorCodes: ["invalid-hostname"] };
     }
 
     if (!validateTurnstileActionResponse(result, ip)) {
-      return { success: false, errorCodes: ['invalid-action'] };
+      return { success: false, errorCodes: ["invalid-action"] };
     }
 
     // Log successful verification
-    logger.info('Turnstile verification attempt', {
+    logger.info("Turnstile verification attempt", {
       success: true,
       hostname: result.hostname,
       clientIP: sanitizeIP(ip),
@@ -229,7 +229,7 @@ export async function verifyTurnstileDetailed(
 
     return { success: true };
   } catch (error) {
-    logger.error('Turnstile verification error', { error, ip: sanitizeIP(ip) });
+    logger.error("Turnstile verification error", { error, ip: sanitizeIP(ip) });
     throw error; // Re-throw to let caller handle 500 errors
   }
 }
@@ -239,19 +239,19 @@ export async function verifyTurnstileDetailed(
  * Get client IP address
  */
 export function getClientIP(request: NextRequest): string {
-  const forwarded = request.headers.get('x-forwarded-for');
-  const realIP = request.headers.get('x-real-ip');
+  const forwarded = request.headers.get("x-forwarded-for");
+  const realIP = request.headers.get("x-real-ip");
 
   if (forwarded) {
-    const first = forwarded.split(',').shift()?.trim();
-    return first || 'unknown';
+    const first = forwarded.split(",").shift()?.trim();
+    return first || "unknown";
   }
 
   if (realIP) {
     return realIP;
   }
 
-  return 'unknown';
+  return "unknown";
 }
 
 /**
@@ -259,8 +259,8 @@ export function getClientIP(request: NextRequest): string {
  * Get full client IP chain for Turnstile verification
  */
 export function getFullClientIPChain(request: NextRequest): string {
-  const forwarded = request.headers.get('x-forwarded-for');
-  const realIP = request.headers.get('x-real-ip');
+  const forwarded = request.headers.get("x-forwarded-for");
+  const realIP = request.headers.get("x-real-ip");
 
   if (forwarded) {
     // Return the full chain for Turnstile to analyze
@@ -271,7 +271,7 @@ export function getFullClientIPChain(request: NextRequest): string {
     return realIP;
   }
 
-  return 'unknown';
+  return "unknown";
 }
 
 /**
@@ -335,10 +335,10 @@ export function validateEnvironmentConfig(): {
   };
 
   const missingVars: string[] = [];
-  if (!envMap.TURNSTILE_SECRET_KEY) missingVars.push('TURNSTILE_SECRET_KEY');
-  if (!envMap.RESEND_API_KEY) missingVars.push('RESEND_API_KEY');
-  if (!envMap.AIRTABLE_API_KEY) missingVars.push('AIRTABLE_API_KEY');
-  if (!envMap.AIRTABLE_BASE_ID) missingVars.push('AIRTABLE_BASE_ID');
+  if (!envMap.TURNSTILE_SECRET_KEY) missingVars.push("TURNSTILE_SECRET_KEY");
+  if (!envMap.RESEND_API_KEY) missingVars.push("RESEND_API_KEY");
+  if (!envMap.AIRTABLE_API_KEY) missingVars.push("AIRTABLE_API_KEY");
+  if (!envMap.AIRTABLE_BASE_ID) missingVars.push("AIRTABLE_BASE_ID");
 
   return {
     isValid: missingVars.length === ZERO,
@@ -352,25 +352,25 @@ export function validateEnvironmentConfig(): {
  */
 export function generateRequestId(): string {
   if (
-    typeof crypto !== 'undefined' &&
-    typeof crypto.randomUUID === 'function'
+    typeof crypto !== "undefined" &&
+    typeof crypto.randomUUID === "function"
   ) {
-    return `req_${crypto.randomUUID().replaceAll('-', '')}`;
+    return `req_${crypto.randomUUID().replaceAll("-", "")}`;
   }
 
   if (
-    typeof crypto !== 'undefined' &&
-    typeof crypto.getRandomValues === 'function'
+    typeof crypto !== "undefined" &&
+    typeof crypto.getRandomValues === "function"
   ) {
     const buffer = new Uint32Array(MAGIC_9);
     crypto.getRandomValues(buffer);
     const randomPart = Array.from(buffer, (value) =>
-      value.toString(MAGIC_36).padStart(COUNT_PAIR, '0'),
-    ).join('');
+      value.toString(MAGIC_36).padStart(COUNT_PAIR, "0"),
+    ).join("");
     return `req_${randomPart}`;
   }
 
-  throw new Error('Secure random generator unavailable for request id');
+  throw new Error("Secure random generator unavailable for request id");
 }
 
 /**
@@ -395,7 +395,7 @@ export function formatErrorResponse(
     timestamp: string;
     details?: Record<string, unknown>;
   } = {
-    error: 'ContactFormError',
+    error: "ContactFormError",
     message,
     statusCode,
     timestamp: new Date().toISOString(),

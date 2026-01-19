@@ -1,6 +1,6 @@
-import { cacheLife } from 'next/cache';
-import type { Locale } from '@/types/i18n';
-import { getTranslationsCached } from '@/lib/i18n/server/getTranslationsCached';
+import { cacheLife } from "next/cache";
+import type { Locale } from "@/types/i18n";
+import { getTranslationsCached } from "@/lib/i18n/server/getTranslationsCached";
 
 export interface ContactHeaderCopy {
   title: string;
@@ -44,35 +44,35 @@ export interface ContactCopyModel {
 export async function getContactCopy(
   locale: Locale,
 ): Promise<ContactCopyModel> {
-  'use cache';
+  "use cache";
 
   // Contact copy is treated as营销/支持类内容，通常更新频率不高：
   // - cacheLife('days') => stale: 5min, revalidate: 1 day, expire: 1 week
   // - 依赖 next-intl 消息 + 显式 locale 参数，不访问 runtime API。
-  cacheLife('days');
+  cacheLife("days");
 
   const t = await getTranslationsCached({
     locale,
-    namespace: 'underConstruction.pages.contact',
+    namespace: "underConstruction.pages.contact",
   });
 
   return {
     header: {
-      title: t('title'),
-      description: t('description'),
+      title: t("title"),
+      description: t("description"),
     },
     panel: {
       contact: {
-        title: t('panel.contactTitle'),
-        emailLabel: t('panel.email'),
-        phoneLabel: t('panel.phone'),
+        title: t("panel.contactTitle"),
+        emailLabel: t("panel.email"),
+        phoneLabel: t("panel.phone"),
       },
       hours: {
-        title: t('panel.hoursTitle'),
-        weekdaysLabel: t('panel.weekdays'),
-        saturdayLabel: t('panel.saturday'),
-        sundayLabel: t('panel.sunday'),
-        closedLabel: t('panel.closed'),
+        title: t("panel.hoursTitle"),
+        weekdaysLabel: t("panel.weekdays"),
+        saturdayLabel: t("panel.saturday"),
+        sundayLabel: t("panel.sunday"),
+        closedLabel: t("panel.closed"),
       },
     },
   };

@@ -1,5 +1,5 @@
-export { Footer } from '@/components/footer/Footer';
-export type { FooterProps } from '@/components/footer/Footer';
+export { Footer } from "@/components/footer/Footer";
+export type { FooterProps } from "@/components/footer/Footer";
 export {
   FOOTER_COLUMNS,
   FOOTER_STYLE_TOKENS,
@@ -7,4 +7,4 @@ export {
   type FooterLinkItem,
   type FooterStyleTokens,
   type FooterTokens,
-} from '@/config/footer-links';
+} from "@/config/footer-links";

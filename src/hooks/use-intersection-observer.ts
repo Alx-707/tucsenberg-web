@@ -1,10 +1,10 @@
-'use client';
+"use client";
 
-import { useCallback, useEffect, useRef, useState } from 'react';
-import { AccessibilityUtils } from '@/lib/accessibility';
-import { logger } from '@/lib/logger';
-import { ZERO } from '@/constants';
-import { MAGIC_0_1 } from '@/constants/decimal';
+import { useCallback, useEffect, useRef, useState } from "react";
+import { AccessibilityUtils } from "@/lib/accessibility";
+import { logger } from "@/lib/logger";
+import { ZERO } from "@/constants";
+import { MAGIC_0_1 } from "@/constants/decimal";
 
 /**
  * Intersection Observer Hook 配置选项
@@ -37,9 +37,9 @@ export interface IntersectionObserverHookReturn<
 /**
  * 默认配置
  */
-const DEFAULT_OPTIONS: Required<Omit<IntersectionObserverOptions, 'root'>> = {
+const DEFAULT_OPTIONS: Required<Omit<IntersectionObserverOptions, "root">> = {
   threshold: MAGIC_0_1,
-  rootMargin: '0px',
+  rootMargin: "0px",
   triggerOnce: true,
 };
 
@@ -124,7 +124,7 @@ function createObserver(args: {
       observer.disconnect();
     };
   } catch (error) {
-    logger.warn('IntersectionObserver error', {
+    logger.warn("IntersectionObserver error", {
       error: error instanceof Error ? error.message : String(error),
       threshold: config.threshold,
       rootMargin: config.rootMargin,
@@ -190,7 +190,7 @@ export function useIntersectionObserver<T extends HTMLElement = HTMLElement>(
 
     if (
       prefersReducedMotion ||
-      typeof window === 'undefined' ||
+      typeof window === "undefined" ||
       !window.IntersectionObserver
     ) {
       fallbackToVisible();

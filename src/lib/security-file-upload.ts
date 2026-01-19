@@ -18,7 +18,7 @@ import {
   MAGIC_HEX_04,
   ONE,
   ZERO,
-} from '@/constants';
+} from "@/constants";
 
 /**
  * 文件上传安全验证工具
@@ -48,25 +48,25 @@ export interface FileValidationResult {
  */
 export const ALLOWED_FILE_TYPES = {
   images: [
-    'image/jpeg',
-    'image/png',
-    'image/gif',
-    'image/webp',
-    'image/svg+xml',
+    "image/jpeg",
+    "image/png",
+    "image/gif",
+    "image/webp",
+    "image/svg+xml",
   ],
   documents: [
-    'application/pdf',
-    'text/plain',
-    'text/csv',
-    'application/msword',
-    'application/vnd.openxmlformats-officedocument.wordprocessingml.document',
-    'application/vnd.ms-excel',
-    'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet',
+    "application/pdf",
+    "text/plain",
+    "text/csv",
+    "application/msword",
+    "application/vnd.openxmlformats-officedocument.wordprocessingml.document",
+    "application/vnd.ms-excel",
+    "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
   ],
   archives: [
-    'application/zip',
-    'application/x-rar-compressed',
-    'application/x-7z-compressed',
+    "application/zip",
+    "application/x-rar-compressed",
+    "application/x-7z-compressed",
   ],
 } as const;
 
@@ -80,11 +80,11 @@ function getAllowedTypesForCategory(
   category: keyof typeof ALLOWED_FILE_TYPES,
 ): readonly string[] {
   switch (category) {
-    case 'images':
+    case "images":
       return ALLOWED_FILE_TYPES.images;
-    case 'documents':
+    case "documents":
       return ALLOWED_FILE_TYPES.documents;
-    case 'archives':
+    case "archives":
       return ALLOWED_FILE_TYPES.archives;
     default:
       return [] as const;
@@ -95,28 +95,28 @@ function getAllowedTypesForCategory(
  * Dangerous file extensions that should never be allowed
  */
 const DANGEROUS_EXTENSIONS = [
-  '.exe',
-  '.bat',
-  '.cmd',
-  '.scr',
-  '.pif',
-  '.js',
-  '.vbs',
-  '.jar',
-  '.com',
-  '.msi',
-  '.dll',
-  '.app',
-  '.deb',
-  '.rpm',
-  '.dmg',
-  '.pkg',
-  '.sh',
-  '.ps1',
-  '.php',
-  '.asp',
-  '.aspx',
-  '.jsp',
+  ".exe",
+  ".bat",
+  ".cmd",
+  ".scr",
+  ".pif",
+  ".js",
+  ".vbs",
+  ".jar",
+  ".com",
+  ".msi",
+  ".dll",
+  ".app",
+  ".deb",
+  ".rpm",
+  ".dmg",
+  ".pkg",
+  ".sh",
+  ".ps1",
+  ".php",
+  ".asp",
+  ".aspx",
+  ".jsp",
 ] as const;
 
 const DANGEROUS_EXTENSION_SET = new Set<string>(DANGEROUS_EXTENSIONS);
@@ -158,7 +158,7 @@ function checkFileNameIssues(fileName: string): {
     }
   }
 
-  const parts = lower.split('.');
+  const parts = lower.split(".");
   if (parts.length > COUNT_PAIR) {
     for (const part of parts.slice(ONE, -ONE)) {
       const ext = `.${part}`;
@@ -180,18 +180,18 @@ function checkFileNameIssues(fileName: string): {
     /^lpt[1-9]\./i,
   ];
   if (suspiciousPatterns.some((p) => p.test(lower))) {
-    warnings.push('File name matches a reserved system name pattern');
+    warnings.push("File name matches a reserved system name pattern");
   }
 
   if (lower.length > MAGIC_255) {
     return {
-      error: 'File name is too long (maximum MAGIC_255 characters)',
+      error: "File name is too long (maximum MAGIC_255 characters)",
       warnings,
     };
   }
 
-  if (lower.includes('\0')) {
-    return { error: 'File name contains invalid characters', warnings };
+  if (lower.includes("\0")) {
+    return { error: "File name contains invalid characters", warnings };
   }
 
   return { warnings };
@@ -218,7 +218,7 @@ export function validateFileUpload(
   if (!allowedTypes.includes(file.type)) {
     return {
       valid: false,
-      error: `File type '${file.type}' is not allowed. Allowed types: ${allowedTypes.join(', ')}`,
+      error: `File type '${file.type}' is not allowed. Allowed types: ${allowedTypes.join(", ")}`,
     };
   }
 
@@ -251,29 +251,29 @@ export async function validateFileSignature(
     const declaredType = file.type;
     const expectedSignature = (() => {
       switch (declaredType) {
-        case 'image/jpeg':
+        case "image/jpeg":
           return [HEX_BYTE_MAX, HEX_JPEG_MARKER_1, HEX_BYTE_MAX] as const;
-        case 'image/png':
+        case "image/png":
           return [
             HEX_PNG_SIGNATURE_1,
             HEX_PNG_SIGNATURE_2,
             HEX_PNG_SIGNATURE_3,
             HEX_PNG_SIGNATURE_4,
           ] as const;
-        case 'image/gif':
+        case "image/gif":
           return [
             HEX_PNG_SIGNATURE_4,
             HEX_PNG_SIGNATURE_5,
             HEX_PNG_SIGNATURE_6,
           ] as const;
-        case 'application/pdf':
+        case "application/pdf":
           return [
             HEX_PDF_MARKER,
             HEX_PNG_SIGNATURE_2,
             HEX_PDF_SIGNATURE_1,
             HEX_PNG_SIGNATURE_6,
           ] as const;
-        case 'application/zip':
+        case "application/zip":
           return [
             HEX_PNG_SIGNATURE_2,
             HEX_ZIP_SIGNATURE,
@@ -305,7 +305,7 @@ export async function validateFileSignature(
   } catch {
     return {
       valid: false,
-      error: 'Failed to validate file signature',
+      error: "Failed to validate file signature",
     };
   }
 }
@@ -315,9 +315,9 @@ export async function validateFileSignature(
  */
 export function sanitizeFileName(fileName: string): string {
   return fileName
-    .replace(/[^a-zA-Z0-9._-]/g, '_') // Replace special chars with underscore
-    .replace(/_{2,}/g, '_') // Replace multiple underscores with single
-    .replace(/^_+|_+$/g, '') // Remove leading/trailing underscores
+    .replace(/[^a-zA-Z0-9._-]/g, "_") // Replace special chars with underscore
+    .replace(/_{2,}/g, "_") // Replace multiple underscores with single
+    .replace(/^_+|_+$/g, "") // Remove leading/trailing underscores
     .substring(ZERO, MAGIC_255); // Limit length
 }
 
@@ -329,13 +329,13 @@ export function generateSafeFileName(
   prefix?: string,
 ): string {
   const timestamp = Date.now();
-  const extension = originalName.split('.').pop() || '';
-  const baseName = originalName.replace(/\.[^/.]+$/, ''); // Remove extension
+  const extension = originalName.split(".").pop() || "";
+  const baseName = originalName.replace(/\.[^/.]+$/, ""); // Remove extension
   const sanitizedBase = sanitizeFileName(baseName);
 
   const parts = [prefix, sanitizedBase, timestamp].filter(Boolean);
 
-  return `${parts.join('_')}.${extension}`;
+  return `${parts.join("_")}.${extension}`;
 }
 
 /**
@@ -357,17 +357,17 @@ export function isDocumentFile(file: File): boolean {
  */
 export function getFileCategory(
   file: File,
-): keyof typeof ALLOWED_FILE_TYPES | 'unknown' {
+): keyof typeof ALLOWED_FILE_TYPES | "unknown" {
   if (ALLOWED_TYPE_SETS.images.has(file.type)) {
-    return 'images';
+    return "images";
   }
   if (ALLOWED_TYPE_SETS.documents.has(file.type)) {
-    return 'documents';
+    return "documents";
   }
   if (ALLOWED_TYPE_SETS.archives.has(file.type)) {
-    return 'archives';
+    return "archives";
   }
-  return 'unknown';
+  return "unknown";
 }
 
 /**

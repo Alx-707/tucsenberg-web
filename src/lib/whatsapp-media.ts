@@ -3,13 +3,13 @@
  * 提供媒体文件上传、下载和管理功能
  */
 
-import { logger } from '@/lib/logger';
+import { logger } from "@/lib/logger";
 
 /**
  * WhatsApp 媒体处理类
  */
 export class WhatsAppMediaService {
-  private readonly baseUrl = 'https://graph.facebook.com/v18.0';
+  private readonly baseUrl = "https://graph.facebook.com/v18.0";
   private readonly accessToken: string;
   private readonly phoneNumberId: string;
 
@@ -30,14 +30,14 @@ export class WhatsAppMediaService {
       });
 
       if (!response.ok) {
-        throw new Error('Failed to get media URL');
+        throw new Error("Failed to get media URL");
       }
 
       const data = await response.json();
       return data.url || null;
     } catch (error) {
       logger.error(
-        'Error getting media URL',
+        "Error getting media URL",
         {},
         error instanceof Error ? error : new Error(String(error)),
       );
@@ -62,14 +62,14 @@ export class WhatsAppMediaService {
       });
 
       if (!response.ok) {
-        throw new Error('Failed to download media');
+        throw new Error("Failed to download media");
       }
 
       const arrayBuffer = await response.arrayBuffer();
       return Buffer.from(arrayBuffer);
     } catch (error) {
       logger.error(
-        'Error downloading media',
+        "Error downloading media",
         {},
         error instanceof Error ? error : new Error(String(error)),
       );
@@ -82,28 +82,28 @@ export class WhatsAppMediaService {
    */
   async uploadMedia(
     file: Buffer | Blob,
-    type: 'image' | 'document' | 'audio' | 'video' | 'sticker',
+    type: "image" | "document" | "audio" | "video" | "sticker",
     filename?: string,
   ): Promise<string | null> {
     try {
       const formData = new FormData();
-      formData.append('messaging_product', 'whatsapp');
-      formData.append('type', type);
+      formData.append("messaging_product", "whatsapp");
+      formData.append("type", type);
 
       if (file instanceof Buffer) {
         formData.append(
-          'file',
+          "file",
           new Blob([new Uint8Array(file)]),
-          filename || 'file',
+          filename || "file",
         );
       } else {
-        formData.append('file', file as Blob, filename);
+        formData.append("file", file as Blob, filename);
       }
 
       const response = await fetch(
         `${this.baseUrl}/${this.phoneNumberId}/media`,
         {
-          method: 'POST',
+          method: "POST",
           headers: {
             Authorization: `Bearer ${this.accessToken}`,
           },
@@ -112,14 +112,14 @@ export class WhatsAppMediaService {
       );
 
       if (!response.ok) {
-        throw new Error('Failed to upload media');
+        throw new Error("Failed to upload media");
       }
 
       const data = await response.json();
       return data.id || null;
     } catch (error) {
       logger.error(
-        'Error uploading media',
+        "Error uploading media",
         {},
         error instanceof Error ? error : new Error(String(error)),
       );
@@ -133,7 +133,7 @@ export class WhatsAppMediaService {
   async deleteMedia(mediaId: string): Promise<boolean> {
     try {
       const response = await fetch(`${this.baseUrl}/${mediaId}`, {
-        method: 'DELETE',
+        method: "DELETE",
         headers: {
           Authorization: `Bearer ${this.accessToken}`,
         },
@@ -142,7 +142,7 @@ export class WhatsAppMediaService {
       return response.ok;
     } catch (error) {
       logger.error(
-        'Error deleting media',
+        "Error deleting media",
         {},
         error instanceof Error ? error : new Error(String(error)),
       );
@@ -168,14 +168,14 @@ export class WhatsAppMediaService {
       });
 
       if (!response.ok) {
-        throw new Error('Failed to get media info');
+        throw new Error("Failed to get media info");
       }
 
       const data = await response.json();
       return data;
     } catch (error) {
       logger.error(
-        'Error getting media info',
+        "Error getting media info",
         {},
         error instanceof Error ? error : new Error(String(error)),
       );

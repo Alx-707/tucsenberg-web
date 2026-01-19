@@ -1,4 +1,4 @@
-'use client';
+"use client";
 
 import {
   memo,
@@ -7,27 +7,27 @@ import {
   useRef,
   useState,
   useTransition,
-} from 'react';
-import { useTranslations } from 'next-intl';
-import { useFormStatus } from 'react-dom';
-import { logger } from '@/lib/logger';
-import { type ServerActionResult } from '@/lib/server-action-utils';
-import { appendAttributionToFormData } from '@/lib/utm';
-import { type FormSubmissionStatus } from '@/lib/validations';
-import { LazyTurnstile } from '@/components/forms/lazy-turnstile';
-import { useOptimisticFormState } from '@/components/forms/use-optimistic-form-state';
-import { useRateLimit } from '@/components/forms/use-rate-limit';
-import { Button } from '@/components/ui/button';
-import { Card } from '@/components/ui/card';
-import { Input } from '@/components/ui/input';
-import { Label } from '@/components/ui/label';
-import { Textarea } from '@/components/ui/textarea';
-import { contactFormAction, type ContactFormResult } from '@/app/actions';
+} from "react";
+import { useTranslations } from "next-intl";
+import { useFormStatus } from "react-dom";
+import { logger } from "@/lib/logger";
+import { type ServerActionResult } from "@/lib/server-action-utils";
+import { appendAttributionToFormData } from "@/lib/utm";
+import { type FormSubmissionStatus } from "@/lib/validations";
+import { LazyTurnstile } from "@/components/forms/lazy-turnstile";
+import { useOptimisticFormState } from "@/components/forms/use-optimistic-form-state";
+import { useRateLimit } from "@/components/forms/use-rate-limit";
+import { Button } from "@/components/ui/button";
+import { Card } from "@/components/ui/card";
+import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
+import { Textarea } from "@/components/ui/textarea";
+import { contactFormAction, type ContactFormResult } from "@/app/actions";
 import {
   buildFormFieldsFromConfig,
   CONTACT_FORM_CONFIG,
   type ContactFormFieldDescriptor,
-} from '@/config/contact-form-config';
+} from "@/config/contact-form-config";
 
 /**
  * 获取状态消息配置
@@ -39,22 +39,22 @@ function getStatusConfig(
 ): { className: string; message: string } | undefined {
   // 使用 switch 代替对象索引访问，避免 security/detect-object-injection
   switch (status) {
-    case 'success':
+    case "success":
       return {
-        className: 'bg-green-50 border-green-200 text-green-800',
-        message: t('submitSuccess'),
+        className: "bg-green-50 border-green-200 text-green-800",
+        message: t("submitSuccess"),
       };
-    case 'error':
+    case "error":
       return {
-        className: 'bg-red-50 border-red-200 text-red-800',
-        message: t('submitError'),
+        className: "bg-red-50 border-red-200 text-red-800",
+        message: t("submitError"),
       };
-    case 'submitting':
+    case "submitting":
       return {
-        className: 'bg-blue-50 border-blue-200 text-blue-800',
-        message: optimisticMessage || t('submitting'),
+        className: "bg-blue-50 border-blue-200 text-blue-800",
+        message: optimisticMessage || t("submitting"),
       };
-    case 'idle':
+    case "idle":
     default:
       return undefined;
   }
@@ -71,23 +71,20 @@ interface StatusMessageProps {
 
 const StatusMessage = memo(
   ({ status, t, optimisticMessage }: StatusMessageProps) => {
-    if (status === 'idle') return null;
+    if (status === "idle") return null;
 
     const config = getStatusConfig(status, t, optimisticMessage);
     if (!config) return null;
 
     return (
-      <div
-        className={`rounded-md border p-4 ${config.className}`}
-        role='alert'
-      >
+      <div className={`rounded-md border p-4 ${config.className}`} role="alert">
         {config.message}
       </div>
     );
   },
 );
 
-StatusMessage.displayName = 'StatusMessage';
+StatusMessage.displayName = "StatusMessage";
 
 /**
  * 计算提交状态的输入参数
@@ -103,11 +100,11 @@ interface SubmitStatusInput {
  * 计算提交状态，优先使用乐观更新状态
  */
 function computeSubmitStatus(input: SubmitStatusInput): FormSubmissionStatus {
-  if (input.optimisticStatus !== 'idle') return input.optimisticStatus;
-  if (input.isPending) return 'submitting';
-  if (input.stateSuccess) return 'success';
-  if (input.stateError) return 'error';
-  return 'idle';
+  if (input.optimisticStatus !== "idle") return input.optimisticStatus;
+  if (input.isPending) return "submitting";
+  if (input.stateSuccess) return "success";
+  if (input.stateError) return "error";
+  return "idle";
 }
 
 /**
@@ -119,7 +116,7 @@ function useContactForm() {
     contactFormAction,
     null,
   );
-  const [turnstileToken, setTurnstileToken] = useState<string>('');
+  const [turnstileToken, setTurnstileToken] = useState<string>("");
   const lastRecordedSuccessRef = useRef(false);
   const [isPendingTransition, startTransition] = useTransition();
 
@@ -150,20 +147,20 @@ function useContactForm() {
   // 创建增强的formAction，使用React 19原生乐观更新
   const enhancedFormAction = (formData: FormData) => {
     if (!turnstileToken) {
-      logger.warn('Form submission attempted without Turnstile token');
+      logger.warn("Form submission attempted without Turnstile token");
       return;
     }
 
     // 使用React 19原生useOptimistic进行乐观更新
     // Note: message is omitted - StatusMessage uses t('submitting') as fallback
     setOptimisticState({
-      status: 'submitting',
+      status: "submitting",
       timestamp: Date.now(),
     });
 
     // 添加Turnstile token和提交时间戳到FormData
-    formData.append('turnstileToken', turnstileToken);
-    formData.append('submittedAt', new Date().toISOString());
+    formData.append("turnstileToken", turnstileToken);
+    formData.append("submittedAt", new Date().toISOString());
 
     // Append marketing attribution data
     appendAttributionToFormData(formData);
@@ -203,20 +200,20 @@ function ErrorDisplay({
   if (!state?.error) return null;
 
   const translatedDetails = state.details?.map((detail) =>
-    detail.startsWith('errors.') ? translate(detail) : detail,
+    detail.startsWith("errors.") ? translate(detail) : detail,
   );
   const uniqueDetails = translatedDetails
     ? Array.from(new Set(translatedDetails))
     : undefined;
-  const isValidationError = state.error === 'Validation failed';
+  const isValidationError = state.error === "Validation failed";
   const shouldShowRawMessage = state.error && !isValidationError;
 
   return (
-    <div className='rounded-lg border border-red-200 bg-red-50 p-4 text-red-800'>
-      <p className='font-medium'>{translate('error')}</p>
-      {shouldShowRawMessage && <p className='text-sm'>{state.error}</p>}
+    <div className="rounded-lg border border-red-200 bg-red-50 p-4 text-red-800">
+      <p className="font-medium">{translate("error")}</p>
+      {shouldShowRawMessage && <p className="text-sm">{state.error}</p>}
       {uniqueDetails && uniqueDetails.length > 0 && (
-        <ul className='mt-2 list-inside list-disc text-sm'>
+        <ul className="mt-2 list-inside list-disc text-sm">
           {uniqueDetails.map((detail) => (
             <li key={detail}>{detail}</li>
           ))}
@@ -238,23 +235,23 @@ const FormFields = memo(({ t, isPending }: FormFieldsProps) => {
   const configuredFields = buildFormFieldsFromConfig(CONTACT_FORM_CONFIG);
   const textInputs = configuredFields.filter(
     (field) =>
-      !field.isCheckbox && field.type !== 'textarea' && !field.isHoneypot,
+      !field.isCheckbox && field.type !== "textarea" && !field.isHoneypot,
   );
   const textareas = configuredFields.filter(
-    (field) => field.type === 'textarea',
+    (field) => field.type === "textarea",
   );
   const checkboxFields = configuredFields.filter((field) => field.isCheckbox);
   const honeypotField = configuredFields.find((field) => field.isHoneypot);
 
   const renderLabelClass = (field: ContactFormFieldDescriptor) =>
     [
-      'text-sm',
+      "text-sm",
       field.required
         ? "after:ml-0.5 after:text-red-500 after:content-['*']"
-        : '',
+        : "",
     ]
       .filter(Boolean)
-      .join(' ');
+      .join(" ");
 
   const renderPlaceholder = (field: ContactFormFieldDescriptor) =>
     field.placeholderKey ? t(field.placeholderKey) : undefined;
@@ -262,16 +259,10 @@ const FormFields = memo(({ t, isPending }: FormFieldsProps) => {
   return (
     <>
       {textInputs.length > 0 && (
-        <div className='grid grid-cols-1 gap-4 md:grid-cols-2'>
+        <div className="grid grid-cols-1 gap-4 md:grid-cols-2">
           {textInputs.map((field) => (
-            <div
-              key={field.key}
-              className='space-y-2'
-            >
-              <Label
-                htmlFor={field.key}
-                className={renderLabelClass(field)}
-              >
+            <div key={field.key} className="space-y-2">
+              <Label htmlFor={field.key} className={renderLabelClass(field)}>
                 {t(field.labelKey)}
               </Label>
               <Input
@@ -289,14 +280,8 @@ const FormFields = memo(({ t, isPending }: FormFieldsProps) => {
       )}
 
       {textareas.map((field) => (
-        <div
-          key={field.key}
-          className='space-y-2'
-        >
-          <Label
-            htmlFor={field.key}
-            className={renderLabelClass(field)}
-          >
+        <div key={field.key} className="space-y-2">
+          <Label htmlFor={field.key} className={renderLabelClass(field)}>
             {t(field.labelKey)}
           </Label>
           <Textarea
@@ -312,26 +297,20 @@ const FormFields = memo(({ t, isPending }: FormFieldsProps) => {
       ))}
 
       {checkboxFields.length > 0 && (
-        <div className='space-y-4'>
+        <div className="space-y-4">
           {checkboxFields.map((field) => (
-            <div
-              key={field.key}
-              className='space-y-2'
-            >
-              <div className='flex items-center space-x-2'>
+            <div key={field.key} className="space-y-2">
+              <div className="flex items-center space-x-2">
                 <input
                   id={field.key}
                   name={field.key}
-                  type='checkbox'
+                  type="checkbox"
                   disabled={isPending}
                   required={field.required}
-                  className='h-4 w-4 rounded border border-input'
+                  className="h-4 w-4 rounded border border-input"
                   aria-describedby={`${field.key}-error`}
                 />
-                <Label
-                  htmlFor={field.key}
-                  className={renderLabelClass(field)}
-                >
+                <Label htmlFor={field.key} className={renderLabelClass(field)}>
                   {t(field.labelKey)}
                 </Label>
               </div>
@@ -344,18 +323,18 @@ const FormFields = memo(({ t, isPending }: FormFieldsProps) => {
         <input
           id={honeypotField.key}
           name={honeypotField.key}
-          type='text'
-          autoComplete='off'
+          type="text"
+          autoComplete="off"
           tabIndex={-1}
-          aria-hidden='true'
-          className='sr-only'
+          aria-hidden="true"
+          className="sr-only"
         />
       )}
     </>
   );
 });
 
-FormFields.displayName = 'FormFields';
+FormFields.displayName = "FormFields";
 
 interface SubmitButtonProps {
   disabled: boolean;
@@ -373,8 +352,8 @@ function SubmitButton({
 
   return (
     <Button
-      type='submit'
-      className='w-full'
+      type="submit"
+      className="w-full"
       disabled={isDisabled}
       aria-disabled={isDisabled}
       aria-busy={pending}
@@ -388,9 +367,9 @@ function SubmitButton({
  * Main contact form container component
  */
 export function ContactFormContainer() {
-  const t = useTranslations('contact.form');
+  const t = useTranslations("contact.form");
   const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
-    if (process.env.NODE_ENV === 'test') {
+    if (process.env.NODE_ENV === "test") {
       e.preventDefault();
     }
   };
@@ -410,11 +389,11 @@ export function ContactFormContainer() {
   );
 
   return (
-    <Card className='mx-auto w-full max-w-2xl'>
+    <Card className="mx-auto w-full max-w-2xl">
       <form
         action={formAction}
         onSubmit={handleSubmit}
-        className='space-y-6 p-6'
+        className="space-y-6 p-6"
       >
         <StatusMessage
           status={submitStatus}
@@ -422,34 +401,28 @@ export function ContactFormContainer() {
           optimisticMessage={optimisticMessage}
         />
 
-        <ErrorDisplay
-          state={state}
-          translate={t}
-        />
+        <ErrorDisplay state={state} translate={t} />
 
-        <FormFields
-          t={t}
-          isPending={isPending}
-        />
+        <FormFields t={t} isPending={isPending} />
 
         {/* Turnstile CAPTCHA - 延迟/按需加载，降低首屏阻塞 */}
         <LazyTurnstile
           onSuccess={setTurnstileToken}
-          onError={() => setTurnstileToken('')}
-          onExpire={() => setTurnstileToken('')}
-          onLoad={() => setTurnstileToken('')}
+          onError={() => setTurnstileToken("")}
+          onExpire={() => setTurnstileToken("")}
+          onLoad={() => setTurnstileToken("")}
         />
 
         {/* Submit button */}
         <SubmitButton
           disabled={submitDisabledReason}
-          idleLabel={t('submit')}
-          pendingLabel={t('submitting')}
+          idleLabel={t("submit")}
+          pendingLabel={t("submitting")}
         />
 
         {isRateLimited && (
-          <p className='text-center text-sm text-amber-600'>
-            {t('rateLimitMessage')}
+          <p className="text-center text-sm text-amber-600">
+            {t("rateLimitMessage")}
           </p>
         )}
       </form>

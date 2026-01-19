@@ -1,6 +1,6 @@
-import type { CSSProperties, ReactNode } from 'react';
-import { Section, Text } from '@react-email/components';
-import { COLORS, SIZES, SPACING } from '@/components/emails/theme';
+import type { CSSProperties, ReactNode } from "react";
+import { Section, Text } from "@react-email/components";
+import { COLORS, SIZES, SPACING } from "@/components/emails/theme";
 
 interface EmailFieldProps {
   label: string;
@@ -12,13 +12,13 @@ const fieldStyle: CSSProperties = {
 };
 
 const labelStyle: CSSProperties = {
-  fontWeight: 'bold',
+  fontWeight: "bold",
   color: COLORS.textLight,
-  margin: '0 0 5px 0',
+  margin: "0 0 5px 0",
 };
 
 const valueContainerStyle: CSSProperties = {
-  margin: '0',
+  margin: "0",
   padding: SPACING.sm,
   backgroundColor: COLORS.background,
   borderRadius: SIZES.borderRadius,

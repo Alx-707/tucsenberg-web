@@ -6,12 +6,12 @@
  * @author ThemeToggle测试优化项目
  */
 
-import { vi } from 'vitest';
+import { vi } from "vitest";
 
 /**
  * 主题类型定义
  */
-export type ThemeType = 'light' | 'dark' | 'system';
+export type ThemeType = "light" | "dark" | "system";
 
 /**
  * 主题Hook Mock接口
@@ -26,16 +26,16 @@ export interface ThemeHookMock {
   handleThemeChange: ReturnType<typeof vi.fn>;
   handleKeyDown: ReturnType<typeof vi.fn>;
   ariaAttributes: {
-    'aria-label': string;
-    'aria-expanded': string;
-    'aria-haspopup': string;
-    'aria-current': string;
+    "aria-label": string;
+    "aria-expanded": string;
+    "aria-haspopup": string;
+    "aria-current": string;
   };
 }
 
 function setMockAriaAttribute(
   mock: ThemeHookMock,
-  key: 'aria-current' | 'aria-expanded',
+  key: "aria-current" | "aria-expanded",
   value: string,
 ): void {
   if (!mock.ariaAttributes) {
@@ -59,7 +59,7 @@ export class ThemeTestUtils {
     overrides: Partial<ThemeHookMock> = {},
   ): ThemeHookMock {
     const defaultMock: ThemeHookMock = {
-      theme: 'light',
+      theme: "light",
       isOpen: false,
       setIsOpen: vi.fn(),
       supportsViewTransitions: true,
@@ -68,10 +68,10 @@ export class ThemeTestUtils {
       handleThemeChange: vi.fn(),
       handleKeyDown: vi.fn(),
       ariaAttributes: {
-        'aria-label': '主题切换',
-        'aria-expanded': 'false',
-        'aria-haspopup': 'menu',
-        'aria-current': 'light',
+        "aria-label": "主题切换",
+        "aria-expanded": "false",
+        "aria-haspopup": "menu",
+        "aria-current": "light",
       },
     };
 
@@ -92,15 +92,15 @@ export class ThemeTestUtils {
 
     // 自动同步aria-current与theme
     if (updates.theme) {
-      setMockAriaAttribute(mock, 'aria-current', updates.theme);
+      setMockAriaAttribute(mock, "aria-current", updates.theme);
     }
 
     // 自动同步aria-expanded与isOpen
     if (updates.isOpen !== undefined) {
       setMockAriaAttribute(
         mock,
-        'aria-expanded',
-        updates.isOpen ? 'true' : 'false',
+        "aria-expanded",
+        updates.isOpen ? "true" : "false",
       );
     }
   }
@@ -149,22 +149,22 @@ export class ThemeTestUtils {
   static getThemeScenarios() {
     return [
       {
-        name: 'Light Theme',
-        theme: 'light' as ThemeType,
-        expectedAria: 'light',
-        description: 'should switch to light theme',
+        name: "Light Theme",
+        theme: "light" as ThemeType,
+        expectedAria: "light",
+        description: "should switch to light theme",
       },
       {
-        name: 'Dark Theme',
-        theme: 'dark' as ThemeType,
-        expectedAria: 'dark',
-        description: 'should switch to dark theme',
+        name: "Dark Theme",
+        theme: "dark" as ThemeType,
+        expectedAria: "dark",
+        description: "should switch to dark theme",
       },
       {
-        name: 'System Theme',
-        theme: 'system' as ThemeType,
-        expectedAria: 'system',
-        description: 'should switch to system theme',
+        name: "System Theme",
+        theme: "system" as ThemeType,
+        expectedAria: "system",
+        description: "should switch to system theme",
       },
     ];
   }
@@ -175,19 +175,19 @@ export class ThemeTestUtils {
   static getAccessibilityScenarios() {
     return [
       {
-        name: 'High Contrast Mode',
+        name: "High Contrast Mode",
         config: { prefersHighContrast: true },
-        description: 'should support high contrast mode',
+        description: "should support high contrast mode",
       },
       {
-        name: 'Reduced Motion',
+        name: "Reduced Motion",
         config: { prefersReducedMotion: true },
-        description: 'should respect reduced motion preferences',
+        description: "should respect reduced motion preferences",
       },
       {
-        name: 'View Transitions Disabled',
+        name: "View Transitions Disabled",
         config: { supportsViewTransitions: false },
-        description: 'should work without View Transitions API',
+        description: "should work without View Transitions API",
       },
     ];
   }
@@ -198,29 +198,29 @@ export class ThemeTestUtils {
   static getEdgeCaseScenarios() {
     return [
       {
-        name: 'Invalid Theme State',
+        name: "Invalid Theme State",
         setup: (mock: ThemeHookMock) => {
           mock.theme = undefined as unknown as ThemeType;
-          setMockAriaAttribute(mock, 'aria-current', 'light'); // fallback
+          setMockAriaAttribute(mock, "aria-current", "light"); // fallback
         },
-        description: 'should handle invalid theme state',
+        description: "should handle invalid theme state",
       },
       {
-        name: 'Network Error',
+        name: "Network Error",
         setup: (mock: ThemeHookMock) => {
           mock.handleThemeChange.mockImplementation(() => {
             // Simulate network error without console output
-            throw new Error('Network request failed');
+            throw new Error("Network request failed");
           });
         },
-        description: 'should handle network errors',
+        description: "should handle network errors",
       },
       {
-        name: 'API Unavailable',
+        name: "API Unavailable",
         setup: () => {
           // Mock API failure scenarios
         },
-        description: 'should handle API unavailability',
+        description: "should handle API unavailability",
       },
     ];
   }
@@ -235,13 +235,13 @@ class ThemeTestAssertions {
    */
   static verifyThemeButton(
     selector: string = '[data-testid="theme-toggle-button"]',
-    expectedTheme: ThemeType = 'light',
+    expectedTheme: ThemeType = "light",
   ): Element {
     const button = document.querySelector(selector);
     expect(button).toBeInTheDocument();
-    expect(button).toHaveAttribute('aria-current', expectedTheme);
-    expect(button).toHaveAttribute('aria-label', '主题切换');
-    expect(button).toHaveAttribute('aria-haspopup', 'menu');
+    expect(button).toHaveAttribute("aria-current", expectedTheme);
+    expect(button).toHaveAttribute("aria-label", "主题切换");
+    expect(button).toHaveAttribute("aria-haspopup", "menu");
     return button as Element;
   }
 
@@ -265,9 +265,9 @@ class ThemeTestAssertions {
     expect(dark).toBeInTheDocument();
     expect(system).toBeInTheDocument();
 
-    expect(light).toHaveAttribute('role', 'menuitem');
-    expect(dark).toHaveAttribute('role', 'menuitem');
-    expect(system).toHaveAttribute('role', 'menuitem');
+    expect(light).toHaveAttribute("role", "menuitem");
+    expect(dark).toHaveAttribute("role", "menuitem");
+    expect(system).toHaveAttribute("role", "menuitem");
 
     return { light: light!, dark: dark!, system: system! };
   }
@@ -350,7 +350,7 @@ class ThemeTestMockFactory {
       reset: () => {
         vi.clearAllMocks();
         ThemeTestUtils.updateThemeHookMock(themeHookMock, {
-          theme: 'light',
+          theme: "light",
           isOpen: false,
           supportsViewTransitions: true,
           prefersReducedMotion: false,
@@ -370,10 +370,10 @@ class ThemeTestMockFactory {
    */
   static getUIComponentMockConfig() {
     return {
-      DropdownMenu: 'Mock DropdownMenu component',
-      DropdownMenuTrigger: 'Mock DropdownMenuTrigger component',
-      DropdownMenuContent: 'Mock DropdownMenuContent component',
-      Button: 'Mock Button component',
+      DropdownMenu: "Mock DropdownMenu component",
+      DropdownMenuTrigger: "Mock DropdownMenuTrigger component",
+      DropdownMenuContent: "Mock DropdownMenuContent component",
+      Button: "Mock Button component",
     };
   }
 
@@ -382,9 +382,9 @@ class ThemeTestMockFactory {
    */
   static getIconMockConfig() {
     return {
-      Sun: 'Mock Sun icon',
-      Moon: 'Mock Moon icon',
-      Monitor: 'Mock Monitor icon',
+      Sun: "Mock Sun icon",
+      Moon: "Mock Moon icon",
+      Monitor: "Mock Monitor icon",
     };
   }
 }

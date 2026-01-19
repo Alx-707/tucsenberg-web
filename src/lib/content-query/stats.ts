@@ -2,10 +2,10 @@
  * 内容统计函数
  */
 
-import type { ContentStats, Locale } from '@/types/content.types';
-import { getAllPages, getAllPosts } from '@/lib/content-query/queries';
-import { getContentConfig } from '@/lib/content-utils';
-import { ZERO } from '@/constants';
+import type { ContentStats, Locale } from "@/types/content.types";
+import { getAllPages, getAllPosts } from "@/lib/content-query/queries";
+import { getContentConfig } from "@/lib/content-utils";
+import { ZERO } from "@/constants";
 
 /**
  * Get content statistics
@@ -28,9 +28,9 @@ export function getContentStats(): ContentStats {
     const pages = getAllPages(locale);
 
     // Use type-safe property access with explicit validation
-    if (locale === 'en' || locale === 'zh') {
+    if (locale === "en" || locale === "zh") {
       // Safe property assignment for known locales
-      if (locale === 'en') {
+      if (locale === "en") {
         stats.postsByLocale.en = posts.length;
         stats.pagesByLocale.en = pages.length;
       } else {

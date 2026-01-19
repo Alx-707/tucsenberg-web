@@ -26,47 +26,47 @@
  *   执行 pnpm test:coverage 生成覆盖率报告
  */
 
-const fs = require('fs');
-const path = require('path');
-const glob = require('glob');
-const { execSync, spawnSync } = require('child_process');
+const fs = require("fs");
+const path = require("path");
+const glob = require("glob");
+const { execSync, spawnSync } = require("child_process");
 
 // 解析命令行参数
 const args = process.argv.slice(2);
-const isFastMode = args.includes('--mode=fast');
-const isCiMode = args.includes('--mode=ci');
-const isFullMode = args.includes('--mode=full') || (!isFastMode && !isCiMode);
-const isJsonOutput = args.includes('--output=json') || args.includes('--json');
-const isSilent = args.includes('--silent');
+const isFastMode = args.includes("--mode=fast");
+const isCiMode = args.includes("--mode=ci");
+const isFullMode = args.includes("--mode=full") || (!isFastMode && !isCiMode);
+const isJsonOutput = args.includes("--output=json") || args.includes("--json");
+const isSilent = args.includes("--silent");
 
-const ESLINT_PACKAGE_PATH = require.resolve('eslint/package.json');
+const ESLINT_PACKAGE_PATH = require.resolve("eslint/package.json");
 const ESLINT_CLI_PATH = path.join(
   path.dirname(ESLINT_PACKAGE_PATH),
-  'bin',
-  'eslint.js',
+  "bin",
+  "eslint.js",
 );
 const ESLINT_BASE_ARGS = [
-  '.',
-  '--ext',
-  '.js,.jsx,.ts,.tsx',
-  '--config',
-  'eslint.config.mjs',
-  '--cache',
-  '--cache-location',
-  '.eslintcache',
+  ".",
+  "--ext",
+  ".js,.jsx,.ts,.tsx",
+  "--config",
+  "eslint.config.mjs",
+  "--cache",
+  "--cache-location",
+  ".eslintcache",
 ];
 
 function parseEslintJsonOutput(rawOutput) {
-  if (typeof rawOutput !== 'string') {
-    throw new Error('ESLint output is not a string');
+  if (typeof rawOutput !== "string") {
+    throw new Error("ESLint output is not a string");
   }
 
   const trimmed = rawOutput.trim();
-  const start = trimmed.indexOf('[');
-  const end = trimmed.lastIndexOf(']');
+  const start = trimmed.indexOf("[");
+  const end = trimmed.lastIndexOf("]");
 
   if (start === -1 || end === -1 || end <= start) {
-    throw new Error('Unable to locate ESLint JSON payload in output');
+    throw new Error("Unable to locate ESLint JSON payload in output");
   }
 
   const jsonText = trimmed.slice(start, end + 1);
@@ -76,9 +76,9 @@ function parseEslintJsonOutput(rawOutput) {
 function runEslintWithJson() {
   const result = spawnSync(
     process.execPath,
-    [ESLINT_CLI_PATH, ...ESLINT_BASE_ARGS, '--format', 'json'],
+    [ESLINT_CLI_PATH, ...ESLINT_BASE_ARGS, "--format", "json"],
     {
-      encoding: 'utf8',
+      encoding: "utf8",
       maxBuffer: 10 * 1024 * 1024, // 10MB
     },
   );
@@ -87,7 +87,7 @@ function runEslintWithJson() {
     throw result.error;
   }
 
-  const rawOutput = (result.stdout || result.stderr || '').toString();
+  const rawOutput = (result.stdout || result.stderr || "").toString();
   const lintResults = parseEslintJsonOutput(rawOutput);
 
   return {
@@ -105,27 +105,27 @@ function log(...args) {
 }
 
 function escapeRegExp(value) {
-  return value.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+  return value.replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
 }
 
 function matchesGlob(pattern, value) {
   // Minimal glob matcher for repo-local paths.
   // Supports: **, *, and literal path separators (/).
-  const normalizedPattern = pattern.split(path.sep).join('/');
-  const normalizedValue = value.split(path.sep).join('/');
+  const normalizedPattern = pattern.split(path.sep).join("/");
+  const normalizedValue = value.split(path.sep).join("/");
 
   const regexText = `^${normalizedPattern
-    .split('/')
+    .split("/")
     .map((part, index, parts) => {
-      if (part === '**') {
+      if (part === "**") {
         const isLast = index === parts.length - 1;
-        return isLast ? '(?:.+/)?[^/]*' : '(?:.+/)?';
+        return isLast ? "(?:.+/)?[^/]*" : "(?:.+/)?";
       }
-      const segment = escapeRegExp(part).replace(/\\\*/g, '[^/]*');
+      const segment = escapeRegExp(part).replace(/\\\*/g, "[^/]*");
       return `${segment}/`;
     })
-    .join('')
-    .replace(/\/$/, '')}$`;
+    .join("")
+    .replace(/\/$/, "")}$`;
 
   try {
     return new RegExp(regexText).test(normalizedValue);
@@ -137,14 +137,14 @@ function matchesGlob(pattern, value) {
 class QualityGate {
   constructor() {
     const coverageEnabledByMode =
-      isFullMode || isCiMode || process.env.QUALITY_ENABLE_COVERAGE === 'true';
+      isFullMode || isCiMode || process.env.QUALITY_ENABLE_COVERAGE === "true";
     const coverageDisabledByEnv =
-      process.env.QUALITY_DISABLE_COVERAGE === 'true';
+      process.env.QUALITY_DISABLE_COVERAGE === "true";
     const performanceEnabledByMode =
-      (isFullMode || process.env.QUALITY_ENABLE_PERFORMANCE === 'true') &&
+      (isFullMode || process.env.QUALITY_ENABLE_PERFORMANCE === "true") &&
       !isCiMode;
     const performanceDisabledByEnv =
-      process.env.QUALITY_DISABLE_PERFORMANCE === 'true';
+      process.env.QUALITY_DISABLE_PERFORMANCE === "true";
 
     const diffCoverageThreshold = Number(
       process.env.QUALITY_DIFF_COVERAGE_THRESHOLD,
@@ -184,33 +184,33 @@ class QualityGate {
           // 增量覆盖率排除列表：这些文件的格式化变更不计入增量覆盖率计算
           // 用于排除仅有 Prettier 格式化变更但原有覆盖率较低的文件
           diffCoverageExclude: [
-            'src/components/forms/use-rate-limit.ts',
-            'src/components/lazy/lazy-web-vitals-reporter.tsx',
-            'src/lib/i18n-validation.ts',
-            'src/lib/locale-storage-hooks.ts',
-            'src/lib/security-tokens.ts',
-            'src/types/react19.ts',
-            'src/lib/__tests__/theme-analytics/setup.ts',
-            'src/app/[locale]/products/error.tsx',
-            'src/app/[locale]/contact/error.tsx',
-            'src/types/whatsapp-api-requests/api-types.ts',
-            'src/types/whatsapp-webhook-utils/functions.ts',
-            'src/lib/content-parser.ts', // Content parser - covered by content tests
+            "src/components/forms/use-rate-limit.ts",
+            "src/components/lazy/lazy-web-vitals-reporter.tsx",
+            "src/lib/i18n-validation.ts",
+            "src/lib/locale-storage-hooks.ts",
+            "src/lib/security-tokens.ts",
+            "src/types/react19.ts",
+            "src/lib/__tests__/theme-analytics/setup.ts",
+            "src/app/[locale]/products/error.tsx",
+            "src/app/[locale]/contact/error.tsx",
+            "src/types/whatsapp-api-requests/api-types.ts",
+            "src/types/whatsapp-webhook-utils/functions.ts",
+            "src/lib/content-parser.ts", // Content parser - covered by content tests
           ],
           // 增量覆盖率排除（glob）：生成文件/声明文件默认不纳入 diff-line coverage
           diffCoverageExcludeGlobs: [
-            '**/*.generated.*',
-            '**/*.d.ts',
-            '**/*-types.ts', // 纯类型定义文件（如 theme-transition-types.ts）
-            '**/*.types.ts', // 另一种类型文件命名约定
-            '**/*.test.*',
-            '**/*.spec.*',
-            '**/__tests__/**',
-            'src/test/**',
-            'src/testing/**',
-            'src/app/**/page.tsx', // Next.js pages - validated via E2E
-            'src/app/**/layout.tsx', // Next.js layouts - validated via E2E
-            'src/lib/content/**', // Content loaders - covered by integration tests
+            "**/*.generated.*",
+            "**/*.d.ts",
+            "**/*-types.ts", // 纯类型定义文件（如 theme-transition-types.ts）
+            "**/*.types.ts", // 另一种类型文件命名约定
+            "**/*.test.*",
+            "**/*.spec.*",
+            "**/__tests__/**",
+            "src/test/**",
+            "src/testing/**",
+            "src/app/**/page.tsx", // Next.js pages - validated via E2E
+            "src/app/**/layout.tsx", // Next.js layouts - validated via E2E
+            "src/lib/content/**", // Content loaders - covered by integration tests
           ],
         },
         codeQuality: {
@@ -240,18 +240,18 @@ class QualityGate {
         },
       },
       // 环境配置
-      environment: process.env.NODE_ENV || 'development',
-      ciMode: process.env.CI === 'true',
-      branch: process.env.GITHUB_REF_NAME || 'unknown',
+      environment: process.env.NODE_ENV || "development",
+      ciMode: process.env.CI === "true",
+      branch: process.env.GITHUB_REF_NAME || "unknown",
       pilotDomain: {
-        prefix: 'src/lib/web-vitals/',
+        prefix: "src/lib/web-vitals/",
         testGlobs: [
-          '**/*.test.{ts,tsx}',
-          '**/*.spec.{ts,tsx}',
-          '**/__tests__/**/*.{ts,tsx}',
+          "**/*.test.{ts,tsx}",
+          "**/*.spec.{ts,tsx}",
+          "**/__tests__/**/*.{ts,tsx}",
         ],
       },
-      diffBaseRef: process.env.QUALITY_DIFF_BASE || 'origin/main',
+      diffBaseRef: process.env.QUALITY_DIFF_BASE || "origin/main",
     };
 
     this.results = {
@@ -266,13 +266,13 @@ class QualityGate {
   }
 
   getMergeBase() {
-    const candidates = [this.config.diffBaseRef, 'origin/main', 'main'];
+    const candidates = [this.config.diffBaseRef, "origin/main", "main"];
     for (const ref of candidates) {
       if (!ref) continue;
       try {
         const base = execSync(`git merge-base HEAD ${ref}`, {
-          encoding: 'utf8',
-          stdio: ['ignore', 'pipe', 'ignore'],
+          encoding: "utf8",
+          stdio: ["ignore", "pipe", "ignore"],
         })
           .toString()
           .trim();
@@ -282,32 +282,32 @@ class QualityGate {
       }
     }
     try {
-      return execSync('git rev-parse HEAD~1', {
-        encoding: 'utf8',
-        stdio: ['ignore', 'pipe', 'ignore'],
+      return execSync("git rev-parse HEAD~1", {
+        encoding: "utf8",
+        stdio: ["ignore", "pipe", "ignore"],
       })
         .toString()
         .trim();
     } catch {
-      return '';
+      return "";
     }
   }
 
-  getChangedFiles(filter = 'ACM') {
+  getChangedFiles(filter = "ACM") {
     const base = this.getMergeBase();
-    const range = base ? `${base}...HEAD` : '';
+    const range = base ? `${base}...HEAD` : "";
     const cmd = base
       ? `git diff --name-only --diff-filter=${filter} ${range}`
       : `git diff --name-only --diff-filter=${filter}`;
     try {
       const output = execSync(cmd, {
-        encoding: 'utf8',
-        stdio: ['ignore', 'pipe', 'ignore'],
+        encoding: "utf8",
+        stdio: ["ignore", "pipe", "ignore"],
       })
         .toString()
         .trim();
       if (!output) return [];
-      return output.split('\n');
+      return output.split("\n");
     } catch {
       return [];
     }
@@ -315,18 +315,18 @@ class QualityGate {
 
   findCoverageSummaryPath() {
     const candidates = [
-      path.join(process.cwd(), 'reports', 'coverage', 'coverage-summary.json'),
-      path.join(process.cwd(), 'coverage', 'coverage-summary.json'),
+      path.join(process.cwd(), "reports", "coverage", "coverage-summary.json"),
+      path.join(process.cwd(), "coverage", "coverage-summary.json"),
     ];
     return candidates.find((p) => fs.existsSync(p));
   }
 
   findCoverageDetailsPath() {
     const candidates = [
-      path.join(process.cwd(), 'reports', 'coverage', 'coverage-final.json'),
-      path.join(process.cwd(), 'reports', 'coverage', 'coverage.json'),
-      path.join(process.cwd(), 'coverage', 'coverage-final.json'),
-      path.join(process.cwd(), 'coverage', 'coverage.json'),
+      path.join(process.cwd(), "reports", "coverage", "coverage-final.json"),
+      path.join(process.cwd(), "reports", "coverage", "coverage.json"),
+      path.join(process.cwd(), "coverage", "coverage-final.json"),
+      path.join(process.cwd(), "coverage", "coverage.json"),
     ];
     return candidates.find((p) => fs.existsSync(p));
   }
@@ -334,7 +334,7 @@ class QualityGate {
   normalizeCoverageEntries(coverageData) {
     const entries = new Map();
     Object.keys(coverageData || {})
-      .filter((key) => key !== 'total')
+      .filter((key) => key !== "total")
       .forEach((key) => {
         const rel = path.relative(process.cwd(), key);
         entries.set(rel, coverageData[key]);
@@ -355,10 +355,10 @@ class QualityGate {
 
   getLineHitsFromIstanbulEntry(entry) {
     const lineHits = new Map();
-    if (!entry || typeof entry !== 'object') return lineHits;
+    if (!entry || typeof entry !== "object") return lineHits;
 
     // Istanbul format typically provides a "l" map { [lineNumber]: hits }
-    if (entry.l && typeof entry.l === 'object') {
+    if (entry.l && typeof entry.l === "object") {
       Object.entries(entry.l).forEach(([line, hits]) => {
         const lineNumber = Number(line);
         if (!Number.isFinite(lineNumber)) return;
@@ -372,8 +372,8 @@ class QualityGate {
     if (
       entry.statementMap &&
       entry.s &&
-      typeof entry.statementMap === 'object' &&
-      typeof entry.s === 'object'
+      typeof entry.statementMap === "object" &&
+      typeof entry.s === "object"
     ) {
       Object.entries(entry.statementMap).forEach(([id, loc]) => {
         const startLine = loc?.start?.line;
@@ -389,11 +389,11 @@ class QualityGate {
 
   getChangedStatementCoverage(entry, changedLines) {
     const result = { total: 0, covered: 0 };
-    if (!entry || typeof entry !== 'object') return result;
-    if (!entry.statementMap || typeof entry.statementMap !== 'object') {
+    if (!entry || typeof entry !== "object") return result;
+    if (!entry.statementMap || typeof entry.statementMap !== "object") {
       return result;
     }
-    if (!entry.s || typeof entry.s !== 'object') return result;
+    if (!entry.s || typeof entry.s !== "object") return result;
 
     for (const [id, loc] of Object.entries(entry.statementMap)) {
       const startLine = Number(loc?.start?.line);
@@ -425,36 +425,36 @@ class QualityGate {
 
   getChangedLinesByFile() {
     const base = this.getMergeBase();
-    const range = base ? `${base}...HEAD` : '';
+    const range = base ? `${base}...HEAD` : "";
     const cmd = base
       ? `git diff --unified=0 --no-color ${range} -- '*.ts' '*.tsx' '*.js' '*.jsx'`
       : `git diff --unified=0 --no-color -- '*.ts' '*.tsx' '*.js' '*.jsx'`;
 
     const output = execSync(cmd, {
-      encoding: 'utf8',
-      stdio: ['ignore', 'pipe', 'ignore'],
+      encoding: "utf8",
+      stdio: ["ignore", "pipe", "ignore"],
       maxBuffer: 50 * 1024 * 1024,
     })
       .toString()
-      .split('\n');
+      .split("\n");
 
     const changedLinesByFile = new Map();
-    let currentFile = '';
+    let currentFile = "";
     let newLineNumber = 0;
     let inHunk = false;
 
     for (const rawLine of output) {
-      const line = rawLine || '';
+      const line = rawLine || "";
 
-      if (line.startsWith('diff --git ')) {
+      if (line.startsWith("diff --git ")) {
         inHunk = false;
         newLineNumber = 0;
-        currentFile = '';
+        currentFile = "";
         const match = line.match(/^diff --git a\/(.+?) b\/(.+?)$/);
-        if (match && match[2] && match[2] !== '/dev/null') {
+        if (match && match[2] && match[2] !== "/dev/null") {
           const nextFile = match[2];
           // Diff-line coverage only applies to production sources covered by Vitest.
-          if (!nextFile.startsWith('src/')) {
+          if (!nextFile.startsWith("src/")) {
             continue;
           }
           if (this.shouldExcludeFromDiffCoverage(nextFile)) {
@@ -471,14 +471,14 @@ class QualityGate {
       if (!currentFile) continue;
 
       // Detect deleted files: +++ /dev/null means file was removed
-      if (line === '+++ /dev/null') {
+      if (line === "+++ /dev/null") {
         // Remove from map since deleted files should not be in diff coverage
         changedLinesByFile.delete(currentFile);
-        currentFile = '';
+        currentFile = "";
         continue;
       }
 
-      if (line.startsWith('@@')) {
+      if (line.startsWith("@@")) {
         const match = line.match(/^@@ -\d+(?:,\d+)? \+(\d+)(?:,(\d+))? @@/);
         if (!match) {
           inHunk = false;
@@ -491,11 +491,11 @@ class QualityGate {
 
       if (!inHunk) continue;
 
-      if (line.startsWith('+++') || line.startsWith('---')) {
+      if (line.startsWith("+++") || line.startsWith("---")) {
         continue;
       }
 
-      if (line.startsWith('+')) {
+      if (line.startsWith("+")) {
         const set = changedLinesByFile.get(currentFile);
         if (set && Number.isFinite(newLineNumber) && newLineNumber > 0) {
           set.add(newLineNumber);
@@ -504,7 +504,7 @@ class QualityGate {
         continue;
       }
 
-      if (line.startsWith('-')) {
+      if (line.startsWith("-")) {
         // deletion: does not advance new line counter
         continue;
       }
@@ -536,13 +536,13 @@ class QualityGate {
     const excludeList = this.config.gates.coverage.diffCoverageExclude || [];
 
     // Prefer diff-statement coverage when detailed coverage is available.
-    if (istanbulCoverageMap && typeof istanbulCoverageMap === 'object') {
+    if (istanbulCoverageMap && typeof istanbulCoverageMap === "object") {
       const changedLinesByFile = this.getChangedLinesByFile();
       const excludedFiles = [...changedLinesByFile.keys()].filter((file) =>
         this.shouldExcludeFromDiffCoverage(file),
       );
       if (excludedFiles.length > 0) {
-        log(`⏭️  增量覆盖率排除文件: ${excludedFiles.join(', ')}`);
+        log(`⏭️  增量覆盖率排除文件: ${excludedFiles.join(", ")}`);
       }
 
       const entries =
@@ -576,7 +576,7 @@ class QualityGate {
         const statementMap = entry.statementMap;
         const hasStatements =
           statementMap &&
-          typeof statementMap === 'object' &&
+          typeof statementMap === "object" &&
           Object.keys(statementMap).length > 0;
 
         // Skip type-only files (empty statementMap)
@@ -594,7 +594,7 @@ class QualityGate {
 
         // Strategy A: If statementMap exists but s (hit counts) is missing/invalid,
         // treat as corrupted coverage data - fail explicitly
-        const hasValidHitCounts = entry.s && typeof entry.s === 'object';
+        const hasValidHitCounts = entry.s && typeof entry.s === "object";
         if (!hasValidHitCounts) {
           missingCoverageData = true;
           missingCoverageFiles.push(file);
@@ -636,7 +636,7 @@ class QualityGate {
 
       if (skippedNonExecutableFiles.length > 0) {
         log(
-          `⏭️  跳过（无可执行语句）: ${skippedNonExecutableFiles.join(', ')}`,
+          `⏭️  跳过（无可执行语句）: ${skippedNonExecutableFiles.join(", ")}`,
         );
       }
 
@@ -655,22 +655,22 @@ class QualityGate {
         changedFilesCount: [...changedLinesByFile.keys()].filter(
           (file) => !this.shouldExcludeFromDiffCoverage(file),
         ).length,
-        metric: 'statements',
-        unitLabel: '可执行语句',
+        metric: "statements",
+        unitLabel: "可执行语句",
         missingCoverageData,
         missingCoverageFiles,
       };
     }
 
     // Fallback: file-level diff coverage based on summary only (legacy behavior).
-    const changedFilesWithCode = this.getChangedFiles('ACM').filter((file) =>
+    const changedFilesWithCode = this.getChangedFiles("ACM").filter((file) =>
       file.match(/\.(js|jsx|ts|tsx)$/),
     );
     const excludedFiles = changedFilesWithCode.filter((file) =>
       excludeList.includes(file),
     );
     if (excludedFiles.length > 0) {
-      log(`⏭️  增量覆盖率排除文件: ${excludedFiles.join(', ')}`);
+      log(`⏭️  增量覆盖率排除文件: ${excludedFiles.join(", ")}`);
     }
     const changedFiles = changedFilesWithCode.filter(
       (file) => !excludeList.includes(file),
@@ -713,15 +713,15 @@ class QualityGate {
       totalCovered,
       totalStatements,
       changedFilesCount: changedFiles.length,
-      metric: 'statements',
-      unitLabel: '可执行语句',
+      metric: "statements",
+      unitLabel: "可执行语句",
       missingCoverageData: false,
       missingCoverageFiles: [],
     };
   }
 
   getAddedPilotDomainFiles() {
-    const added = this.getChangedFiles('A');
+    const added = this.getChangedFiles("A");
     const prefix = this.config.pilotDomain.prefix;
     if (!prefix) return [];
     return added.filter(
@@ -738,10 +738,10 @@ class QualityGate {
       path.join(dir, `${base}.test.tsx`),
       path.join(dir, `${base}.spec.ts`),
       path.join(dir, `${base}.spec.tsx`),
-      path.join(dir, '__tests__', `${base}.test.ts`),
-      path.join(dir, '__tests__', `${base}.spec.ts`),
-      path.join(dir, '__tests__', `${base}.test.tsx`),
-      path.join(dir, '__tests__', `${base}.spec.tsx`),
+      path.join(dir, "__tests__", `${base}.test.ts`),
+      path.join(dir, "__tests__", `${base}.spec.ts`),
+      path.join(dir, "__tests__", `${base}.test.tsx`),
+      path.join(dir, "__tests__", `${base}.spec.tsx`),
     ];
 
     if (candidates.some((p) => fs.existsSync(p))) {
@@ -758,26 +758,26 @@ class QualityGate {
    * 执行所有质量门禁检查
    */
   async executeQualityGates() {
-    log('🚪 开始执行质量门禁检查...\n');
+    log("🚪 开始执行质量门禁检查...\n");
     log(`🌿 分支: ${this.config.branch}`);
     log(`🏗️  环境: ${this.config.environment}`);
-    log(`🤖 CI模式: ${this.config.ciMode ? '是' : '否'}`);
+    log(`🤖 CI模式: ${this.config.ciMode ? "是" : "否"}`);
     const modeLabel = this.config.fastMode
-      ? '快速 (--mode=fast)'
+      ? "快速 (--mode=fast)"
       : this.config.ciGateMode
-        ? 'CI (--mode=ci)'
-        : '完整';
+        ? "CI (--mode=ci)"
+        : "完整";
     log(`⚡ 运行模式: ${modeLabel}`);
     if (this.config.fastMode) {
-      log('   跳过: 覆盖率检查、性能测试（将在 CI 中执行）');
+      log("   跳过: 覆盖率检查、性能测试（将在 CI 中执行）");
     }
     if (this.config.ciGateMode) {
-      log('   跳过: 性能计时（建议由 CI performance job 负责）');
+      log("   跳过: 性能计时（建议由 CI performance job 负责）");
     }
-    log('');
+    log("");
 
     // SEO/Config placeholder check (production only)
-    if (this.config.environment === 'production') {
+    if (this.config.environment === "production") {
       this.results.gates.seoConfig = await this.checkSeoConfigPlaceholders();
     }
 
@@ -790,11 +790,11 @@ class QualityGate {
       this.results.gates.coverage = await this.checkCoverage();
     } else {
       this.results.gates.coverage = {
-        name: 'Coverage',
-        status: 'skipped',
+        name: "Coverage",
+        status: "skipped",
         checks: {},
         blocking: false,
-        issues: ['覆盖率门禁已禁用（fast 模式或显式禁用）'],
+        issues: ["覆盖率门禁已禁用（fast 模式或显式禁用）"],
       };
     }
 
@@ -802,16 +802,16 @@ class QualityGate {
       this.results.gates.performance = await this.checkPerformance();
     } else {
       this.results.gates.performance = {
-        name: 'Performance',
-        status: 'skipped',
+        name: "Performance",
+        status: "skipped",
         checks: {},
         blocking: false,
         issues: [
           this.config.fastMode
-            ? '快速模式下跳过性能计时'
+            ? "快速模式下跳过性能计时"
             : this.config.ciGateMode
-              ? 'CI 模式下跳过性能计时'
-              : '性能门禁已禁用',
+              ? "CI 模式下跳过性能计时"
+              : "性能门禁已禁用",
         ],
       };
     }
@@ -834,11 +834,11 @@ class QualityGate {
    * 代码质量门禁检查
    */
   async checkCodeQuality() {
-    log('🔍 执行代码质量门禁检查...');
+    log("🔍 执行代码质量门禁检查...");
 
     const gate = {
-      name: 'Code Quality',
-      status: 'unknown',
+      name: "Code Quality",
+      status: "unknown",
       checks: {},
       blocking: this.config.gates.codeQuality.blocking,
       issues: [],
@@ -862,16 +862,16 @@ class QualityGate {
         this.config.gates.codeQuality.thresholds.eslintWarnings;
 
       if (hasErrors) {
-        gate.status = 'failed';
-        gate.issues.push('代码质量检查发现错误');
+        gate.status = "failed";
+        gate.issues.push("代码质量检查发现错误");
       } else if (hasWarnings) {
-        gate.status = 'warning';
-        gate.issues.push('代码质量检查发现警告');
+        gate.status = "warning";
+        gate.issues.push("代码质量检查发现警告");
       } else {
-        gate.status = 'passed';
+        gate.status = "passed";
       }
     } catch (error) {
-      gate.status = 'error';
+      gate.status = "error";
       gate.issues.push(`代码质量检查失败: ${error.message}`);
     }
 
@@ -890,18 +890,18 @@ class QualityGate {
    * quality-gate 仅负责阈值检查和阻断决策。
    */
   async checkCoverage() {
-    log('📊 执行覆盖率门禁检查...');
+    log("📊 执行覆盖率门禁检查...");
 
     const gate = {
-      name: 'Coverage',
-      status: 'unknown',
+      name: "Coverage",
+      status: "unknown",
       checks: {},
       blocking: this.config.gates.coverage.blocking,
       issues: [],
     };
 
     // 检查是否应跳过测试执行（CI 环境或显式参数）
-    const skipTestRun = this.config.ciMode || args.includes('--skip-test-run');
+    const skipTestRun = this.config.ciMode || args.includes("--skip-test-run");
 
     try {
       // 检查是否已有覆盖率报告
@@ -909,22 +909,22 @@ class QualityGate {
 
       if (skipTestRun) {
         // CI 模式：仅读取已有报告
-        log('📖 CI 模式：读取已有覆盖率报告...');
+        log("📖 CI 模式：读取已有覆盖率报告...");
         if (!coverageJsonPath) {
-          gate.status = 'error';
+          gate.status = "error";
           gate.issues.push(
-            '覆盖率报告不存在。请确保在调用 quality:gate 前已执行 pnpm test:coverage',
+            "覆盖率报告不存在。请确保在调用 quality:gate 前已执行 pnpm test:coverage",
           );
           log(`${this.getStatusEmoji(gate.status)} 覆盖率门禁: ${gate.status}`);
           return gate;
         }
       } else {
         // 本地模式：运行覆盖率测试
-        log('🧪 运行测试以生成覆盖率...');
+        log("🧪 运行测试以生成覆盖率...");
         const coverageTimeout =
           Number(process.env.QUALITY_COVERAGE_TIMEOUT_MS) || 480000; // 8min default
-        execSync('pnpm test:coverage --run --reporter=json', {
-          stdio: 'pipe',
+        execSync("pnpm test:coverage --run --reporter=json", {
+          stdio: "pipe",
           timeout: coverageTimeout,
           maxBuffer: 50 * 1024 * 1024, // 50MB to handle long test output
         });
@@ -935,7 +935,7 @@ class QualityGate {
       // 读取覆盖率数据
 
       if (coverageJsonPath && fs.existsSync(coverageJsonPath)) {
-        const rawData = fs.readFileSync(coverageJsonPath, 'utf8');
+        const rawData = fs.readFileSync(coverageJsonPath, "utf8");
         const coverageData = JSON.parse(rawData);
         gate.checks.coverage = coverageData.total;
 
@@ -944,7 +944,7 @@ class QualityGate {
         const coverageDetailsPath = this.findCoverageDetailsPath();
         if (coverageDetailsPath && fs.existsSync(coverageDetailsPath)) {
           try {
-            const rawDetails = fs.readFileSync(coverageDetailsPath, 'utf8');
+            const rawDetails = fs.readFileSync(coverageDetailsPath, "utf8");
             istanbulCoverageMap = JSON.parse(rawDetails);
           } catch {
             istanbulCoverageMap = null;
@@ -965,10 +965,10 @@ class QualityGate {
         });
 
         if (failedMetrics.length > 0) {
-          gate.status = gate.blocking ? 'failed' : 'warning';
-          gate.issues.push(`覆盖率不达标: ${failedMetrics.join(', ')}`);
+          gate.status = gate.blocking ? "failed" : "warning";
+          gate.issues.push(`覆盖率不达标: ${failedMetrics.join(", ")}`);
         } else {
-          gate.status = 'passed';
+          gate.status = "passed";
         }
 
         // 增量覆盖率检查（diff coverage）
@@ -983,13 +983,13 @@ class QualityGate {
 
           // 检查是否有文件缺少覆盖率数据（Strategy A: 严格失败）
           if (diffCoverage.missingCoverageData) {
-            gate.status = gate.blocking ? 'failed' : 'warning';
+            gate.status = gate.blocking ? "failed" : "warning";
             const missingFiles = diffCoverage.missingCoverageFiles || [];
             if (missingFiles.length > 0) {
               gate.issues.push(
-                `新增文件未被覆盖率收录: ${missingFiles.join(', ')}`,
+                `新增文件未被覆盖率收录: ${missingFiles.join(", ")}`,
               );
-              gate.issues.push('  请确保测试已执行并覆盖率配置包含所有源文件');
+              gate.issues.push("  请确保测试已执行并覆盖率配置包含所有源文件");
             }
           }
 
@@ -999,8 +999,8 @@ class QualityGate {
             diffCoverage.pct < threshold
           ) {
             const shortfall = threshold - diffCoverage.pct;
-            gate.status = gate.blocking ? 'failed' : 'warning';
-            const unitLabel = diffCoverage.unitLabel || '行';
+            gate.status = gate.blocking ? "failed" : "warning";
+            const unitLabel = diffCoverage.unitLabel || "行";
             gate.issues.push(
               `增量覆盖率不达标: ${diffCoverage.pct.toFixed(2)}% < ${threshold}%（差距 ${shortfall.toFixed(2)}%，变更 ${diffCoverage.changedFilesCount} 个文件，${diffCoverage.totalCovered}/${diffCoverage.totalStatements} ${unitLabel}覆盖）`,
             );
@@ -1035,18 +1035,18 @@ class QualityGate {
             !diffCoverage.missingCoverageData &&
             diffCoverage.drop > warningThreshold
           ) {
-            gate.status = gate.status === 'passed' ? 'warning' : gate.status;
+            gate.status = gate.status === "passed" ? "warning" : gate.status;
             gate.issues.push(
               `增量覆盖率较全量下降 ${diffCoverage.drop.toFixed(2)}%（增量 ${diffCoverage.pct.toFixed(2)}% vs 全量 ${(coverageData.total?.statements?.pct || 0).toFixed(2)}%）`,
             );
           }
         }
       } else {
-        gate.status = 'error';
-        gate.issues.push('覆盖率报告文件不存在');
+        gate.status = "error";
+        gate.issues.push("覆盖率报告文件不存在");
       }
     } catch (error) {
-      gate.status = gate.blocking ? 'error' : 'warning';
+      gate.status = gate.blocking ? "error" : "warning";
       gate.issues.push(`覆盖率检查失败: ${error.message}`);
     }
 
@@ -1056,9 +1056,9 @@ class QualityGate {
       (file) => !this.hasTestForFile(file),
     );
     if (missingTests.length > 0) {
-      gate.status = gate.status === 'passed' ? 'warning' : gate.status;
+      gate.status = gate.status === "passed" ? "warning" : gate.status;
       gate.issues.push(
-        `试点域缺少测试（新增文件未找到配套测试）: ${missingTests.join(', ')}`,
+        `试点域缺少测试（新增文件未找到配套测试）: ${missingTests.join(", ")}`,
       );
     }
 
@@ -1070,11 +1070,11 @@ class QualityGate {
    * 性能门禁检查
    */
   async checkPerformance() {
-    log('⚡ 执行性能门禁检查...');
+    log("⚡ 执行性能门禁检查...");
 
     const gate = {
-      name: 'Performance',
-      status: 'unknown',
+      name: "Performance",
+      status: "unknown",
       checks: {},
       blocking: this.config.gates.performance.blocking,
       issues: [],
@@ -1084,28 +1084,28 @@ class QualityGate {
       // 构建性能检查
       const buildStart = Date.now();
       // 使用 spawnSync 捕获 stdout + stderr，确保能识别写入 stderr 的 i18n 报错
-      const buildRes = spawnSync('pnpm', ['build'], {
-        encoding: 'utf8',
+      const buildRes = spawnSync("pnpm", ["build"], {
+        encoding: "utf8",
         shell: true,
         maxBuffer: 50 * 1024 * 1024,
       });
-      const buildOutput = (buildRes.stdout || '') + (buildRes.stderr || '');
+      const buildOutput = (buildRes.stdout || "") + (buildRes.stderr || "");
       const buildTime = Date.now() - buildStart;
 
       gate.checks.buildTime = buildTime;
 
       // 构建失败时直接阻断并输出节选日志，便于诊断
-      if (typeof buildRes.status === 'number' && buildRes.status !== 0) {
+      if (typeof buildRes.status === "number" && buildRes.status !== 0) {
         gate.issues.push(`构建失败（退出码 ${buildRes.status}）`);
-        gate.issues.push('构建输出（节选）：');
+        gate.issues.push("构建输出（节选）：");
         gate.issues.push(buildOutput.slice(0, 2000));
-        gate.status = 'failed';
+        gate.status = "failed";
         gate.blocking = true;
       } else {
         // Zero-tolerance i18n smoke test: fail if next-intl reports missing messages（stdout 或 stderr 均可识别）
         if (/MISSING_MESSAGE/i.test(buildOutput)) {
-          gate.issues.push('next-intl MISSING_MESSAGE detected in build logs');
-          gate.status = 'failed';
+          gate.issues.push("next-intl MISSING_MESSAGE detected in build logs");
+          gate.status = "failed";
           gate.blocking = true; // enforce blocking when i18n is broken
         }
       }
@@ -1114,8 +1114,8 @@ class QualityGate {
       const testStart = Date.now();
       const perfTestTimeout =
         Number(process.env.QUALITY_PERF_TEST_TIMEOUT_MS) || 360000; // 6min default
-      execSync('pnpm test --run --reporter=json', {
-        stdio: 'pipe',
+      execSync("pnpm test --run --reporter=json", {
+        stdio: "pipe",
         timeout: perfTestTimeout,
         maxBuffer: 50 * 1024 * 1024, // 50MB to handle long test output
       });
@@ -1138,13 +1138,13 @@ class QualityGate {
       }
 
       if (issues.length > 0) {
-        gate.status = gate.blocking ? 'failed' : 'warning';
+        gate.status = gate.blocking ? "failed" : "warning";
         gate.issues.push(...issues);
       } else {
-        gate.status = 'passed';
+        gate.status = "passed";
       }
     } catch (error) {
-      gate.status = gate.blocking ? 'error' : 'warning';
+      gate.status = gate.blocking ? "error" : "warning";
       gate.issues.push(`性能检查失败: ${error.message}`);
     }
 
@@ -1156,11 +1156,11 @@ class QualityGate {
    * 安全门禁检查
    */
   async checkSecurity() {
-    log('🔒 执行安全门禁检查...');
+    log("🔒 执行安全门禁检查...");
 
     const gate = {
-      name: 'Security',
-      status: 'unknown',
+      name: "Security",
+      status: "unknown",
       checks: {},
       blocking: this.config.gates.security.blocking,
       issues: [],
@@ -1179,15 +1179,15 @@ class QualityGate {
           this.config.gates.security.thresholds.vulnerabilities ||
         highSeverity > this.config.gates.security.thresholds.highSeverity
       ) {
-        gate.status = 'failed';
+        gate.status = "failed";
         gate.issues.push(
           `发现 ${vulnerabilities} 个安全漏洞，其中 ${highSeverity} 个高危`,
         );
       } else {
-        gate.status = 'passed';
+        gate.status = "passed";
       }
     } catch (error) {
-      gate.status = 'warning'; // 安全检查失败不阻塞，但发出警告
+      gate.status = "warning"; // 安全检查失败不阻塞，但发出警告
       gate.issues.push(`安全检查失败: ${error.message}`);
     }
 
@@ -1200,11 +1200,11 @@ class QualityGate {
    * Detects unconfigured [PLACEHOLDER] values in SITE_CONFIG
    */
   async checkSeoConfigPlaceholders() {
-    log('🔍 执行 SEO/Config 占位符检查...');
+    log("🔍 执行 SEO/Config 占位符检查...");
 
     const gate = {
-      name: 'SEO Config',
-      status: 'unknown',
+      name: "SEO Config",
+      status: "unknown",
       checks: {},
       blocking: true, // Block production builds with placeholders
       issues: [],
@@ -1213,19 +1213,19 @@ class QualityGate {
     try {
       const siteConfigPath = path.join(
         process.cwd(),
-        'src',
-        'config',
-        'paths',
-        'site-config.ts',
+        "src",
+        "config",
+        "paths",
+        "site-config.ts",
       );
 
       if (!fs.existsSync(siteConfigPath)) {
-        gate.status = 'warning';
-        gate.issues.push('site-config.ts not found');
+        gate.status = "warning";
+        gate.issues.push("site-config.ts not found");
         return gate;
       }
 
-      const content = fs.readFileSync(siteConfigPath, 'utf8');
+      const content = fs.readFileSync(siteConfigPath, "utf8");
 
       // Check for placeholder patterns [SOMETHING]
       const placeholderPattern = /\[([A-Z_]+)\]/g;
@@ -1239,25 +1239,25 @@ class QualityGate {
       gate.checks.hasExampleUrl = hasExampleUrl;
 
       if (uniquePlaceholders.length > 0 || hasExampleUrl) {
-        gate.status = 'failed';
+        gate.status = "failed";
         if (uniquePlaceholders.length > 0) {
           gate.issues.push(
-            `发现未配置的占位符: ${uniquePlaceholders.join(', ')}`,
+            `发现未配置的占位符: ${uniquePlaceholders.join(", ")}`,
           );
         }
         if (hasExampleUrl) {
           gate.issues.push(
-            'NEXT_PUBLIC_BASE_URL 未配置（使用默认 example.com）',
+            "NEXT_PUBLIC_BASE_URL 未配置（使用默认 example.com）",
           );
         }
         gate.issues.push(
-          '请在 .env.production 中配置这些值，或更新 src/config/paths/site-config.ts',
+          "请在 .env.production 中配置这些值，或更新 src/config/paths/site-config.ts",
         );
       } else {
-        gate.status = 'passed';
+        gate.status = "passed";
       }
     } catch (error) {
-      gate.status = 'error';
+      gate.status = "error";
       gate.issues.push(`SEO/Config 检查失败: ${error.message}`);
     }
 
@@ -1270,13 +1270,13 @@ class QualityGate {
    */
   async runTypeCheck() {
     try {
-      execSync('pnpm type-check', {
-        stdio: 'pipe',
+      execSync("pnpm type-check", {
+        stdio: "pipe",
         maxBuffer: 20 * 1024 * 1024, // 20MB for potential many type errors
       });
-      return { errors: 0, status: 'passed' };
+      return { errors: 0, status: "passed" };
     } catch (error) {
-      return { errors: 1, status: 'failed', message: error.message };
+      return { errors: 1, status: "failed", message: error.message };
     }
   }
 
@@ -1297,13 +1297,13 @@ class QualityGate {
 
       return {
         ...totals,
-        status: exitCode === 0 && totals.errors === 0 ? 'passed' : 'failed',
+        status: exitCode === 0 && totals.errors === 0 ? "passed" : "failed",
       };
     } catch (error) {
       return {
         errors: 0,
         warnings: 0,
-        status: 'error',
+        status: "error",
         message: error.message,
       };
     }
@@ -1314,9 +1314,9 @@ class QualityGate {
    */
   async runSecurityAudit() {
     try {
-      const output = execSync('pnpm audit --json', {
-        encoding: 'utf8',
-        stdio: 'pipe',
+      const output = execSync("pnpm audit --json", {
+        encoding: "utf8",
+        stdio: "pipe",
         maxBuffer: 10 * 1024 * 1024, // 10MB for audit results
       });
       const auditData = JSON.parse(output);
@@ -1325,19 +1325,19 @@ class QualityGate {
         vulnerabilities: auditData.metadata?.vulnerabilities?.total || 0,
         high: auditData.metadata?.vulnerabilities?.high || 0,
         critical: auditData.metadata?.vulnerabilities?.critical || 0,
-        status: 'completed',
+        status: "completed",
       };
     } catch (error) {
       // npm audit 在发现漏洞时会返回非零退出码
       try {
-        const output = error.stdout || '';
+        const output = error.stdout || "";
         if (output) {
           const auditData = JSON.parse(output);
           return {
             vulnerabilities: auditData.metadata?.vulnerabilities?.total || 0,
             high: auditData.metadata?.vulnerabilities?.high || 0,
             critical: auditData.metadata?.vulnerabilities?.critical || 0,
-            status: 'completed',
+            status: "completed",
           };
         }
       } catch (parseError) {
@@ -1348,7 +1348,7 @@ class QualityGate {
         vulnerabilities: 0,
         high: 0,
         critical: 0,
-        status: 'failed',
+        status: "failed",
         error: error.message,
       };
     }
@@ -1360,25 +1360,25 @@ class QualityGate {
   summarizeResults() {
     Object.values(this.results.gates).forEach((gate) => {
       switch (gate.status) {
-        case 'passed':
+        case "passed":
           this.results.summary.passed++;
           break;
-        case 'failed':
+        case "failed":
           this.results.summary.failed++;
           if (gate.blocking) {
             this.results.summary.blocked = true;
           }
           break;
-        case 'error':
+        case "error":
           this.results.summary.failed++;
           if (gate.blocking) {
             this.results.summary.blocked = true;
           }
           break;
-        case 'warning':
+        case "warning":
           this.results.summary.warnings++;
           break;
-        case 'skipped':
+        case "skipped":
           // skipped 状态不计入通过/失败，仅记录
           if (!this.results.summary.skipped) {
             this.results.summary.skipped = 0;
@@ -1398,8 +1398,8 @@ class QualityGate {
       return this.generateJsonReport();
     }
 
-    log('\n🚪 质量门禁检查报告');
-    log('='.repeat(50));
+    log("\n🚪 质量门禁检查报告");
+    log("=".repeat(50));
 
     log(`✅ 通过: ${this.results.summary.passed}`);
     log(`❌ 失败: ${this.results.summary.failed}`);
@@ -1407,9 +1407,9 @@ class QualityGate {
     if (this.results.summary.skipped) {
       log(`⏭️  跳过: ${this.results.summary.skipped}`);
     }
-    log(`🚫 阻塞构建: ${this.results.summary.blocked ? '是' : '否'}`);
+    log(`🚫 阻塞构建: ${this.results.summary.blocked ? "是" : "否"}`);
 
-    log('\n📋 详细结果:');
+    log("\n📋 详细结果:");
     Object.values(this.results.gates).forEach((gate) => {
       log(`${this.getStatusEmoji(gate.status)} ${gate.name}: ${gate.status}`);
       if (gate.issues && gate.issues.length > 0) {
@@ -1422,7 +1422,7 @@ class QualityGate {
     // 保存报告
     const reportPath = path.join(
       process.cwd(),
-      'reports',
+      "reports",
       `quality-gate-${Date.now()}.json`,
     );
     fs.mkdirSync(path.dirname(reportPath), { recursive: true });
@@ -1453,12 +1453,12 @@ class QualityGate {
   generateJsonReport() {
     const report = {
       timestamp: new Date().toISOString(),
-      version: '1.0.0',
+      version: "1.0.0",
       mode: this.config.fastMode
-        ? 'fast'
+        ? "fast"
         : this.config.ciGateMode
-          ? 'ci'
-          : 'full',
+          ? "ci"
+          : "full",
       branch: this.config.branch,
       environment: this.config.environment,
       ci: this.config.ciMode,
@@ -1495,8 +1495,8 @@ class QualityGate {
     // 同时保存到文件
     const reportPath = path.join(
       process.cwd(),
-      'reports',
-      'quality-gate-latest.json',
+      "reports",
+      "quality-gate-latest.json",
     );
     fs.mkdirSync(path.dirname(reportPath), { recursive: true });
     fs.writeFileSync(reportPath, JSON.stringify(report, null, 2));
@@ -1509,13 +1509,13 @@ class QualityGate {
     // GitHub Actions 注解
     if (process.env.GITHUB_ACTIONS) {
       Object.values(this.results.gates).forEach((gate) => {
-        if (gate.status === 'failed' && gate.blocking) {
+        if (gate.status === "failed" && gate.blocking) {
           console.log(
-            `::error::质量门禁失败: ${gate.name} - ${gate.issues.join(', ')}`,
+            `::error::质量门禁失败: ${gate.name} - ${gate.issues.join(", ")}`,
           );
-        } else if (gate.status === 'warning') {
+        } else if (gate.status === "warning") {
           console.log(
-            `::warning::质量门禁警告: ${gate.name} - ${gate.issues.join(', ')}`,
+            `::warning::质量门禁警告: ${gate.name} - ${gate.issues.join(", ")}`,
           );
         }
       });
@@ -1528,12 +1528,12 @@ class QualityGate {
         fs.appendFileSync(
           outputPath,
           `quality-gate-passed=${String(!this.results.summary.blocked)}\n`,
-          'utf8',
+          "utf8",
         );
         fs.appendFileSync(
           outputPath,
           `quality-gate-score=${String(this.calculateQualityScore())}\n`,
-          'utf8',
+          "utf8",
         );
       } catch {
         // Ignore output write failures to avoid blocking the gate itself.
@@ -1554,18 +1554,18 @@ class QualityGate {
 
   getStatusEmoji(status) {
     switch (status) {
-      case 'passed':
-        return '✅';
-      case 'failed':
-        return '❌';
-      case 'warning':
-        return '⚠️';
-      case 'error':
-        return '💥';
-      case 'skipped':
-        return '⏭️';
+      case "passed":
+        return "✅";
+      case "failed":
+        return "❌";
+      case "warning":
+        return "⚠️";
+      case "error":
+        return "💥";
+      case "skipped":
+        return "⏭️";
       default:
-        return '❓';
+        return "❓";
     }
   }
 }
@@ -1583,13 +1583,13 @@ async function main() {
     }
 
     if (results.summary.blocked) {
-      log('\n🚫 质量门禁检查失败，构建被阻塞！');
+      log("\n🚫 质量门禁检查失败，构建被阻塞！");
       process.exit(1);
     } else if (results.summary.failed > 0 || results.summary.warnings > 0) {
-      log('\n⚠️  质量门禁检查发现问题，但不阻塞构建');
-      log('请及时修复相关问题以提高代码质量');
+      log("\n⚠️  质量门禁检查发现问题，但不阻塞构建");
+      log("请及时修复相关问题以提高代码质量");
     } else {
-      log('\n🎉 所有质量门禁检查通过！');
+      log("\n🎉 所有质量门禁检查通过！");
     }
   } catch (error) {
     if (isJsonOutput) {
@@ -1597,7 +1597,7 @@ async function main() {
         JSON.stringify(
           {
             timestamp: new Date().toISOString(),
-            version: '1.0.0',
+            version: "1.0.0",
             error: true,
             message: error.message,
             summary: {
@@ -1616,7 +1616,7 @@ async function main() {
       );
       process.exit(1);
     }
-    console.error('❌ 质量门禁检查失败:', error.message);
+    console.error("❌ 质量门禁检查失败:", error.message);
     process.exit(1);
   }
 }

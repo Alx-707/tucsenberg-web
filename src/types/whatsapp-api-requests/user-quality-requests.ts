@@ -8,8 +8,8 @@
  * User blocking request
  */
 export interface UserBlockRequest {
-  messaging_product: 'whatsapp';
-  action: 'block' | 'unblock';
+  messaging_product: "whatsapp";
+  action: "block" | "unblock";
 }
 
 /**
@@ -17,6 +17,6 @@ export interface UserBlockRequest {
  * Quality rating request
  */
 export interface QualityRatingRequest {
-  messaging_product: 'whatsapp';
+  messaging_product: "whatsapp";
   phone_number_id: string;
 }

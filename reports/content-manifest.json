@@ -1,0 +1,326 @@
+{
+  "entries": [
+    {
+      "type": "posts",
+      "locale": "en",
+      "slug": "welcome",
+      "extension": ".mdx",
+      "filePath": "/content/posts/en/welcome.mdx",
+      "relativePath": "content/posts/en/welcome.mdx"
+    },
+    {
+      "type": "posts",
+      "locale": "zh",
+      "slug": "welcome",
+      "extension": ".mdx",
+      "filePath": "/content/posts/zh/welcome.mdx",
+      "relativePath": "content/posts/zh/welcome.mdx"
+    },
+    {
+      "type": "pages",
+      "locale": "en",
+      "slug": "about",
+      "extension": ".mdx",
+      "filePath": "/content/pages/en/about.mdx",
+      "relativePath": "content/pages/en/about.mdx"
+    },
+    {
+      "type": "pages",
+      "locale": "en",
+      "slug": "faq",
+      "extension": ".mdx",
+      "filePath": "/content/pages/en/faq.mdx",
+      "relativePath": "content/pages/en/faq.mdx"
+    },
+    {
+      "type": "pages",
+      "locale": "en",
+      "slug": "privacy",
+      "extension": ".mdx",
+      "filePath": "/content/pages/en/privacy.mdx",
+      "relativePath": "content/pages/en/privacy.mdx"
+    },
+    {
+      "type": "pages",
+      "locale": "en",
+      "slug": "terms",
+      "extension": ".mdx",
+      "filePath": "/content/pages/en/terms.mdx",
+      "relativePath": "content/pages/en/terms.mdx"
+    },
+    {
+      "type": "pages",
+      "locale": "zh",
+      "slug": "about",
+      "extension": ".mdx",
+      "filePath": "/content/pages/zh/about.mdx",
+      "relativePath": "content/pages/zh/about.mdx"
+    },
+    {
+      "type": "pages",
+      "locale": "zh",
+      "slug": "faq",
+      "extension": ".mdx",
+      "filePath": "/content/pages/zh/faq.mdx",
+      "relativePath": "content/pages/zh/faq.mdx"
+    },
+    {
+      "type": "pages",
+      "locale": "zh",
+      "slug": "privacy",
+      "extension": ".mdx",
+      "filePath": "/content/pages/zh/privacy.mdx",
+      "relativePath": "content/pages/zh/privacy.mdx"
+    },
+    {
+      "type": "pages",
+      "locale": "zh",
+      "slug": "terms",
+      "extension": ".mdx",
+      "filePath": "/content/pages/zh/terms.mdx",
+      "relativePath": "content/pages/zh/terms.mdx"
+    },
+    {
+      "type": "products",
+      "locale": "en",
+      "slug": "low-e-igu",
+      "extension": ".mdx",
+      "filePath": "/content/products/en/low-e-igu.mdx",
+      "relativePath": "content/products/en/low-e-igu.mdx"
+    },
+    {
+      "type": "products",
+      "locale": "en",
+      "slug": "sample-product",
+      "extension": ".mdx",
+      "filePath": "/content/products/en/sample-product.mdx",
+      "relativePath": "content/products/en/sample-product.mdx"
+    },
+    {
+      "type": "products",
+      "locale": "en",
+      "slug": "shopfront-system",
+      "extension": ".mdx",
+      "filePath": "/content/products/en/shopfront-system.mdx",
+      "relativePath": "content/products/en/shopfront-system.mdx"
+    },
+    {
+      "type": "products",
+      "locale": "en",
+      "slug": "sliding-door-system",
+      "extension": ".mdx",
+      "filePath": "/content/products/en/sliding-door-system.mdx",
+      "relativePath": "content/products/en/sliding-door-system.mdx"
+    },
+    {
+      "type": "products",
+      "locale": "en",
+      "slug": "unitized-curtain-wall",
+      "extension": ".mdx",
+      "filePath": "/content/products/en/unitized-curtain-wall.mdx",
+      "relativePath": "content/products/en/unitized-curtain-wall.mdx"
+    },
+    {
+      "type": "products",
+      "locale": "zh",
+      "slug": "low-e-igu",
+      "extension": ".mdx",
+      "filePath": "/content/products/zh/low-e-igu.mdx",
+      "relativePath": "content/products/zh/low-e-igu.mdx"
+    },
+    {
+      "type": "products",
+      "locale": "zh",
+      "slug": "sample-product",
+      "extension": ".mdx",
+      "filePath": "/content/products/zh/sample-product.mdx",
+      "relativePath": "content/products/zh/sample-product.mdx"
+    },
+    {
+      "type": "products",
+      "locale": "zh",
+      "slug": "shopfront-system",
+      "extension": ".mdx",
+      "filePath": "/content/products/zh/shopfront-system.mdx",
+      "relativePath": "content/products/zh/shopfront-system.mdx"
+    },
+    {
+      "type": "products",
+      "locale": "zh",
+      "slug": "sliding-door-system",
+      "extension": ".mdx",
+      "filePath": "/content/products/zh/sliding-door-system.mdx",
+      "relativePath": "content/products/zh/sliding-door-system.mdx"
+    },
+    {
+      "type": "products",
+      "locale": "zh",
+      "slug": "unitized-curtain-wall",
+      "extension": ".mdx",
+      "filePath": "/content/products/zh/unitized-curtain-wall.mdx",
+      "relativePath": "content/products/zh/unitized-curtain-wall.mdx"
+    }
+  ],
+  "byKey": {
+    "posts/en/welcome": {
+      "type": "posts",
+      "locale": "en",
+      "slug": "welcome",
+      "extension": ".mdx",
+      "filePath": "/content/posts/en/welcome.mdx",
+      "relativePath": "content/posts/en/welcome.mdx"
+    },
+    "posts/zh/welcome": {
+      "type": "posts",
+      "locale": "zh",
+      "slug": "welcome",
+      "extension": ".mdx",
+      "filePath": "/content/posts/zh/welcome.mdx",
+      "relativePath": "content/posts/zh/welcome.mdx"
+    },
+    "pages/en/about": {
+      "type": "pages",
+      "locale": "en",
+      "slug": "about",
+      "extension": ".mdx",
+      "filePath": "/content/pages/en/about.mdx",
+      "relativePath": "content/pages/en/about.mdx"
+    },
+    "pages/en/faq": {
+      "type": "pages",
+      "locale": "en",
+      "slug": "faq",
+      "extension": ".mdx",
+      "filePath": "/content/pages/en/faq.mdx",
+      "relativePath": "content/pages/en/faq.mdx"
+    },
+    "pages/en/privacy": {
+      "type": "pages",
+      "locale": "en",
+      "slug": "privacy",
+      "extension": ".mdx",
+      "filePath": "/content/pages/en/privacy.mdx",
+      "relativePath": "content/pages/en/privacy.mdx"
+    },
+    "pages/en/terms": {
+      "type": "pages",
+      "locale": "en",
+      "slug": "terms",
+      "extension": ".mdx",
+      "filePath": "/content/pages/en/terms.mdx",
+      "relativePath": "content/pages/en/terms.mdx"
+    },
+    "pages/zh/about": {
+      "type": "pages",
+      "locale": "zh",
+      "slug": "about",
+      "extension": ".mdx",
+      "filePath": "/content/pages/zh/about.mdx",
+      "relativePath": "content/pages/zh/about.mdx"
+    },
+    "pages/zh/faq": {
+      "type": "pages",
+      "locale": "zh",
+      "slug": "faq",
+      "extension": ".mdx",
+      "filePath": "/content/pages/zh/faq.mdx",
+      "relativePath": "content/pages/zh/faq.mdx"
+    },
+    "pages/zh/privacy": {
+      "type": "pages",
+      "locale": "zh",
+      "slug": "privacy",
+      "extension": ".mdx",
+      "filePath": "/content/pages/zh/privacy.mdx",
+      "relativePath": "content/pages/zh/privacy.mdx"
+    },
+    "pages/zh/terms": {
+      "type": "pages",
+      "locale": "zh",
+      "slug": "terms",
+      "extension": ".mdx",
+      "filePath": "/content/pages/zh/terms.mdx",
+      "relativePath": "content/pages/zh/terms.mdx"
+    },
+    "products/en/low-e-igu": {
+      "type": "products",
+      "locale": "en",
+      "slug": "low-e-igu",
+      "extension": ".mdx",
+      "filePath": "/content/products/en/low-e-igu.mdx",
+      "relativePath": "content/products/en/low-e-igu.mdx"
+    },
+    "products/en/sample-product": {
+      "type": "products",
+      "locale": "en",
+      "slug": "sample-product",
+      "extension": ".mdx",
+      "filePath": "/content/products/en/sample-product.mdx",
+      "relativePath": "content/products/en/sample-product.mdx"
+    },
+    "products/en/shopfront-system": {
+      "type": "products",
+      "locale": "en",
+      "slug": "shopfront-system",
+      "extension": ".mdx",
+      "filePath": "/content/products/en/shopfront-system.mdx",
+      "relativePath": "content/products/en/shopfront-system.mdx"
+    },
+    "products/en/sliding-door-system": {
+      "type": "products",
+      "locale": "en",
+      "slug": "sliding-door-system",
+      "extension": ".mdx",
+      "filePath": "/content/products/en/sliding-door-system.mdx",
+      "relativePath": "content/products/en/sliding-door-system.mdx"
+    },
+    "products/en/unitized-curtain-wall": {
+      "type": "products",
+      "locale": "en",
+      "slug": "unitized-curtain-wall",
+      "extension": ".mdx",
+      "filePath": "/content/products/en/unitized-curtain-wall.mdx",
+      "relativePath": "content/products/en/unitized-curtain-wall.mdx"
+    },
+    "products/zh/low-e-igu": {
+      "type": "products",
+      "locale": "zh",
+      "slug": "low-e-igu",
+      "extension": ".mdx",
+      "filePath": "/content/products/zh/low-e-igu.mdx",
+      "relativePath": "content/products/zh/low-e-igu.mdx"
+    },
+    "products/zh/sample-product": {
+      "type": "products",
+      "locale": "zh",
+      "slug": "sample-product",
+      "extension": ".mdx",
+      "filePath": "/content/products/zh/sample-product.mdx",
+      "relativePath": "content/products/zh/sample-product.mdx"
+    },
+    "products/zh/shopfront-system": {
+      "type": "products",
+      "locale": "zh",
+      "slug": "shopfront-system",
+      "extension": ".mdx",
+      "filePath": "/content/products/zh/shopfront-system.mdx",
+      "relativePath": "content/products/zh/shopfront-system.mdx"
+    },
+    "products/zh/sliding-door-system": {
+      "type": "products",
+      "locale": "zh",
+      "slug": "sliding-door-system",
+      "extension": ".mdx",
+      "filePath": "/content/products/zh/sliding-door-system.mdx",
+      "relativePath": "content/products/zh/sliding-door-system.mdx"
+    },
+    "products/zh/unitized-curtain-wall": {
+      "type": "products",
+      "locale": "zh",
+      "slug": "unitized-curtain-wall",
+      "extension": ".mdx",
+      "filePath": "/content/products/zh/unitized-curtain-wall.mdx",
+      "relativePath": "content/products/zh/unitized-curtain-wall.mdx"
+    }
+  }
+}

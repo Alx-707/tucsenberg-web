@@ -1,1 +1,1 @@
-export { MDXContent, MDXRenderer } from './mdx-content';
+export { MDXContent, MDXRenderer } from "./mdx-content";

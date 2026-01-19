@@ -1,5 +1,5 @@
-import AxeBuilder from '@axe-core/playwright';
-import type { Page } from '@playwright/test';
+import AxeBuilder from "@axe-core/playwright";
+import type { Page } from "@playwright/test";
 
 /**
  * 使用 AxeBuilder 封装的可访问性检查工具，替代旧版 checkA11y/injectAxe API。

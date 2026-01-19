@@ -2,39 +2,39 @@
  * @vitest-environment jsdom
  */
 
-import { act, renderHook } from '@testing-library/react';
-import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
-import { useKeyboardNavigation } from '@/hooks/use-keyboard-navigation';
+import { act, renderHook } from "@testing-library/react";
+import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
+import { useKeyboardNavigation } from "@/hooks/use-keyboard-navigation";
 
 // Mock focus method
 const mockFocus = vi.fn();
 
-describe('useKeyboardNavigation Events Tests', () => {
+describe("useKeyboardNavigation Events Tests", () => {
   beforeEach(() => {
     // Mock HTMLElement.prototype.focus
-    Object.defineProperty(HTMLElement.prototype, 'focus', {
+    Object.defineProperty(HTMLElement.prototype, "focus", {
       value: mockFocus,
       writable: true,
     });
 
     // Mock querySelector and querySelectorAll
-    Object.defineProperty(document, 'querySelector', {
+    Object.defineProperty(document, "querySelector", {
       value: vi.fn(),
       writable: true,
     });
 
-    Object.defineProperty(document, 'querySelectorAll', {
+    Object.defineProperty(document, "querySelectorAll", {
       value: vi.fn(() => []),
       writable: true,
     });
 
     // Mock addEventListener and removeEventListener
-    Object.defineProperty(document, 'addEventListener', {
+    Object.defineProperty(document, "addEventListener", {
       value: vi.fn(),
       writable: true,
     });
 
-    Object.defineProperty(document, 'removeEventListener', {
+    Object.defineProperty(document, "removeEventListener", {
       value: vi.fn(),
       writable: true,
     });
@@ -44,8 +44,8 @@ describe('useKeyboardNavigation Events Tests', () => {
     vi.restoreAllMocks();
   });
 
-  describe('键盘事件处理', () => {
-    it('should handle keyboard navigation', () => {
+  describe("键盘事件处理", () => {
+    it("should handle keyboard navigation", () => {
       const { result } = renderHook(() =>
         useKeyboardNavigation({ enabled: true }),
       );
@@ -60,12 +60,12 @@ describe('useKeyboardNavigation Events Tests', () => {
       expect(result.current.getCurrentFocusIndex()).toBeGreaterThanOrEqual(-1);
     });
 
-    it('should handle different arrow keys', () => {
+    it("should handle different arrow keys", () => {
       const { result } = renderHook(() =>
         useKeyboardNavigation({ enabled: true }),
       );
 
-      const keys = ['ArrowDown', 'ArrowUp', 'ArrowLeft', 'ArrowRight'];
+      const keys = ["ArrowDown", "ArrowUp", "ArrowLeft", "ArrowRight"];
 
       keys.forEach((key) => {
         const mockEvent = {
@@ -76,11 +76,11 @@ describe('useKeyboardNavigation Events Tests', () => {
 
         act(() => {
           // Test navigation functions directly
-          if (mockEvent.key === 'ArrowDown' || mockEvent.key === 'ArrowRight') {
+          if (mockEvent.key === "ArrowDown" || mockEvent.key === "ArrowRight") {
             result.current.focusNext();
           } else if (
-            mockEvent.key === 'ArrowUp' ||
-            mockEvent.key === 'ArrowLeft'
+            mockEvent.key === "ArrowUp" ||
+            mockEvent.key === "ArrowLeft"
           ) {
             result.current.focusPrevious();
           }
@@ -92,7 +92,7 @@ describe('useKeyboardNavigation Events Tests', () => {
       });
     });
 
-    it('should handle Home and End keys', () => {
+    it("should handle Home and End keys", () => {
       const { result } = renderHook(() =>
         useKeyboardNavigation({ enabled: true }),
       );
@@ -110,7 +110,7 @@ describe('useKeyboardNavigation Events Tests', () => {
       expect(result.current.getCurrentFocusIndex()).toBeGreaterThanOrEqual(-1);
     });
 
-    it('should ignore non-navigation keys', () => {
+    it("should ignore non-navigation keys", () => {
       const { result } = renderHook(() =>
         useKeyboardNavigation({ enabled: true }),
       );
@@ -125,7 +125,7 @@ describe('useKeyboardNavigation Events Tests', () => {
       expect(result.current.getCurrentFocusIndex()).toBeGreaterThanOrEqual(-1);
     });
 
-    it('should respect enabled state', () => {
+    it("should respect enabled state", () => {
       const { result } = renderHook(() =>
         useKeyboardNavigation({ enabled: false }),
       );
@@ -138,19 +138,19 @@ describe('useKeyboardNavigation Events Tests', () => {
       });
 
       // Navigation functions should still be available
-      expect(typeof result.current.focusNext).toBe('function');
+      expect(typeof result.current.focusNext).toBe("function");
 
       // Test that the hook handles enabled state correctly
       expect(result.current.getCurrentFocusIndex()).toBe(-1); // No focus initially
     });
   });
 
-  describe('方向配置测试', () => {
-    it('should handle horizontal orientation', () => {
+  describe("方向配置测试", () => {
+    it("should handle horizontal orientation", () => {
       const { result } = renderHook(() =>
         useKeyboardNavigation({
           enabled: true,
-          orientation: 'horizontal',
+          orientation: "horizontal",
         }),
       );
 
@@ -167,11 +167,11 @@ describe('useKeyboardNavigation Events Tests', () => {
       expect(result.current.getCurrentFocusIndex()).toBeGreaterThanOrEqual(-1);
     });
 
-    it('should handle vertical orientation', () => {
+    it("should handle vertical orientation", () => {
       const { result } = renderHook(() =>
         useKeyboardNavigation({
           enabled: true,
-          orientation: 'vertical',
+          orientation: "vertical",
         }),
       );
 
@@ -188,15 +188,15 @@ describe('useKeyboardNavigation Events Tests', () => {
       expect(result.current.getCurrentFocusIndex()).toBeGreaterThanOrEqual(-1);
     });
 
-    it('should handle both orientation', () => {
+    it("should handle both orientation", () => {
       const { result } = renderHook(() =>
         useKeyboardNavigation({
           enabled: true,
-          orientation: 'both',
+          orientation: "both",
         }),
       );
 
-      const keys = ['ArrowUp', 'ArrowDown', 'ArrowLeft', 'ArrowRight'];
+      const keys = ["ArrowUp", "ArrowDown", "ArrowLeft", "ArrowRight"];
 
       keys.forEach((_key) => {
         // 模拟键盘事件（已移除未使用的事件变量）
@@ -213,8 +213,8 @@ describe('useKeyboardNavigation Events Tests', () => {
     });
   });
 
-  describe('回调函数测试', () => {
-    it('should call onNavigate callback', () => {
+  describe("回调函数测试", () => {
+    it("should call onNavigate callback", () => {
       const mockOnNavigate = vi.fn();
 
       const { result } = renderHook(() =>
@@ -232,9 +232,9 @@ describe('useKeyboardNavigation Events Tests', () => {
       expect(result.current.getCurrentFocusIndex()).toBeGreaterThanOrEqual(-1);
     });
 
-    it('should handle callback errors gracefully', () => {
+    it("should handle callback errors gracefully", () => {
       const errorCallback = vi.fn(() => {
-        throw new Error('Callback error');
+        throw new Error("Callback error");
       });
 
       const { result } = renderHook(() =>

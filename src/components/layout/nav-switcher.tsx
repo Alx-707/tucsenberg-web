@@ -8,10 +8,10 @@
  * - Loading skeleton provides visual feedback during component load
  * - Idle preloading reduces perceived latency for first interaction
  */
-'use client';
+"use client";
 
-import { useEffect } from 'react';
-import dynamic from 'next/dynamic';
+import { useEffect } from "react";
+import dynamic from "next/dynamic";
 
 /**
  * Loading skeleton for navigation
@@ -20,13 +20,13 @@ import dynamic from 'next/dynamic';
 function NavSkeleton() {
   return (
     <div
-      className='header-desktop-only items-center space-x-1'
-      aria-hidden='true'
+      className="header-desktop-only items-center space-x-1"
+      aria-hidden="true"
     >
-      <div className='h-9 w-16 animate-pulse rounded-xl bg-muted' />
-      <div className='h-9 w-20 animate-pulse rounded-xl bg-muted' />
-      <div className='h-9 w-16 animate-pulse rounded-xl bg-muted' />
-      <div className='h-9 w-16 animate-pulse rounded-xl bg-muted' />
+      <div className="h-9 w-16 animate-pulse rounded-xl bg-muted" />
+      <div className="h-9 w-20 animate-pulse rounded-xl bg-muted" />
+      <div className="h-9 w-16 animate-pulse rounded-xl bg-muted" />
+      <div className="h-9 w-16 animate-pulse rounded-xl bg-muted" />
     </div>
   );
 }
@@ -35,7 +35,7 @@ function NavSkeleton() {
 // ssr: false to defer loading until client-side
 // Loading skeleton prevents layout shift
 const VercelNavigation = dynamic(
-  () => import('./vercel-navigation').then((m) => m.VercelNavigation),
+  () => import("./vercel-navigation").then((m) => m.VercelNavigation),
   {
     ssr: false,
     loading: () => <NavSkeleton />,
@@ -52,18 +52,18 @@ export function NavSwitcher({ className }: NavSwitcherProps) {
   useEffect(() => {
     // Use requestIdleCallback for non-blocking preload
     const idleCallback =
-      typeof window !== 'undefined' && 'requestIdleCallback' in window
+      typeof window !== "undefined" && "requestIdleCallback" in window
         ? window.requestIdleCallback
         : (callback: () => void) => setTimeout(callback, 1);
 
     const handle = idleCallback(() => {
       // Preload the navigation component
-      import('./vercel-navigation');
+      import("./vercel-navigation");
     });
 
     return () => {
-      if (typeof handle === 'number') {
-        if ('cancelIdleCallback' in window) {
+      if (typeof handle === "number") {
+        if ("cancelIdleCallback" in window) {
           window.cancelIdleCallback(handle);
         } else {
           clearTimeout(handle);

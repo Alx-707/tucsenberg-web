@@ -5,27 +5,27 @@
  * This module handles validation and delegates to the unified processLead pipeline
  */
 
-import { z } from 'zod';
-import { airtableService } from '@/lib/airtable';
-import { contactFieldValidators } from '@/lib/form-schema/contact-field-validators';
-import { processLead } from '@/lib/lead-pipeline';
-import { CONTACT_SUBJECTS, LEAD_TYPES } from '@/lib/lead-pipeline/lead-schema';
-import { logger, sanitizeEmail, sanitizeIP } from '@/lib/logger';
-import { constantTimeCompare } from '@/lib/security-crypto';
-import { verifyTurnstile } from '@/app/api/contact/contact-api-utils';
-import { mapZodIssueToErrorKey } from '@/app/api/contact/contact-form-error-utils';
+import { z } from "zod";
+import { airtableService } from "@/lib/airtable";
+import { contactFieldValidators } from "@/lib/form-schema/contact-field-validators";
+import { processLead } from "@/lib/lead-pipeline";
+import { CONTACT_SUBJECTS, LEAD_TYPES } from "@/lib/lead-pipeline/lead-schema";
+import { logger, sanitizeEmail, sanitizeIP } from "@/lib/logger";
+import { constantTimeCompare } from "@/lib/security-crypto";
+import { verifyTurnstile } from "@/app/api/contact/contact-api-utils";
+import { mapZodIssueToErrorKey } from "@/app/api/contact/contact-form-error-utils";
 import {
   CONTACT_FORM_CONFIG,
   createContactFormSchemaFromConfig,
   type ContactFormFieldValues,
-} from '@/config/contact-form-config';
+} from "@/config/contact-form-config";
 import {
   ANIMATION_DURATION_VERY_SLOW,
   COUNT_TEN,
   ONE,
   SECONDS_PER_MINUTE,
   ZERO,
-} from '@/constants';
+} from "@/constants";
 
 const contactFormSchema = createContactFormSchemaFromConfig(
   CONTACT_FORM_CONFIG,
@@ -37,7 +37,7 @@ const contactFormSchema = createContactFormSchemaFromConfig(
  * Extended contact form schema with Turnstile token
  */
 export const contactFormWithTokenSchema = contactFormSchema.extend({
-  turnstileToken: z.string().min(ONE, 'Security verification required'),
+  turnstileToken: z.string().min(ONE, "Security verification required"),
   submittedAt: z.string(),
 });
 
@@ -54,7 +54,7 @@ export async function validateFormData(body: unknown, clientIP: string) {
   const validationResult = contactFormWithTokenSchema.safeParse(body);
 
   if (!validationResult.success) {
-    logger.warn('Form validation failed', {
+    logger.warn("Form validation failed", {
       errors: validationResult.error.issues,
       clientIP: sanitizeIP(clientIP),
     });
@@ -65,7 +65,7 @@ export async function validateFormData(body: unknown, clientIP: string) {
 
     return {
       success: false,
-      error: 'Validation failed',
+      error: "Validation failed",
       details: errorMessages,
       data: null,
     };
@@ -80,7 +80,7 @@ export async function validateFormData(body: unknown, clientIP: string) {
   const maxAge = COUNT_TEN * SECONDS_PER_MINUTE * ANIMATION_DURATION_VERY_SLOW; // COUNT_TEN分钟
 
   if (timeDiff > maxAge || timeDiff < ZERO) {
-    logger.warn('Form submission time validation failed', {
+    logger.warn("Form submission time validation failed", {
       submittedAt: formData.submittedAt,
       timeDiff,
       clientIP: sanitizeIP(clientIP),
@@ -88,8 +88,8 @@ export async function validateFormData(body: unknown, clientIP: string) {
 
     return {
       success: false,
-      error: 'Form submission expired or invalid',
-      details: ['Please refresh the page and try again'],
+      error: "Form submission expired or invalid",
+      details: ["Please refresh the page and try again"],
       data: null,
     };
   }
@@ -100,13 +100,13 @@ export async function validateFormData(body: unknown, clientIP: string) {
     clientIP,
   );
   if (!turnstileValid) {
-    logger.warn('Turnstile verification failed', {
+    logger.warn("Turnstile verification failed", {
       clientIP: sanitizeIP(clientIP),
     });
     return {
       success: false,
-      error: 'Security verification failed',
-      details: ['Please complete the security check'],
+      error: "Security verification failed",
+      details: ["Please complete the security check"],
       data: null,
     };
   }
@@ -128,9 +128,9 @@ function mapSubjectToEnum(
   if (!subject) return CONTACT_SUBJECTS.OTHER;
 
   const subjectLower = subject.toLowerCase();
-  if (subjectLower.includes('product')) return CONTACT_SUBJECTS.PRODUCT_INQUIRY;
-  if (subjectLower.includes('distributor')) return CONTACT_SUBJECTS.DISTRIBUTOR;
-  if (subjectLower.includes('oem') || subjectLower.includes('odm')) {
+  if (subjectLower.includes("product")) return CONTACT_SUBJECTS.PRODUCT_INQUIRY;
+  if (subjectLower.includes("distributor")) return CONTACT_SUBJECTS.DISTRIBUTOR;
+  if (subjectLower.includes("oem") || subjectLower.includes("odm")) {
     return CONTACT_SUBJECTS.OEM_ODM;
   }
   return CONTACT_SUBJECTS.OTHER;
@@ -145,12 +145,12 @@ export async function processFormSubmission(formData: ContactFormWithToken) {
   // Map legacy format to new Lead Pipeline format
   const fullName = [formData.firstName, formData.lastName]
     .filter(Boolean)
-    .join(' ')
+    .join(" ")
     .trim();
 
   const leadInput = {
     type: LEAD_TYPES.CONTACT,
-    fullName: fullName || formData.firstName || 'Unknown',
+    fullName: fullName || formData.firstName || "Unknown",
     email: formData.email,
     company: formData.company,
     subject: mapSubjectToEnum(formData.subject),
@@ -174,12 +174,12 @@ export async function processFormSubmission(formData: ContactFormWithToken) {
   }
 
   // 处理失败情况
-  logger.error('Contact form submission failed via processLead', {
+  logger.error("Contact form submission failed via processLead", {
     error: result.error,
     email: sanitizeEmail(formData.email),
   });
 
-  throw new Error('Failed to process form submission');
+  throw new Error("Failed to process form submission");
 }
 
 /**
@@ -224,8 +224,8 @@ export async function getContactFormStats() {
       data: normalizedStats,
     };
   } catch (error) {
-    logger.error('Failed to get contact form stats', { error });
-    throw new Error('Failed to retrieve statistics');
+    logger.error("Failed to get contact form stats", { error });
+    throw new Error("Failed to retrieve statistics");
   }
 }
 
@@ -237,11 +237,11 @@ export function validateAdminAccess(authHeader: string | null): boolean {
   const adminToken = process.env.ADMIN_API_TOKEN;
 
   if (!adminToken) {
-    logger.warn('Admin API token not configured');
+    logger.warn("Admin API token not configured");
     return false;
   }
 
-  if (!authHeader || !authHeader.startsWith('Bearer ')) {
+  if (!authHeader || !authHeader.startsWith("Bearer ")) {
     return false;
   }
 
@@ -263,7 +263,7 @@ export function sanitizeFormData(
     firstName: data.firstName.trim(),
     lastName: data.lastName.trim(),
     email: data.email.toLowerCase().trim(),
-    company: data.company?.trim() || '',
+    company: data.company?.trim() || "",
     phone: data.phone?.trim() || undefined,
     subject: data.subject?.trim() || undefined,
     message: data.message.trim(),

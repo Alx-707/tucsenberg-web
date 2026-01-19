@@ -2,9 +2,9 @@
  * @vitest-environment jsdom
  */
 
-import { render, screen } from '@testing-library/react';
-import userEvent from '@testing-library/user-event';
-import { beforeEach, describe, expect, it, vi } from 'vitest';
+import { render, screen } from "@testing-library/react";
+import userEvent from "@testing-library/user-event";
+import { beforeEach, describe, expect, it, vi } from "vitest";
 import {
   NavigationMenu,
   NavigationMenuContent,
@@ -12,17 +12,13 @@ import {
   NavigationMenuLink,
   NavigationMenuList,
   NavigationMenuTrigger,
-} from '../navigation-menu';
+} from "../navigation-menu";
 
 // Mock Lucide React icons
-vi.mock('lucide-react', () => ({
-  ChevronDownIcon: ({ className, ...props }: React.ComponentProps<'svg'>) => (
-    <svg
-      data-testid='chevron-down-icon'
-      className={className}
-      {...props}
-    >
-      <path d='M6 9l6 6 6-6' />
+vi.mock("lucide-react", () => ({
+  ChevronDownIcon: ({ className, ...props }: React.ComponentProps<"svg">) => (
+    <svg data-testid="chevron-down-icon" className={className} {...props}>
+      <path d="M6 9l6 6 6-6" />
     </svg>
   ),
 }));
@@ -43,14 +39,14 @@ function setupInteractionTest() {
   }
 
   vi.stubGlobal(
-    'ResizeObserver',
+    "ResizeObserver",
     MockResizeObserver as unknown as ResizeObserver,
   );
 
   return { user };
 }
 
-describe('NavigationMenu - Interactions', () => {
+describe("NavigationMenu - Interactions", () => {
   let user: ReturnType<typeof userEvent.setup>;
 
   beforeEach(() => {
@@ -58,13 +54,13 @@ describe('NavigationMenu - Interactions', () => {
     user = setup.user;
   });
 
-  describe('NavigationMenuTrigger', () => {
-    it('renders navigation menu trigger with chevron icon', () => {
+  describe("NavigationMenuTrigger", () => {
+    it("renders navigation menu trigger with chevron icon", () => {
       render(
         <NavigationMenu>
           <NavigationMenuList>
             <NavigationMenuItem>
-              <NavigationMenuTrigger data-testid='nav-trigger'>
+              <NavigationMenuTrigger data-testid="nav-trigger">
                 Products
               </NavigationMenuTrigger>
             </NavigationMenuItem>
@@ -72,20 +68,20 @@ describe('NavigationMenu - Interactions', () => {
         </NavigationMenu>,
       );
 
-      const trigger = screen.getByTestId('nav-trigger');
+      const trigger = screen.getByTestId("nav-trigger");
       expect(trigger).toBeInTheDocument();
-      expect(trigger).toHaveTextContent('Products');
+      expect(trigger).toHaveTextContent("Products");
 
-      const chevronIcon = screen.getByTestId('chevron-down-icon');
+      const chevronIcon = screen.getByTestId("chevron-down-icon");
       expect(chevronIcon).toBeInTheDocument();
     });
 
-    it('applies trigger styles', () => {
+    it("applies trigger styles", () => {
       render(
         <NavigationMenu>
           <NavigationMenuList>
             <NavigationMenuItem>
-              <NavigationMenuTrigger data-testid='nav-trigger'>
+              <NavigationMenuTrigger data-testid="nav-trigger">
                 Products
               </NavigationMenuTrigger>
             </NavigationMenuItem>
@@ -93,25 +89,25 @@ describe('NavigationMenu - Interactions', () => {
         </NavigationMenu>,
       );
 
-      const trigger = screen.getByTestId('nav-trigger');
+      const trigger = screen.getByTestId("nav-trigger");
       expect(trigger).toHaveClass(
-        'group',
-        'inline-flex',
-        'h-[30px]',
-        'items-center',
-        'justify-center',
-        'rounded-full',
+        "group",
+        "inline-flex",
+        "h-[30px]",
+        "items-center",
+        "justify-center",
+        "rounded-full",
       );
     });
 
-    it('applies custom className', () => {
+    it("applies custom className", () => {
       render(
         <NavigationMenu>
           <NavigationMenuList>
             <NavigationMenuItem>
               <NavigationMenuTrigger
-                className='custom-trigger'
-                data-testid='nav-trigger'
+                className="custom-trigger"
+                data-testid="nav-trigger"
               >
                 Products
               </NavigationMenuTrigger>
@@ -120,47 +116,47 @@ describe('NavigationMenu - Interactions', () => {
         </NavigationMenu>,
       );
 
-      const trigger = screen.getByTestId('nav-trigger');
-      expect(trigger).toHaveClass('custom-trigger');
+      const trigger = screen.getByTestId("nav-trigger");
+      expect(trigger).toHaveClass("custom-trigger");
     });
 
-    it('handles click interactions', async () => {
+    it("handles click interactions", async () => {
       render(
         <NavigationMenu>
           <NavigationMenuList>
             <NavigationMenuItem>
-              <NavigationMenuTrigger data-testid='nav-trigger'>
+              <NavigationMenuTrigger data-testid="nav-trigger">
                 Products
               </NavigationMenuTrigger>
               <NavigationMenuContent>
-                <div data-testid='nav-content'>Content</div>
+                <div data-testid="nav-content">Content</div>
               </NavigationMenuContent>
             </NavigationMenuItem>
           </NavigationMenuList>
         </NavigationMenu>,
       );
 
-      const trigger = screen.getByTestId('nav-trigger');
+      const trigger = screen.getByTestId("nav-trigger");
 
       // Initially content should not be visible
-      expect(screen.queryByTestId('nav-content')).not.toBeInTheDocument();
+      expect(screen.queryByTestId("nav-content")).not.toBeInTheDocument();
 
       // Click trigger to open content
       await user.click(trigger);
 
       // Content should now be visible
-      expect(screen.getByTestId('nav-content')).toBeInTheDocument();
+      expect(screen.getByTestId("nav-content")).toBeInTheDocument();
     });
   });
 
-  describe('NavigationMenuContent', () => {
-    it('renders navigation menu content when menu is open', () => {
+  describe("NavigationMenuContent", () => {
+    it("renders navigation menu content when menu is open", () => {
       render(
-        <NavigationMenu defaultValue='item-1'>
+        <NavigationMenu defaultValue="item-1">
           <NavigationMenuList>
-            <NavigationMenuItem value='item-1'>
+            <NavigationMenuItem value="item-1">
               <NavigationMenuTrigger>Products</NavigationMenuTrigger>
-              <NavigationMenuContent data-testid='nav-content'>
+              <NavigationMenuContent data-testid="nav-content">
                 <div>Product content</div>
               </NavigationMenuContent>
             </NavigationMenuItem>
@@ -168,18 +164,18 @@ describe('NavigationMenu - Interactions', () => {
         </NavigationMenu>,
       );
 
-      const content = screen.getByTestId('nav-content');
+      const content = screen.getByTestId("nav-content");
       expect(content).toBeInTheDocument();
-      expect(content).toHaveTextContent('Product content');
+      expect(content).toHaveTextContent("Product content");
     });
 
-    it('applies default classes when rendered', () => {
+    it("applies default classes when rendered", () => {
       render(
-        <NavigationMenu defaultValue='item-1'>
+        <NavigationMenu defaultValue="item-1">
           <NavigationMenuList>
-            <NavigationMenuItem value='item-1'>
+            <NavigationMenuItem value="item-1">
               <NavigationMenuTrigger>Products</NavigationMenuTrigger>
-              <NavigationMenuContent data-testid='nav-content'>
+              <NavigationMenuContent data-testid="nav-content">
                 <div>Content</div>
               </NavigationMenuContent>
             </NavigationMenuItem>
@@ -187,19 +183,19 @@ describe('NavigationMenu - Interactions', () => {
         </NavigationMenu>,
       );
 
-      const content = screen.getByTestId('nav-content');
-      expect(content).toHaveAttribute('data-slot', 'navigation-menu-content');
+      const content = screen.getByTestId("nav-content");
+      expect(content).toHaveAttribute("data-slot", "navigation-menu-content");
     });
 
-    it('applies custom className when provided', () => {
+    it("applies custom className when provided", () => {
       render(
-        <NavigationMenu defaultValue='item-1'>
+        <NavigationMenu defaultValue="item-1">
           <NavigationMenuList>
-            <NavigationMenuItem value='item-1'>
+            <NavigationMenuItem value="item-1">
               <NavigationMenuTrigger>Products</NavigationMenuTrigger>
               <NavigationMenuContent
-                className='custom-content'
-                data-testid='nav-content'
+                className="custom-content"
+                data-testid="nav-content"
               >
                 <div>Content</div>
               </NavigationMenuContent>
@@ -208,21 +204,18 @@ describe('NavigationMenu - Interactions', () => {
         </NavigationMenu>,
       );
 
-      const content = screen.getByTestId('nav-content');
-      expect(content).toHaveClass('custom-content');
+      const content = screen.getByTestId("nav-content");
+      expect(content).toHaveClass("custom-content");
     });
   });
 
-  describe('NavigationMenuLink', () => {
-    it('renders navigation menu link', () => {
+  describe("NavigationMenuLink", () => {
+    it("renders navigation menu link", () => {
       render(
         <NavigationMenu>
           <NavigationMenuList>
             <NavigationMenuItem>
-              <NavigationMenuLink
-                href='/products'
-                data-testid='nav-link'
-              >
+              <NavigationMenuLink href="/products" data-testid="nav-link">
                 Products
               </NavigationMenuLink>
             </NavigationMenuItem>
@@ -230,21 +223,18 @@ describe('NavigationMenu - Interactions', () => {
         </NavigationMenu>,
       );
 
-      const link = screen.getByTestId('nav-link');
+      const link = screen.getByTestId("nav-link");
       expect(link).toBeInTheDocument();
-      expect(link).toHaveTextContent('Products');
-      expect(link).toHaveAttribute('href', '/products');
+      expect(link).toHaveTextContent("Products");
+      expect(link).toHaveAttribute("href", "/products");
     });
 
-    it('applies default classes', () => {
+    it("applies default classes", () => {
       render(
         <NavigationMenu>
           <NavigationMenuList>
             <NavigationMenuItem>
-              <NavigationMenuLink
-                href='/products'
-                data-testid='nav-link'
-              >
+              <NavigationMenuLink href="/products" data-testid="nav-link">
                 Products
               </NavigationMenuLink>
             </NavigationMenuItem>
@@ -252,27 +242,27 @@ describe('NavigationMenu - Interactions', () => {
         </NavigationMenu>,
       );
 
-      const link = screen.getByTestId('nav-link');
+      const link = screen.getByTestId("nav-link");
       expect(link).toHaveClass(
-        'inline-flex',
-        'h-[30px]',
-        'items-center',
-        'rounded-full',
-        'px-3',
-        'py-2',
-        'text-sm',
+        "inline-flex",
+        "h-[30px]",
+        "items-center",
+        "rounded-full",
+        "px-3",
+        "py-2",
+        "text-sm",
       );
     });
 
-    it('applies custom className', () => {
+    it("applies custom className", () => {
       render(
         <NavigationMenu>
           <NavigationMenuList>
             <NavigationMenuItem>
               <NavigationMenuLink
-                href='/products'
-                className='custom-link'
-                data-testid='nav-link'
+                href="/products"
+                className="custom-link"
+                data-testid="nav-link"
               >
                 Products
               </NavigationMenuLink>
@@ -281,11 +271,11 @@ describe('NavigationMenu - Interactions', () => {
         </NavigationMenu>,
       );
 
-      const link = screen.getByTestId('nav-link');
-      expect(link).toHaveClass('custom-link');
+      const link = screen.getByTestId("nav-link");
+      expect(link).toHaveClass("custom-link");
     });
 
-    it('handles click interactions', async () => {
+    it("handles click interactions", async () => {
       const handleClick = vi.fn();
 
       render(
@@ -293,9 +283,9 @@ describe('NavigationMenu - Interactions', () => {
           <NavigationMenuList>
             <NavigationMenuItem>
               <NavigationMenuLink
-                href='/products'
+                href="/products"
                 onClick={handleClick}
-                data-testid='nav-link'
+                data-testid="nav-link"
               >
                 Products
               </NavigationMenuLink>
@@ -304,7 +294,7 @@ describe('NavigationMenu - Interactions', () => {
         </NavigationMenu>,
       );
 
-      const link = screen.getByTestId('nav-link');
+      const link = screen.getByTestId("nav-link");
       await user.click(link);
 
       expect(handleClick).toHaveBeenCalledTimes(1);

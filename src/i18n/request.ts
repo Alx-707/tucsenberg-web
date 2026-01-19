@@ -1,26 +1,26 @@
-import { getRequestConfig } from 'next-intl/server';
+import { getRequestConfig } from "next-intl/server";
 import {
   I18nPerformanceMonitor,
   TranslationCache,
-} from '@/lib/i18n-performance';
-import { loadCompleteMessages } from '@/lib/load-messages';
-import { COUNT_FIVE, ONE } from '@/constants';
-import { routing } from '@/i18n/routing';
+} from "@/lib/i18n-performance";
+import { loadCompleteMessages } from "@/lib/load-messages";
+import { COUNT_FIVE, ONE } from "@/constants";
+import { routing } from "@/i18n/routing";
 
 // 辅助函数：获取格式配置
 function getFormats(locale: string) {
   return {
     dateTime: {
       short: {
-        day: 'numeric' as const,
-        month: 'short' as const,
-        year: 'numeric' as const,
+        day: "numeric" as const,
+        month: "short" as const,
+        year: "numeric" as const,
       },
       long: {
-        day: 'numeric' as const,
-        month: 'long' as const,
-        year: 'numeric' as const,
-        weekday: 'long' as const,
+        day: "numeric" as const,
+        month: "long" as const,
+        year: "numeric" as const,
+        weekday: "long" as const,
       },
     },
     number: {
@@ -28,18 +28,18 @@ function getFormats(locale: string) {
         maximumFractionDigits: COUNT_FIVE,
       },
       currency: {
-        style: 'currency' as const,
-        currency: locale === 'zh' ? 'CNY' : 'USD',
+        style: "currency" as const,
+        currency: locale === "zh" ? "CNY" : "USD",
       },
       percentage: {
-        style: 'percent' as const,
+        style: "percent" as const,
         minimumFractionDigits: ONE,
       },
     },
     list: {
       enumeration: {
-        style: 'long' as const,
-        type: 'conjunction' as const,
+        style: "long" as const,
+        type: "conjunction" as const,
       },
     },
   };
@@ -75,26 +75,26 @@ function createSuccessResponse({
   cacheUsed,
 }: SuccessResponseArgs) {
   if (
-    process.env.I18N_DEBUG_BUILD === '1' &&
-    process.env.NEXT_PHASE === 'phase-production-build'
+    process.env.I18N_DEBUG_BUILD === "1" &&
+    process.env.NEXT_PHASE === "phase-production-build"
   ) {
     const topLevelKeys = Object.keys(messages);
     // eslint-disable-next-line no-console
-    console.error('[i18n-debug] createSuccessResponse snapshot', {
+    console.error("[i18n-debug] createSuccessResponse snapshot", {
       locale,
       loadTime,
       cacheUsed,
       topLevelKeys,
-      hasProducts: Object.prototype.hasOwnProperty.call(messages, 'products'),
-      hasFaq: Object.prototype.hasOwnProperty.call(messages, 'faq'),
-      hasPrivacy: Object.prototype.hasOwnProperty.call(messages, 'privacy'),
+      hasProducts: Object.prototype.hasOwnProperty.call(messages, "products"),
+      hasFaq: Object.prototype.hasOwnProperty.call(messages, "faq"),
+      hasPrivacy: Object.prototype.hasOwnProperty.call(messages, "privacy"),
     });
   }
 
   return {
     locale,
     messages,
-    timeZone: locale === 'zh' ? 'Asia/Shanghai' : 'UTC',
+    timeZone: locale === "zh" ? "Asia/Shanghai" : "UTC",
     formats: getFormats(locale),
     strictMessageTypeSafety: true,
     metadata: {
@@ -107,11 +107,11 @@ function createSuccessResponse({
 // 辅助函数：创建错误回退响应
 async function createFallbackResponse(locale: string, startTime: number) {
   if (
-    process.env.I18N_DEBUG_BUILD === '1' &&
-    process.env.NEXT_PHASE === 'phase-production-build'
+    process.env.I18N_DEBUG_BUILD === "1" &&
+    process.env.NEXT_PHASE === "phase-production-build"
   ) {
     // eslint-disable-next-line no-console
-    console.error('[i18n-debug] createFallbackResponse triggered', {
+    console.error("[i18n-debug] createFallbackResponse triggered", {
       locale,
       phase: process.env.NEXT_PHASE,
     });
@@ -120,7 +120,7 @@ async function createFallbackResponse(locale: string, startTime: number) {
   return {
     locale,
     messages: (await import(`../../messages/${locale}.json`)).default,
-    timeZone: locale === 'zh' ? 'Asia/Shanghai' : 'UTC',
+    timeZone: locale === "zh" ? "Asia/Shanghai" : "UTC",
     formats: getFormats(locale),
     strictMessageTypeSafety: true,
     metadata: {
@@ -137,12 +137,12 @@ export default getRequestConfig(async ({ requestLocale }) => {
 
   // 如果没有明确的语言偏好，使用默认语言
   // next-intl middleware会自动处理语言检测和cookie
-  if (!locale || !routing.locales.includes(locale as 'en' | 'zh')) {
+  if (!locale || !routing.locales.includes(locale as "en" | "zh")) {
     locale = routing.defaultLocale;
   }
 
   try {
-    const messages = await loadCompleteMessages(locale as 'en' | 'zh');
+    const messages = await loadCompleteMessages(locale as "en" | "zh");
     const loadTime = performance.now() - startTime;
     const cacheUsed = handleCacheMetrics(locale, loadTime);
 

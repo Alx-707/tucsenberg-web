@@ -1,35 +1,35 @@
-import { render } from '@testing-library/react';
-import { beforeEach, describe, expect, it, vi } from 'vitest';
+import { render } from "@testing-library/react";
+import { beforeEach, describe, expect, it, vi } from "vitest";
 
 const { mockStoreAttributionData } = vi.hoisted(() => ({
   mockStoreAttributionData: vi.fn(),
 }));
 
-vi.mock('@/lib/utm', () => ({
+vi.mock("@/lib/utm", () => ({
   storeAttributionData: mockStoreAttributionData,
 }));
 
-describe('AttributionBootstrap', () => {
+describe("AttributionBootstrap", () => {
   beforeEach(() => {
     vi.clearAllMocks();
   });
 
-  it('calls storeAttributionData on mount', async () => {
-    const { AttributionBootstrap } = await import('../attribution-bootstrap');
+  it("calls storeAttributionData on mount", async () => {
+    const { AttributionBootstrap } = await import("../attribution-bootstrap");
     render(<AttributionBootstrap />);
 
     expect(mockStoreAttributionData).toHaveBeenCalledTimes(1);
   });
 
-  it('renders nothing (returns null)', async () => {
-    const { AttributionBootstrap } = await import('../attribution-bootstrap');
+  it("renders nothing (returns null)", async () => {
+    const { AttributionBootstrap } = await import("../attribution-bootstrap");
     const { container } = render(<AttributionBootstrap />);
 
     expect(container).toBeEmptyDOMElement();
   });
 
-  it('only calls storeAttributionData once even on re-render', async () => {
-    const { AttributionBootstrap } = await import('../attribution-bootstrap');
+  it("only calls storeAttributionData once even on re-render", async () => {
+    const { AttributionBootstrap } = await import("../attribution-bootstrap");
     const { rerender } = render(<AttributionBootstrap />);
 
     rerender(<AttributionBootstrap />);

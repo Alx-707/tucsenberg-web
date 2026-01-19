@@ -4,7 +4,7 @@ import {
   COUNT_300000,
   MAGIC_12,
   MAGIC_2000,
-} from './count';
+} from "./count";
 
 /**
  * 时间相关常量

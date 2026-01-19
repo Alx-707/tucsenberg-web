@@ -2,20 +2,20 @@
  * 内容排序和分页函数
  */
 
-import type { BlogPost, ContentQueryOptions } from '@/types/content.types';
-import { ZERO } from '@/constants';
+import type { BlogPost, ContentQueryOptions } from "@/types/content.types";
+import { ZERO } from "@/constants";
 
 /**
  * Get field value from post metadata with type safety
  */
 function getFieldValue(post: BlogPost, field: string): string {
   switch (field) {
-    case 'publishedAt':
-      return post.metadata.publishedAt || '';
-    case 'updatedAt':
-      return post.metadata.updatedAt || '';
-    case 'title':
-      return post.metadata.title || '';
+    case "publishedAt":
+      return post.metadata.publishedAt || "";
+    case "updatedAt":
+      return post.metadata.updatedAt || "";
+    case "title":
+      return post.metadata.title || "";
     default:
       throw new Error(`Unexpected sort field: ${field}`);
   }
@@ -27,9 +27,9 @@ function getFieldValue(post: BlogPost, field: string): string {
 function compareValues(
   aValue: string,
   bValue: string,
-  sortOrder: 'asc' | 'desc',
+  sortOrder: "asc" | "desc",
 ): number {
-  if (sortOrder === 'desc') {
+  if (sortOrder === "desc") {
     return bValue.localeCompare(aValue);
   }
   return aValue.localeCompare(bValue);
@@ -38,7 +38,7 @@ function compareValues(
 /**
  * Create a sort comparator function for posts
  */
-function createSortComparator(sortBy: string, sortOrder: 'asc' | 'desc') {
+function createSortComparator(sortBy: string, sortOrder: "asc" | "desc") {
   return (a: BlogPost, b: BlogPost): number => {
     const aValue = getFieldValue(a, sortBy);
     const bValue = getFieldValue(b, sortBy);
@@ -50,13 +50,13 @@ function createSortComparator(sortBy: string, sortOrder: 'asc' | 'desc') {
  * Validate sort field to prevent object injection
  */
 function validateSortField(sortBy: string): void {
-  const allowedSortFields = ['publishedAt', 'updatedAt', 'title'] as const;
+  const allowedSortFields = ["publishedAt", "updatedAt", "title"] as const;
 
   if (
     !allowedSortFields.includes(sortBy as (typeof allowedSortFields)[number])
   ) {
     throw new Error(
-      `Invalid sort field: ${sortBy}. Allowed fields: ${allowedSortFields.join(', ')}`,
+      `Invalid sort field: ${sortBy}. Allowed fields: ${allowedSortFields.join(", ")}`,
     );
   }
 }
@@ -68,8 +68,8 @@ export function sortPosts(
   posts: BlogPost[],
   options: ContentQueryOptions,
 ): BlogPost[] {
-  const sortBy = options.sortBy || 'publishedAt';
-  const sortOrder = options.sortOrder || 'desc';
+  const sortBy = options.sortBy || "publishedAt";
+  const sortOrder = options.sortOrder || "desc";
 
   // Validate sort field to prevent object injection
   validateSortField(sortBy);

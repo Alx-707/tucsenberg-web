@@ -2,17 +2,17 @@
  * @vitest-environment jsdom
  */
 
-import { act, renderHook } from '@testing-library/react';
-import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
-import { useKeyboardNavigation } from '@/hooks/use-keyboard-navigation';
+import { act, renderHook } from "@testing-library/react";
+import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
+import { useKeyboardNavigation } from "@/hooks/use-keyboard-navigation";
 
 // Mock focus method
 const mockFocus = vi.fn();
 
-describe('useKeyboardNavigation DOM Tests', () => {
+describe("useKeyboardNavigation DOM Tests", () => {
   beforeEach(() => {
     // Mock HTMLElement.prototype.focus
-    Object.defineProperty(HTMLElement.prototype, 'focus', {
+    Object.defineProperty(HTMLElement.prototype, "focus", {
       value: mockFocus,
       writable: true,
     });
@@ -21,10 +21,10 @@ describe('useKeyboardNavigation DOM Tests', () => {
   afterEach(() => {
     vi.restoreAllMocks();
     // Clean up DOM
-    document.body.innerHTML = '';
+    document.body.innerHTML = "";
   });
 
-  describe('实际DOM交互测试', () => {
+  describe("实际DOM交互测试", () => {
     beforeEach(() => {
       // Setup DOM with actual focusable elements
       document.body.innerHTML = `
@@ -38,13 +38,13 @@ describe('useKeyboardNavigation DOM Tests', () => {
       `;
     });
 
-    it('should work with real DOM elements', () => {
+    it("should work with real DOM elements", () => {
       const { result } = renderHook(() => useKeyboardNavigation());
 
       // Set the container ref to the actual DOM element
-      const container = document.getElementById('container');
+      const container = document.getElementById("container");
       if (container && result.current.containerRef) {
-        Object.defineProperty(result.current.containerRef, 'current', {
+        Object.defineProperty(result.current.containerRef, "current", {
           value: container,
           writable: true,
         });
@@ -54,12 +54,12 @@ describe('useKeyboardNavigation DOM Tests', () => {
       expect(container).toBeInTheDocument();
     });
 
-    it('should find focusable elements in container', () => {
+    it("should find focusable elements in container", () => {
       const { result } = renderHook(() => useKeyboardNavigation());
 
-      const container = document.getElementById('container');
+      const container = document.getElementById("container");
       if (container && result.current.containerRef) {
-        Object.defineProperty(result.current.containerRef, 'current', {
+        Object.defineProperty(result.current.containerRef, "current", {
           value: container,
           writable: true,
         });
@@ -73,12 +73,12 @@ describe('useKeyboardNavigation DOM Tests', () => {
       expect(result.current.getCurrentFocusIndex()).toBeGreaterThanOrEqual(-1);
     });
 
-    it('should handle focus on different element types', () => {
+    it("should handle focus on different element types", () => {
       const { result } = renderHook(() => useKeyboardNavigation());
 
-      const container = document.getElementById('container');
+      const container = document.getElementById("container");
       if (container && result.current.containerRef) {
-        Object.defineProperty(result.current.containerRef, 'current', {
+        Object.defineProperty(result.current.containerRef, "current", {
           value: container,
           writable: true,
         });
@@ -101,7 +101,7 @@ describe('useKeyboardNavigation DOM Tests', () => {
     });
   });
 
-  describe('键盘事件模拟测试', () => {
+  describe("键盘事件模拟测试", () => {
     let realContainer: HTMLElement;
     let originalFocus: typeof HTMLElement.prototype.focus;
 
@@ -118,7 +118,7 @@ describe('useKeyboardNavigation DOM Tests', () => {
         </div>
       `;
 
-      realContainer = document.getElementById('test-container')!;
+      realContainer = document.getElementById("test-container")!;
     });
 
     afterEach(() => {
@@ -126,7 +126,7 @@ describe('useKeyboardNavigation DOM Tests', () => {
       HTMLElement.prototype.focus = originalFocus;
     });
 
-    it('should handle real keyboard events', () => {
+    it("should handle real keyboard events", () => {
       const mockOnNavigate = vi.fn();
 
       const { result } = renderHook(() =>
@@ -138,13 +138,13 @@ describe('useKeyboardNavigation DOM Tests', () => {
 
       // 设置容器引用
       if (result.current.containerRef) {
-        Object.defineProperty(result.current.containerRef, 'current', {
+        Object.defineProperty(result.current.containerRef, "current", {
           value: realContainer,
           writable: true,
         });
       }
 
-      const buttons = realContainer.querySelectorAll('button');
+      const buttons = realContainer.querySelectorAll("button");
       expect(buttons).toHaveLength(3);
 
       // 模拟键盘事件（已移除未使用的事件变量）
@@ -156,13 +156,13 @@ describe('useKeyboardNavigation DOM Tests', () => {
       expect(result.current.getCurrentFocusIndex()).toBeGreaterThanOrEqual(-1);
     });
 
-    it('should navigate through elements with arrow keys', () => {
+    it("should navigate through elements with arrow keys", () => {
       const { result } = renderHook(() =>
         useKeyboardNavigation({ enabled: true }),
       );
 
       if (result.current.containerRef) {
-        Object.defineProperty(result.current.containerRef, 'current', {
+        Object.defineProperty(result.current.containerRef, "current", {
           value: realContainer,
           writable: true,
         });
@@ -191,7 +191,7 @@ describe('useKeyboardNavigation DOM Tests', () => {
       expect(result.current.getCurrentFocusIndex()).toBeGreaterThanOrEqual(-1);
     });
 
-    it('should handle direct focus by index', () => {
+    it("should handle direct focus by index", () => {
       const mockOnNavigate = vi.fn();
 
       const { result } = renderHook(() =>
@@ -202,7 +202,7 @@ describe('useKeyboardNavigation DOM Tests', () => {
       );
 
       if (result.current.containerRef) {
-        Object.defineProperty(result.current.containerRef, 'current', {
+        Object.defineProperty(result.current.containerRef, "current", {
           value: realContainer,
           writable: true,
         });
@@ -224,8 +224,8 @@ describe('useKeyboardNavigation DOM Tests', () => {
     });
   });
 
-  describe('动态DOM变化测试', () => {
-    it('should handle dynamically added elements', () => {
+  describe("动态DOM变化测试", () => {
+    it("should handle dynamically added elements", () => {
       const { result } = renderHook(() => useKeyboardNavigation());
 
       // 初始DOM
@@ -235,17 +235,17 @@ describe('useKeyboardNavigation DOM Tests', () => {
         </div>
       `;
 
-      const container = document.getElementById('dynamic-container')!;
+      const container = document.getElementById("dynamic-container")!;
       if (result.current.containerRef) {
-        Object.defineProperty(result.current.containerRef, 'current', {
+        Object.defineProperty(result.current.containerRef, "current", {
           value: container,
           writable: true,
         });
       }
 
       // 动态添加元素
-      const newButton = document.createElement('button');
-      newButton.textContent = 'Button 2';
+      const newButton = document.createElement("button");
+      newButton.textContent = "Button 2";
       container.appendChild(newButton);
 
       act(() => {
@@ -255,7 +255,7 @@ describe('useKeyboardNavigation DOM Tests', () => {
       expect(result.current.getCurrentFocusIndex()).toBeGreaterThanOrEqual(-1);
     });
 
-    it('should handle dynamically removed elements', () => {
+    it("should handle dynamically removed elements", () => {
       const { result } = renderHook(() => useKeyboardNavigation());
 
       // 初始DOM
@@ -266,16 +266,16 @@ describe('useKeyboardNavigation DOM Tests', () => {
         </div>
       `;
 
-      const container = document.getElementById('dynamic-container')!;
+      const container = document.getElementById("dynamic-container")!;
       if (result.current.containerRef) {
-        Object.defineProperty(result.current.containerRef, 'current', {
+        Object.defineProperty(result.current.containerRef, "current", {
           value: container,
           writable: true,
         });
       }
 
       // 移除一个元素
-      const btn2 = document.getElementById('btn2');
+      const btn2 = document.getElementById("btn2");
       if (btn2) {
         btn2.remove();
       }

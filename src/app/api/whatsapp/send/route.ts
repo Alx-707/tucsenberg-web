@@ -1,23 +1,23 @@
-import { NextRequest, NextResponse } from 'next/server';
-import { z } from 'zod';
-import type { SendMessageRequest, TemplateComponent } from '@/types/whatsapp';
-import { safeParseJson } from '@/lib/api/safe-parse-json';
+import { NextRequest, NextResponse } from "next/server";
+import { z } from "zod";
+import type { SendMessageRequest, TemplateComponent } from "@/types/whatsapp";
+import { safeParseJson } from "@/lib/api/safe-parse-json";
 import {
   withRateLimit,
   type RateLimitContext,
-} from '@/lib/api/with-rate-limit';
-import { logger } from '@/lib/logger';
-import { constantTimeCompare } from '@/lib/security-crypto';
+} from "@/lib/api/with-rate-limit";
+import { logger } from "@/lib/logger";
+import { constantTimeCompare } from "@/lib/security-crypto";
 import {
   getClientEnvironmentInfo,
   sendWhatsAppMessage,
-} from '@/lib/whatsapp-service';
-import { COUNT_THREE } from '@/constants/count';
+} from "@/lib/whatsapp-service";
+import { COUNT_THREE } from "@/constants/count";
 import {
   FIVE_SECONDS_MS,
   ONE_SECOND_MS,
   TWO_SECONDS_MS,
-} from '@/constants/time';
+} from "@/constants/time";
 
 // HTTP status codes
 const HTTP_UNAUTHORIZED = 401;
@@ -32,18 +32,18 @@ function validateApiKey(request: NextRequest): NextResponse | null {
 
   // API key is mandatory - return 503 if not configured
   if (!configuredApiKey) {
-    logger.warn('WhatsApp API: WHATSAPP_API_KEY not configured');
+    logger.warn("WhatsApp API: WHATSAPP_API_KEY not configured");
     return NextResponse.json(
-      { error: 'WhatsApp API service not configured' },
+      { error: "WhatsApp API service not configured" },
       { status: HTTP_SERVICE_UNAVAILABLE },
     );
   }
 
-  const authHeader = request.headers.get('Authorization');
+  const authHeader = request.headers.get("Authorization");
   if (!authHeader) {
-    logger.warn('WhatsApp API: Missing Authorization header');
+    logger.warn("WhatsApp API: Missing Authorization header");
     return NextResponse.json(
-      { error: 'Authentication required' },
+      { error: "Authentication required" },
       { status: HTTP_UNAUTHORIZED },
     );
   }
@@ -51,19 +51,19 @@ function validateApiKey(request: NextRequest): NextResponse | null {
   // Extract Bearer token
   const bearerMatch = authHeader.match(/^Bearer\s+(.+)$/i);
   if (!bearerMatch) {
-    logger.warn('WhatsApp API: Invalid Authorization header format');
+    logger.warn("WhatsApp API: Invalid Authorization header format");
     return NextResponse.json(
-      { error: 'Invalid authentication format' },
+      { error: "Invalid authentication format" },
       { status: HTTP_UNAUTHORIZED },
     );
   }
 
-  const providedKey = (bearerMatch[1] ?? '').trim();
+  const providedKey = (bearerMatch[1] ?? "").trim();
   // Use constant-time comparison to prevent timing attacks
   if (!providedKey || !constantTimeCompare(providedKey, configuredApiKey)) {
-    logger.warn('WhatsApp API: Invalid API key provided');
+    logger.warn("WhatsApp API: Invalid API key provided");
     return NextResponse.json(
-      { error: 'Invalid credentials' },
+      { error: "Invalid credentials" },
       { status: HTTP_UNAUTHORIZED },
     );
   }
@@ -79,30 +79,30 @@ function validateApiKey(request: NextRequest): NextResponse | null {
 
 // Request body validation schema
 const SendMessageSchema = z.object({
-  to: z.string().min(1, 'Recipient phone number is required'),
-  type: z.enum(['text', 'template'], {
+  to: z.string().min(1, "Recipient phone number is required"),
+  type: z.enum(["text", "template"], {
     message: 'Message type must be "text" or "template"',
   }),
   content: z.object({
     body: z.string().optional(),
     templateName: z.string().optional(),
-    languageCode: z.string().default('en'),
+    languageCode: z.string().default("en"),
     components: z
       .array(
         z.object({
-          type: z.enum(['header', 'body', 'footer', 'button']),
-          sub_type: z.enum(['quick_reply', 'url', 'phone_number']).optional(),
+          type: z.enum(["header", "body", "footer", "button"]),
+          sub_type: z.enum(["quick_reply", "url", "phone_number"]).optional(),
           index: z.number().optional(),
           parameters: z
             .array(
               z.object({
                 type: z.enum([
-                  'text',
-                  'currency',
-                  'date_time',
-                  'image',
-                  'document',
-                  'video',
+                  "text",
+                  "currency",
+                  "date_time",
+                  "image",
+                  "document",
+                  "video",
                 ]),
                 text: z.string().optional(),
                 currency: z
@@ -163,11 +163,11 @@ function isRetryableError(error: unknown): boolean {
   if (error instanceof Error) {
     const message = error.message.toLowerCase();
     return (
-      message.includes('network') ||
-      message.includes('timeout') ||
-      message.includes('rate limit') ||
-      message.includes('429') ||
-      message.includes('503')
+      message.includes("network") ||
+      message.includes("timeout") ||
+      message.includes("rate limit") ||
+      message.includes("429") ||
+      message.includes("503")
     );
   }
   return false;
@@ -180,14 +180,14 @@ function validateMessageContent(
   type: string,
   content: Record<string, unknown>,
 ): NextResponse | null {
-  if (type === 'text' && !content.body) {
+  if (type === "text" && !content.body) {
     return NextResponse.json(
       { error: 'Text message requires "body" in content' },
       { status: 400 },
     );
   }
 
-  if (type === 'template' && !content.templateName) {
+  if (type === "template" && !content.templateName) {
     return NextResponse.json(
       { error: 'Template message requires "templateName" in content' },
       { status: 400 },
@@ -205,29 +205,29 @@ function buildWhatsAppMessage(
   type: string,
   content: Record<string, unknown>,
 ): SendMessageRequest {
-  if (type === 'text') {
+  if (type === "text") {
     return {
-      messaging_product: 'whatsapp',
-      recipient_type: 'individual',
+      messaging_product: "whatsapp",
+      recipient_type: "individual",
       to,
-      type: 'text',
+      type: "text",
       text: {
         body: content.body as string,
       },
     };
   }
 
-  if (type === 'template') {
+  if (type === "template") {
     const templateMessage: SendMessageRequest = {
-      messaging_product: 'whatsapp',
-      recipient_type: 'individual',
+      messaging_product: "whatsapp",
+      recipient_type: "individual",
       to,
-      type: 'template',
+      type: "template",
       template: {
         name: content.templateName as string,
         language: {
-          code: (content.languageCode as string) || 'en',
-          policy: 'deterministic',
+          code: (content.languageCode as string) || "en",
+          policy: "deterministic",
         },
       },
     };
@@ -253,7 +253,7 @@ async function parseSendMessageRequest(
   request: NextRequest,
 ): Promise<{ error?: NextResponse; data?: ParsedRequest }> {
   const parsedBody = await safeParseJson<unknown>(request, {
-    route: '/api/whatsapp/send',
+    route: "/api/whatsapp/send",
   });
   if (!parsedBody.ok) {
     return {
@@ -266,7 +266,7 @@ async function parseSendMessageRequest(
     return {
       error: NextResponse.json(
         {
-          error: 'Invalid request body',
+          error: "Invalid request body",
           details: validationResult.error.issues,
         },
         { status: 400 },
@@ -309,11 +309,11 @@ async function sendMessageWithRetry(
       }
 
       // Check if error is retryable
-      if (!isRetryableError(new Error(result.error || 'Unknown error'))) {
+      if (!isRetryableError(new Error(result.error || "Unknown error"))) {
         return result;
       }
 
-      lastError = new Error(result.error || 'Unknown error');
+      lastError = new Error(result.error || "Unknown error");
     } catch (error) {
       lastError = error;
 
@@ -364,23 +364,23 @@ function buildSuccessResponse(
  */
 function handleServiceError(error: unknown): NextResponse {
   logger.error(
-    'WhatsApp send message error',
+    "WhatsApp send message error",
     {},
     error instanceof Error ? error : new Error(String(error)),
   );
 
   if (
     error instanceof Error &&
-    error.message.includes('WHATSAPP_ACCESS_TOKEN')
+    error.message.includes("WHATSAPP_ACCESS_TOKEN")
   ) {
     return NextResponse.json(
-      { error: 'WhatsApp service not configured' },
+      { error: "WhatsApp service not configured" },
       { status: 503 },
     );
   }
 
   return NextResponse.json(
-    { error: 'Failed to send message' },
+    { error: "Failed to send message" },
     { status: 500 },
   );
 }
@@ -409,7 +409,7 @@ async function handlePost(
     const result = await sendMessageWithRetry(message);
 
     if (!result.success) {
-      throw new Error(result.error || 'Failed to send message');
+      throw new Error(result.error || "Failed to send message");
     }
 
     return buildSuccessResponse(result);
@@ -422,7 +422,7 @@ async function handlePost(
  * POST /api/whatsapp/send
  * Send WhatsApp message with retry logic
  */
-export const POST = withRateLimit('whatsapp', handlePost);
+export const POST = withRateLimit("whatsapp", handlePost);
 
 // GET: Return API usage info (requires authentication)
 export function GET(request: NextRequest) {
@@ -435,44 +435,44 @@ export function GET(request: NextRequest) {
   const clientInfo = getClientEnvironmentInfo();
 
   return NextResponse.json({
-    message: 'WhatsApp Send Message API',
+    message: "WhatsApp Send Message API",
     environment: clientInfo.environment,
     clientType: clientInfo.clientType,
     usage: {
-      method: 'POST',
-      endpoint: '/api/whatsapp/send',
+      method: "POST",
+      endpoint: "/api/whatsapp/send",
       body: {
-        to: 'string (phone number with country code)',
+        to: "string (phone number with country code)",
         type: '"text" | "template"',
         content: {
-          body: 'string (required for text messages)',
-          templateName: 'string (required for template messages)',
+          body: "string (required for text messages)",
+          templateName: "string (required for template messages)",
           languageCode: 'string (optional, default: "en")',
-          components: 'array (optional, for template parameters)',
+          components: "array (optional, for template parameters)",
         },
       },
     },
     examples: {
       textMessage: {
-        to: '+1234567890',
-        type: 'text',
+        to: "+1234567890",
+        type: "text",
         content: {
-          body: 'Hello from our service!',
+          body: "Hello from our service!",
         },
       },
       templateMessage: {
-        to: '+1234567890',
-        type: 'template',
+        to: "+1234567890",
+        type: "template",
         content: {
-          templateName: 'welcome_message',
-          languageCode: 'en',
+          templateName: "welcome_message",
+          languageCode: "en",
           components: [
             {
-              type: 'body',
+              type: "body",
               parameters: [
                 {
-                  type: 'text',
-                  text: 'John Doe',
+                  type: "text",
+                  text: "John Doe",
                 },
               ],
             },

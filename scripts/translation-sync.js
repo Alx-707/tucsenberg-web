@@ -5,17 +5,17 @@
  * 自动同步翻译文件，支持增量更新和智能合并
  */
 
-const fs = require('fs');
-const path = require('path');
+const fs = require("fs");
+const path = require("path");
 
-console.log('🔄 开始翻译同步和更新...\n');
+console.log("🔄 开始翻译同步和更新...\n");
 
 // 配置
 const CONFIG = {
-  LOCALES: require('../i18n-locales.config').locales,
-  MESSAGES_DIR: path.join(process.cwd(), 'messages'),
-  BACKUP_DIR: path.join(process.cwd(), 'backups', 'translations'),
-  OUTPUT_DIR: path.join(process.cwd(), 'reports'),
+  LOCALES: require("../i18n-locales.config").locales,
+  MESSAGES_DIR: path.join(process.cwd(), "messages"),
+  BACKUP_DIR: path.join(process.cwd(), "backups", "translations"),
+  OUTPUT_DIR: path.join(process.cwd(), "reports"),
 
   // 同步选项
   SYNC_OPTIONS: {
@@ -42,7 +42,7 @@ const syncResults = {
 function createBackup() {
   if (!CONFIG.SYNC_OPTIONS.backupBeforeSync) return;
 
-  const timestamp = new Date().toISOString().replace(/[:.]/g, '-');
+  const timestamp = new Date().toISOString().replace(/[:.]/g, "-");
   const backupDir = path.join(CONFIG.BACKUP_DIR, timestamp);
 
   if (!fs.existsSync(backupDir)) {
@@ -72,7 +72,7 @@ function loadTranslations() {
   for (const locale of CONFIG.LOCALES) {
     const filePath = path.join(CONFIG.MESSAGES_DIR, `${locale}.json`);
     try {
-      const content = fs.readFileSync(filePath, 'utf8');
+      const content = fs.readFileSync(filePath, "utf8");
       translations[locale] = JSON.parse(content);
       console.log(`📖 加载翻译文件: ${locale}.json`);
     } catch (error) {
@@ -90,11 +90,11 @@ function loadTranslations() {
 function getAllTranslationKeys(translations) {
   const allKeys = new Set();
 
-  function extractKeys(obj, prefix = '') {
+  function extractKeys(obj, prefix = "") {
     for (const [key, value] of Object.entries(obj)) {
       const fullKey = prefix ? `${prefix}.${key}` : key;
 
-      if (typeof value === 'object' && value !== null) {
+      if (typeof value === "object" && value !== null) {
         extractKeys(value, fullKey);
       } else {
         allKeys.add(fullKey);
@@ -115,7 +115,7 @@ function getAllTranslationKeys(translations) {
  * 获取嵌套对象的值
  */
 function getNestedValue(obj, path) {
-  return path.split('.').reduce((current, key) => {
+  return path.split(".").reduce((current, key) => {
     return current && current[key] !== undefined ? current[key] : undefined;
   }, obj);
 }
@@ -124,12 +124,12 @@ function getNestedValue(obj, path) {
  * 设置嵌套对象的值
  */
 function setNestedValue(obj, path, value) {
-  const keys = path.split('.');
+  const keys = path.split(".");
   const lastKey = keys.pop();
 
   let current = obj;
   for (const key of keys) {
-    if (!current[key] || typeof current[key] !== 'object') {
+    if (!current[key] || typeof current[key] !== "object") {
       current[key] = {};
     }
     current = current[key];
@@ -157,8 +157,8 @@ function syncTranslationKeys(translations) {
           let fallbackValue = null;
 
           // 首先尝试从英文复制
-          if (locale !== 'en') {
-            fallbackValue = getNestedValue(syncedTranslations['en'], key);
+          if (locale !== "en") {
+            fallbackValue = getNestedValue(syncedTranslations["en"], key);
           }
 
           // 如果没有英文，尝试从其他语言复制
@@ -169,7 +169,7 @@ function syncTranslationKeys(translations) {
                   syncedTranslations[otherLocale],
                   key,
                 );
-                if (otherValue && typeof otherValue === 'string') {
+                if (otherValue && typeof otherValue === "string") {
                   fallbackValue = otherValue;
                   break;
                 }
@@ -210,12 +210,12 @@ function validateTranslations(translations) {
 
     // 检查缺失值
     const missingLocales = CONFIG.LOCALES.filter(
-      (locale) => values[locale] === undefined || values[locale] === '',
+      (locale) => values[locale] === undefined || values[locale] === "",
     );
 
     if (missingLocales.length > 0) {
       issues.push({
-        type: 'missing_translation',
+        type: "missing_translation",
         key,
         locales: missingLocales,
       });
@@ -223,7 +223,7 @@ function validateTranslations(translations) {
 
     // 检查可疑的未翻译内容
     const stringValues = Object.entries(values)
-      .filter(([_, value]) => typeof value === 'string' && value.trim() !== '')
+      .filter(([_, value]) => typeof value === "string" && value.trim() !== "")
       .map(([locale, value]) => ({ locale, value }));
 
     if (stringValues.length > 1) {
@@ -234,12 +234,12 @@ function validateTranslations(translations) {
 
       if (
         sameValues.length === stringValues.length &&
-        !key.includes('url') &&
+        !key.includes("url") &&
         firstValue.length > 3 &&
-        !firstValue.startsWith('[TODO:')
+        !firstValue.startsWith("[TODO:")
       ) {
         issues.push({
-          type: 'suspicious_translation',
+          type: "suspicious_translation",
           key,
           value: firstValue,
         });
@@ -259,12 +259,12 @@ function saveTranslations(translations) {
 
     try {
       const content = `${JSON.stringify(translations[locale], null, 2)}\n`;
-      fs.writeFileSync(filePath, content, 'utf8');
+      fs.writeFileSync(filePath, content, "utf8");
       syncResults.updated++;
       console.log(`💾 保存翻译文件: ${locale}.json`);
     } catch (error) {
       syncResults.errors.push({
-        type: 'save_error',
+        type: "save_error",
         locale,
         error: error.message,
       });
@@ -301,7 +301,7 @@ function generateSyncReport(validationIssues) {
 
   const reportPath = path.join(
     CONFIG.OUTPUT_DIR,
-    'translation-sync-report.json',
+    "translation-sync-report.json",
   );
   fs.writeFileSync(reportPath, JSON.stringify(report, null, 2));
 
@@ -313,7 +313,7 @@ function generateSyncReport(validationIssues) {
  * 显示同步结果
  */
 function displayResults(validationIssues) {
-  console.log('\n📊 同步统计:\n');
+  console.log("\n📊 同步统计:\n");
   console.log(`   处理文件: ${syncResults.processed}`);
   console.log(`   创建键: ${syncResults.created}`);
   console.log(`   更新文件: ${syncResults.updated}`);
@@ -324,14 +324,14 @@ function displayResults(validationIssues) {
 
   // 显示验证问题
   if (validationIssues.length > 0) {
-    console.log('⚠️  发现的问题:');
+    console.log("⚠️  发现的问题:");
 
     const missingTranslations = validationIssues.filter(
-      (issue) => issue.type === 'missing_translation',
+      (issue) => issue.type === "missing_translation",
     );
 
     const suspiciousTranslations = validationIssues.filter(
-      (issue) => issue.type === 'suspicious_translation',
+      (issue) => issue.type === "suspicious_translation",
     );
 
     if (missingTranslations.length > 0) {
@@ -367,7 +367,7 @@ async function main() {
     // 验证翻译完整性
     let validationIssues = [];
     if (CONFIG.SYNC_OPTIONS.validateAfterSync) {
-      console.log('\n🔍 验证翻译完整性...');
+      console.log("\n🔍 验证翻译完整性...");
       validationIssues = validateTranslations(syncedTranslations);
     }
 
@@ -380,21 +380,21 @@ async function main() {
     // 判断是否通过
     const hasErrors = syncResults.errors.length > 0;
     const hasCriticalIssues = validationIssues.some(
-      (issue) => issue.type === 'missing_translation',
+      (issue) => issue.type === "missing_translation",
     );
 
     if (!hasErrors && !hasCriticalIssues) {
-      console.log('✅ 翻译同步完成！所有翻译文件已成功同步。\n');
+      console.log("✅ 翻译同步完成！所有翻译文件已成功同步。\n");
       process.exit(0);
     } else if (!hasErrors && hasCriticalIssues) {
-      console.log('⚠️  翻译同步完成，但存在需要注意的问题。\n');
+      console.log("⚠️  翻译同步完成，但存在需要注意的问题。\n");
       process.exit(0);
     } else {
-      console.log('❌ 翻译同步失败！存在需要修复的错误。\n');
+      console.log("❌ 翻译同步失败！存在需要修复的错误。\n");
       process.exit(1);
     }
   } catch (error) {
-    console.error('💥 翻译同步失败:', error.message);
+    console.error("💥 翻译同步失败:", error.message);
     process.exit(1);
   }
 }

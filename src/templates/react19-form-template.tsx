@@ -1,4 +1,4 @@
-'use client';
+"use client";
 
 /**
  * React 19表单组件模板
@@ -8,15 +8,15 @@
  * @author React 19架构升级项目
  * @description 标准化的React 19表单组件模板，包含useActionState、useOptimistic、错误处理等最佳实践
  */
-import { useActionState, useOptimistic, useTransition } from 'react';
-import { useTranslations } from 'next-intl';
-import { logger } from '@/lib/logger';
-import { type ServerActionResult } from '@/lib/server-action-utils';
-import { type FormSubmissionStatus } from '@/lib/validations';
-import { Button } from '@/components/ui/button';
-import { Card } from '@/components/ui/card';
-import { Input } from '@/components/ui/input';
-import { Label } from '@/components/ui/label';
+import { useActionState, useOptimistic, useTransition } from "react";
+import { useTranslations } from "next-intl";
+import { logger } from "@/lib/logger";
+import { type ServerActionResult } from "@/lib/server-action-utils";
+import { type FormSubmissionStatus } from "@/lib/validations";
+import { Button } from "@/components/ui/button";
+import { Card } from "@/components/ui/card";
+import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
 
 /**
  * 表单状态类型定义
@@ -32,7 +32,7 @@ export interface FormState {
  */
 export interface FormField {
   name: string;
-  type: 'text' | 'email' | 'tel' | 'textarea' | 'select';
+  type: "text" | "email" | "tel" | "textarea" | "select";
   label: string;
   required?: boolean;
   placeholder?: string;
@@ -92,7 +92,7 @@ interface StatusMessageProps {
 }
 
 function StatusMessage({ status, message, t }: StatusMessageProps) {
-  if (status === 'idle') return null;
+  if (status === "idle") return null;
 
   const statusConfig: Record<
     FormSubmissionStatus,
@@ -100,33 +100,33 @@ function StatusMessage({ status, message, t }: StatusMessageProps) {
   > = {
     success: {
       className:
-        'bg-green-50 border-green-200 text-green-800 dark:bg-green-900/20 dark:border-green-800 dark:text-green-200',
-      defaultMessage: t('formTemplate.form.success'),
+        "bg-green-50 border-green-200 text-green-800 dark:bg-green-900/20 dark:border-green-800 dark:text-green-200",
+      defaultMessage: t("formTemplate.form.success"),
     },
     error: {
       className:
-        'bg-red-50 border-red-200 text-red-800 dark:bg-red-900/20 dark:border-red-800 dark:text-red-200',
-      defaultMessage: t('formTemplate.form.error'),
+        "bg-red-50 border-red-200 text-red-800 dark:bg-red-900/20 dark:border-red-800 dark:text-red-200",
+      defaultMessage: t("formTemplate.form.error"),
     },
     submitting: {
       className:
-        'bg-blue-50 border-blue-200 text-blue-800 dark:bg-blue-900/20 dark:border-blue-800 dark:text-blue-200',
-      defaultMessage: t('formTemplate.form.submitting'),
+        "bg-blue-50 border-blue-200 text-blue-800 dark:bg-blue-900/20 dark:border-blue-800 dark:text-blue-200",
+      defaultMessage: t("formTemplate.form.submitting"),
     },
     idle: undefined,
   };
 
   let config: { className: string; defaultMessage: string } | undefined;
   switch (status) {
-    case 'success': {
+    case "success": {
       config = statusConfig.success;
       break;
     }
-    case 'error': {
+    case "error": {
       config = statusConfig.error;
       break;
     }
-    case 'submitting': {
+    case "submitting": {
       config = statusConfig.submitting;
       break;
     }
@@ -139,7 +139,7 @@ function StatusMessage({ status, message, t }: StatusMessageProps) {
 
   return (
     <div className={`rounded-md border p-4 ${config.className}`}>
-      <p className='text-sm font-medium'>{message || config.defaultMessage}</p>
+      <p className="text-sm font-medium">{message || config.defaultMessage}</p>
     </div>
   );
 }
@@ -158,16 +158,16 @@ function FormFieldRenderer({ field, errors, t }: FormFieldRendererProps) {
   const fieldId = `field-${field.name}`;
 
   return (
-    <div className='space-y-2'>
+    <div className="space-y-2">
       <Label
         htmlFor={fieldId}
-        className={hasError ? 'text-red-600 dark:text-red-400' : ''}
+        className={hasError ? "text-red-600 dark:text-red-400" : ""}
       >
         {field.label}
-        {field.required && <span className='ml-1 text-red-500'>*</span>}
+        {field.required && <span className="ml-1 text-red-500">*</span>}
       </Label>
 
-      {field.type === 'textarea' ? (
+      {field.type === "textarea" ? (
         <textarea
           id={fieldId}
           name={field.name}
@@ -175,27 +175,24 @@ function FormFieldRenderer({ field, errors, t }: FormFieldRendererProps) {
           required={field.required}
           className={`min-h-[100px] w-full rounded-md border px-3 py-2 text-sm ${
             hasError
-              ? 'border-red-300 focus:border-red-500 focus:ring-red-500'
-              : 'border-input focus:border-primary focus:ring-primary'
+              ? "border-red-300 focus:border-red-500 focus:ring-red-500"
+              : "border-input focus:border-primary focus:ring-primary"
           }`}
         />
-      ) : field.type === 'select' ? (
+      ) : field.type === "select" ? (
         <select
           id={fieldId}
           name={field.name}
           required={field.required}
           className={`w-full rounded-md border px-3 py-2 text-sm ${
             hasError
-              ? 'border-red-300 focus:border-red-500 focus:ring-red-500'
-              : 'border-input focus:border-primary focus:ring-primary'
+              ? "border-red-300 focus:border-red-500 focus:ring-red-500"
+              : "border-input focus:border-primary focus:ring-primary"
           }`}
         >
-          <option value=''>{t('formTemplate.form.selectOption')}</option>
+          <option value="">{t("formTemplate.form.selectOption")}</option>
           {field.options?.map((option) => (
-            <option
-              key={option.value}
-              value={option.value}
-            >
+            <option key={option.value} value={option.value}>
               {option.label}
             </option>
           ))}
@@ -209,14 +206,14 @@ function FormFieldRenderer({ field, errors, t }: FormFieldRendererProps) {
           required={field.required}
           className={
             hasError
-              ? 'border-red-300 focus:border-red-500 focus:ring-red-500'
-              : ''
+              ? "border-red-300 focus:border-red-500 focus:ring-red-500"
+              : ""
           }
         />
       )}
 
       {hasError && (
-        <div className='text-sm text-red-600 dark:text-red-400'>
+        <div className="text-sm text-red-600 dark:text-red-400">
           {errors.map((error, index) => (
             <p key={index}>{error}</p>
           ))}
@@ -239,14 +236,10 @@ function SubmitButton({
   t: (key: string) => string;
 }) {
   return (
-    <Button
-      type='submit'
-      disabled={isPending}
-      className='w-full'
-    >
+    <Button type="submit" disabled={isPending} className="w-full">
       {isPending
-        ? t('formTemplate.form.submitting')
-        : text || t('formTemplate.form.submit')}
+        ? t("formTemplate.form.submitting")
+        : text || t("formTemplate.form.submit")}
     </Button>
   );
 }
@@ -260,7 +253,7 @@ export function React19FormTemplate({
   title,
   submitText,
   enableOptimistic = false,
-  className = '',
+  className = "",
   onSuccess,
   onError,
 }: React19FormTemplateProps) {
@@ -279,24 +272,24 @@ export function React19FormTemplate({
         if (result.success) {
           onSuccess?.(result);
           return {
-            status: 'success' as FormSubmissionStatus,
-            message: t('formTemplate.form.success'),
+            status: "success" as FormSubmissionStatus,
+            message: t("formTemplate.form.success"),
           };
         }
 
-        onError?.(result.error || t('formTemplate.form.error'));
+        onError?.(result.error || t("formTemplate.form.error"));
         return {
-          status: 'error' as FormSubmissionStatus,
-          message: result.error || t('formTemplate.form.error'),
+          status: "error" as FormSubmissionStatus,
+          message: result.error || t("formTemplate.form.error"),
           errors: result.error ? { general: [result.error] } : undefined,
         };
       } catch (error) {
-        logger.error('Form submission error:', error);
+        logger.error("Form submission error:", error);
         const errorMessage =
-          error instanceof Error ? error.message : t('formTemplate.form.error');
+          error instanceof Error ? error.message : t("formTemplate.form.error");
         onError?.(errorMessage);
         return {
-          status: 'error' as FormSubmissionStatus,
+          status: "error" as FormSubmissionStatus,
           message: errorMessage,
         };
       }
@@ -314,8 +307,8 @@ export function React19FormTemplate({
     if (enableOptimistic) {
       // 乐观更新：立即显示提交状态
       setOptimisticState({
-        status: 'submitting',
-        message: t('formTemplate.form.submitting'),
+        status: "submitting",
+        message: t("formTemplate.form.submitting"),
       });
     }
 
@@ -329,9 +322,9 @@ export function React19FormTemplate({
 
   return (
     <Card className={`p-6 ${className}`}>
-      <div className='space-y-6'>
+      <div className="space-y-6">
         <div>
-          <h2 className='text-2xl font-bold text-gray-900 dark:text-gray-100'>
+          <h2 className="text-2xl font-bold text-gray-900 dark:text-gray-100">
             {title}
           </h2>
         </div>
@@ -344,10 +337,7 @@ export function React19FormTemplate({
           />
         )}
 
-        <form
-          action={handleSubmit}
-          className='space-y-4'
-        >
+        <form action={handleSubmit} className="space-y-4">
           {fields.map((field) => (
             <FormFieldRenderer
               key={field.name}
@@ -357,11 +347,7 @@ export function React19FormTemplate({
             />
           ))}
 
-          <SubmitButton
-            text={submitText}
-            isPending={pending}
-            t={t}
-          />
+          <SubmitButton text={submitText} isPending={pending} t={t} />
         </form>
       </div>
     </Card>
@@ -382,25 +368,25 @@ export function React19FormTemplate({
 export const FORM_TEMPLATE_EXAMPLE = {
   fields: [
     {
-      name: 'name',
-      type: 'text' as const,
-      label: 'formTemplate.example.fields.name.label',
+      name: "name",
+      type: "text" as const,
+      label: "formTemplate.example.fields.name.label",
       required: true,
-      placeholder: 'formTemplate.example.fields.name.placeholder',
+      placeholder: "formTemplate.example.fields.name.placeholder",
     },
     {
-      name: 'email',
-      type: 'email' as const,
-      label: 'formTemplate.example.fields.email.label',
+      name: "email",
+      type: "email" as const,
+      label: "formTemplate.example.fields.email.label",
       required: true,
-      placeholder: 'formTemplate.example.fields.email.placeholder',
+      placeholder: "formTemplate.example.fields.email.placeholder",
     },
     {
-      name: 'message',
-      type: 'textarea' as const,
-      label: 'formTemplate.example.fields.message.label',
+      name: "message",
+      type: "textarea" as const,
+      label: "formTemplate.example.fields.message.label",
       required: true,
-      placeholder: 'formTemplate.example.fields.message.placeholder',
+      placeholder: "formTemplate.example.fields.message.placeholder",
     },
   ],
 };

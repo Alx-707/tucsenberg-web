@@ -10,23 +10,23 @@
  * @see openspec/changes/p1-cache-tag-invalidation/proposal.md
  */
 
-import { revalidatePath, revalidateTag } from 'next/cache';
-import type { Locale } from '@/types/content.types';
+import { revalidatePath, revalidateTag } from "next/cache";
+import type { Locale } from "@/types/content.types";
 import {
   CACHE_DOMAINS,
   cacheTags,
   contentTags,
   i18nTags,
   productTags,
-} from '@/lib/cache/cache-tags';
-import { logger } from '@/lib/logger';
+} from "@/lib/cache/cache-tags";
+import { logger } from "@/lib/logger";
 
 /**
  * Default cache profile for revalidation.
  * 'max' uses stale-while-revalidate semantics - stale content is served
  * while fresh content is fetched in the background.
  */
-const DEFAULT_REVALIDATE_PROFILE = 'max' as const;
+const DEFAULT_REVALIDATE_PROFILE = "max" as const;
 
 /**
  * Result of an invalidation operation.
@@ -171,10 +171,10 @@ export function invalidateDomain(
       tags.push(i18nTags.all());
       break;
     case CACHE_DOMAINS.CONTENT:
-      tags.push(contentTags.blogList('en'), contentTags.blogList('zh'));
+      tags.push(contentTags.blogList("en"), contentTags.blogList("zh"));
       break;
     case CACHE_DOMAINS.PRODUCT:
-      tags.push(...productTags.forLocale('en'), ...productTags.forLocale('zh'));
+      tags.push(...productTags.forLocale("en"), ...productTags.forLocale("zh"));
       break;
     default:
       logger.warn(`Unknown cache domain: ${domainTag}`);
@@ -189,7 +189,7 @@ export function invalidateDomain(
  */
 export function invalidateCachePath(
   path: string,
-  type: 'page' | 'layout' = 'page',
+  type: "page" | "layout" = "page",
 ): void {
   try {
     revalidatePath(path, type);

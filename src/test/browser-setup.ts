@@ -4,12 +4,12 @@
  */
 
 /// <reference lib="dom" />
-import { afterAll, afterEach, beforeAll, beforeEach } from 'vitest';
+import { afterAll, afterEach, beforeAll, beforeEach } from "vitest";
 
 // 浏览器API Mock配置
 beforeAll(() => {
   // 配置浏览器特定的全局变量
-  Object.defineProperty(window, 'matchMedia', {
+  Object.defineProperty(window, "matchMedia", {
     writable: true,
     value: (query: string) => ({
       matches: false,
@@ -24,7 +24,7 @@ beforeAll(() => {
   });
 
   // 配置IntersectionObserver
-  Object.defineProperty(window, 'IntersectionObserver', {
+  Object.defineProperty(window, "IntersectionObserver", {
     writable: true,
     value: class IntersectionObserver {
       constructor(
@@ -39,7 +39,7 @@ beforeAll(() => {
   });
 
   // 配置ResizeObserver
-  Object.defineProperty(window, 'ResizeObserver', {
+  Object.defineProperty(window, "ResizeObserver", {
     writable: true,
     value: class ResizeObserver {
       constructor(
@@ -54,7 +54,7 @@ beforeAll(() => {
   });
 
   // 配置Performance API
-  Object.defineProperty(window, 'performance', {
+  Object.defineProperty(window, "performance", {
     writable: true,
     value: {
       ...window.performance,
@@ -68,7 +68,7 @@ beforeAll(() => {
   });
 
   // 配置Web Vitals相关API
-  Object.defineProperty(window, 'PerformanceObserver', {
+  Object.defineProperty(window, "PerformanceObserver", {
     writable: true,
     value: class PerformanceObserver {
       constructor(_callback: (_list: unknown, _observer: unknown) => void) {
@@ -80,19 +80,19 @@ beforeAll(() => {
   });
 
   // 配置Clipboard API
-  Object.defineProperty(navigator, 'clipboard', {
+  Object.defineProperty(navigator, "clipboard", {
     writable: true,
     value: {
       writeText: async () => {},
-      readText: () => Promise.resolve(''),
+      readText: () => Promise.resolve(""),
     },
   });
 
   // 配置User Agent
-  Object.defineProperty(navigator, 'userAgent', {
+  Object.defineProperty(navigator, "userAgent", {
     writable: true,
     value:
-      'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36',
+      "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36",
   });
 
   // Browser test environment initialized
@@ -101,7 +101,7 @@ beforeAll(() => {
 // 每个测试前的清理
 beforeEach(() => {
   // 清理DOM
-  document.body.innerHTML = '';
+  document.body.innerHTML = "";
 
   // 重置滚动位置
   window.scrollTo(0, 0);
@@ -111,13 +111,13 @@ beforeEach(() => {
   sessionStorage.clear();
 
   // 重置CSS媒体查询
-  Object.defineProperty(window, 'innerWidth', {
+  Object.defineProperty(window, "innerWidth", {
     writable: true,
     configurable: true,
     value: 1280,
   });
 
-  Object.defineProperty(window, 'innerHeight', {
+  Object.defineProperty(window, "innerHeight", {
     writable: true,
     configurable: true,
     value: 720,
@@ -148,27 +148,27 @@ export const browserTestUtils = {
    * 模拟窗口大小变化
    */
   resizeWindow: (width: number, height: number) => {
-    Object.defineProperty(window, 'innerWidth', {
+    Object.defineProperty(window, "innerWidth", {
       writable: true,
       configurable: true,
       value: width,
     });
 
-    Object.defineProperty(window, 'innerHeight', {
+    Object.defineProperty(window, "innerHeight", {
       writable: true,
       configurable: true,
       value: height,
     });
 
     // 触发resize事件
-    window.dispatchEvent(new Event('resize'));
+    window.dispatchEvent(new Event("resize"));
   },
 
   /**
    * 模拟媒体查询匹配
    */
   mockMediaQuery: (query: string, matches: boolean) => {
-    Object.defineProperty(window, 'matchMedia', {
+    Object.defineProperty(window, "matchMedia", {
       writable: true,
       value: (q: string) => ({
         matches: q === query ? matches : false,
@@ -187,20 +187,20 @@ export const browserTestUtils = {
    * 模拟滚动到指定位置
    */
   scrollTo: (x: number, y: number) => {
-    Object.defineProperty(window, 'scrollX', {
+    Object.defineProperty(window, "scrollX", {
       writable: true,
       configurable: true,
       value: x,
     });
 
-    Object.defineProperty(window, 'scrollY', {
+    Object.defineProperty(window, "scrollY", {
       writable: true,
       configurable: true,
       value: y,
     });
 
     // 触发scroll事件
-    window.dispatchEvent(new Event('scroll'));
+    window.dispatchEvent(new Event("scroll"));
   },
 
   /**

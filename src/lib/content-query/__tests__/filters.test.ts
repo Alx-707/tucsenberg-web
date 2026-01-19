@@ -9,14 +9,14 @@
  * - filterPosts
  */
 
-import { beforeEach, describe, expect, it, vi } from 'vitest';
+import { beforeEach, describe, expect, it, vi } from "vitest";
 import type {
   BlogPost,
   BlogPostMetadata,
   ContentConfig,
   ContentQueryOptions,
   ParsedContent,
-} from '@/types/content.types';
+} from "@/types/content.types";
 // Import after mocking
 import {
   filterPosts,
@@ -24,11 +24,11 @@ import {
   matchesCategories,
   matchesFeaturedFilter,
   matchesTags,
-} from '@/lib/content-query/filters';
+} from "@/lib/content-query/filters";
 
 // Mock getContentConfig before importing filters
 const mockGetContentConfig = vi.fn<() => ContentConfig>();
-vi.mock('@/lib/content-utils', () => ({
+vi.mock("@/lib/content-utils", () => ({
   getContentConfig: () => mockGetContentConfig(),
 }));
 
@@ -37,10 +37,10 @@ function createMockBlogPostMetadata(
   overrides?: Partial<BlogPostMetadata>,
 ): BlogPostMetadata {
   return {
-    title: 'Test Post',
-    slug: 'test-post',
-    publishedAt: '2024-01-15',
-    description: 'Test description',
+    title: "Test Post",
+    slug: "test-post",
+    publishedAt: "2024-01-15",
+    description: "Test description",
     draft: false,
     featured: false,
     tags: [],
@@ -55,9 +55,9 @@ function createMockParsedContent(
 ): ParsedContent<BlogPostMetadata> {
   const { metadata: metadataOverrides, ...restOverrides } = overrides ?? {};
   return {
-    slug: restOverrides?.slug ?? 'test-post',
-    content: restOverrides?.content ?? 'Test content body',
-    filePath: restOverrides?.filePath ?? '/content/posts/en/test-post.mdx',
+    slug: restOverrides?.slug ?? "test-post",
+    content: restOverrides?.content ?? "Test content body",
+    filePath: restOverrides?.filePath ?? "/content/posts/en/test-post.mdx",
     ...restOverrides,
     metadata: createMockBlogPostMetadata(metadataOverrides),
   };
@@ -74,28 +74,28 @@ function createMockContentConfig(
   overrides?: Partial<ContentConfig>,
 ): ContentConfig {
   return {
-    defaultLocale: 'en',
-    supportedLocales: ['en', 'zh'],
+    defaultLocale: "en",
+    supportedLocales: ["en", "zh"],
     postsPerPage: 10,
     enableDrafts: false,
     enableSearch: true,
     enableComments: false,
     autoGenerateExcerpt: true,
     excerptLength: 160,
-    dateFormat: 'YYYY-MM-DD',
-    timeZone: 'UTC',
+    dateFormat: "YYYY-MM-DD",
+    timeZone: "UTC",
     ...overrides,
   };
 }
 
-describe('content-query/filters', () => {
+describe("content-query/filters", () => {
   beforeEach(() => {
     vi.clearAllMocks();
     mockGetContentConfig.mockReturnValue(createMockContentConfig());
   });
 
-  describe('isDraftAllowed', () => {
-    it('should allow non-draft posts regardless of config', () => {
+  describe("isDraftAllowed", () => {
+    it("should allow non-draft posts regardless of config", () => {
       const post = createMockParsedContent({
         metadata: { draft: false } as BlogPostMetadata,
       });
@@ -104,7 +104,7 @@ describe('content-query/filters', () => {
       expect(isDraftAllowed(post, options)).toBe(true);
     });
 
-    it('should filter draft posts in production when enableDrafts is false', () => {
+    it("should filter draft posts in production when enableDrafts is false", () => {
       mockGetContentConfig.mockReturnValue(
         createMockContentConfig({ enableDrafts: false }),
       );
@@ -116,7 +116,7 @@ describe('content-query/filters', () => {
       expect(isDraftAllowed(post, options)).toBe(false);
     });
 
-    it('should allow draft posts when enableDrafts is true', () => {
+    it("should allow draft posts when enableDrafts is true", () => {
       mockGetContentConfig.mockReturnValue(
         createMockContentConfig({ enableDrafts: true }),
       );
@@ -128,7 +128,7 @@ describe('content-query/filters', () => {
       expect(isDraftAllowed(post, options)).toBe(true);
     });
 
-    it('should filter by options.draft when specified as true', () => {
+    it("should filter by options.draft when specified as true", () => {
       mockGetContentConfig.mockReturnValue(
         createMockContentConfig({ enableDrafts: true }),
       );
@@ -144,7 +144,7 @@ describe('content-query/filters', () => {
       expect(isDraftAllowed(draftPost, options)).toBe(true);
     });
 
-    it('should filter by options.draft when specified as false', () => {
+    it("should filter by options.draft when specified as false", () => {
       mockGetContentConfig.mockReturnValue(
         createMockContentConfig({ enableDrafts: true }),
       );
@@ -160,7 +160,7 @@ describe('content-query/filters', () => {
       expect(isDraftAllowed(draftPost, options)).toBe(false);
     });
 
-    it('should handle undefined draft metadata', () => {
+    it("should handle undefined draft metadata", () => {
       const post = createMockParsedContent({
         metadata: { draft: undefined } as unknown as BlogPostMetadata,
       });
@@ -169,7 +169,7 @@ describe('content-query/filters', () => {
       expect(isDraftAllowed(post, options)).toBe(true);
     });
 
-    it('should prioritize production config over options when drafts disabled', () => {
+    it("should prioritize production config over options when drafts disabled", () => {
       mockGetContentConfig.mockReturnValue(
         createMockContentConfig({ enableDrafts: false }),
       );
@@ -183,8 +183,8 @@ describe('content-query/filters', () => {
     });
   });
 
-  describe('matchesFeaturedFilter', () => {
-    it('should return true when no featured filter specified', () => {
+  describe("matchesFeaturedFilter", () => {
+    it("should return true when no featured filter specified", () => {
       const post = createMockParsedContent({
         metadata: { featured: false } as BlogPostMetadata,
       });
@@ -193,7 +193,7 @@ describe('content-query/filters', () => {
       expect(matchesFeaturedFilter(post, options)).toBe(true);
     });
 
-    it('should return true when post matches featured=true filter', () => {
+    it("should return true when post matches featured=true filter", () => {
       const post = createMockParsedContent({
         metadata: { featured: true } as BlogPostMetadata,
       });
@@ -202,7 +202,7 @@ describe('content-query/filters', () => {
       expect(matchesFeaturedFilter(post, options)).toBe(true);
     });
 
-    it('should return false when post does not match featured=true filter', () => {
+    it("should return false when post does not match featured=true filter", () => {
       const post = createMockParsedContent({
         metadata: { featured: false } as BlogPostMetadata,
       });
@@ -211,7 +211,7 @@ describe('content-query/filters', () => {
       expect(matchesFeaturedFilter(post, options)).toBe(false);
     });
 
-    it('should return true when post matches featured=false filter', () => {
+    it("should return true when post matches featured=false filter", () => {
       const post = createMockParsedContent({
         metadata: { featured: false } as BlogPostMetadata,
       });
@@ -220,7 +220,7 @@ describe('content-query/filters', () => {
       expect(matchesFeaturedFilter(post, options)).toBe(true);
     });
 
-    it('should return false when post does not match featured=false filter', () => {
+    it("should return false when post does not match featured=false filter", () => {
       const post = createMockParsedContent({
         metadata: { featured: true } as BlogPostMetadata,
       });
@@ -229,7 +229,7 @@ describe('content-query/filters', () => {
       expect(matchesFeaturedFilter(post, options)).toBe(false);
     });
 
-    it('should handle undefined featured metadata', () => {
+    it("should handle undefined featured metadata", () => {
       const post = createMockParsedContent({
         metadata: { featured: undefined } as unknown as BlogPostMetadata,
       });
@@ -239,43 +239,43 @@ describe('content-query/filters', () => {
     });
   });
 
-  describe('matchesTags', () => {
-    it('should return true when no tags filter specified', () => {
+  describe("matchesTags", () => {
+    it("should return true when no tags filter specified", () => {
       const post = createMockParsedContent({
-        metadata: { tags: ['javascript', 'react'] } as BlogPostMetadata,
+        metadata: { tags: ["javascript", "react"] } as BlogPostMetadata,
       });
 
       expect(matchesTags(post, undefined)).toBe(true);
     });
 
-    it('should return true when post has at least one matching tag', () => {
+    it("should return true when post has at least one matching tag", () => {
       const post = createMockParsedContent({
         metadata: {
-          tags: ['javascript', 'react', 'typescript'],
+          tags: ["javascript", "react", "typescript"],
         } as BlogPostMetadata,
       });
 
-      expect(matchesTags(post, ['react', 'vue'])).toBe(true);
+      expect(matchesTags(post, ["react", "vue"])).toBe(true);
     });
 
-    it('should return false when post has no matching tags', () => {
+    it("should return false when post has no matching tags", () => {
       const post = createMockParsedContent({
-        metadata: { tags: ['javascript', 'react'] } as BlogPostMetadata,
+        metadata: { tags: ["javascript", "react"] } as BlogPostMetadata,
       });
 
-      expect(matchesTags(post, ['vue', 'angular'])).toBe(false);
+      expect(matchesTags(post, ["vue", "angular"])).toBe(false);
     });
 
-    it('should return false when post has no tags and filter is specified', () => {
+    it("should return false when post has no tags and filter is specified", () => {
       // Create post with no tags property (simulating missing tags)
       const metadata = createMockBlogPostMetadata();
       delete (metadata as Partial<BlogPostMetadata>).tags;
       const post = createMockParsedContent({ metadata });
 
-      expect(matchesTags(post, ['javascript'])).toBe(false);
+      expect(matchesTags(post, ["javascript"])).toBe(false);
     });
 
-    it('should return false when post has empty tags array and filter is empty array', () => {
+    it("should return false when post has empty tags array and filter is empty array", () => {
       // Empty array is truthy, some() on empty array returns false
       // so the condition becomes: if ([] && !false) => if (true) => return false
       const post = createMockParsedContent({
@@ -285,60 +285,60 @@ describe('content-query/filters', () => {
       expect(matchesTags(post, [])).toBe(false);
     });
 
-    it('should return false when post has empty tags array and filter is specified', () => {
+    it("should return false when post has empty tags array and filter is specified", () => {
       const post = createMockParsedContent({
         metadata: createMockBlogPostMetadata({ tags: [] }),
       });
 
-      expect(matchesTags(post, ['javascript'])).toBe(false);
+      expect(matchesTags(post, ["javascript"])).toBe(false);
     });
 
-    it('should match with multiple overlapping tags', () => {
+    it("should match with multiple overlapping tags", () => {
       const post = createMockParsedContent({
-        metadata: { tags: ['a', 'b', 'c'] } as BlogPostMetadata,
+        metadata: { tags: ["a", "b", "c"] } as BlogPostMetadata,
       });
 
-      expect(matchesTags(post, ['b', 'c', 'd'])).toBe(true);
+      expect(matchesTags(post, ["b", "c", "d"])).toBe(true);
     });
   });
 
-  describe('matchesCategories', () => {
-    it('should return true when no categories filter specified', () => {
+  describe("matchesCategories", () => {
+    it("should return true when no categories filter specified", () => {
       const post = createMockParsedContent({
-        metadata: { categories: ['tech', 'news'] } as BlogPostMetadata,
+        metadata: { categories: ["tech", "news"] } as BlogPostMetadata,
       });
 
       expect(matchesCategories(post, undefined)).toBe(true);
     });
 
-    it('should return true when post has at least one matching category', () => {
+    it("should return true when post has at least one matching category", () => {
       const post = createMockParsedContent({
         metadata: {
-          categories: ['tech', 'news', 'tutorial'],
+          categories: ["tech", "news", "tutorial"],
         } as BlogPostMetadata,
       });
 
-      expect(matchesCategories(post, ['news', 'review'])).toBe(true);
+      expect(matchesCategories(post, ["news", "review"])).toBe(true);
     });
 
-    it('should return false when post has no matching categories', () => {
+    it("should return false when post has no matching categories", () => {
       const post = createMockParsedContent({
-        metadata: { categories: ['tech', 'news'] } as BlogPostMetadata,
+        metadata: { categories: ["tech", "news"] } as BlogPostMetadata,
       });
 
-      expect(matchesCategories(post, ['review', 'opinion'])).toBe(false);
+      expect(matchesCategories(post, ["review", "opinion"])).toBe(false);
     });
 
-    it('should return false when post has no categories and filter is specified', () => {
+    it("should return false when post has no categories and filter is specified", () => {
       // Create post with no categories property (simulating missing categories)
       const metadata = createMockBlogPostMetadata();
       delete (metadata as Partial<BlogPostMetadata>).categories;
       const post = createMockParsedContent({ metadata });
 
-      expect(matchesCategories(post, ['tech'])).toBe(false);
+      expect(matchesCategories(post, ["tech"])).toBe(false);
     });
 
-    it('should return false when post has empty categories array and filter is empty array', () => {
+    it("should return false when post has empty categories array and filter is empty array", () => {
       // Empty array is truthy, some() on empty array returns false
       // so the condition becomes: if ([] && !false) => if (true) => return false
       const post = createMockParsedContent({
@@ -348,21 +348,21 @@ describe('content-query/filters', () => {
       expect(matchesCategories(post, [])).toBe(false);
     });
 
-    it('should return false when post has empty categories and filter is specified', () => {
+    it("should return false when post has empty categories and filter is specified", () => {
       const post = createMockParsedContent({
         metadata: createMockBlogPostMetadata({ categories: [] }),
       });
 
-      expect(matchesCategories(post, ['tech'])).toBe(false);
+      expect(matchesCategories(post, ["tech"])).toBe(false);
     });
   });
 
-  describe('filterPosts', () => {
-    it('should return all posts when no filters applied', () => {
+  describe("filterPosts", () => {
+    it("should return all posts when no filters applied", () => {
       const posts = [
-        createMockParsedContent({ slug: 'post-1' }),
-        createMockParsedContent({ slug: 'post-2' }),
-        createMockParsedContent({ slug: 'post-3' }),
+        createMockParsedContent({ slug: "post-1" }),
+        createMockParsedContent({ slug: "post-2" }),
+        createMockParsedContent({ slug: "post-3" }),
       ];
       const options: ContentQueryOptions = {};
 
@@ -371,17 +371,17 @@ describe('content-query/filters', () => {
       expect(result).toHaveLength(3);
     });
 
-    it('should filter by draft status', () => {
+    it("should filter by draft status", () => {
       mockGetContentConfig.mockReturnValue(
         createMockContentConfig({ enableDrafts: false }),
       );
       const posts = [
         createMockParsedContent({
-          slug: 'published',
+          slug: "published",
           metadata: { draft: false } as BlogPostMetadata,
         }),
         createMockParsedContent({
-          slug: 'draft',
+          slug: "draft",
           metadata: { draft: true } as BlogPostMetadata,
         }),
       ];
@@ -390,17 +390,17 @@ describe('content-query/filters', () => {
       const result = filterPosts(posts, options);
 
       expect(result).toHaveLength(1);
-      expect(result[0]!.slug).toBe('published');
+      expect(result[0]!.slug).toBe("published");
     });
 
-    it('should filter by featured status', () => {
+    it("should filter by featured status", () => {
       const posts = [
         createMockParsedContent({
-          slug: 'featured',
+          slug: "featured",
           metadata: { featured: true } as BlogPostMetadata,
         }),
         createMockParsedContent({
-          slug: 'not-featured',
+          slug: "not-featured",
           metadata: { featured: false } as BlogPostMetadata,
         }),
       ];
@@ -409,120 +409,120 @@ describe('content-query/filters', () => {
       const result = filterPosts(posts, options);
 
       expect(result).toHaveLength(1);
-      expect(result[0]!.slug).toBe('featured');
+      expect(result[0]!.slug).toBe("featured");
     });
 
-    it('should filter by tags', () => {
+    it("should filter by tags", () => {
       const posts = [
         createMockParsedContent({
-          slug: 'react-post',
-          metadata: { tags: ['react', 'javascript'] } as BlogPostMetadata,
+          slug: "react-post",
+          metadata: { tags: ["react", "javascript"] } as BlogPostMetadata,
         }),
         createMockParsedContent({
-          slug: 'vue-post',
-          metadata: { tags: ['vue', 'javascript'] } as BlogPostMetadata,
+          slug: "vue-post",
+          metadata: { tags: ["vue", "javascript"] } as BlogPostMetadata,
         }),
       ];
-      const options: ContentQueryOptions = { tags: ['react'] };
+      const options: ContentQueryOptions = { tags: ["react"] };
 
       const result = filterPosts(posts, options);
 
       expect(result).toHaveLength(1);
-      expect(result[0]!.slug).toBe('react-post');
+      expect(result[0]!.slug).toBe("react-post");
     });
 
-    it('should filter by categories', () => {
+    it("should filter by categories", () => {
       const posts = [
         createMockParsedContent({
-          slug: 'tech-post',
-          metadata: { categories: ['tech'] } as BlogPostMetadata,
+          slug: "tech-post",
+          metadata: { categories: ["tech"] } as BlogPostMetadata,
         }),
         createMockParsedContent({
-          slug: 'news-post',
-          metadata: { categories: ['news'] } as BlogPostMetadata,
+          slug: "news-post",
+          metadata: { categories: ["news"] } as BlogPostMetadata,
         }),
       ];
-      const options: ContentQueryOptions = { categories: ['tech'] };
+      const options: ContentQueryOptions = { categories: ["tech"] };
 
       const result = filterPosts(posts, options);
 
       expect(result).toHaveLength(1);
-      expect(result[0]!.slug).toBe('tech-post');
+      expect(result[0]!.slug).toBe("tech-post");
     });
 
-    it('should apply multiple filters together (AND logic)', () => {
+    it("should apply multiple filters together (AND logic)", () => {
       mockGetContentConfig.mockReturnValue(
         createMockContentConfig({ enableDrafts: true }),
       );
       const posts = [
         createMockParsedContent({
-          slug: 'match-all',
+          slug: "match-all",
           metadata: {
             draft: false,
             featured: true,
-            tags: ['react'],
-            categories: ['tech'],
+            tags: ["react"],
+            categories: ["tech"],
           } as BlogPostMetadata,
         }),
         createMockParsedContent({
-          slug: 'wrong-featured',
+          slug: "wrong-featured",
           metadata: {
             draft: false,
             featured: false,
-            tags: ['react'],
-            categories: ['tech'],
+            tags: ["react"],
+            categories: ["tech"],
           } as BlogPostMetadata,
         }),
         createMockParsedContent({
-          slug: 'wrong-tag',
+          slug: "wrong-tag",
           metadata: {
             draft: false,
             featured: true,
-            tags: ['vue'],
-            categories: ['tech'],
+            tags: ["vue"],
+            categories: ["tech"],
           } as BlogPostMetadata,
         }),
         createMockParsedContent({
-          slug: 'wrong-category',
+          slug: "wrong-category",
           metadata: {
             draft: false,
             featured: true,
-            tags: ['react'],
-            categories: ['news'],
+            tags: ["react"],
+            categories: ["news"],
           } as BlogPostMetadata,
         }),
       ];
       const options: ContentQueryOptions = {
         featured: true,
-        tags: ['react'],
-        categories: ['tech'],
+        tags: ["react"],
+        categories: ["tech"],
       };
 
       const result = filterPosts(posts, options);
 
       expect(result).toHaveLength(1);
-      expect(result[0]!.slug).toBe('match-all');
+      expect(result[0]!.slug).toBe("match-all");
     });
 
-    it('should return empty array when no posts match', () => {
+    it("should return empty array when no posts match", () => {
       const posts = [
         createMockParsedContent({
-          slug: 'post-1',
-          metadata: { tags: ['vue'] } as BlogPostMetadata,
+          slug: "post-1",
+          metadata: { tags: ["vue"] } as BlogPostMetadata,
         }),
         createMockParsedContent({
-          slug: 'post-2',
-          metadata: { tags: ['angular'] } as BlogPostMetadata,
+          slug: "post-2",
+          metadata: { tags: ["angular"] } as BlogPostMetadata,
         }),
       ];
-      const options: ContentQueryOptions = { tags: ['react'] };
+      const options: ContentQueryOptions = { tags: ["react"] };
 
       const result = filterPosts(posts, options);
 
       expect(result).toHaveLength(0);
     });
 
-    it('should return empty array when input is empty', () => {
+    it("should return empty array when input is empty", () => {
       const posts: ParsedContent<BlogPostMetadata>[] = [];
       const options: ContentQueryOptions = {};
 
@@ -531,17 +531,17 @@ describe('content-query/filters', () => {
       expect(result).toHaveLength(0);
     });
 
-    it('should filter drafts when requesting draft: false explicitly', () => {
+    it("should filter drafts when requesting draft: false explicitly", () => {
       mockGetContentConfig.mockReturnValue(
         createMockContentConfig({ enableDrafts: true }),
       );
       const posts = [
         createMockParsedContent({
-          slug: 'published',
+          slug: "published",
           metadata: { draft: false } as BlogPostMetadata,
         }),
         createMockParsedContent({
-          slug: 'draft',
+          slug: "draft",
           metadata: { draft: true } as BlogPostMetadata,
         }),
       ];
@@ -550,20 +550,20 @@ describe('content-query/filters', () => {
       const result = filterPosts(posts, options);
 
       expect(result).toHaveLength(1);
-      expect(result[0]!.slug).toBe('published');
+      expect(result[0]!.slug).toBe("published");
     });
 
-    it('should filter only drafts when requesting draft: true', () => {
+    it("should filter only drafts when requesting draft: true", () => {
       mockGetContentConfig.mockReturnValue(
         createMockContentConfig({ enableDrafts: true }),
       );
       const posts = [
         createMockParsedContent({
-          slug: 'published',
+          slug: "published",
           metadata: { draft: false } as BlogPostMetadata,
         }),
         createMockParsedContent({
-          slug: 'draft',
+          slug: "draft",
           metadata: { draft: true } as BlogPostMetadata,
         }),
       ];
@@ -572,20 +572,20 @@ describe('content-query/filters', () => {
       const result = filterPosts(posts, options);
 
       expect(result).toHaveLength(1);
-      expect(result[0]!.slug).toBe('draft');
+      expect(result[0]!.slug).toBe("draft");
     });
 
-    it('should cast result to BlogPost array', () => {
-      const posts = [createMockParsedContent({ slug: 'post-1' })];
+    it("should cast result to BlogPost array", () => {
+      const posts = [createMockParsedContent({ slug: "post-1" })];
       const options: ContentQueryOptions = {};
 
       const result = filterPosts(posts, options);
 
       // Verify the result is typed as BlogPost[]
-      expect(result[0]!).toHaveProperty('metadata');
-      expect(result[0]!).toHaveProperty('content');
-      expect(result[0]!).toHaveProperty('slug');
-      expect(result[0]!).toHaveProperty('filePath');
+      expect(result[0]!).toHaveProperty("metadata");
+      expect(result[0]!).toHaveProperty("content");
+      expect(result[0]!).toHaveProperty("slug");
+      expect(result[0]!).toHaveProperty("filePath");
     });
   });
 });

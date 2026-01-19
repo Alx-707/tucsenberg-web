@@ -1,8 +1,8 @@
-import { describe, expect, it } from 'vitest';
-import { getAppConfig, validateAppConfig } from '@/config/app';
+import { describe, expect, it } from "vitest";
+import { getAppConfig, validateAppConfig } from "@/config/app";
 
-describe('应用配置验证（validateAppConfig）', () => {
-  it('对 getAppConfig 生成的默认配置返回 true', () => {
+describe("应用配置验证（validateAppConfig）", () => {
+  it("对 getAppConfig 生成的默认配置返回 true", () => {
     // 使用当前环境变量构建应用配置
     const appConfig = getAppConfig();
 

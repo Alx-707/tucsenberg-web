@@ -1,10 +1,10 @@
-import { cn } from '@/lib/utils';
+import { cn } from "@/lib/utils";
 import {
   Card,
   CardContent,
   CardFooter,
   CardHeader,
-} from '@/components/ui/card';
+} from "@/components/ui/card";
 
 export interface ProductCardSkeletonProps {
   /** Whether to show cover image skeleton */
@@ -29,32 +29,32 @@ export function ProductCardSkeleton({
   className,
 }: ProductCardSkeletonProps) {
   return (
-    <Card className={cn('h-full overflow-hidden', className)}>
+    <Card className={cn("h-full overflow-hidden", className)}>
       {showCoverImage && (
-        <div className='aspect-[4/3] w-full animate-pulse bg-muted' />
+        <div className="aspect-[4/3] w-full animate-pulse bg-muted" />
       )}
 
-      <CardHeader className='gap-3'>
+      <CardHeader className="gap-3">
         {showCategory && (
-          <div className='h-5 w-24 animate-pulse rounded-full bg-muted' />
+          <div className="h-5 w-24 animate-pulse rounded-full bg-muted" />
         )}
-        <div className='space-y-2'>
-          <div className='h-5 w-full animate-pulse rounded bg-muted' />
-          <div className='h-5 w-3/4 animate-pulse rounded bg-muted' />
+        <div className="space-y-2">
+          <div className="h-5 w-full animate-pulse rounded bg-muted" />
+          <div className="h-5 w-3/4 animate-pulse rounded bg-muted" />
         </div>
       </CardHeader>
 
-      <CardContent className='pt-0'>
-        <div className='space-y-2'>
-          <div className='h-4 w-full animate-pulse rounded bg-muted' />
-          <div className='h-4 w-5/6 animate-pulse rounded bg-muted' />
+      <CardContent className="pt-0">
+        <div className="space-y-2">
+          <div className="h-4 w-full animate-pulse rounded bg-muted" />
+          <div className="h-4 w-5/6 animate-pulse rounded bg-muted" />
         </div>
       </CardContent>
 
       {showTradeInfo && (
-        <CardFooter className='mt-auto gap-4'>
-          <div className='h-4 w-20 animate-pulse rounded bg-muted' />
-          <div className='h-4 w-24 animate-pulse rounded bg-muted' />
+        <CardFooter className="mt-auto gap-4">
+          <div className="h-4 w-20 animate-pulse rounded bg-muted" />
+          <div className="h-4 w-24 animate-pulse rounded bg-muted" />
         </CardFooter>
       )}
     </Card>
@@ -78,24 +78,24 @@ export interface ProductGridSkeletonProps {
 
 // Static column class getters
 function getSmColumnClass(sm: 1 | 2): string {
-  if (sm === 1) return 'sm:grid-cols-1';
-  return 'sm:grid-cols-2';
+  if (sm === 1) return "sm:grid-cols-1";
+  return "sm:grid-cols-2";
 }
 
 function getMdColumnClass(md: 2 | 3): string {
-  if (md === 2) return 'md:grid-cols-2';
-  return 'md:grid-cols-3';
+  if (md === 2) return "md:grid-cols-2";
+  return "md:grid-cols-3";
 }
 
 function getLgColumnClass(lg: 3 | 4): string {
-  if (lg === 3) return 'lg:grid-cols-3';
-  return 'lg:grid-cols-4';
+  if (lg === 3) return "lg:grid-cols-3";
+  return "lg:grid-cols-4";
 }
 
 function getGapClass(gap: 4 | 6 | 8): string {
-  if (gap === 4) return 'gap-4';
-  if (gap === 6) return 'gap-6';
-  return 'gap-8';
+  if (gap === 4) return "gap-4";
+  if (gap === 6) return "gap-6";
+  return "gap-8";
 }
 
 /**
@@ -112,7 +112,7 @@ export function ProductGridSkeleton({
   className,
 }: ProductGridSkeletonProps) {
   const gridClasses = cn(
-    'grid grid-cols-1',
+    "grid grid-cols-1",
     getSmColumnClass(sm),
     getMdColumnClass(md),
     getLgColumnClass(lg),

@@ -1,4 +1,4 @@
-'use client';
+"use client";
 
 /**
  * Cookie Consent Banner
@@ -10,15 +10,15 @@
  * - Responsive design (bottom bar on mobile, floating on desktop)
  * - CSS variable coordination with floating elements (--cookie-banner-height)
  */
-import { useCallback, useEffect, useRef, useState } from 'react';
-import Link from 'next/link';
-import { X } from 'lucide-react';
-import { useTranslations } from 'next-intl';
-import { useCookieConsent } from '@/lib/cookie-consent';
-import { cn } from '@/lib/utils';
-import { Button } from '@/components/ui/button';
+import { useCallback, useEffect, useRef, useState } from "react";
+import Link from "next/link";
+import { X } from "lucide-react";
+import { useTranslations } from "next-intl";
+import { useCookieConsent } from "@/lib/cookie-consent";
+import { cn } from "@/lib/utils";
+import { Button } from "@/components/ui/button";
 
-const CSS_VAR_BANNER_HEIGHT = '--cookie-banner-height';
+const CSS_VAR_BANNER_HEIGHT = "--cookie-banner-height";
 
 interface CookieBannerProps {
   className?: string;
@@ -38,11 +38,11 @@ function setCookieBannerHeight(height: number): void {
  * Reset --cookie-banner-height to 0 when banner is dismissed
  */
 function resetCookieBannerHeight(): void {
-  document.documentElement.style.setProperty(CSS_VAR_BANNER_HEIGHT, '0px');
+  document.documentElement.style.setProperty(CSS_VAR_BANNER_HEIGHT, "0px");
 }
 
 export function CookieBanner({ className }: CookieBannerProps) {
-  const t = useTranslations('cookie');
+  const t = useTranslations("cookie");
   const { hasConsented, ready, acceptAll, rejectAll, savePreferences } =
     useCookieConsent();
   const [showPreferences, setShowPreferences] = useState(false);
@@ -97,17 +97,17 @@ export function CookieBanner({ className }: CookieBannerProps) {
   return (
     <div
       ref={bannerRef}
-      role='dialog'
-      aria-modal='false'
-      aria-label={t('title')}
+      role="dialog"
+      aria-modal="false"
+      aria-label={t("title")}
       className={cn(
-        'fixed inset-x-0 bottom-0 z-[100] duration-300 animate-in slide-in-from-bottom',
-        'border-t bg-background/95 backdrop-blur-sm supports-[backdrop-filter]:bg-background/80',
-        'shadow-lg',
+        "fixed inset-x-0 bottom-0 z-[100] duration-300 animate-in slide-in-from-bottom",
+        "border-t bg-background/95 backdrop-blur-sm supports-[backdrop-filter]:bg-background/80",
+        "shadow-lg",
         className,
       )}
     >
-      <div className='mx-auto max-w-7xl px-4 py-4 sm:px-6 lg:px-8'>
+      <div className="mx-auto max-w-7xl px-4 py-4 sm:px-6 lg:px-8">
         {showPreferences ? (
           <PreferencesPanel
             t={t}
@@ -132,7 +132,7 @@ export function CookieBanner({ className }: CookieBannerProps) {
 }
 
 interface MainBannerProps {
-  t: ReturnType<typeof useTranslations<'cookie'>>;
+  t: ReturnType<typeof useTranslations<"cookie">>;
   onAcceptAll: () => void;
   onRejectAll: () => void;
   onManage: () => void;
@@ -145,43 +145,43 @@ function MainBanner({
   onManage,
 }: MainBannerProps) {
   return (
-    <div className='flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between'>
-      <div className='flex-1 space-y-1'>
-        <p className='text-sm font-medium text-foreground'>{t('title')}</p>
-        <p className='text-xs text-muted-foreground sm:text-sm'>
-          {t('description')}{' '}
+    <div className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
+      <div className="flex-1 space-y-1">
+        <p className="text-sm font-medium text-foreground">{t("title")}</p>
+        <p className="text-xs text-muted-foreground sm:text-sm">
+          {t("description")}{" "}
           <Link
-            href='/privacy'
-            className='underline underline-offset-4 hover:text-foreground'
+            href="/privacy"
+            className="underline underline-offset-4 hover:text-foreground"
           >
-            {t('learnMore')}
+            {t("learnMore")}
           </Link>
         </p>
       </div>
-      <div className='flex flex-wrap items-center gap-2 sm:flex-nowrap'>
+      <div className="flex flex-wrap items-center gap-2 sm:flex-nowrap">
         <Button
-          variant='ghost'
-          size='sm'
+          variant="ghost"
+          size="sm"
           onClick={onManage}
-          className='text-xs'
+          className="text-xs"
         >
-          {t('manage')}
+          {t("manage")}
         </Button>
         <Button
-          variant='outline'
-          size='sm'
+          variant="outline"
+          size="sm"
           onClick={onRejectAll}
-          className='text-xs'
+          className="text-xs"
         >
-          {t('rejectAll')}
+          {t("rejectAll")}
         </Button>
         <Button
-          variant='default'
-          size='sm'
+          variant="default"
+          size="sm"
           onClick={onAcceptAll}
-          className='text-xs'
+          className="text-xs"
         >
-          {t('acceptAll')}
+          {t("acceptAll")}
         </Button>
       </div>
     </div>
@@ -189,7 +189,7 @@ function MainBanner({
 }
 
 interface PreferencesPanelProps {
-  t: ReturnType<typeof useTranslations<'cookie'>>;
+  t: ReturnType<typeof useTranslations<"cookie">>;
   analytics: boolean;
   marketing: boolean;
   onAnalyticsChange: (value: boolean) => void;
@@ -208,32 +208,32 @@ function PreferencesPanel({
   onClose,
 }: PreferencesPanelProps) {
   return (
-    <div className='space-y-4'>
-      <div className='flex items-start justify-between'>
+    <div className="space-y-4">
+      <div className="flex items-start justify-between">
         <div>
-          <p className='text-sm font-medium text-foreground'>
-            {t('preferences.title')}
+          <p className="text-sm font-medium text-foreground">
+            {t("preferences.title")}
           </p>
-          <p className='text-xs text-muted-foreground'>
-            {t('preferences.description')}
+          <p className="text-xs text-muted-foreground">
+            {t("preferences.description")}
           </p>
         </div>
         <Button
-          variant='ghost'
-          size='icon'
+          variant="ghost"
+          size="icon"
           onClick={onClose}
-          className='h-8 w-8 shrink-0'
-          aria-label={t('close')}
+          className="h-8 w-8 shrink-0"
+          aria-label={t("close")}
         >
-          <X className='h-4 w-4' />
+          <X className="h-4 w-4" />
         </Button>
       </div>
 
-      <div className='grid gap-3 sm:grid-cols-3'>
+      <div className="grid gap-3 sm:grid-cols-3">
         {/* Necessary - Always enabled, onChange is no-op since disabled */}
         <CategoryToggle
-          label={t('categories.necessary')}
-          description={t('categories.necessaryDesc')}
+          label={t("categories.necessary")}
+          description={t("categories.necessaryDesc")}
           checked={true}
           disabled={true}
           onChange={Function.prototype as unknown as (value: boolean) => void}
@@ -241,35 +241,27 @@ function PreferencesPanel({
 
         {/* Analytics */}
         <CategoryToggle
-          label={t('categories.analytics')}
-          description={t('categories.analyticsDesc')}
+          label={t("categories.analytics")}
+          description={t("categories.analyticsDesc")}
           checked={analytics}
           onChange={onAnalyticsChange}
         />
 
         {/* Marketing */}
         <CategoryToggle
-          label={t('categories.marketing')}
-          description={t('categories.marketingDesc')}
+          label={t("categories.marketing")}
+          description={t("categories.marketingDesc")}
           checked={marketing}
           onChange={onMarketingChange}
         />
       </div>
 
-      <div className='flex justify-end gap-2'>
-        <Button
-          variant='outline'
-          size='sm'
-          onClick={onClose}
-        >
-          {t('cancel')}
+      <div className="flex justify-end gap-2">
+        <Button variant="outline" size="sm" onClick={onClose}>
+          {t("cancel")}
         </Button>
-        <Button
-          variant='default'
-          size='sm'
-          onClick={onSave}
-        >
-          {t('savePreferences')}
+        <Button variant="default" size="sm" onClick={onSave}>
+          {t("savePreferences")}
         </Button>
       </div>
     </div>
@@ -291,30 +283,30 @@ function CategoryToggle({
   disabled = false,
   onChange,
 }: CategoryToggleProps) {
-  const id = `cookie-${label.toLowerCase().replace(/\s+/g, '-')}`;
+  const id = `cookie-${label.toLowerCase().replace(/\s+/g, "-")}`;
 
   return (
     <label
       htmlFor={id}
       className={cn(
-        'flex cursor-pointer items-start gap-3 rounded-lg border p-3 transition-colors',
-        disabled ? 'cursor-not-allowed bg-muted/50' : 'hover:bg-muted/50',
-        checked && !disabled && 'border-primary/50 bg-primary/5',
+        "flex cursor-pointer items-start gap-3 rounded-lg border p-3 transition-colors",
+        disabled ? "cursor-not-allowed bg-muted/50" : "hover:bg-muted/50",
+        checked && !disabled && "border-primary/50 bg-primary/5",
       )}
     >
       <input
         id={id}
-        type='checkbox'
+        type="checkbox"
         checked={checked}
         disabled={disabled}
         onChange={(e) => onChange(e.target.checked)}
-        className='mt-0.5 h-4 w-4 rounded border-input accent-primary disabled:cursor-not-allowed disabled:opacity-50'
+        className="mt-0.5 h-4 w-4 rounded border-input accent-primary disabled:cursor-not-allowed disabled:opacity-50"
       />
-      <div className='flex-1 space-y-0.5'>
-        <p className='text-xs leading-none font-medium text-foreground'>
+      <div className="flex-1 space-y-0.5">
+        <p className="text-xs leading-none font-medium text-foreground">
           {label}
         </p>
-        <p className='text-xs text-muted-foreground'>{description}</p>
+        <p className="text-xs text-muted-foreground">{description}</p>
       </div>
     </label>
   );

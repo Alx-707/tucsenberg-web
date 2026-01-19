@@ -1,4 +1,4 @@
-'use server';
+"use server";
 
 /**
  * Server Actions 统一入口文件
@@ -7,11 +7,11 @@
  * @description React 19 Server Actions 基础设施
  * @version 1.0.0
  */
-import { headers } from 'next/headers';
-import { contactFieldValidators } from '@/lib/form-schema/contact-field-validators';
-import { type ContactFormData } from '@/lib/form-schema/contact-form-schema';
-import { logger } from '@/lib/logger';
-import { checkDistributedRateLimit } from '@/lib/security/distributed-rate-limit';
+import { headers } from "next/headers";
+import { contactFieldValidators } from "@/lib/form-schema/contact-field-validators";
+import { type ContactFormData } from "@/lib/form-schema/contact-form-schema";
+import { logger } from "@/lib/logger";
+import { checkDistributedRateLimit } from "@/lib/security/distributed-rate-limit";
 import {
   createErrorResultWithLogging,
   createSuccessResultWithLogging,
@@ -20,14 +20,14 @@ import {
   withErrorHandling,
   type ServerAction,
   type ServerActionResult,
-} from '@/lib/server-action-utils';
-import { verifyTurnstile } from '@/app/api/contact/contact-api-utils';
-import { processFormSubmission } from '@/app/api/contact/contact-api-validation';
-import { mapZodIssueToErrorKey } from '@/app/api/contact/contact-form-error-utils';
+} from "@/lib/server-action-utils";
+import { verifyTurnstile } from "@/app/api/contact/contact-api-utils";
+import { processFormSubmission } from "@/app/api/contact/contact-api-validation";
+import { mapZodIssueToErrorKey } from "@/app/api/contact/contact-form-error-utils";
 import {
   CONTACT_FORM_CONFIG,
   createContactFormSchemaFromConfig,
-} from '@/config/contact-form-config';
+} from "@/config/contact-form-config";
 
 /**
  * 联系表单提交结果类型
@@ -63,9 +63,9 @@ const contactFormSchema = createContactFormSchemaFromConfig(
  */
 async function getClientIPFromHeaders(): Promise<string> {
   const headersList = await headers();
-  const forwardedFor = headersList.get('x-forwarded-for');
-  const realIP = headersList.get('x-real-ip');
-  return forwardedFor?.split(',')[0]?.trim() || realIP || 'unknown';
+  const forwardedFor = headersList.get("x-forwarded-for");
+  const realIP = headersList.get("x-real-ip");
+  return forwardedFor?.split(",")[0]?.trim() || realIP || "unknown";
 }
 
 /**
@@ -84,7 +84,7 @@ async function validateContactFormData(
 
     return {
       success: false,
-      error: 'Validation failed',
+      error: "Validation failed",
       details: errorMessages,
       data: null,
     };
@@ -99,8 +99,8 @@ async function validateContactFormData(
   if (timeDiff > maxAge || timeDiff < 0) {
     return {
       success: false,
-      error: 'Form submission expired or invalid',
-      details: ['Please refresh the page and try again'],
+      error: "Form submission expired or invalid",
+      details: ["Please refresh the page and try again"],
       data: null,
     };
   }
@@ -110,8 +110,8 @@ async function validateContactFormData(
   if (!turnstileValid) {
     return {
       success: false,
-      error: 'Security verification failed',
-      details: ['Please complete the security check'],
+      error: "Security verification failed",
+      details: ["Please complete the security check"],
       data: null,
     };
   }
@@ -146,18 +146,18 @@ async function processContactFormSubmission(
  */
 function extractContactFormData(formData: FormData): ContactFormWithToken {
   return {
-    firstName: getFormDataString(formData, 'firstName'),
-    lastName: getFormDataString(formData, 'lastName'),
-    email: getFormDataString(formData, 'email'),
-    company: getFormDataString(formData, 'company'),
-    phone: getFormDataString(formData, 'phone'),
-    subject: getFormDataString(formData, 'subject'),
-    message: getFormDataString(formData, 'message'),
-    acceptPrivacy: getFormDataBoolean(formData, 'acceptPrivacy'),
-    marketingConsent: getFormDataBoolean(formData, 'marketingConsent'),
-    turnstileToken: getFormDataString(formData, 'turnstileToken'),
+    firstName: getFormDataString(formData, "firstName"),
+    lastName: getFormDataString(formData, "lastName"),
+    email: getFormDataString(formData, "email"),
+    company: getFormDataString(formData, "company"),
+    phone: getFormDataString(formData, "phone"),
+    subject: getFormDataString(formData, "subject"),
+    message: getFormDataString(formData, "message"),
+    acceptPrivacy: getFormDataBoolean(formData, "acceptPrivacy"),
+    marketingConsent: getFormDataBoolean(formData, "marketingConsent"),
+    turnstileToken: getFormDataString(formData, "turnstileToken"),
     submittedAt:
-      getFormDataString(formData, 'submittedAt') || new Date().toISOString(),
+      getFormDataString(formData, "submittedAt") || new Date().toISOString(),
   };
 }
 
@@ -169,12 +169,12 @@ async function performSecurityChecks(
   formData: FormData,
   clientIP: string,
 ): Promise<ServerActionResult<ContactFormResult> | null> {
-  const rateLimitResult = await checkDistributedRateLimit(clientIP, 'contact');
+  const rateLimitResult = await checkDistributedRateLimit(clientIP, "contact");
   if (!rateLimitResult.allowed) {
-    return createErrorResultWithLogging('Too many requests', undefined, logger);
+    return createErrorResultWithLogging("Too many requests", undefined, logger);
   }
 
-  const honeypot = getFormDataString(formData, 'website');
+  const honeypot = getFormDataString(formData, "website");
   if (honeypot) {
     return createSuccessResultWithLogging(
       {
@@ -183,7 +183,7 @@ async function performSecurityChecks(
         emailMessageId: null,
         airtableRecordId: null,
       } satisfies ContactFormResult,
-      'Thank you for your message.',
+      "Thank you for your message.",
       logger,
     );
   }
@@ -230,7 +230,7 @@ export const contactFormAction: ServerAction<FormData, ContactFormResult> =
       // 验证必需的Turnstile token
       if (!contactData.turnstileToken) {
         return createErrorResultWithLogging(
-          'Security verification required',
+          "Security verification required",
           undefined,
           logger,
         );
@@ -240,7 +240,7 @@ export const contactFormAction: ServerAction<FormData, ContactFormResult> =
       const validation = await validateContactFormData(contactData, clientIP);
       if (!validation.success || !validation.data) {
         return createErrorResultWithLogging(
-          validation.error || 'Validation failed',
+          validation.error || "Validation failed",
           validation.details || undefined,
           logger,
         );
@@ -251,7 +251,7 @@ export const contactFormAction: ServerAction<FormData, ContactFormResult> =
 
       // 记录成功提交
       const processingTime = performance.now() - startTime;
-      logger.info('Contact form submitted via Server Action', {
+      logger.info("Contact form submitted via Server Action", {
         processingTime,
         emailSent: submissionResult.emailSent,
         recordCreated: submissionResult.recordCreated,
@@ -261,19 +261,19 @@ export const contactFormAction: ServerAction<FormData, ContactFormResult> =
 
       return createSuccessResultWithLogging(
         submissionResult,
-        'Thank you for your message. We will get back to you soon.',
+        "Thank you for your message. We will get back to you soon.",
         logger,
       );
     } catch (error) {
       const processingTime = performance.now() - startTime;
-      logger.error('Contact form Server Action failed', {
-        error: error instanceof Error ? error.message : 'Unknown error',
+      logger.error("Contact form Server Action failed", {
+        error: error instanceof Error ? error.message : "Unknown error",
         stack: error instanceof Error ? error.stack : undefined,
         processingTime,
       });
 
       return createErrorResultWithLogging(
-        'An unexpected error occurred. Please try again later.',
+        "An unexpected error occurred. Please try again later.",
         undefined,
         logger,
       );

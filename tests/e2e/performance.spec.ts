@@ -1,11 +1,11 @@
-import { expect, test } from '@playwright/test';
+import { expect, test } from "@playwright/test";
 
-test.describe('Performance Tests', () => {
-  test('should load homepage within acceptable time', async ({ page }) => {
+test.describe("Performance Tests", () => {
+  test("should load homepage within acceptable time", async ({ page }) => {
     const startTime = Date.now();
 
-    await page.goto('/', { waitUntil: 'domcontentloaded' });
-    await page.waitForURL('**/en');
+    await page.goto("/", { waitUntil: "domcontentloaded" });
+    await page.waitForURL("**/en");
 
     const loadTime = Date.now() - startTime;
     console.log(`Homepage load time: ${loadTime}ms`);
@@ -15,8 +15,8 @@ test.describe('Performance Tests', () => {
     expect(loadTime).toBeLessThan(budgetMs);
   });
 
-  test('should have good Core Web Vitals', async ({ page }) => {
-    await page.goto('/');
+  test("should have good Core Web Vitals", async ({ page }) => {
+    await page.goto("/");
 
     // Measure Core Web Vitals
     const vitals = await page.evaluate(() => {
@@ -26,7 +26,7 @@ test.describe('Performance Tests', () => {
           const webVitals: Record<string, number> = {};
 
           entries.forEach((entry) => {
-            if (entry.entryType === 'navigation') {
+            if (entry.entryType === "navigation") {
               const navEntry = entry as PerformanceNavigationTiming;
               webVitals.FCP = navEntry.loadEventEnd - navEntry.fetchStart;
             }
@@ -35,48 +35,48 @@ test.describe('Performance Tests', () => {
           resolve(webVitals);
         });
 
-        observer.observe({ entryTypes: ['navigation', 'paint'] });
+        observer.observe({ entryTypes: ["navigation", "paint"] });
 
         // Fallback timeout
         setTimeout(() => resolve({}), 5000);
       });
     });
 
-    console.log('Core Web Vitals:', vitals);
+    console.log("Core Web Vitals:", vitals);
   });
 
-  test('should not have console errors', async ({ page }) => {
+  test("should not have console errors", async ({ page }) => {
     const consoleErrors: string[] = [];
 
-    page.on('console', (msg) => {
-      if (msg.type() === 'error') {
+    page.on("console", (msg) => {
+      if (msg.type() === "error") {
         consoleErrors.push(msg.text());
       }
     });
 
-    await page.goto('/');
-    await page.waitForLoadState('networkidle');
+    await page.goto("/");
+    await page.waitForLoadState("networkidle");
 
     // Filter out known acceptable errors
     const criticalErrors = consoleErrors.filter(
       (error) =>
-        !error.includes('favicon') &&
-        !error.includes('404') &&
-        !error.includes('net::ERR_FAILED'),
+        !error.includes("favicon") &&
+        !error.includes("404") &&
+        !error.includes("net::ERR_FAILED"),
     );
 
     expect(criticalErrors).toHaveLength(0);
   });
 
-  test('should handle network failures gracefully', async ({ page }) => {
+  test("should handle network failures gracefully", async ({ page }) => {
     // Simulate slow network
-    await page.route('**/*', (route) => {
+    await page.route("**/*", (route) => {
       setTimeout(() => route.continue(), 100);
     });
 
-    await page.goto('/');
+    await page.goto("/");
 
     // Page should still load and be functional
-    await expect(page.locator('body')).toBeVisible();
+    await expect(page.locator("body")).toBeVisible();
   });
 });

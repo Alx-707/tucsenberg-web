@@ -1,8 +1,8 @@
-import { cn } from '@/lib/utils';
-import { AnimatedStatItem } from '@/components/trust/animated-stat-item';
-import type { TrustStat } from '@/components/trust/trust-types';
+import { cn } from "@/lib/utils";
+import { AnimatedStatItem } from "@/components/trust/animated-stat-item";
+import type { TrustStat } from "@/components/trust/trust-types";
 
-export type { TrustStat } from '@/components/trust/trust-types';
+export type { TrustStat } from "@/components/trust/trust-types";
 
 export interface TrustStatsProps {
   /** Section title */
@@ -17,9 +17,9 @@ export interface TrustStatsProps {
 
 function StaticStatItem({ stat }: { stat: TrustStat }) {
   return (
-    <div className='text-center'>
-      <div className='mb-2 text-4xl font-bold text-primary'>{stat.value}</div>
-      <div className='text-sm text-muted-foreground'>{stat.label}</div>
+    <div className="text-center">
+      <div className="mb-2 text-4xl font-bold text-primary">{stat.value}</div>
+      <div className="text-sm text-muted-foreground">{stat.label}</div>
     </div>
   );
 }
@@ -39,24 +39,18 @@ export function TrustStats({
   }
 
   return (
-    <section className={cn('bg-muted/30 py-12 md:py-16', className)}>
-      <div className='container mx-auto px-4'>
+    <section className={cn("bg-muted/30 py-12 md:py-16", className)}>
+      <div className="container mx-auto px-4">
         {title !== undefined && (
-          <h2 className='mb-10 text-center text-2xl font-bold'>{title}</h2>
+          <h2 className="mb-10 text-center text-2xl font-bold">{title}</h2>
         )}
 
-        <div className='grid gap-8 sm:grid-cols-2 lg:grid-cols-4'>
+        <div className="grid gap-8 sm:grid-cols-2 lg:grid-cols-4">
           {stats.map((stat) =>
             animated ? (
-              <AnimatedStatItem
-                key={stat.id}
-                stat={stat}
-              />
+              <AnimatedStatItem key={stat.id} stat={stat} />
             ) : (
-              <StaticStatItem
-                key={stat.id}
-                stat={stat}
-              />
+              <StaticStatItem key={stat.id} stat={stat} />
             ),
           )}
         </div>

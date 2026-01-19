@@ -6,12 +6,12 @@
 import type {
   WebhookError,
   WebhookVerificationRequest,
-} from '@/types/whatsapp-webhook-base';
+} from "@/types/whatsapp-webhook-base";
 import {
   ANIMATION_DURATION_NORMAL,
   ANIMATION_DURATION_VERY_SLOW,
   MAGIC_600,
-} from '@/constants';
+} from "@/constants";
 
 /**
  * Webhook验证工具函数
@@ -22,11 +22,11 @@ export function isWebhookVerificationRequest(
 ): query is WebhookVerificationRequest {
   return Boolean(
     query &&
-    typeof query === 'object' &&
-    'hub.mode' in query &&
-    'hub.challenge' in query &&
-    'hub.verify_token' in query &&
-    (query as Record<string, unknown>)['hub.mode'] === 'subscribe',
+    typeof query === "object" &&
+    "hub.mode" in query &&
+    "hub.challenge" in query &&
+    "hub.verify_token" in query &&
+    (query as Record<string, unknown>)["hub.mode"] === "subscribe",
   );
 }
 
@@ -45,7 +45,7 @@ export function createWebhookError(
 ): WebhookError {
   const result: WebhookError = {
     code,
-    title: 'Webhook Error',
+    title: "Webhook Error",
     message,
   };
 

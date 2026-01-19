@@ -1,5 +1,5 @@
-import { createEnv } from '@t3-oss/env-nextjs';
-import { z } from 'zod';
+import { createEnv } from "@t3-oss/env-nextjs";
+import { z } from "zod";
 
 export const env = createEnv({
   /**
@@ -43,12 +43,12 @@ export const env = createEnv({
     // Vercel
     VERCEL_URL: z.string().optional(),
     VERCEL_GIT_COMMIT_SHA: z.string().optional(),
-    VERCEL_ENV: z.enum(['development', 'preview', 'production']).optional(),
+    VERCEL_ENV: z.enum(["development", "preview", "production"]).optional(),
 
     // Node Environment
     NODE_ENV: z
-      .enum(['development', 'test', 'production'])
-      .default('development'),
+      .enum(["development", "test", "production"])
+      .default("development"),
 
     // CI/CD
     CI: z.string().optional(),
@@ -57,15 +57,15 @@ export const env = createEnv({
     // Security
     SECURITY_HEADERS_ENABLED: z
       .string()
-      .transform((val) => val === 'true')
-      .default('true'),
+      .transform((val) => val === "true")
+      .default("true"),
     CSP_REPORT_URI: z.string().url().optional(),
 
     // Feature Flags
     ENABLE_WHATSAPP_CHAT: z
       .string()
-      .transform((val) => val === 'true')
-      .default('true'),
+      .transform((val) => val === "true")
+      .default("true"),
   },
 
   /**
@@ -75,9 +75,9 @@ export const env = createEnv({
    */
   client: {
     // Base Configuration
-    NEXT_PUBLIC_BASE_URL: z.string().url().default('http://localhost:3000'),
-    NEXT_PUBLIC_APP_NAME: z.string().default('B2B Web Template'),
-    NEXT_PUBLIC_APP_VERSION: z.string().default('1.0.0'),
+    NEXT_PUBLIC_BASE_URL: z.string().url().default("http://localhost:3000"),
+    NEXT_PUBLIC_APP_NAME: z.string().default("B2B Web Template"),
+    NEXT_PUBLIC_APP_VERSION: z.string().default("1.0.0"),
 
     // Analytics & Monitoring
     NEXT_PUBLIC_VERCEL_ANALYTICS_ID: z.string().optional(),
@@ -89,41 +89,41 @@ export const env = createEnv({
     // Feature Flags
     NEXT_PUBLIC_ENABLE_ANALYTICS: z
       .string()
-      .transform((val) => val === 'true')
-      .default('true'),
+      .transform((val) => val === "true")
+      .default("true"),
     NEXT_PUBLIC_ENABLE_ERROR_REPORTING: z
       .string()
-      .transform((val) => val === 'true')
-      .default('true'),
+      .transform((val) => val === "true")
+      .default("true"),
     NEXT_PUBLIC_ENABLE_PERFORMANCE_MONITORING: z
       .string()
-      .transform((val) => val === 'true')
-      .default('true'),
+      .transform((val) => val === "true")
+      .default("true"),
     NEXT_PUBLIC_WHATSAPP_NUMBER: z.string().optional(),
 
     // Development Tools
     NEXT_PUBLIC_DISABLE_REACT_SCAN: z
       .string()
-      .transform((val) => val === 'true')
-      .default('false'),
+      .transform((val) => val === "true")
+      .default("false"),
     NEXT_PUBLIC_DISABLE_DEV_TOOLS: z
       .string()
-      .transform((val) => val === 'true')
-      .default('false'),
+      .transform((val) => val === "true")
+      .default("false"),
     NEXT_PUBLIC_TEST_MODE: z
       .string()
-      .transform((val) => val === 'true')
-      .default('false'),
+      .transform((val) => val === "true")
+      .default("false"),
 
     // Internationalization
-    NEXT_PUBLIC_DEFAULT_LOCALE: z.string().default('en'),
-    NEXT_PUBLIC_SUPPORTED_LOCALES: z.string().default('en,zh'),
+    NEXT_PUBLIC_DEFAULT_LOCALE: z.string().default("en"),
+    NEXT_PUBLIC_SUPPORTED_LOCALES: z.string().default("en,zh"),
 
     // Security
     NEXT_PUBLIC_CSP_NONCE: z.string().optional(),
     NEXT_PUBLIC_SECURITY_MODE: z
-      .enum(['strict', 'moderate', 'relaxed'])
-      .default('strict'),
+      .enum(["strict", "moderate", "relaxed"])
+      .default("strict"),
   },
 
   /**

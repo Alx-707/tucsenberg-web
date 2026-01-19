@@ -4,12 +4,12 @@
  * 集成测试所有错误处理机制，验证整个系统的错误处理能力
  */
 
-import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
-import { NetworkErrorSimulator } from '@/../tests/error-scenarios/setup';
+import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
+import { NetworkErrorSimulator } from "@/../tests/error-scenarios/setup";
 import {
   TEST_APP_CONSTANTS,
   TEST_DELAY_VALUES,
-} from '@/constants/test-constants';
+} from "@/constants/test-constants";
 
 // 综合错误处理系统
 class ComprehensiveErrorHandler {
@@ -115,39 +115,39 @@ class ComprehensiveErrorHandler {
     const errorMessage = error.message.toLowerCase();
 
     // 网络错误恢复
-    if (errorMessage.includes('network') || errorMessage.includes('fetch')) {
-      return { recovered: true, strategy: 'retry_with_exponential_backoff' };
+    if (errorMessage.includes("network") || errorMessage.includes("fetch")) {
+      return { recovered: true, strategy: "retry_with_exponential_backoff" };
     }
 
     // 认证错误恢复
-    if (errorMessage.includes('unauthorized') || errorMessage.includes('401')) {
-      return { recovered: true, strategy: 'refresh_authentication_token' };
+    if (errorMessage.includes("unauthorized") || errorMessage.includes("401")) {
+      return { recovered: true, strategy: "refresh_authentication_token" };
     }
 
     // 权限错误恢复
-    if (errorMessage.includes('forbidden') || errorMessage.includes('403')) {
-      return { recovered: false, strategy: 'request_elevated_permissions' };
+    if (errorMessage.includes("forbidden") || errorMessage.includes("403")) {
+      return { recovered: false, strategy: "request_elevated_permissions" };
     }
 
     // 资源不存在错误恢复
-    if (errorMessage.includes('not found') || errorMessage.includes('404')) {
-      return { recovered: true, strategy: 'create_default_resource' };
+    if (errorMessage.includes("not found") || errorMessage.includes("404")) {
+      return { recovered: true, strategy: "create_default_resource" };
     }
 
     // 服务器错误恢复
-    if (errorMessage.includes('500') || errorMessage.includes('server error')) {
-      return { recovered: true, strategy: 'use_fallback_service' };
+    if (errorMessage.includes("500") || errorMessage.includes("server error")) {
+      return { recovered: true, strategy: "use_fallback_service" };
     }
 
     // 验证错误恢复
     if (
-      errorMessage.includes('validation') ||
-      errorMessage.includes('invalid')
+      errorMessage.includes("validation") ||
+      errorMessage.includes("invalid")
     ) {
-      return { recovered: true, strategy: 'sanitize_and_retry' };
+      return { recovered: true, strategy: "sanitize_and_retry" };
     }
 
-    return { recovered: false, strategy: 'escalate_to_support' };
+    return { recovered: false, strategy: "escalate_to_support" };
   }
 
   // 获取断路器状态
@@ -176,7 +176,7 @@ class ComprehensiveErrorHandler {
   }
 }
 
-describe('Comprehensive Error Handling Integration Tests', () => {
+describe("Comprehensive Error Handling Integration Tests", () => {
   let errorHandler: ComprehensiveErrorHandler;
   let networkSimulator: NetworkErrorSimulator;
   // 预留用于未来扩展的测试工具
@@ -199,10 +199,10 @@ describe('Comprehensive Error Handling Integration Tests', () => {
     vi.restoreAllMocks();
   });
 
-  describe('Circuit Breaker Pattern', () => {
-    it('should open circuit breaker after threshold failures', async () => {
+  describe("Circuit Breaker Pattern", () => {
+    it("should open circuit breaker after threshold failures", async () => {
       const failingService = async () => {
-        throw new Error('Service unavailable');
+        throw new Error("Service unavailable");
       };
 
       // 触发5次失败以开启断路器
@@ -210,31 +210,31 @@ describe('Comprehensive Error Handling Integration Tests', () => {
         await expect(
           errorHandler.executeWithCircuitBreaker(
             failingService,
-            'test-service',
+            "test-service",
             TEST_APP_CONSTANTS.STANDARD_COUNT_FIVE,
           ),
-        ).rejects.toThrow('Service unavailable');
+        ).rejects.toThrow("Service unavailable");
       }
 
       // 第6次应该被断路器拒绝
       await expect(
         errorHandler.executeWithCircuitBreaker(
           failingService,
-          'test-service',
+          "test-service",
           TEST_APP_CONSTANTS.STANDARD_COUNT_FIVE,
         ),
-      ).rejects.toThrow('Circuit breaker is open');
+      ).rejects.toThrow("Circuit breaker is open");
 
       const status = errorHandler.getCircuitBreakerStatus();
-      expect(status['test-service']?.isOpen).toBe(true);
-      expect(status['test-service']?.failures).toBe(
+      expect(status["test-service"]?.isOpen).toBe(true);
+      expect(status["test-service"]?.failures).toBe(
         TEST_APP_CONSTANTS.STANDARD_COUNT_FIVE,
       );
     });
 
-    it('should reset circuit breaker after timeout', async () => {
+    it("should reset circuit breaker after timeout", async () => {
       const failingService = async () => {
-        throw new Error('Service unavailable');
+        throw new Error("Service unavailable");
       };
 
       // 开启断路器
@@ -242,11 +242,11 @@ describe('Comprehensive Error Handling Integration Tests', () => {
         await expect(
           errorHandler.executeWithCircuitBreaker(
             failingService,
-            'test-service',
+            "test-service",
             TEST_APP_CONSTANTS.STANDARD_COUNT_FIVE,
             TEST_DELAY_VALUES.SHORT_DELAY,
           ),
-        ).rejects.toThrow('Service unavailable');
+        ).rejects.toThrow("Service unavailable");
       }
 
       // 等待超时
@@ -258,24 +258,24 @@ describe('Comprehensive Error Handling Integration Tests', () => {
       await expect(
         errorHandler.executeWithCircuitBreaker(
           failingService,
-          'test-service',
+          "test-service",
           5,
           100,
         ),
-      ).rejects.toThrow('Service unavailable');
+      ).rejects.toThrow("Service unavailable");
 
       const status = errorHandler.getCircuitBreakerStatus();
-      expect(status['test-service']?.failures).toBe(1); // 重置后的第一次失败
+      expect(status["test-service"]?.failures).toBe(1); // 重置后的第一次失败
     });
 
-    it('should handle successful operations after circuit breaker reset', async () => {
+    it("should handle successful operations after circuit breaker reset", async () => {
       let callCount = 0;
       const intermittentService = async () => {
         callCount += 1;
         if (callCount <= TEST_APP_CONSTANTS.STANDARD_COUNT_FIVE) {
-          throw new Error('Service unavailable');
+          throw new Error("Service unavailable");
         }
-        return 'Success';
+        return "Success";
       };
 
       // 开启断路器
@@ -283,11 +283,11 @@ describe('Comprehensive Error Handling Integration Tests', () => {
         await expect(
           errorHandler.executeWithCircuitBreaker(
             intermittentService,
-            'test-service',
+            "test-service",
             5,
             100,
           ),
-        ).rejects.toThrow('Service unavailable');
+        ).rejects.toThrow("Service unavailable");
       }
 
       // 等待重置
@@ -296,38 +296,38 @@ describe('Comprehensive Error Handling Integration Tests', () => {
       // 现在应该成功
       const result = await errorHandler.executeWithCircuitBreaker(
         intermittentService,
-        'test-service',
+        "test-service",
         5,
         100,
       );
-      expect(result).toBe('Success');
+      expect(result).toBe("Success");
 
       const status = errorHandler.getCircuitBreakerStatus();
-      expect(status['test-service']?.failures).toBe(0);
-      expect(status['test-service']?.isOpen).toBe(false);
+      expect(status["test-service"]?.failures).toBe(0);
+      expect(status["test-service"]?.isOpen).toBe(false);
     });
   });
 
-  describe('Health Check System', () => {
-    it('should track service health status', async () => {
+  describe("Health Check System", () => {
+    it("should track service health status", async () => {
       const healthyService = async () => true;
       const unhealthyService = async () => false;
       const failingService = async () => {
-        throw new Error('Health check failed');
+        throw new Error("Health check failed");
       };
 
-      await errorHandler.performHealthCheck('service-1', healthyService);
-      await errorHandler.performHealthCheck('service-2', unhealthyService);
-      await errorHandler.performHealthCheck('service-3', failingService);
+      await errorHandler.performHealthCheck("service-1", healthyService);
+      await errorHandler.performHealthCheck("service-2", unhealthyService);
+      await errorHandler.performHealthCheck("service-3", failingService);
 
       const health = errorHandler.getSystemHealth();
-      expect(health.services['service-1']).toBe(true);
-      expect(health.services['service-2']).toBe(false);
-      expect(health.services['service-3']).toBe(false);
+      expect(health.services["service-1"]).toBe(true);
+      expect(health.services["service-2"]).toBe(false);
+      expect(health.services["service-3"]).toBe(false);
       expect(health.overall).toBe(false); // 只有1/3服务健康
     });
 
-    it('should calculate overall system health correctly', async () => {
+    it("should calculate overall system health correctly", async () => {
       const healthyService = async () => true;
 
       // 添加5个健康服务
@@ -340,36 +340,36 @@ describe('Comprehensive Error Handling Integration Tests', () => {
     });
   });
 
-  describe('Error Recovery Strategies', () => {
-    it('should identify appropriate recovery strategies for different error types', async () => {
+  describe("Error Recovery Strategies", () => {
+    it("should identify appropriate recovery strategies for different error types", async () => {
       const errorScenarios = [
         {
-          error: new Error('Network timeout'),
-          expectedStrategy: 'retry_with_exponential_backoff',
+          error: new Error("Network timeout"),
+          expectedStrategy: "retry_with_exponential_backoff",
         },
         {
-          error: new Error('401 Unauthorized'),
-          expectedStrategy: 'refresh_authentication_token',
+          error: new Error("401 Unauthorized"),
+          expectedStrategy: "refresh_authentication_token",
         },
         {
-          error: new Error('403 Forbidden'),
-          expectedStrategy: 'request_elevated_permissions',
+          error: new Error("403 Forbidden"),
+          expectedStrategy: "request_elevated_permissions",
         },
         {
-          error: new Error('404 Not Found'),
-          expectedStrategy: 'create_default_resource',
+          error: new Error("404 Not Found"),
+          expectedStrategy: "create_default_resource",
         },
         {
-          error: new Error('500 Internal Server Error'),
-          expectedStrategy: 'use_fallback_service',
+          error: new Error("500 Internal Server Error"),
+          expectedStrategy: "use_fallback_service",
         },
         {
-          error: new Error('Validation failed'),
-          expectedStrategy: 'sanitize_and_retry',
+          error: new Error("Validation failed"),
+          expectedStrategy: "sanitize_and_retry",
         },
         {
-          error: new Error('Unknown error'),
-          expectedStrategy: 'escalate_to_support',
+          error: new Error("Unknown error"),
+          expectedStrategy: "escalate_to_support",
         },
       ];
 
@@ -379,24 +379,24 @@ describe('Comprehensive Error Handling Integration Tests', () => {
       }
     });
 
-    it('should handle complex error recovery scenarios', async () => {
+    it("should handle complex error recovery scenarios", async () => {
       // 模拟复杂的错误恢复场景
       const complexError = new Error(
-        'Network fetch failed: 500 Internal Server Error',
+        "Network fetch failed: 500 Internal Server Error",
       );
       const recovery = await errorHandler.recoverFromError(complexError, {
-        operation: 'data-fetch',
+        operation: "data-fetch",
         retryCount: 2,
       });
 
       // 应该选择网络错误的恢复策略
-      expect(recovery.strategy).toBe('retry_with_exponential_backoff');
+      expect(recovery.strategy).toBe("retry_with_exponential_backoff");
       expect(recovery.recovered).toBe(true);
     });
   });
 
-  describe('End-to-End Error Scenarios', () => {
-    it('should handle complete system failure and recovery', async () => {
+  describe("End-to-End Error Scenarios", () => {
+    it("should handle complete system failure and recovery", async () => {
       // 模拟系统级故障
       networkSimulator.simulateConnectionFailure();
 
@@ -405,33 +405,33 @@ describe('Comprehensive Error Handling Integration Tests', () => {
         operationCount++;
         if (operationCount <= 5) {
           // 增加失败次数确保断路器开启
-          throw new Error('System failure');
+          throw new Error("System failure");
         }
-        return 'System recovered';
+        return "System recovered";
       };
 
       // 第一次尝试应该失败
       await expect(
-        errorHandler.executeWithCircuitBreaker(systemOperation, 'main-system'),
-      ).rejects.toThrow('System failure');
+        errorHandler.executeWithCircuitBreaker(systemOperation, "main-system"),
+      ).rejects.toThrow("System failure");
 
       // 继续失败直到断路器开启
       for (let i = 0; i < 4; i++) {
         await expect(
           errorHandler.executeWithCircuitBreaker(
             systemOperation,
-            'main-system',
+            "main-system",
           ),
         ).rejects.toThrow();
       }
 
       // 断路器应该开启
       const status = errorHandler.getCircuitBreakerStatus();
-      expect(status['main-system']?.isOpen).toBe(true);
+      expect(status["main-system"]?.isOpen).toBe(true);
     });
 
-    it('should handle cascading failures across multiple services', async () => {
-      const services = ['auth', 'database', 'cache', 'api'];
+    it("should handle cascading failures across multiple services", async () => {
+      const services = ["auth", "database", "cache", "api"];
 
       // 模拟级联故障
       for (const service of services) {
@@ -452,18 +452,18 @@ describe('Comprehensive Error Handling Integration Tests', () => {
       services.forEach((service) => {
         // 使用安全的属性访问，避免对象注入
         const serviceStatus =
-          allStatus && typeof allStatus === 'object' && service in allStatus
+          allStatus && typeof allStatus === "object" && service in allStatus
             ? allStatus[service as keyof typeof allStatus]
             : null;
         expect(serviceStatus?.isOpen).toBe(true);
       });
     });
 
-    it('should handle mixed success and failure scenarios', async () => {
+    it("should handle mixed success and failure scenarios", async () => {
       const mixedServices = [
-        { id: 'reliable-service', shouldFail: false },
-        { id: 'unreliable-service', shouldFail: true },
-        { id: 'intermittent-service', shouldFail: 'sometimes' },
+        { id: "reliable-service", shouldFail: false },
+        { id: "unreliable-service", shouldFail: true },
+        { id: "intermittent-service", shouldFail: "sometimes" },
       ];
 
       for (const { id, shouldFail } of mixedServices) {
@@ -472,7 +472,7 @@ describe('Comprehensive Error Handling Integration Tests', () => {
             throw new Error(`${id} failed`);
           }
           if (
-            shouldFail === 'sometimes' &&
+            shouldFail === "sometimes" &&
             crypto &&
             crypto.getRandomValues(new Uint32Array(1))[0]! / 2 ** 32 < 0.5
           ) {
@@ -505,8 +505,8 @@ describe('Comprehensive Error Handling Integration Tests', () => {
     });
   });
 
-  describe('Performance Under Error Conditions', () => {
-    it('should maintain performance during high error rates', async () => {
+  describe("Performance Under Error Conditions", () => {
+    it("should maintain performance during high error rates", async () => {
       const startTime = Date.now();
       const operations = [];
 
@@ -535,17 +535,17 @@ describe('Comprehensive Error Handling Integration Tests', () => {
 
       // 应该有成功和失败的结果
       const successes = results.filter(
-        (r) => typeof r === 'object' && 'success' in r,
+        (r) => typeof r === "object" && "success" in r,
       );
       const failures = results.filter(
-        (r) => typeof r === 'object' && 'error' in r,
+        (r) => typeof r === "object" && "error" in r,
       );
 
       expect(successes.length).toBeGreaterThan(0);
       expect(failures.length).toBeGreaterThan(0);
     });
 
-    it('should handle memory usage efficiently during error storms', async () => {
+    it("should handle memory usage efficiently during error storms", async () => {
       // 模拟错误风暴
       const errorStorm = Array.from({ length: 1000 }, (_, i) =>
         errorHandler.recoverFromError(new Error(`Storm error ${i}`), {}),
@@ -557,7 +557,7 @@ describe('Comprehensive Error Handling Integration Tests', () => {
       expect(results).toHaveLength(1000);
       results.forEach((result) => {
         expect(result.strategy).toBeDefined();
-        expect(typeof result.recovered).toBe('boolean');
+        expect(typeof result.recovered).toBe("boolean");
       });
     });
   });

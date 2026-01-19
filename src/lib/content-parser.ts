@@ -4,10 +4,10 @@
  * This module provides functions for parsing MDX files with frontmatter
  * and retrieving content files from directories.
  */
-import fs from 'fs';
-import path from 'path';
-import matter from 'gray-matter';
-import yaml, { type LoadOptions } from 'js-yaml';
+import fs from "fs";
+import path from "path";
+import matter from "gray-matter";
+import yaml, { type LoadOptions } from "js-yaml";
 import {
   ContentError,
   ContentValidationError,
@@ -15,19 +15,19 @@ import {
   type ContentType,
   type Locale,
   type ParsedContent,
-} from '@/types/content.types';
+} from "@/types/content.types";
 import {
   CONTENT_DIR,
   getValidationConfig,
   shouldFilterDraft,
   validateFilePath,
-} from '@/lib/content-utils';
+} from "@/lib/content-utils";
 import {
   validateContentMetadata,
   type ValidationConfig,
-} from '@/lib/content-validation';
-import { logger } from '@/lib/logger';
-import { CONTENT_LIMITS } from '@/constants/app-constants';
+} from "@/lib/content-validation";
+import { logger } from "@/lib/logger";
+import { CONTENT_LIMITS } from "@/constants/app-constants";
 
 type YamlWithSafeLoad = typeof yaml & {
   safeLoad?: (str: string, opts?: LoadOptions) => unknown;
@@ -55,7 +55,7 @@ export interface ParseContentOptions {
  */
 function getProductionValidationConfig(): ValidationConfig {
   const config = getValidationConfig();
-  const isProduction = process.env.NODE_ENV === 'production';
+  const isProduction = process.env.NODE_ENV === "production";
 
   const merged: ValidationConfig = {
     strictMode: isProduction || (config.strictMode ?? false),
@@ -97,18 +97,18 @@ export function parseContentFile<T extends ContentMetadata = ContentMetadata>(
     if (!fs.existsSync(validatedPath)) {
       throw new ContentError(
         `Content file not found: ${filePath}`,
-        'FILE_NOT_FOUND',
+        "FILE_NOT_FOUND",
       );
     }
 
     // eslint-disable-next-line security/detect-non-literal-fs-filename -- validatedPath已通过validateFilePath安全验证，防止路径遍历攻击
-    const fileContent = fs.readFileSync(validatedPath, 'utf-8');
+    const fileContent = fs.readFileSync(validatedPath, "utf-8");
 
     // Check file size limits
     if (fileContent.length > CONTENT_LIMITS.MAX_FILE_SIZE) {
       throw new ContentError(
         `Content file too large: ${fileContent.length} bytes (max: ${CONTENT_LIMITS.MAX_FILE_SIZE})`,
-        'FILE_TOO_LARGE',
+        "FILE_TOO_LARGE",
       );
     }
 
@@ -139,7 +139,7 @@ export function parseContentFile<T extends ContentMetadata = ContentMetadata>(
 
     // Extract slug from filename (fallback if not in frontmatter)
     const slug =
-      (frontmatter['slug'] as string) ??
+      (frontmatter["slug"] as string) ??
       path.basename(filePath, path.extname(filePath));
 
     return {
@@ -156,8 +156,8 @@ export function parseContentFile<T extends ContentMetadata = ContentMetadata>(
       throw error;
     }
     throw new ContentError(
-      `Failed to parse content file: ${filePath}. ${error instanceof Error ? error.message : 'Unknown error'}`,
-      'PARSE_ERROR',
+      `Failed to parse content file: ${filePath}. ${error instanceof Error ? error.message : "Unknown error"}`,
+      "PARSE_ERROR",
     );
   }
 }
@@ -172,13 +172,13 @@ function logValidationResult(
 ): void {
   if (!validation.isValid) {
     const logMethod = strictMode ? logger.error : logger.warn;
-    logMethod('Content validation failed', {
+    logMethod("Content validation failed", {
       file: filePath,
       errors: validation.errors,
       warnings: validation.warnings,
     });
   } else if (validation.warnings.length > 0) {
-    logger.info('Content validation warnings', {
+    logger.info("Content validation warnings", {
       file: filePath,
       warnings: validation.warnings,
     });
@@ -199,7 +199,7 @@ export function parseContentFileWithDraftFilter<
 
   // Filter out drafts based on configuration
   if (shouldFilterDraft(parsed.metadata.draft)) {
-    logger.info('Filtering draft content', {
+    logger.info("Filtering draft content", {
       file: filePath,
       slug: parsed.slug,
     });
@@ -223,7 +223,7 @@ export function getContentFiles(contentDir: string, locale?: Locale): string[] {
 
   // eslint-disable-next-line security/detect-non-literal-fs-filename -- validatedContentDir已通过validateFilePath安全验证，防止路径遍历攻击
   if (!fs.existsSync(validatedContentDir)) {
-    logger.warn('Content directory does not exist', {
+    logger.warn("Content directory does not exist", {
       dir: validatedContentDir,
     });
     return [];
@@ -234,7 +234,7 @@ export function getContentFiles(contentDir: string, locale?: Locale): string[] {
   return files
     .filter((file) => {
       const ext = path.extname(file);
-      const isValidExtension = ['.md', '.mdx'].includes(ext);
+      const isValidExtension = [".md", ".mdx"].includes(ext);
       if (!isValidExtension) {
         return false;
       }
@@ -252,7 +252,7 @@ export function getContentFiles(contentDir: string, locale?: Locale): string[] {
         `.${locale.toLowerCase()}.`,
       );
       const hasNoLocaleSuffix =
-        !normalized.includes('.en.') && !normalized.includes('.zh.');
+        !normalized.includes(".en.") && !normalized.includes(".zh.");
       return hasExplicitLocale || hasNoLocaleSuffix;
     })
     .map((file) => path.join(validatedContentDir, file));

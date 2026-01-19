@@ -1,10 +1,10 @@
-import Image from 'next/image';
-import Link from 'next/link';
-import { Calendar, Clock } from 'lucide-react';
-import type { PostSummary } from '@/types/content.types';
-import { getBlurPlaceholder } from '@/lib/image';
-import { cn } from '@/lib/utils';
-import { Badge } from '@/components/ui/badge';
+import Image from "next/image";
+import Link from "next/link";
+import { Calendar, Clock } from "lucide-react";
+import type { PostSummary } from "@/types/content.types";
+import { getBlurPlaceholder } from "@/lib/image";
+import { cn } from "@/lib/utils";
+import { Badge } from "@/components/ui/badge";
 import {
   Card,
   CardContent,
@@ -12,7 +12,7 @@ import {
   CardFooter,
   CardHeader,
   CardTitle,
-} from '@/components/ui/card';
+} from "@/components/ui/card";
 
 export interface PostCardProps {
   post: PostSummary;
@@ -41,14 +41,14 @@ interface CoverImageProps {
 
 function CoverImage({ src, alt }: CoverImageProps) {
   return (
-    <div className='relative aspect-[16/9] w-full overflow-hidden'>
+    <div className="relative aspect-[16/9] w-full overflow-hidden">
       <Image
         src={src}
         alt={alt}
         fill
-        sizes='(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 33vw'
-        className='object-cover transition-transform duration-300 group-hover:scale-105'
-        {...getBlurPlaceholder('neutral')}
+        sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 33vw"
+        className="object-cover transition-transform duration-300 group-hover:scale-105"
+        {...getBlurPlaceholder("neutral")}
       />
     </div>
   );
@@ -64,21 +64,14 @@ function TagList({ tags, maxTags }: TagListProps) {
   const remainingCount = tags.length - maxTags;
 
   return (
-    <div className='flex flex-wrap gap-1.5'>
+    <div className="flex flex-wrap gap-1.5">
       {displayTags.map((tag) => (
-        <Badge
-          key={tag}
-          variant='secondary'
-          className='text-xs'
-        >
+        <Badge key={tag} variant="secondary" className="text-xs">
           {tag}
         </Badge>
       ))}
       {remainingCount > 0 && (
-        <Badge
-          variant='outline'
-          className='text-xs'
-        >
+        <Badge variant="outline" className="text-xs">
           +{remainingCount}
         </Badge>
       )}
@@ -103,32 +96,23 @@ function PostMeta({
 }: PostMetaProps) {
   // Map short locale codes to full locale identifiers (explicit to avoid object injection)
   const dateLocale =
-    locale === 'en' ? 'en-US' : locale === 'zh' ? 'zh-CN' : locale;
+    locale === "en" ? "en-US" : locale === "zh" ? "zh-CN" : locale;
 
   const formattedDate = new Date(publishedAt).toLocaleDateString(dateLocale, {
-    year: 'numeric',
-    month: 'short',
-    day: 'numeric',
+    year: "numeric",
+    month: "short",
+    day: "numeric",
   });
 
   return (
-    <CardFooter className='mt-auto gap-4 text-xs text-muted-foreground'>
-      <time
-        dateTime={publishedAt}
-        className='flex items-center gap-1'
-      >
-        <Calendar
-          className='h-3.5 w-3.5'
-          aria-hidden='true'
-        />
+    <CardFooter className="mt-auto gap-4 text-xs text-muted-foreground">
+      <time dateTime={publishedAt} className="flex items-center gap-1">
+        <Calendar className="h-3.5 w-3.5" aria-hidden="true" />
         {formattedDate}
       </time>
       {showReadingTime && readingTime !== undefined && (
-        <span className='flex items-center gap-1'>
-          <Clock
-            className='h-3.5 w-3.5'
-            aria-hidden='true'
-          />
+        <span className="flex items-center gap-1">
+          <Clock className="h-3.5 w-3.5" aria-hidden="true" />
           {readingTime} {readingTimeLabel}
         </span>
       )}
@@ -143,14 +127,14 @@ function PostMeta({
  */
 export function PostCard({
   post,
-  linkPrefix = '/blog',
-  locale = 'en',
+  linkPrefix = "/blog",
+  locale = "en",
   showCoverImage = true,
   showTags = true,
   showReadingTime = true,
   maxTags = 3,
   className,
-  readingTimeLabel = 'min read',
+  readingTimeLabel = "min read",
 }: PostCardProps) {
   const {
     slug,
@@ -171,38 +155,28 @@ export function PostCard({
     <article>
       <Link
         href={`${linkPrefix}/${slug}`}
-        className='group block h-full rounded-xl focus:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2'
+        className="group block h-full rounded-xl focus:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2"
       >
         <Card
           className={cn(
-            'h-full overflow-hidden transition-all duration-200',
-            'hover:border-primary/20 hover:shadow-md',
-            'group-focus-visible:border-primary/20 group-focus-visible:shadow-md',
+            "h-full overflow-hidden transition-all duration-200",
+            "hover:border-primary/20 hover:shadow-md",
+            "group-focus-visible:border-primary/20 group-focus-visible:shadow-md",
             className,
           )}
         >
-          {shouldShowCoverImage && (
-            <CoverImage
-              src={coverImage}
-              alt={title}
-            />
-          )}
+          {shouldShowCoverImage && <CoverImage src={coverImage} alt={title} />}
 
-          <CardHeader className='gap-3'>
-            {shouldShowTags && (
-              <TagList
-                tags={tags}
-                maxTags={maxTags}
-              />
-            )}
-            <CardTitle className='line-clamp-2 text-lg leading-snug transition-colors group-hover:text-primary'>
+          <CardHeader className="gap-3">
+            {shouldShowTags && <TagList tags={tags} maxTags={maxTags} />}
+            <CardTitle className="line-clamp-2 text-lg leading-snug transition-colors group-hover:text-primary">
               {title}
             </CardTitle>
           </CardHeader>
 
           {displayText !== undefined && (
-            <CardContent className='pt-0'>
-              <CardDescription className='line-clamp-3'>
+            <CardContent className="pt-0">
+              <CardDescription className="line-clamp-3">
                 {displayText}
               </CardDescription>
             </CardContent>
