@@ -41,3 +41,6 @@ test-results/
 
 # Vercel
 .vercel/
+
+# CI/Build artifacts
+reports/
