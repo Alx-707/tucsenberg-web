@@ -1,0 +1,332 @@
+{
+  "provenance": {
+    "url": "https://vercel.com/",
+    "capturedAt": "2026-01-15T00:07:19.977Z",
+    "viewports": ["desktop"],
+    "presetSignals": {
+      "hints": ["geist", "tailwind"]
+    }
+  },
+  "components": [
+    {
+      "id": "CTAButtonPrimary",
+      "selector": "[data-testid=\"header/sign-up\"]",
+      "description": "Primary CTA button with dark background",
+      "variants": {
+        "intent": {
+          "values": ["primary"],
+          "default": "primary"
+        }
+      },
+      "states": ["default", "hover", "focus"],
+      "tokens": {
+        "default": {
+          "display": "flex",
+          "fontFamily": "{typography.fontFamily.sans}",
+          "fontSize": "{typography.fontSize.sm}",
+          "fontWeight": "{typography.fontWeight.medium}",
+          "lineHeight": "{typography.lineHeight.snug}",
+          "color": "{color.semantic.text-inverse}",
+          "backgroundColor": "{color.semantic.bg-cta-primary}",
+          "borderRadius": "{radius.semantic.button}",
+          "paddingX": "{space.primitive.1.5}",
+          "height": "32px",
+          "transition": "border-color 0.15s, background 0.15s, color 0.15s, transform 0.15s, box-shadow 0.15s"
+        },
+        "hover": {},
+        "focus": {
+          "outlineOffset": "2px"
+        }
+      }
+    },
+    {
+      "id": "CTAButtonSecondary",
+      "selector": "[data-testid=\"header/log-in\"]",
+      "description": "Secondary CTA button with light background and border",
+      "variants": {
+        "intent": {
+          "values": ["secondary"],
+          "default": "secondary"
+        }
+      },
+      "states": ["default", "hover", "focus"],
+      "tokens": {
+        "default": {
+          "display": "flex",
+          "fontFamily": "{typography.fontFamily.sans}",
+          "fontSize": "{typography.fontSize.sm}",
+          "fontWeight": "{typography.fontWeight.medium}",
+          "lineHeight": "{typography.lineHeight.snug}",
+          "color": "{color.semantic.text-primary}",
+          "backgroundColor": "{color.semantic.bg-canvas}",
+          "borderRadius": "{radius.semantic.button}",
+          "boxShadow": "{shadow.semantic.button}",
+          "paddingX": "{space.primitive.1.5}",
+          "height": "32px",
+          "transition": "border-color 0.15s, background 0.15s, color 0.15s, transform 0.15s, box-shadow 0.15s"
+        },
+        "hover": {},
+        "focus": {
+          "outlineOffset": "2px"
+        }
+      }
+    },
+    {
+      "id": "CTAButtonPill",
+      "selector": "div > section:nth-of-type(2) > div:nth-of-type(2) > div > a:nth-of-type(1)",
+      "description": "Pill-shaped CTA button for hero sections",
+      "variants": {
+        "intent": {
+          "values": ["primary", "secondary"],
+          "default": "primary"
+        }
+      },
+      "states": ["default", "hover", "focus"],
+      "tokens": {
+        "default": {
+          "display": "flex",
+          "fontFamily": "{typography.fontFamily.sans}",
+          "fontSize": "{typography.fontSize.sm}",
+          "fontWeight": "{typography.fontWeight.medium}",
+          "lineHeight": "{typography.lineHeight.snug}",
+          "color": "{color.semantic.text-inverse}",
+          "backgroundColor": "{color.semantic.bg-cta-primary}",
+          "borderRadius": "{radius.semantic.button-pill}",
+          "paddingX": "{space.primitive.2.5}",
+          "height": "40px",
+          "transition": "border-color 0.15s, background 0.15s, color 0.15s, transform 0.15s, box-shadow 0.15s"
+        },
+        "hover": {},
+        "focus": {
+          "outlineOffset": "2px"
+        }
+      }
+    },
+    {
+      "id": "CTAButtonAccent",
+      "selector": "div:nth-of-type(1) > div > div:nth-of-type(2) > div > button:nth-of-type(1)",
+      "description": "Accent CTA button with brand blue background",
+      "variants": {
+        "intent": {
+          "values": ["accent"],
+          "default": "accent"
+        }
+      },
+      "states": ["default", "hover", "focus"],
+      "tokens": {
+        "default": {
+          "display": "flex",
+          "fontFamily": "{typography.fontFamily.sans}",
+          "fontSize": "13.3333px",
+          "fontWeight": "{typography.fontWeight.medium}",
+          "color": "{color.semantic.text-inverse}",
+          "backgroundColor": "{color.semantic.bg-cta-accent}",
+          "borderRadius": "{radius.semantic.button}",
+          "paddingY": "{space.primitive.1.5}",
+          "paddingX": "{space.primitive.2.5}",
+          "gap": "{space.primitive.2}",
+          "transition": "color 0.1s, background-color 0.1s, border-color 0.1s"
+        },
+        "hover": {},
+        "focus": {}
+      }
+    },
+    {
+      "id": "NavButton",
+      "selector": "nav > div:nth-of-type(1) > ul > li:nth-of-type(1) > button",
+      "description": "Navigation dropdown trigger button",
+      "variants": {
+        "intent": {
+          "values": ["default"],
+          "default": "default"
+        }
+      },
+      "states": ["default", "hover", "focus"],
+      "tokens": {
+        "default": {
+          "display": "flex",
+          "fontFamily": "{typography.fontFamily.sans}",
+          "fontSize": "{typography.fontSize.sm}",
+          "fontWeight": "{typography.fontWeight.normal}",
+          "lineHeight": "14px",
+          "color": "{color.semantic.text-secondary}",
+          "borderRadius": "{radius.primitive.full}",
+          "paddingY": "{space.primitive.2}",
+          "paddingX": "{space.primitive.3}",
+          "gap": "{space.primitive.1}",
+          "transition": "color 0.09s, background 0.09s"
+        },
+        "hover": {
+          "color": "{color.semantic.text-primary}"
+        },
+        "focus": {}
+      }
+    },
+    {
+      "id": "MenuLink",
+      "selector": "ul > li:nth-of-type(1) > ul > li:nth-of-type(1) > a",
+      "description": "Dropdown menu link item",
+      "variants": {
+        "intent": {
+          "values": ["default", "highlighted"],
+          "default": "default"
+        }
+      },
+      "states": ["default", "hover"],
+      "tokens": {
+        "default": {
+          "display": "flex",
+          "fontFamily": "{typography.fontFamily.sans}",
+          "fontSize": "{typography.fontSize.sm}",
+          "fontWeight": "{typography.fontWeight.normal}",
+          "color": "{color.semantic.text-secondary}",
+          "borderRadius": "{radius.semantic.card}",
+          "padding": "{space.primitive.3}",
+          "gap": "{space.primitive.3}",
+          "transition": "all"
+        },
+        "hover": {}
+      }
+    },
+    {
+      "id": "HeaderLogo",
+      "selector": "[data-testid=\"header/navbar/logo\"]",
+      "description": "Header logo link",
+      "variants": {},
+      "states": ["default", "hover", "focus"],
+      "tokens": {
+        "default": {
+          "display": "flex",
+          "fontFamily": "{typography.fontFamily.sans}",
+          "fontSize": "{typography.fontSize.base}",
+          "color": "{color.semantic.text-primary}",
+          "borderRadius": "{radius.primitive.sm}",
+          "transition": "box-shadow 0.2s"
+        },
+        "hover": {},
+        "focus": {}
+      }
+    },
+    {
+      "id": "Tab",
+      "selector": "[role='tab']",
+      "description": "Tab button in tab groups",
+      "variants": {
+        "selected": {
+          "values": ["true", "false"],
+          "default": "false"
+        }
+      },
+      "states": ["default", "selected", "hover"],
+      "tokens": {
+        "default": {
+          "display": "flex",
+          "fontFamily": "{typography.fontFamily.sans}",
+          "fontSize": "{typography.fontSize.sm}",
+          "fontWeight": "{typography.fontWeight.normal}",
+          "color": "{color.semantic.text-primary}",
+          "borderRadius": "{radius.semantic.tab}",
+          "minWidth": "44px",
+          "paddingX": "{space.primitive.4}",
+          "height": "40px",
+          "gap": "{space.primitive.2.5}",
+          "transition": "all"
+        },
+        "selected": {},
+        "hover": {}
+      }
+    },
+    {
+      "id": "IconButton",
+      "selector": "section:nth-of-type(1) > div:nth-of-type(2) > div > header > a",
+      "description": "Circular icon button with arrow",
+      "variants": {},
+      "states": ["default", "hover", "focus"],
+      "tokens": {
+        "default": {
+          "display": "flex",
+          "fontFamily": "{typography.fontFamily.sans}",
+          "fontSize": "{typography.fontSize.base}",
+          "fontWeight": "{typography.fontWeight.medium}",
+          "lineHeight": "{typography.lineHeight.snug}",
+          "color": "{color.semantic.text-primary}",
+          "backgroundColor": "{color.semantic.bg-canvas}",
+          "borderRadius": "{radius.semantic.avatar}",
+          "boxShadow": "{shadow.semantic.button-elevated}",
+          "width": "40px",
+          "height": "40px",
+          "marginTop": "{space.primitive.4}",
+          "transition": "border-color 0.15s, background 0.15s, color 0.15s, transform 0.15s, box-shadow 0.15s"
+        },
+        "hover": {},
+        "focus": {
+          "outlineOffset": "2px"
+        }
+      }
+    },
+    {
+      "id": "HamburgerButton",
+      "selector": "[aria-label=\"Open menu\"]",
+      "description": "Mobile hamburger menu button",
+      "variants": {},
+      "states": ["default", "hover", "focus"],
+      "tokens": {
+        "default": {
+          "display": "flex",
+          "fontFamily": "Arial",
+          "fontSize": "13.3333px",
+          "color": "{color.semantic.text-primary}",
+          "borderColor": "{color.semantic.border-default}",
+          "borderWidth": "1px",
+          "borderStyle": "solid",
+          "borderRadius": "{radius.semantic.avatar}",
+          "width": "32px",
+          "height": "32px",
+          "paddingX": "{space.primitive.1.5}",
+          "transition": "box-shadow 0.2s"
+        },
+        "hover": {},
+        "focus": {}
+      }
+    },
+    {
+      "id": "HeroCard",
+      "selector": "div > section:nth-of-type(2) > div:nth-of-type(1) > div > a",
+      "description": "Large hero card with pill shape",
+      "variants": {},
+      "states": ["default", "hover"],
+      "tokens": {
+        "default": {
+          "display": "flex",
+          "fontFamily": "{typography.fontFamily.sans}",
+          "fontSize": "{typography.fontSize.base}",
+          "color": "{color.semantic.text-primary}",
+          "backgroundColor": "{color.semantic.bg-surface}",
+          "borderRadius": "{radius.primitive.full}",
+          "boxShadow": "{shadow.semantic.button-elevated}",
+          "paddingLeft": "{space.primitive.9}",
+          "paddingRight": "{space.primitive.4.5}",
+          "height": "96px",
+          "gap": "{space.primitive.6}",
+          "transition": "background 0.15s ease-out"
+        },
+        "hover": {}
+      }
+    },
+    {
+      "id": "FooterLink",
+      "selector": "footer nav ul li a",
+      "description": "Footer navigation link",
+      "variants": {},
+      "states": ["default", "hover"],
+      "tokens": {
+        "default": {
+          "fontFamily": "{typography.fontFamily.sans}",
+          "fontSize": "{typography.fontSize.sm}",
+          "color": "{color.semantic.text-primary}"
+        },
+        "hover": {}
+      }
+    }
+  ]
+}

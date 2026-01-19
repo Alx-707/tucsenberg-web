@@ -322,4 +322,15 @@ describe("Button Component", () => {
       expect(button).toHaveClass("[&_svg]:pointer-events-none");
     });
   });
+
+  describe("Performance", () => {
+    it("uses specific transition properties instead of transition-all", () => {
+      render(<Button>Test</Button>);
+      const button = screen.getByRole("button");
+      // Verify no transition-all class
+      expect(button.className).not.toMatch(/\btransition-all\b/);
+      // Verify specific transition class exists
+      expect(button.className).toMatch(/\btransition-colors\b/);
+    });
+  });
 });

@@ -26,6 +26,7 @@ export function NameFields({ t, isPending }: NameFieldsProps) {
           id="firstName"
           name="firstName"
           type="text"
+          autoComplete="given-name"
           placeholder={t("firstNamePlaceholder")}
           disabled={isPending}
           required
@@ -44,6 +45,7 @@ export function NameFields({ t, isPending }: NameFieldsProps) {
           id="lastName"
           name="lastName"
           type="text"
+          autoComplete="family-name"
           placeholder={t("lastNamePlaceholder")}
           disabled={isPending}
           required

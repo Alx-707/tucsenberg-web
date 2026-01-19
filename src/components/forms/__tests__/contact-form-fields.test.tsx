@@ -48,6 +48,22 @@ describe("Contact Form Fields - React 19 Native Form Tests", () => {
       expect(screen.getByLabelText(/firstName/i)).toBeDisabled();
       expect(screen.getByLabelText(/lastName/i)).toBeDisabled();
     });
+
+    it("firstName field has correct autocomplete attribute", () => {
+      render(<NameFields {...defaultProps} />);
+
+      const firstNameInput = screen.getByRole("textbox", {
+        name: /firstName/i,
+      });
+      expect(firstNameInput).toHaveAttribute("autocomplete", "given-name");
+    });
+
+    it("lastName field has correct autocomplete attribute", () => {
+      render(<NameFields {...defaultProps} />);
+
+      const lastNameInput = screen.getByRole("textbox", { name: /lastName/i });
+      expect(lastNameInput).toHaveAttribute("autocomplete", "family-name");
+    });
   });
 
   describe("ContactFields Component", () => {
@@ -56,6 +72,20 @@ describe("Contact Form Fields - React 19 Native Form Tests", () => {
 
       expect(screen.getByLabelText(/email/i)).toBeInTheDocument();
       expect(screen.getByLabelText(/company/i)).toBeInTheDocument();
+    });
+
+    it("email field has correct autocomplete attribute", () => {
+      render(<ContactFields {...defaultProps} />);
+
+      const emailInput = screen.getByRole("textbox", { name: /email/i });
+      expect(emailInput).toHaveAttribute("autocomplete", "email");
+    });
+
+    it("company field has correct autocomplete attribute", () => {
+      render(<ContactFields {...defaultProps} />);
+
+      const companyInput = screen.getByRole("textbox", { name: /company/i });
+      expect(companyInput).toHaveAttribute("autocomplete", "organization");
     });
 
     it("should have correct input attributes", () => {
@@ -84,6 +114,13 @@ describe("Contact Form Fields - React 19 Native Form Tests", () => {
 
       expect(screen.getByLabelText(/phone/i)).toBeInTheDocument();
       expect(screen.getByLabelText(/subject/i)).toBeInTheDocument();
+    });
+
+    it("phone field has correct autocomplete attribute", () => {
+      render(<AdditionalFields {...defaultProps} />);
+
+      const phoneInput = screen.getByRole("textbox", { name: /phone/i });
+      expect(phoneInput).toHaveAttribute("autocomplete", "tel");
     });
 
     it("should have correct input attributes", () => {

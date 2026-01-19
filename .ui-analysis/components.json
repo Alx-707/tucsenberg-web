@@ -1,0 +1,227 @@
+{
+  "$schema": "https://ui-reverse-engineering.dev/schemas/components.json",
+  "meta": {
+    "url": "https://vercel.com/",
+    "captured": "2026-01-15T04:48:59.106Z",
+    "viewport": { "width": 1440, "height": 900 }
+  },
+  "components": [
+    {
+      "name": "PrimaryButton",
+      "selector": "[data-testid=\"header/sign-up\"]",
+      "tag": "a",
+      "role": "link",
+      "variants": ["default"],
+      "states": {
+        "default": {
+          "backgroundColor": "{color.semantic.interactive.primary}",
+          "color": "{color.semantic.text.inverse}",
+          "borderRadius": "{borderRadius.lg}",
+          "paddingTop": "{spacing.3}",
+          "paddingRight": "{spacing.5}",
+          "paddingBottom": "{spacing.3}",
+          "paddingLeft": "{spacing.5}",
+          "fontSize": "{typography.fontSize.sm}",
+          "fontWeight": "{typography.fontWeight.medium}",
+          "lineHeight": "{typography.lineHeight.normal}",
+          "transition": "{transition.duration.slow} {transition.easing.smooth}"
+        },
+        "hover": {
+          "backgroundColor": "{color.semantic.interactive.primaryHover}"
+        }
+      },
+      "deltas": {
+        "default→hover": {
+          "backgroundColor": {
+            "from": "#171717",
+            "to": "#383838"
+          }
+        }
+      },
+      "exceptions": []
+    },
+    {
+      "name": "SecondaryButton",
+      "selector": "[data-testid=\"header/login\"]",
+      "tag": "a",
+      "role": "link",
+      "variants": ["default"],
+      "states": {
+        "default": {
+          "backgroundColor": "transparent",
+          "color": "{color.semantic.text.primary}",
+          "borderRadius": "{borderRadius.lg}",
+          "paddingTop": "{spacing.3}",
+          "paddingRight": "{spacing.5}",
+          "paddingBottom": "{spacing.3}",
+          "paddingLeft": "{spacing.5}",
+          "fontSize": "{typography.fontSize.sm}",
+          "fontWeight": "{typography.fontWeight.medium}",
+          "transition": "{transition.duration.fast}"
+        }
+      },
+      "exceptions": []
+    },
+    {
+      "name": "NavLink",
+      "selector": "nav a",
+      "tag": "a",
+      "role": "link",
+      "variants": ["default"],
+      "states": {
+        "default": {
+          "color": "{color.semantic.text.primary}",
+          "fontSize": "{typography.fontSize.sm}",
+          "fontWeight": "{typography.fontWeight.medium}",
+          "textDecoration": "none",
+          "transition": "{transition.duration.normal} {transition.easing.default}"
+        }
+      },
+      "exceptions": []
+    },
+    {
+      "name": "NavigationMenu",
+      "selector": "nav[role=\"navigation\"]",
+      "tag": "nav",
+      "role": "navigation",
+      "variants": ["default"],
+      "states": {
+        "default": {
+          "display": "flex",
+          "alignItems": "center",
+          "gap": "{spacing.6}"
+        }
+      },
+      "animations": {
+        "dropdown": {
+          "enter": "navigation-menu-module__AENi4G__scaleIn",
+          "exit": "navigation-menu-module__AENi4G__scaleOut"
+        }
+      },
+      "exceptions": []
+    },
+    {
+      "name": "Header",
+      "selector": "header",
+      "tag": "header",
+      "role": "banner",
+      "variants": ["default"],
+      "states": {
+        "default": {
+          "position": "sticky",
+          "top": "0",
+          "height": "{spacing.16}",
+          "backgroundColor": "{color.semantic.background.primary}",
+          "borderBottom": "1px solid {color.semantic.border.default}",
+          "backdropFilter": "blur(8px)"
+        }
+      },
+      "animations": {
+        "fadeIn": "header-module__6nzVrW__fadeIn"
+      },
+      "exceptions": []
+    },
+    {
+      "name": "HeroHeading",
+      "selector": "main h1",
+      "tag": "h1",
+      "role": "heading",
+      "variants": ["default"],
+      "states": {
+        "default": {
+          "fontSize": "{typography.fontSize.3xl}",
+          "fontWeight": "{typography.fontWeight.semibold}",
+          "lineHeight": "{typography.lineHeight.tight}",
+          "letterSpacing": "{typography.letterSpacing.tight}",
+          "color": "{color.semantic.text.primary}"
+        }
+      },
+      "exceptions": []
+    },
+    {
+      "name": "BodyText",
+      "selector": "main p",
+      "tag": "p",
+      "role": null,
+      "variants": ["default", "secondary"],
+      "states": {
+        "default": {
+          "fontSize": "{typography.fontSize.base}",
+          "fontWeight": "{typography.fontWeight.normal}",
+          "lineHeight": "{typography.lineHeight.normal}",
+          "color": "{color.semantic.text.primary}"
+        },
+        "secondary": {
+          "color": "{color.semantic.text.secondary}"
+        }
+      },
+      "exceptions": []
+    },
+    {
+      "name": "Card",
+      "selector": "section div[class*=\"card\"]",
+      "tag": "div",
+      "role": null,
+      "variants": ["default", "elevated"],
+      "states": {
+        "default": {
+          "backgroundColor": "{color.semantic.background.primary}",
+          "borderRadius": "{borderRadius.lg}",
+          "border": "1px solid {color.semantic.border.subtle}",
+          "padding": "{spacing.6}"
+        },
+        "elevated": {
+          "boxShadow": "{shadow.md}"
+        }
+      },
+      "exceptions": []
+    },
+    {
+      "name": "ThemeToggle",
+      "selector": "input[aria-label*=\"dark\" i]",
+      "tag": "input",
+      "role": "switch",
+      "variants": ["light", "dark"],
+      "states": {
+        "default": {
+          "cursor": "pointer"
+        }
+      },
+      "exceptions": [
+        {
+          "field": "appearance",
+          "rawValue": "custom toggle styles",
+          "reason": "Toggle uses custom CSS, not standard input appearance"
+        }
+      ]
+    },
+    {
+      "name": "GridContainer",
+      "selector": "section[class*=\"grid\"]",
+      "tag": "section",
+      "role": null,
+      "variants": ["default"],
+      "states": {
+        "default": {
+          "display": "grid",
+          "gap": "{spacing.6}",
+          "gridTemplateColumns": "repeat(auto-fit, minmax(300px, 1fr))"
+        }
+      },
+      "animations": {
+        "disappear": {
+          "xs": "grid-module__4pDFEa__xsDisappear",
+          "sm": "grid-module__4pDFEa__smDisappear",
+          "md": "grid-module__4pDFEa__mdDisappear",
+          "lg": "grid-module__4pDFEa__lgDisappear"
+        }
+      },
+      "exceptions": []
+    }
+  ],
+  "patterns": {
+    "buttonTransition": "border-color 0.15s, background 0.15s, color 0.15s, transform 0.15s, box-shadow 0.15s",
+    "ctaTransition": "border-color 0.3s cubic-bezier(0.39, 0.18, 0.17, 0.99), background 0.3s cubic-bezier(0.39, 0.18, 0.17, 0.99), color 0.3s cubic-bezier(0.39, 0.18, 0.17, 0.99), transform 0.3s cubic-bezier(0.39, 0.18, 0.17, 0.99), box-shadow 0.3s cubic-bezier(0.39, 0.18, 0.17, 0.99)",
+    "cardHover": "transform 0.16s cubic-bezier(0.31, 0.05, 0.43, 1.02)"
+  }
+}

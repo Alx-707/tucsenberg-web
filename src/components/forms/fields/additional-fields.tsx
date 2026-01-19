@@ -22,6 +22,7 @@ export function AdditionalFields({ t, isPending }: AdditionalFieldsProps) {
             id="phone"
             name="phone"
             type="tel"
+            autoComplete="tel"
             placeholder={t("phonePlaceholder")}
             disabled={isPending}
             aria-describedby="phone-error"

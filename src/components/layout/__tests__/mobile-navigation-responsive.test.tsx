@@ -230,8 +230,8 @@ describe("Mobile Navigation Responsive - Main Tests", () => {
       render(<MobileNavigation className="transition-all duration-300" />);
 
       const trigger = screen.getByRole("button");
-      // transition类应该在外层容器上，但button本身已有transition-all
-      expect(trigger).toHaveClass("transition-all");
+      // Button uses transition-colors for performance (per web-design-guidelines)
+      expect(trigger).toHaveClass("transition-colors");
       const container = trigger.closest("div");
       expect(container).toHaveClass("duration-300");
     });
