@@ -211,6 +211,9 @@ class QualityGate {
             "src/app/**/page.tsx", // Next.js pages - validated via E2E
             "src/app/**/layout.tsx", // Next.js layouts - validated via E2E
             "src/lib/content/**", // Content loaders - covered by integration tests
+            "src/types/whatsapp*.ts", // WhatsApp type definitions - no runtime code
+            "src/types/i18n.ts", // i18n type definitions - no runtime code
+            "src/templates/**", // Templates - dev reference only
           ],
         },
         codeQuality: {
