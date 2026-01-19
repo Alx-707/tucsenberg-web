@@ -26,6 +26,7 @@ export function ContactFields({ t, isPending }: ContactFieldsProps) {
           id="email"
           name="email"
           type="email"
+          autoComplete="email"
           placeholder={t("emailPlaceholder")}
           disabled={isPending}
           required
@@ -44,6 +45,7 @@ export function ContactFields({ t, isPending }: ContactFieldsProps) {
           id="company"
           name="company"
           type="text"
+          autoComplete="organization"
           placeholder={t("companyPlaceholder")}
           disabled={isPending}
           required

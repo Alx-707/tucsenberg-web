@@ -1,0 +1,126 @@
+/* ============================================
+   URL: https://vercel.com/
+   Captured: 2026-01-14T14:37:15.647Z
+
+   Coverage:
+   - Keyframes: 12/12 (100%)
+   - Transitions: 6 patterns
+   - State deltas: 3 observed
+
+   CORS-blocked: None
+   ============================================ */
+
+/* === KEYFRAMES (same-origin) === */
+
+/* Source: https://vercel.com/vc-ap-vercel-marketing/_next/static/chunks/aa00e40d81c10c16.css */
+@keyframes fadeIn {
+  0% { opacity: 0; }
+  100% { opacity: 1; }
+}
+
+/* Source: https://vercel.com/vc-ap-vercel-marketing/_next/static/chunks/aa00e40d81c10c16.css */
+@keyframes scaleIn {
+  0% {
+    opacity: 0;
+    transform: rotateX(-30deg) scale(0.9);
+  }
+  100% {
+    opacity: 1;
+    transform: rotateX(0deg) scale(1);
+  }
+}
+
+/* Source: https://vercel.com/vc-ap-vercel-marketing/_next/static/chunks/aa00e40d81c10c16.css */
+@keyframes scaleOut {
+  0% {
+    opacity: 1;
+    transform: rotateX(0deg) scale(1);
+  }
+  100% {
+    opacity: 0;
+    transform: rotateX(-10deg) scale(0.95);
+  }
+}
+
+/* Source: https://vercel.com/vc-ap-vercel-marketing/_next/static/chunks/aa00e40d81c10c16.css */
+@keyframes fadeOut {
+  0% { opacity: 1; }
+  100% { opacity: 0; }
+}
+
+/* Source: https://vercel.com/vc-ap-vercel-marketing/_next/static/chunks/aa00e40d81c10c16.css */
+@keyframes enterFromRight {
+  0% {
+    opacity: 0;
+    transform: translate(200px);
+  }
+  100% {
+    opacity: 1;
+    transform: translate(0px);
+  }
+}
+
+/* Source: https://vercel.com/vc-ap-vercel-marketing/_next/static/chunks/aa00e40d81c10c16.css */
+@keyframes delayed-pointer-events {
+  0% { pointer-events: none; }
+  100% { pointer-events: auto; }
+}
+
+/* Responsive disappear animations */
+/* Source: https://vercel.com/vc-ap-vercel-marketing/_next/static/chunks/aa00e40d81c10c16.css */
+@keyframes xsDisappear {
+  90% { opacity: 1; }
+  100% { opacity: 0; }
+}
+
+@keyframes smDisappear {
+  90% { opacity: 1; }
+  100% { opacity: 0; }
+}
+
+@keyframes smdDisappear {
+  90% { opacity: 1; }
+  100% { opacity: 0; }
+}
+
+@keyframes mdDisappear {
+  90% { opacity: 1; }
+  100% { opacity: 0; }
+}
+
+@keyframes lgDisappear {
+  90% { opacity: 1; }
+  100% { opacity: 0; }
+}
+
+/* === TRANSITIONS (observed) === */
+
+/* Pattern 1 (293×): html, div, span, a, button, etc. */
+/* all */
+
+/* Pattern 2 (4×): p */
+/* color 0.15s ease-in-out */
+
+/* Pattern 3 (1×): div (card hover) */
+/* box-shadow 0.2s, background-color 0.2s */
+
+/* Pattern 4 (1×): a (link hover) */
+/* box-shadow 0.2s */
+
+/* Pattern 5 (1×): button (nav button) */
+/* color 0.09s, background 0.09s */
+
+/* Pattern 6 (1×): span (icon rotation) */
+/* rotate 0.2s */
+
+/* === STATE DELTAS === */
+
+/* Button [nav > ul > li > button] default→hover:
+   backgroundColor: transparent → rgba(0, 0, 0, 0.05)
+   color: #666666 → #171717 */
+
+/* Link [a with border-radius: 6px] default→hover:
+   boxShadow: none → 0 0 0 1px #00000014 */
+
+/* Card [section > div] default→hover:
+   boxShadow: 0 0 0 1px #00000014 → 0 0 0 1px #00000014, 0px 2px 2px #0000000a */

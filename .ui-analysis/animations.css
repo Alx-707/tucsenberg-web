@@ -1,0 +1,172 @@
+/* ============================================
+   URL: https://vercel.com/
+   Captured: 2026-01-15T05:27:11.945Z
+
+   Coverage:
+   - Keyframes: 12/12 (100%)
+   - Transitions: 12 patterns
+   - State deltas: 1 observed
+
+   CORS-blocked: None
+   ============================================ */
+
+/* === KEYFRAMES (same-origin) === */
+
+/* Source: https://vercel.com/vc-ap-vercel-marketing/_next/static/chunks/3606ed04a7d9a6c0.css */
+@keyframes grid-module__4pDFEa__xsDisappear {
+  90% {
+    opacity: 1;
+  }
+  100% {
+    opacity: 0;
+  }
+}
+
+@keyframes grid-module__4pDFEa__smDisappear {
+  90% {
+    opacity: 1;
+  }
+  100% {
+    opacity: 0;
+  }
+}
+
+@keyframes grid-module__4pDFEa__smdDisappear {
+  90% {
+    opacity: 1;
+  }
+  100% {
+    opacity: 0;
+  }
+}
+
+@keyframes grid-module__4pDFEa__mdDisappear {
+  90% {
+    opacity: 1;
+  }
+  100% {
+    opacity: 0;
+  }
+}
+
+@keyframes grid-module__4pDFEa__lgDisappear {
+  90% {
+    opacity: 1;
+  }
+  100% {
+    opacity: 0;
+  }
+}
+
+@keyframes header-module__6nzVrW__fadeIn {
+  0% {
+    opacity: 0;
+  }
+  100% {
+    opacity: 1;
+  }
+}
+
+@keyframes navigation-menu-module__AENi4G__delayed-pointer-events {
+  0% {
+    pointer-events: none;
+  }
+  100% {
+    pointer-events: auto;
+  }
+}
+
+@keyframes navigation-menu-module__AENi4G__scaleIn {
+  0% {
+    opacity: 0;
+    transform: rotateX(-30deg) scale(0.9);
+  }
+  100% {
+    opacity: 1;
+    transform: rotateX(0deg) scale(1);
+  }
+}
+
+@keyframes navigation-menu-module__AENi4G__scaleOut {
+  0% {
+    opacity: 1;
+    transform: rotateX(0deg) scale(1);
+  }
+  100% {
+    opacity: 0;
+    transform: rotateX(-10deg) scale(0.95);
+  }
+}
+
+@keyframes navigation-menu-module__AENi4G__fadeIn {
+  0% {
+    opacity: 0;
+  }
+  100% {
+    opacity: 1;
+  }
+}
+
+@keyframes navigation-menu-module__AENi4G__fadeOut {
+  0% {
+    opacity: 1;
+  }
+  100% {
+    opacity: 0;
+  }
+}
+
+@keyframes navigation-menu-module__AENi4G__enterFromRight {
+  0% {
+    opacity: 0;
+    transform: translate(200px);
+  }
+  100% {
+    opacity: 1;
+    transform: translate(0px);
+  }
+}
+
+/* === TRANSITIONS (observed) === */
+
+/* Pattern 1 (743×): html, head, style, meta, link, script, title, body, div, header, img, nav, ul, li, svg, path, h5, a, g, defs, clippath, rect, mask, circle, lineargradient, stop, span, main, section, h1, p, polygon, line */
+/* all */
+
+/* Pattern 2 (36×): p */
+/* color 0.15s ease-in-out */
+
+/* Pattern 3 (5×): button, a */
+/* color 0.09s, background 0.09s */
+
+/* Pattern 4 (5×): a */
+/* border-color 0.15s, background 0.15s, color 0.15s, transform 0.15s, box-shadow 0.15s */
+
+/* Pattern 5 (3×): span */
+/* rotate 0.2s */
+
+/* Pattern 6 (2×): a, button */
+/* box-shadow 0.2s */
+
+/* Pattern 7 (2×): div */
+/* transform 0.16s cubic-bezier(0.31, 0.05, 0.43, 1.02) */
+
+/* Pattern 8 (1×): div */
+/* box-shadow 0.2s, background-color 0.2s */
+
+/* Pattern 9 (1×): div */
+/* 0.3s ease-in-out */
+
+/* Pattern 10 (1×): a */
+/* border-color 0.3s cubic-bezier(0.39, 0.18, 0.17, 0.99), background 0.3s cubic-bezier(0.39, 0.18, 0.17, 0.99), color 0.3s cubic-bezier(0.39, 0.18, 0.17, 0.99), transform 0.3s cubic-bezier(0.39, 0.18, 0.17, 0.99), box-shadow 0.3s cubic-bezier(0.39, 0.18, 0.17, 0.99), width 0.4s cubic-bezier(0.39, 0.18, 0.17, 0.99) */
+
+/* Pattern 11 (1×): div */
+/* cubic-bezier(0.14, 0.55, 0.3, 0.92) */
+
+/* Pattern 12 (1×): canvas */
+/* opacity 2s */
+
+/* === STATE DELTAS === */
+
+/* Sign Up Button [data-testid="header/sign-up"] default→hover:
+   backgroundColor: #171717 → #383838
+ */

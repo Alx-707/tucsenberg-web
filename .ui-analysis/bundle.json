@@ -1,0 +1,197 @@
+{
+  "$schema": "https://ui-reverse-engineering.dev/schemas/bundle.json",
+  "meta": {
+    "url": "https://vercel.com/",
+    "captured": "2026-01-15T04:48:59.106Z",
+    "tool": "ui-reverse-engineering",
+    "version": "1.0.0"
+  },
+  "provenance": {
+    "viewports": [
+      { "name": "desktop", "width": 1440, "height": 900, "captured": true }
+    ],
+    "sources": {
+      "cssVariables": {
+        "count": 80,
+        "limit": 80,
+        "origins": [":root", "[data-theme]"]
+      },
+      "stylesheets": {
+        "sameOrigin": [
+          "https://vercel.com/vc-ap-vercel-marketing/_next/static/chunks/3606ed04a7d9a6c0.css"
+        ],
+        "crossOrigin": [],
+        "blocked": []
+      },
+      "computedStyles": {
+        "elementsScanned": 801,
+        "propertiesExtracted": 52
+      }
+    },
+    "statesSampled": [
+      {
+        "component": "PrimaryButton",
+        "selector": "[data-testid=\"header/sign-up\"]",
+        "states": ["default", "hover"],
+        "method": "chrome-hover"
+      }
+    ],
+    "themeDetection": {
+      "currentTheme": "light",
+      "toggleFound": true,
+      "toggleSelector": "input[aria-label*=\"dark\" i]",
+      "cssVariableTheming": true,
+      "systemPreferenceSupport": true
+    }
+  },
+  "extraction": {
+    "colors": {
+      "unique": 15,
+      "limit": 40,
+      "topByFrequency": [
+        { "value": "#171717", "count": 2704, "usage": "text, primary buttons" },
+        { "value": "#666666", "count": 382, "usage": "secondary text" },
+        {
+          "value": "#ffffff",
+          "count": 103,
+          "usage": "backgrounds, button text"
+        },
+        { "value": "#000000", "count": 50, "usage": "accents" },
+        { "value": "#fafafa", "count": 45, "usage": "secondary backgrounds" },
+        { "value": "#e6e6e6", "count": 32, "usage": "borders" },
+        { "value": "#ebebeb", "count": 28, "usage": "subtle borders" },
+        { "value": "#a8a8a8", "count": 15, "usage": "disabled states" },
+        { "value": "#0062d1", "count": 12, "usage": "CTA buttons" },
+        { "value": "#52aeff", "count": 8, "usage": "links" }
+      ]
+    },
+    "typography": {
+      "fontFamilies": 2,
+      "fontSizes": 7,
+      "fontWeights": 3,
+      "lineHeights": 3
+    },
+    "spacing": {
+      "unique": 11,
+      "limit": 20,
+      "distribution": [
+        { "value": "12px", "count": 110 },
+        { "value": "8px", "count": 64 },
+        { "value": "2px", "count": 36 },
+        { "value": "10px", "count": 9 },
+        { "value": "32px", "count": 3 },
+        { "value": "48px", "count": 2 },
+        { "value": "24px", "count": 2 },
+        { "value": "64px", "count": 1 }
+      ]
+    },
+    "borderRadii": {
+      "unique": 7,
+      "limit": 10,
+      "distribution": [
+        { "value": "6px", "count": 90 },
+        { "value": "64px", "count": 50 },
+        { "value": "4px", "count": 41 },
+        { "value": "9999px", "count": 35 },
+        { "value": "2px", "count": 20 },
+        { "value": "50%", "count": 11 },
+        { "value": "100px", "count": 4 }
+      ]
+    },
+    "shadows": {
+      "unique": 4,
+      "limit": 10,
+      "values": [
+        "rgba(0, 0, 0, 0.04) 0px 2px 2px 0px",
+        "rgba(0, 0, 0, 0.08) 0px 0px 0px 1px, rgba(0, 0, 0, 0.02) 0px 1px 1px 0px, rgba(0, 0, 0, 0.04) 0px 4px 8px 0px",
+        "rgb(235, 235, 235) 0px 0px 0px 1px"
+      ]
+    },
+    "animations": {
+      "keyframes": {
+        "count": 12,
+        "limit": 12,
+        "names": [
+          "grid-module__4pDFEa__xsDisappear",
+          "grid-module__4pDFEa__smDisappear",
+          "grid-module__4pDFEa__smdDisappear",
+          "grid-module__4pDFEa__mdDisappear",
+          "grid-module__4pDFEa__lgDisappear",
+          "header-module__6nzVrW__fadeIn",
+          "navigation-menu-module__AENi4G__delayed-pointer-events",
+          "navigation-menu-module__AENi4G__scaleIn",
+          "navigation-menu-module__AENi4G__scaleOut",
+          "navigation-menu-module__AENi4G__fadeIn",
+          "navigation-menu-module__AENi4G__fadeOut",
+          "navigation-menu-module__AENi4G__enterFromRight"
+        ]
+      },
+      "transitions": {
+        "patterns": 12,
+        "limit": 20
+      }
+    },
+    "breakpoints": {
+      "detected": 46,
+      "key": [375, 640, 768, 1024, 1200, 1400]
+    }
+  },
+  "designSystem": {
+    "detected": ["Geist", "Tailwind"],
+    "confidence": "high",
+    "evidence": {
+      "geist": {
+        "cssVariables": 103,
+        "prefix": "--geist-*",
+        "fontFamily": "Geist, Geist Mono"
+      },
+      "tailwind": {
+        "cssVariables": 47,
+        "prefix": "--tw-*",
+        "utilityClasses": true
+      },
+      "designSystem": {
+        "cssVariables": 203,
+        "prefix": "--ds-*"
+      }
+    },
+    "containerQueries": true
+  },
+  "validation": {
+    "tokenPathsResolved": true,
+    "unresolvedPaths": [],
+    "limitsEnforced": true,
+    "exceededLimits": [],
+    "coverageStats": {
+      "cssVariables": { "extracted": 80, "limit": 80, "rate": "100%" },
+      "colors": { "extracted": 15, "limit": 40, "rate": "38%" },
+      "spacing": { "extracted": 11, "limit": 20, "rate": "55%" },
+      "shadows": { "extracted": 4, "limit": 10, "rate": "40%" },
+      "radii": { "extracted": 7, "limit": 10, "rate": "70%" },
+      "keyframes": { "extracted": 12, "limit": 12, "rate": "100%" }
+    }
+  },
+  "artifacts": {
+    "analysisReport": {
+      "path": "analysis-report.md",
+      "generated": true
+    },
+    "designTokens": {
+      "path": "design-tokens.json",
+      "generated": true,
+      "format": "DTCG"
+    },
+    "animations": {
+      "path": "animations.css",
+      "generated": true
+    },
+    "components": {
+      "path": "components.json",
+      "generated": true
+    },
+    "bundle": {
+      "path": "bundle.json",
+      "generated": true
+    }
+  }
+}
