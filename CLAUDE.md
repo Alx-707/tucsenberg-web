@@ -66,3 +66,4 @@ All in `.claude/rules/`.
 
 - **Language**: English for tools; **Chinese** for user output
 - **Git**: Never commit to `main`—use feature branch (`feat/`, `fix/`, `docs/`, `chore/`)
+- **Next.js DevTools**: When starting work, ALWAYS call `init` from `next-devtools-mcp` FIRST to set up context and establish documentation requirements (automatic, no prompt needed)
