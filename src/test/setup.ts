@@ -35,12 +35,39 @@ vi.mock("@/lib/mdx-importers.generated", () => ({
   },
 }));
 
-// Mock next/font/local for local font loading (P2-1 Phase 3: Geist Sans Latin subset)
+// Mock next/font/local for local font loading
+// Supports multiple font configurations: Open Sans (Twitter theme) and Geist Sans (fallback)
 vi.mock("next/font/local", () => ({
-  default: vi.fn(() => ({
-    variable: "--font-geist-sans",
-    className: "geist-sans-subset",
-    style: { fontFamily: "Geist Sans Latin" },
+  default: vi.fn(
+    (config: { src: string | Array<{ path: string }>; variable?: string }) => {
+      // Determine font type based on config
+      const isOpenSans =
+        Array.isArray(config.src) ||
+        (typeof config.src === "string" && config.src.includes("open-sans"));
+
+      if (isOpenSans) {
+        return {
+          variable: "--font-open-sans",
+          className: "open-sans-local",
+          style: { fontFamily: "Open Sans" },
+        };
+      }
+      // Default: Geist Sans
+      return {
+        variable: "--font-geist-sans",
+        className: "geist-sans-subset",
+        style: { fontFamily: "Geist Sans Latin" },
+      };
+    },
+  ),
+}));
+
+// Mock next/font/google (kept for compatibility, not currently used)
+vi.mock("next/font/google", () => ({
+  Open_Sans: vi.fn(() => ({
+    variable: "--font-open-sans",
+    className: "open-sans",
+    style: { fontFamily: "Open Sans" },
   })),
 }));
 

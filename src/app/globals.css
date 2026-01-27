@@ -11,11 +11,13 @@
 @theme inline {
   --color-background: var(--background);
   --color-foreground: var(--foreground);
-  --font-sans: var(--font-geist-sans);
-  /* P2-1 Phase 2: 使用系统等宽字体栈替代 Geist Mono，节省 ~59KB */
+  /* Twitter 主题：使用 Open Sans 作为主要字体（next/font/local 加载） */
+  --font-sans: var(--font-open-sans), var(--font-geist-sans);
+  /* Twitter 主题：使用 Georgia 作为衬线字体 */
+  --font-serif: Georgia, Cambria, "Times New Roman", Times, serif;
+  /* Twitter 主题：使用 Menlo 作为等宽字体 */
   --font-mono:
-    ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono",
-    "Courier New", monospace;
+    Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace;
   --color-sidebar-ring: var(--sidebar-ring);
   --color-sidebar-border: var(--sidebar-border);
   --color-sidebar-accent-foreground: var(--sidebar-accent-foreground);
@@ -52,144 +54,215 @@
 }
 
 :root {
-  --radius: 0.625rem;
+  /* Twitter 主题 - 圆角设置 */
+  --radius: 1.3rem;
   --font-chinese-stack:
     "PingFang SC", "Hiragino Sans GB", "Microsoft YaHei", "Source Han Sans SC",
     "Noto Sans SC", "Noto Sans CJK SC", "WenQuanYi Micro Hei", sans-serif;
 
-  /* 基础颜色 - 优化对比度确保WCAG AA级合规 */
+  /* Twitter Light Mode - 基础颜色 */
+  /* #ffffff -> oklch(1 0 0) */
   --background: oklch(1 0 0);
-  --foreground: oklch(0.145 0 0);
+  /* #0f1419 -> oklch(0.183 0.011 256.1) */
+  --foreground: oklch(0.183 0.011 256.1);
 
   /* 卡片和弹出层 */
-  --card: oklch(1 0 0);
-  --card-foreground: oklch(0.145 0 0);
+  /* #f7f8f8 -> oklch(0.976 0.001 106.4) */
+  --card: oklch(0.976 0.001 106.4);
+  --card-foreground: oklch(0.183 0.011 256.1);
+  /* #ffffff -> oklch(1 0 0) */
   --popover: oklch(1 0 0);
-  --popover-foreground: oklch(0.145 0 0);
+  --popover-foreground: oklch(0.183 0.011 256.1);
 
-  /* 主要颜色 */
-  --primary: oklch(0.205 0 0);
-  --primary-foreground: oklch(0.985 0 0);
+  /* 主要颜色 - Twitter Blue */
+  /* #1e9df1 -> oklch(0.668 0.163 237.8) */
+  --primary: oklch(0.668 0.163 237.8);
+  /* #ffffff */
+  --primary-foreground: oklch(1 0 0);
 
   /* 次要颜色 */
-  --secondary: oklch(0.97 0 0);
-  --secondary-foreground: oklch(0.205 0 0);
+  /* #0f1419 -> oklch(0.183 0.011 256.1) */
+  --secondary: oklch(0.183 0.011 256.1);
+  /* #ffffff */
+  --secondary-foreground: oklch(1 0 0);
 
   /* 静音颜色 */
-  --muted: oklch(0.97 0 0);
-  --muted-foreground: oklch(0.556 0 0);
+  /* #E5E5E6 -> oklch(0.919 0.001 264.5) */
+  --muted: oklch(0.919 0.001 264.5);
+  /* #0f1419 -> oklch(0.183 0.011 256.1) - 原主题使用深灰色 */
+  --muted-foreground: oklch(0.183 0.011 256.1);
 
   /* 强调颜色 */
-  --accent: oklch(0.97 0 0);
-  --accent-foreground: oklch(0.205 0 0);
+  /* #E3ECF6 -> oklch(0.939 0.018 250.1) */
+  --accent: oklch(0.939 0.018 250.1);
+  /* #1e9df1 -> oklch(0.668 0.163 237.8) - Twitter Blue */
+  --accent-foreground: oklch(0.668 0.163 237.8);
 
-  /* 破坏性颜色 */
-  --destructive: oklch(0.577 0.245 27.325);
-  --destructive-foreground: oklch(0.985 0 0);
+  /* 破坏性颜色 - Twitter Red */
+  /* #f4212e -> oklch(0.593 0.227 25.4) */
+  --destructive: oklch(0.593 0.227 25.4);
+  --destructive-foreground: oklch(1 0 0);
 
   /* 边框和输入 */
-  --border: oklch(0.922 0 0);
-  --input: oklch(0.922 0 0);
-  --ring: oklch(0.708 0 0);
+  /* #e1eaef -> oklch(0.932 0.012 232.8) */
+  --border: oklch(0.932 0.012 232.8);
+  /* #f7f9fa -> oklch(0.979 0.003 228.2) */
+  --input: oklch(0.979 0.003 228.2);
+  /* #1da1f2 -> oklch(0.676 0.163 237.7) - Twitter Blue */
+  --ring: oklch(0.676 0.163 237.7);
 
-  /* 语义化颜色 - 新增 */
-  --success: oklch(0.646 0.222 142.5);
-  --success-foreground: oklch(0.985 0 0);
-  --warning: oklch(0.828 0.189 84.429);
-  --warning-foreground: oklch(0.145 0 0);
-  --error: oklch(0.577 0.245 27.325);
-  --error-foreground: oklch(0.985 0 0);
-  --info: oklch(0.6 0.118 184.704);
-  --info-foreground: oklch(0.985 0 0);
+  /* 语义化颜色 - Twitter 风格 */
+  /* #00b87a -> oklch(0.692 0.165 162.5) - Twitter Green */
+  --success: oklch(0.692 0.165 162.5);
+  --success-foreground: oklch(1 0 0);
+  /* #f7b928 -> oklch(0.818 0.16 81.1) - Twitter Yellow */
+  --warning: oklch(0.818 0.16 81.1);
+  --warning-foreground: oklch(0.183 0.011 256.1);
+  /* #f4212e -> oklch(0.593 0.227 25.4) - Twitter Red */
+  --error: oklch(0.593 0.227 25.4);
+  --error-foreground: oklch(1 0 0);
+  /* #1e9df1 -> oklch(0.668 0.163 237.8) - Twitter Blue */
+  --info: oklch(0.668 0.163 237.8);
+  --info-foreground: oklch(1 0 0);
 
-  /* 图表颜色 - 保持向后兼容 */
-  --chart-1: oklch(0.646 0.222 41.116);
-  --chart-2: oklch(0.6 0.118 184.704);
-  --chart-3: oklch(0.398 0.07 227.392);
-  --chart-4: oklch(0.828 0.189 84.429);
-  --chart-5: oklch(0.769 0.188 70.08);
+  /* 图表颜色 - Twitter 调色板 */
+  /* #1e9df1 -> oklch(0.668 0.163 237.8) */
+  --chart-1: oklch(0.668 0.163 237.8);
+  /* #00b87a -> oklch(0.692 0.165 162.5) */
+  --chart-2: oklch(0.692 0.165 162.5);
+  /* #f7b928 -> oklch(0.818 0.16 81.1) */
+  --chart-3: oklch(0.818 0.16 81.1);
+  /* #17bf63 -> oklch(0.713 0.181 155.2) */
+  --chart-4: oklch(0.713 0.181 155.2);
+  /* #e0245e -> oklch(0.546 0.207 6.9) */
+  --chart-5: oklch(0.546 0.207 6.9);
 
-  /* 文本选择高亮 */
-  --selection-background: oklch(0.488 0.243 264.376 / 30%);
-  --selection-foreground: oklch(0.145 0 0);
+  /* 文本选择高亮 - Twitter Blue */
+  --selection-background: oklch(0.668 0.163 237.8 / 30%);
+  --selection-foreground: oklch(0.183 0.011 256.1);
 
-  /* 侧边栏颜色 */
-  --sidebar: oklch(0.985 0 0);
-  --sidebar-foreground: oklch(0.145 0 0);
-  --sidebar-primary: oklch(0.205 0 0);
-  --sidebar-primary-foreground: oklch(0.985 0 0);
-  --sidebar-accent: oklch(0.97 0 0);
-  --sidebar-accent-foreground: oklch(0.205 0 0);
-  --sidebar-border: oklch(0.922 0 0);
-  --sidebar-ring: oklch(0.708 0 0);
+  /* 侧边栏颜色 - Twitter 风格 */
+  /* #f7f8f8 */
+  --sidebar: oklch(0.976 0.001 106.4);
+  --sidebar-foreground: oklch(0.183 0.011 256.1);
+  /* #1e9df1 - Twitter Blue */
+  --sidebar-primary: oklch(0.668 0.163 237.8);
+  --sidebar-primary-foreground: oklch(1 0 0);
+  --sidebar-accent: oklch(0.939 0.018 250.1);
+  --sidebar-accent-foreground: oklch(0.183 0.011 256.1);
+  /* #e1e8ed -> oklch(0.929 0.008 232.5) */
+  --sidebar-border: oklch(0.929 0.008 232.5);
+  --sidebar-ring: oklch(0.676 0.163 237.7);
+
+  /* Twitter 主题 - 阴影设置 */
+  --shadow-color: oklch(0.676 0.163 237.7 / 15%); /* rgba(29,161,242,0.15) */
+  --shadow-opacity: 0;
+  --shadow-blur: 0px;
+  --shadow-spread: 0px;
+  --shadow-offset-x: 0px;
+  --shadow-offset-y: 2px;
 }
 
 .dark {
-  /* 基础颜色 - 暗黑主题优化 */
-  --background: oklch(0.145 0 0);
-  --foreground: oklch(0.985 0 0);
+  /* Twitter Dark Mode - 基础颜色 */
+  /* #000000 -> oklch(0 0 0) */
+  --background: oklch(0 0 0);
+  /* #e7e9ea -> oklch(0.929 0.005 264.5) */
+  --foreground: oklch(0.929 0.005 264.5);
 
   /* 卡片和弹出层 */
-  --card: oklch(0.205 0 0);
-  --card-foreground: oklch(0.985 0 0);
-  --popover: oklch(0.205 0 0);
-  --popover-foreground: oklch(0.985 0 0);
+  /* #17181c -> oklch(0.173 0.009 273.9) */
+  --card: oklch(0.173 0.009 273.9);
+  /* #d9d9d9 -> oklch(0.878 0 0) - 注意：与 foreground 不同 */
+  --card-foreground: oklch(0.878 0 0);
+  /* #000000 */
+  --popover: oklch(0 0 0);
+  --popover-foreground: oklch(0.929 0.005 264.5);
 
-  /* 主要颜色 */
-  --primary: oklch(0.922 0 0);
-  --primary-foreground: oklch(0.205 0 0);
+  /* 主要颜色 - Twitter Blue (dark) */
+  /* #1c9cf0 -> oklch(0.663 0.165 237.7) */
+  --primary: oklch(0.663 0.165 237.7);
+  /* #ffffff */
+  --primary-foreground: oklch(1 0 0);
 
   /* 次要颜色 */
-  --secondary: oklch(0.269 0 0);
-  --secondary-foreground: oklch(0.985 0 0);
+  /* #f0f3f4 -> oklch(0.961 0.005 227.7) */
+  --secondary: oklch(0.961 0.005 227.7);
+  /* #0f1419 -> oklch(0.183 0.011 256.1) */
+  --secondary-foreground: oklch(0.183 0.011 256.1);
 
   /* 静音颜色 */
-  --muted: oklch(0.269 0 0);
-  --muted-foreground: oklch(0.708 0 0);
+  /* #181818 -> oklch(0.168 0 0) */
+  --muted: oklch(0.168 0 0);
+  /* #72767a -> oklch(0.532 0.012 252.9) - Twitter 灰色 */
+  --muted-foreground: oklch(0.532 0.012 252.9);
 
   /* 强调颜色 */
-  --accent: oklch(0.269 0 0);
-  --accent-foreground: oklch(0.985 0 0);
+  /* #061622 -> oklch(0.146 0.024 242.8) */
+  --accent: oklch(0.146 0.024 242.8);
+  /* #1c9cf0 -> oklch(0.663 0.165 237.7) - Twitter Blue dark */
+  --accent-foreground: oklch(0.663 0.165 237.7);
 
-  /* 破坏性颜色 */
-  --destructive: oklch(0.704 0.191 22.216);
-  --destructive-foreground: oklch(0.985 0 0);
+  /* 破坏性颜色 - Twitter Red (dark) */
+  /* #f4212e -> oklch(0.593 0.227 25.4) */
+  --destructive: oklch(0.593 0.227 25.4);
+  --destructive-foreground: oklch(1 0 0);
 
   /* 边框和输入 */
-  --border: oklch(1 0 0 / 10%);
-  --input: oklch(1 0 0 / 15%);
-  --ring: oklch(0.556 0 0);
+  /* #242628 -> oklch(0.231 0.006 264.5) */
+  --border: oklch(0.231 0.006 264.5);
+  /* #22303c -> oklch(0.269 0.026 240.3) */
+  --input: oklch(0.269 0.026 240.3);
+  /* #1da1f2 -> oklch(0.676 0.163 237.7) - Twitter Blue */
+  --ring: oklch(0.676 0.163 237.7);
 
-  /* 语义化颜色 - 暗黑主题版本 */
-  --success: oklch(0.7 0.222 142.5);
-  --success-foreground: oklch(0.145 0 0);
-  --warning: oklch(0.85 0.189 84.429);
-  --warning-foreground: oklch(0.145 0 0);
-  --error: oklch(0.704 0.191 22.216);
-  --error-foreground: oklch(0.985 0 0);
-  --info: oklch(0.65 0.118 184.704);
-  --info-foreground: oklch(0.145 0 0);
+  /* 语义化颜色 - Twitter 风格 (dark mode) */
+  /* #00b87a -> oklch(0.692 0.165 162.5) - Twitter Green */
+  --success: oklch(0.692 0.165 162.5);
+  --success-foreground: oklch(0 0 0);
+  /* #f7b928 -> oklch(0.818 0.16 81.1) - Twitter Yellow */
+  --warning: oklch(0.818 0.16 81.1);
+  --warning-foreground: oklch(0 0 0);
+  /* #f4212e -> oklch(0.593 0.227 25.4) - Twitter Red */
+  --error: oklch(0.593 0.227 25.4);
+  --error-foreground: oklch(1 0 0);
+  /* #1c9cf0 -> oklch(0.663 0.165 237.7) - Twitter Blue */
+  --info: oklch(0.663 0.165 237.7);
+  --info-foreground: oklch(0 0 0);
 
-  /* 图表颜色 - 暗黑主题版本 */
-  --chart-1: oklch(0.488 0.243 264.376);
-  --chart-2: oklch(0.696 0.17 162.48);
-  --chart-3: oklch(0.769 0.188 70.08);
-  --chart-4: oklch(0.627 0.265 303.9);
-  --chart-5: oklch(0.645 0.246 16.439);
+  /* 图表颜色 - Twitter 调色板 (dark mode) */
+  /* #1c9cf0 */
+  --chart-1: oklch(0.663 0.165 237.7);
+  /* #00b87a */
+  --chart-2: oklch(0.692 0.165 162.5);
+  /* #f7b928 */
+  --chart-3: oklch(0.818 0.16 81.1);
+  /* #17bf63 */
+  --chart-4: oklch(0.713 0.181 155.2);
+  /* #e0245e */
+  --chart-5: oklch(0.546 0.207 6.9);
 
-  /* 文本选择高亮 - 暗黑主题版本 */
-  --selection-background: oklch(0.488 0.243 264.376 / 40%);
-  --selection-foreground: oklch(0.985 0 0);
+  /* 文本选择高亮 - Twitter Blue (dark mode) */
+  --selection-background: oklch(0.663 0.165 237.7 / 40%);
+  --selection-foreground: oklch(0.929 0.005 264.5);
 
-  /* 侧边栏颜色 - 暗黑主题版本 */
-  --sidebar: oklch(0.205 0 0);
-  --sidebar-foreground: oklch(0.985 0 0);
-  --sidebar-primary: oklch(0.488 0.243 264.376);
-  --sidebar-primary-foreground: oklch(0.985 0 0);
-  --sidebar-accent: oklch(0.269 0 0);
-  --sidebar-accent-foreground: oklch(0.985 0 0);
-  --sidebar-border: oklch(1 0 0 / 10%);
-  --sidebar-ring: oklch(0.556 0 0);
+  /* 侧边栏颜色 - Twitter 风格 (dark mode) */
+  /* #17181c */
+  --sidebar: oklch(0.173 0.009 273.9);
+  /* #d9d9d9 -> oklch(0.878 0 0) */
+  --sidebar-foreground: oklch(0.878 0 0);
+  /* #1da1f2 - Twitter Blue */
+  --sidebar-primary: oklch(0.676 0.163 237.7);
+  --sidebar-primary-foreground: oklch(1 0 0);
+  /* #061622 */
+  --sidebar-accent: oklch(0.146 0.024 242.8);
+  --sidebar-accent-foreground: oklch(0.929 0.005 264.5);
+  /* #38444d -> oklch(0.362 0.022 236.4) */
+  --sidebar-border: oklch(0.362 0.022 236.4);
+  --sidebar-ring: oklch(0.676 0.163 237.7);
+
+  /* Twitter 主题 - 阴影设置 (dark mode) */
+  --shadow-color: oklch(0.676 0.163 237.7 / 25%); /* rgba(29,161,242,0.25) */
 }
 
 @layer base {
@@ -198,7 +271,8 @@
   }
   body {
     @apply bg-background text-foreground;
-    font-family: var(--font-geist-sans), var(--font-chinese-stack);
+    font-family:
+      var(--font-open-sans), var(--font-geist-sans), var(--font-chinese-stack);
   }
 
   /* 文本选择高亮样式 */
