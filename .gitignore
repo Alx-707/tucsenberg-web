@@ -44,3 +44,6 @@ test-results/
 
 # CI/Build artifacts
 reports/
+
+# Generated translation mocks (built by prebuild)
+public/messages/
