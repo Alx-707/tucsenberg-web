@@ -105,6 +105,7 @@ storybook-static/
 *.md
 docs/
 .augment/
+.next-docs/
 
 # Configuration files that may contain non-standard syntax
 *.dot
