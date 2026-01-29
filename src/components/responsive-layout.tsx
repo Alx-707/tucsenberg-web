@@ -17,7 +17,6 @@ import { cn } from "@/lib/utils";
  * - Layout change callbacks for analytics/tracking
  * - Accessibility attributes
  *
- * @see openspec/changes/p2-responsive-css-first for full specification
  */
 
 interface ResponsiveLayoutProps {
