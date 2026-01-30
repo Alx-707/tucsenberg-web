@@ -3,9 +3,70 @@
 /**
  * 常量模块统一导出
  * 提供项目中所有常量的集中访问点
+ *
+ * 模块结构:
+ * - ./whatsapp-errors.ts  - WhatsApp API 错误码 (语义化命名)
+ * - ./validation-limits.ts - 验证限制和约束常量
+ * - ./count.ts            - 基础计数和数值常量
+ * - ./time.ts             - 时间相关常量
+ * - ./hex.ts              - 十六进制常量
+ * - ./decimal.ts          - 小数常量
  */
 
-// 领域常量 - 新增的分类常量
+// ============================================================================
+// WhatsApp 错误码 (新增领域模块)
+// ============================================================================
+export {
+  // 语义化命名
+  WA_ERR_GENERIC_USER,
+  WA_ERR_TEMPORARY,
+  WA_ERR_LIMIT_REACHED,
+  WA_ERR_PERMISSION,
+  WA_ERR_AUTH,
+  WA_ERR_ACCESS_TOKEN,
+  WA_ERR_POLICY_BLOCK,
+  WA_ERR_RATE_LIMIT,
+  WA_ERR_API_TEMPORARY,
+  WA_ERR_API_RATE_LIMIT,
+  WA_ERR_API_MISSING_PARAM,
+  WA_ERR_API_INVALID_PARAM,
+  WA_ERR_API_TIMEOUT,
+  WA_ERR_API_UNAVAILABLE,
+  WA_ERR_API_INVALID_PHONE,
+  WA_ERR_API_UNDELIVERABLE,
+  WA_ERR_API_REENGAGEMENT,
+  WA_ERR_API_UNSUPPORTED_MSG,
+  WA_ERR_MEDIA_DOWNLOAD,
+  WA_ERR_MEDIA_UPLOAD,
+  // 错误码集合
+  RETRYABLE_WA_ERRORS,
+  AUTH_WA_ERRORS,
+  RATE_LIMIT_WA_ERRORS,
+} from './whatsapp-errors';
+
+// ============================================================================
+// 验证限制常量 (新增领域模块)
+// ============================================================================
+export {
+  // 语义化命名
+  MAX_WA_MESSAGE_LENGTH,
+  MAX_WA_BUTTON_ID_LENGTH,
+  MAX_WA_BUTTON_TITLE_LENGTH,
+  MAX_WA_BUTTONS_COUNT,
+  MAX_WA_LIST_ROWS_COUNT,
+  MAX_WA_ROW_ID_LENGTH,
+  MAX_WA_ROW_TITLE_LENGTH,
+  MAX_WA_ROW_DESC_LENGTH,
+  MAX_WA_TEMPLATE_PARAM_LENGTH,
+  AES_KEY_LENGTH_BITS,
+  PBKDF2_ITERATIONS,
+  SALT_BYTE_LENGTH,
+  AES_IV_BYTE_LENGTH,
+} from './validation-limits';
+
+// ============================================================================
+// 时间相关常量
+// ============================================================================
 export {
   DAYS_PER_WEEK,
   HOURS_PER_DAY,
@@ -19,7 +80,6 @@ export {
   SECONDS_PER_HOUR,
   MILLISECONDS_PER_MINUTE,
   MILLISECONDS_PER_HOUR,
-  MAX_SET_TIMEOUT_DELAY_MS,
   HALF_SECOND_MS,
   TWO_HUNDRED_MS,
   FOUR_HUNDRED_MS,
@@ -31,7 +91,11 @@ export {
   THIRTY_SECONDS_MS,
   MINUTE_MS,
   FIVE_MINUTES_MS,
-} from "./time";
+} from './time';
+
+// ============================================================================
+// 十六进制常量
+// ============================================================================
 export {
   HEX_BYTE_MAX,
   HEX_NIBBLE_MAX,
@@ -54,8 +118,13 @@ export {
   MAGIC_HEX_04,
   MAGIC_HEX_3,
   MAGIC_HEX_8,
-} from "./hex";
+} from './hex';
+
+// ============================================================================
+// 计数与数值常量
+// ============================================================================
 export {
+  // 基础计数
   COUNT_ZERO,
   COUNT_ONE,
   COUNT_TWO,
@@ -68,94 +137,49 @@ export {
   COUNT_EIGHT,
   COUNT_NINE,
   COUNT_TEN,
-  COUNT_14,
   COUNT_PAIR,
   COUNT_TRIPLE,
   COUNT_QUAD,
+  // 进制和编码
+  MAGIC_16,
+  MAGIC_36,
+  // 安全相关
   MAGIC_6,
   MAGIC_8,
   MAGIC_9,
   MAGIC_12,
-  MAGIC_15,
-  MAGIC_16,
-  MAGIC_17,
-  MAGIC_18,
-  MAGIC_20,
-  MAGIC_22,
-  COUNT_23,
   MAGIC_32,
-  COUNT_35,
-  MAGIC_36,
-  MAGIC_40,
-  COUNT_45,
   MAGIC_48,
   MAGIC_64,
-  MAGIC_70,
+  // 验证相关
+  MAGIC_15,
+  MAGIC_20,
   MAGIC_72,
-  MAGIC_75,
-  MAGIC_80,
-  MAGIC_85,
-  MAGIC_90,
+  // 监控阈值
   MAGIC_95,
   MAGIC_99,
+  // 文件大小
+  MAGIC_255,
+  // 时间相关
+  MAGIC_600,
+  MAGIC_2000,
+  MAGIC_2500,
+  // 尺寸和数量
   COUNT_120,
   COUNT_160,
   COUNT_250,
-  COUNT_256,
-  COUNT_368,
-  COUNT_450,
-  MAGIC_512,
   COUNT_700,
-  COUNT_800,
-  MAGIC_131,
-  MAGIC_132,
-  MAGIC_133,
-  MAGIC_136,
-  MAGIC_190,
-  MAGIC_255,
-  MAGIC_256,
-  MAGIC_368,
-  MAGIC_429,
-  MAGIC_600,
-  MAGIC_800,
-  MAGIC_999,
-  COUNT_1536,
   COUNT_1600,
-  MAGIC_1800,
-  MAGIC_2000,
-  MAGIC_2500,
   COUNT_3600,
-  MAGIC_4000,
-  MAGIC_4096,
-  COUNT_6000,
-  COUNT_7000,
-  COUNT_8000,
-  COUNT_9000,
-  MAGIC_10000,
-  COUNT_12000,
-  COUNT_15000,
-  COUNT_45000,
-  COUNT_100000,
-  COUNT_125000,
-  COUNT_200000,
   COUNT_300000,
-  MAGIC_131000,
-  MAGIC_131005,
-  MAGIC_131008,
-  MAGIC_131009,
-  MAGIC_131014,
-  MAGIC_131016,
-  MAGIC_131021,
-  MAGIC_131026,
-  MAGIC_131047,
-  MAGIC_131051,
-  MAGIC_131052,
-  MAGIC_131053,
-  MAGIC_60000,
-  MAGIC_300000,
+  // 大容量数值
   MAGIC_1048576,
   MAGIC_3600000,
-} from "./count";
+} from './count';
+
+// ============================================================================
+// 小数常量
+// ============================================================================
 export {
   DEC_0_001,
   DEC_0_01,
@@ -188,9 +212,11 @@ export {
   OFFSET_NEGATIVE_LARGE,
   OFFSET_NEGATIVE_EXTRA_LARGE,
   OFFSET_NEGATIVE_MASSIVE,
-} from "./decimal";
+} from './decimal';
 
+// ============================================================================
 // 响应式断点常量
+// ============================================================================
 export {
   BREAKPOINT_SM,
   BREAKPOINT_MD,
@@ -198,10 +224,12 @@ export {
   BREAKPOINT_XL,
   BREAKPOINT_2XL,
   BREAKPOINTS,
-} from "./breakpoints";
-export type { BreakpointKey } from "./breakpoints";
+} from './breakpoints';
+export type { BreakpointKey } from './breakpoints';
 
+// ============================================================================
 // 魔法数字常量 - Facade聚合入口
+// ============================================================================
 export {
   ZERO,
   ONE,
@@ -217,12 +245,16 @@ export {
   BYTES_PER_KB,
   ANGLE_90_DEG,
   ANGLE_360_DEG,
-} from "./magic-numbers";
+} from './magic-numbers';
 
+// ============================================================================
 // 单位工具常量
-export { SECOND_MS, HOUR_MS, KB, MB } from "./units";
+// ============================================================================
+export { SECOND_MS, HOUR_MS, KB, MB } from './units';
 
+// ============================================================================
 // 国际化常量
+// ============================================================================
 export {
   TIME_UNITS,
   CACHE_DURATIONS,
@@ -240,9 +272,11 @@ export {
   REPORTING_THRESHOLDS,
   UI_RATIOS,
   PAGINATION_CONFIG,
-} from "./i18n-constants";
+} from './i18n-constants';
 
+// ============================================================================
 // 应用程序常量
+// ============================================================================
 export {
   TIME_CONSTANTS,
   DELAY_CONSTANTS,
@@ -252,7 +286,7 @@ export {
   PERCENTAGE_CONSTANTS,
   PERFORMANCE_CONSTANTS,
   DEBUG_CONSTANTS,
-} from "./app-constants";
+} from './app-constants';
 export type {
   AppConstants,
   TimeConstants,
@@ -263,9 +297,11 @@ export type {
   PercentageConstants,
   PerformanceConstants,
   DebugConstants,
-} from "./app-constants";
+} from './app-constants';
 
+// ============================================================================
 // 测试相关常量
+// ============================================================================
 export {
   TEST_TIME_CALCULATIONS,
   TEST_DELAY_VALUES,
@@ -288,9 +324,11 @@ export {
   TEST_SAMPLE_CONSTANTS,
   TEST_SCREEN_CONSTANTS,
   TEST_SPECIAL_CONSTANTS,
-} from "./test-constants";
+} from './test-constants';
 
+// ============================================================================
 // 安全相关常量
+// ============================================================================
 export {
   ENCRYPTION_CONSTANTS,
   ACCESS_CONTROL_CONSTANTS,
@@ -300,7 +338,7 @@ export {
   INPUT_VALIDATION_CONSTANTS,
   CSP_CONSTANTS,
   SECURITY_HEADERS_CONSTANTS,
-} from "./security-constants";
+} from './security-constants';
 export type {
   SecurityConstants,
   EncryptionConstants,
@@ -311,23 +349,27 @@ export type {
   InputValidationConstants,
   CspConstants,
   SecurityHeadersConstants,
-} from "./security-constants";
+} from './security-constants';
 
+// ============================================================================
 // SEO相关常量
+// ============================================================================
 export {
   SEO_PRIORITY_CONSTANTS,
   SITEMAP_CHANGEFREQ_CONSTANTS,
   URL_GENERATION_CONSTANTS,
-} from "./seo-constants";
+} from './seo-constants';
 export type {
   SeoConstants,
   SeoPriorityConstants,
   SitemapChangefreqConstants,
   UrlGenerationConstants,
-} from "./seo-constants";
+} from './seo-constants';
 
-// 重新导出主要常量对象以便于使用
-export { APP_CONSTANTS } from "./app-constants";
-export { SECURITY_CONSTANTS } from "./security-constants";
-export { SEO_CONSTANTS } from "./seo-constants";
-export { TEST_CONSTANTS } from "./test-constants";
+// ============================================================================
+// 重新导出主要常量对象
+// ============================================================================
+export { APP_CONSTANTS } from './app-constants';
+export { SECURITY_CONSTANTS } from './security-constants';
+export { SEO_CONSTANTS } from './seo-constants';
+export { TEST_CONSTANTS } from './test-constants';

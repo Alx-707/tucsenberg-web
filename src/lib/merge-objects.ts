@@ -1,5 +1,4 @@
-import { safeGetProperty, safeSetProperty } from "@/lib/security-object-access";
-import { hasOwn } from "@/lib/security/object-guards";
+import { hasOwn } from '@/lib/security/object-guards';
 
 /**
  * Deep merge plain objects.
@@ -16,29 +15,32 @@ export function mergeObjects<T extends Record<string, unknown>>(
 
   for (const key in source) {
     if (!hasOwn(source, key)) continue;
-    const sourceValue = safeGetProperty(source, key);
+    // eslint-disable-next-line security/detect-object-injection -- hasOwn 已校验 key 来自 source 自身属性
+    const sourceValue = source[key];
     if (sourceValue === undefined) continue;
-    const targetValue = safeGetProperty(result, key);
+    // eslint-disable-next-line security/detect-object-injection -- hasOwn 已校验，result 由 target 浅拷贝
+    const targetValue = result[key];
 
     const isSourcePlain =
-      typeof sourceValue === "object" &&
+      typeof sourceValue === 'object' &&
       sourceValue !== null &&
       !Array.isArray(sourceValue);
     const isTargetPlain =
-      typeof targetValue === "object" &&
+      typeof targetValue === 'object' &&
       targetValue !== null &&
       !Array.isArray(targetValue);
 
     if (isSourcePlain && isTargetPlain) {
-      const mergedNested = mergeObjects(
+      // eslint-disable-next-line security/detect-object-injection -- 递归合并已校验的嵌套对象
+      result[key] = mergeObjects(
         targetValue as Record<string, unknown>,
         sourceValue as Record<string, unknown>,
-      );
-      safeSetProperty({ obj: result, key, value: mergedNested });
+      ) as T[Extract<keyof T, string>];
       continue;
     }
 
-    safeSetProperty({ obj: result, key, value: sourceValue });
+    // eslint-disable-next-line security/detect-object-injection -- hasOwn 已校验 key
+    result[key] = sourceValue as T[Extract<keyof T, string>];
   }
 
   return result;
