@@ -52,11 +52,11 @@ describe("Constants Index Module", () => {
       const content = fs.readFileSync(indexPath, "utf8");
 
       // 验证包含所有必要的导出 (使用命名导出而不是通配符导出)
-      expect(content).toContain('} from "./i18n-constants"');
-      expect(content).toContain('} from "./app-constants"');
-      expect(content).toContain('} from "./test-constants"');
-      expect(content).toContain('} from "./security-constants"');
-      expect(content).toContain('} from "./seo-constants"');
+      expect(content).toMatch(/} from ['"]\.\/i18n-constants['"]/);
+      expect(content).toMatch(/} from ['"]\.\/app-constants['"]/);
+      expect(content).toMatch(/} from ['"]\.\/test-constants['"]/);
+      expect(content).toMatch(/} from ['"]\.\/security-constants['"]/);
+      expect(content).toMatch(/} from ['"]\.\/seo-constants['"]/);
     });
 
     it("should have re-export statements", () => {

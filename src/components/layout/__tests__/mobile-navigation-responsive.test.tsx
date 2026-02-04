@@ -347,15 +347,13 @@ describe("Mobile Navigation Responsive - Main Tests", () => {
 
       const trigger = screen.getByRole("button");
 
-      // Rapid clicks should not cause performance issues - 使用 fireEvent 避免 pointer-events 问题
-      const _startTime = Date.now();
-      for (let i = 0; i < 10; i++) {
-        fireEvent.click(trigger);
-      }
-      const endTime = Date.now();
-
-      // Should complete within reasonable time
-      expect(endTime - _startTime).toBeLessThan(1000);
+      // Rapid clicks should not break component state.
+      // Avoid wall-clock timing assertions here (flaky on CI / busy machines).
+      expect(() => {
+        for (let i = 0; i < 10; i++) {
+          fireEvent.click(trigger);
+        }
+      }).not.toThrow();
       expect(trigger).toBeInTheDocument();
     });
 

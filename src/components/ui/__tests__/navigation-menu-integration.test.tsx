@@ -119,7 +119,15 @@ describe("NavigationMenu - Dropdown & State Management", () => {
 
       // Close dropdown with second click
       await user.click(trigger);
-      expect(screen.queryByTestId("dropdown-content")).not.toBeInTheDocument();
+
+      // Radix NavigationMenu may keep content mounted briefly for exit animations.
+      // Assert it is no longer visible (or removed entirely).
+      const content = screen.queryByTestId("dropdown-content");
+      if (content) {
+        expect(content).not.toBeVisible();
+      } else {
+        expect(content).not.toBeInTheDocument();
+      }
     });
 
     it("handles multiple dropdown menus independently", async () => {
