@@ -1,4 +1,4 @@
-import { hasOwn } from '@/lib/security/object-guards';
+import { hasOwn } from "@/lib/security/object-guards";
 
 /**
  * Deep merge plain objects.
@@ -22,11 +22,11 @@ export function mergeObjects<T extends Record<string, unknown>>(
     const targetValue = result[key];
 
     const isSourcePlain =
-      typeof sourceValue === 'object' &&
+      typeof sourceValue === "object" &&
       sourceValue !== null &&
       !Array.isArray(sourceValue);
     const isTargetPlain =
-      typeof targetValue === 'object' &&
+      typeof targetValue === "object" &&
       targetValue !== null &&
       !Array.isArray(targetValue);
 

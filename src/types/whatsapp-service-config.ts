@@ -10,7 +10,7 @@ import {
   TEN_SECONDS_MS,
   THIRTY_SECONDS_MS,
   ZERO,
-} from '@/constants';
+} from "@/constants";
 
 /**
  * WhatsApp Service Configuration Types
@@ -60,11 +60,11 @@ export interface WhatsAppServiceOptions {
   /** Enable service logging (default: true) */
   enableLogging?: boolean;
   /** Logging level (default: 'info') */
-  logLevel?: 'debug' | 'info' | 'warn' | 'error';
+  logLevel?: "debug" | "info" | "warn" | "error";
   /** Enable message validation before sending (default: true) */
   validateMessages?: boolean;
   /** Rate limiting strategy (default: 'exponential') */
-  rateLimitStrategy?: 'exponential' | 'linear' | 'fixed';
+  rateLimitStrategy?: "exponential" | "linear" | "fixed";
   /** Maximum rate limit attempts (default: 5) */
   rateLimitMaxAttempts?: number;
 }
@@ -122,7 +122,7 @@ export interface CircuitBreakerConfig {
  */
 export interface CircuitBreakerState {
   /** Current circuit state */
-  state: 'closed' | 'open' | 'half-open';
+  state: "closed" | "open" | "half-open";
   /** Current failure count */
   failureCount: number;
   /** Timestamp of last failure */
@@ -143,7 +143,7 @@ export interface CacheConfig {
   /** Maximum number of entries in cache */
   maxSize: number;
   /** Cache eviction strategy */
-  strategy: 'lru' | 'fifo' | 'lfu';
+  strategy: "lru" | "fifo" | "lfu";
 }
 
 /**
@@ -190,7 +190,7 @@ export interface LogEntry {
   /** Timestamp of log entry */
   timestamp: number;
   /** Log level */
-  level: 'debug' | 'info' | 'warn' | 'error';
+  level: "debug" | "info" | "warn" | "error";
   /** Log message */
   message: string;
   /** Additional context data */
@@ -231,33 +231,33 @@ export interface Logger {
  * All supported WhatsApp message types
  */
 export type MessageType =
-  | 'text'
-  | 'image'
-  | 'document'
-  | 'audio'
-  | 'video'
-  | 'location'
-  | 'contacts'
-  | 'template'
-  | 'interactive';
+  | "text"
+  | "image"
+  | "document"
+  | "audio"
+  | "video"
+  | "location"
+  | "contacts"
+  | "template"
+  | "interactive";
 
 /**
  * Message Status Enumeration
  * All possible message delivery statuses
  */
-export type MessageStatus = 'sent' | 'delivered' | 'read' | 'failed';
+export type MessageStatus = "sent" | "delivered" | "read" | "failed";
 
 /**
  * Service Environment Enumeration
  * Supported deployment environments
  */
-export type ServiceEnvironment = 'development' | 'staging' | 'production';
+export type ServiceEnvironment = "development" | "staging" | "production";
 
 /**
  * Log Level Enumeration
  * Supported logging levels
  */
-export type LogLevel = 'debug' | 'info' | 'warn' | 'error';
+export type LogLevel = "debug" | "info" | "warn" | "error";
 
 // ==================== Default Configurations ====================
 
@@ -272,9 +272,9 @@ export const DEFAULT_SERVICE_OPTIONS: Required<WhatsAppServiceOptions> = {
   maxRetryDelay: TEN_SECONDS_MS,
   retryMultiplier: COUNT_PAIR,
   enableLogging: true,
-  logLevel: 'info',
+  logLevel: "info",
   validateMessages: true,
-  rateLimitStrategy: 'exponential',
+  rateLimitStrategy: "exponential",
   rateLimitMaxAttempts: COUNT_FIVE,
 };
 
@@ -298,7 +298,7 @@ export const DEFAULT_CIRCUIT_BREAKER_CONFIG: CircuitBreakerConfig = {
   failureThreshold: COUNT_FIVE,
   recoveryTimeout: MINUTE_MS,
   monitoringPeriod: TEN_SECONDS_MS,
-  expectedErrors: ['WhatsAppRateLimitError', 'WhatsAppNetworkError'],
+  expectedErrors: ["WhatsAppRateLimitError", "WhatsAppNetworkError"],
 };
 
 /**
@@ -308,7 +308,7 @@ export const DEFAULT_CIRCUIT_BREAKER_CONFIG: CircuitBreakerConfig = {
 export const DEFAULT_CACHE_CONFIG: CacheConfig = {
   ttl: FIVE_MINUTES_MS, // 5 minutes
   maxSize: ANIMATION_DURATION_VERY_SLOW,
-  strategy: 'lru',
+  strategy: "lru",
 };
 
 // ==================== Configuration Validation ====================
@@ -324,9 +324,9 @@ export function validateWhatsAppConfig(
     config.accessToken &&
     config.phoneNumberId &&
     config.verifyToken &&
-    typeof config.accessToken === 'string' &&
-    typeof config.phoneNumberId === 'string' &&
-    typeof config.verifyToken === 'string',
+    typeof config.accessToken === "string" &&
+    typeof config.phoneNumberId === "string" &&
+    typeof config.verifyToken === "string",
   );
 }
 
@@ -367,7 +367,7 @@ function buildMergedConfig(config: WhatsAppConfig): WhatsAppConfig {
     accessToken: config.accessToken,
     phoneNumberId: config.phoneNumberId,
     verifyToken: config.verifyToken,
-    apiVersion: config.apiVersion ?? 'v18.0',
+    apiVersion: config.apiVersion ?? "v18.0",
   };
 
   if (config.webhookUrl !== undefined)

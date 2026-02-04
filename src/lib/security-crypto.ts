@@ -5,7 +5,7 @@ import {
   MAGIC_16,
   PBKDF2_ITERATIONS,
   ZERO,
-} from '@/constants';
+} from "@/constants";
 
 /**
  * 加密和密码哈希工具
@@ -39,23 +39,23 @@ export async function hashPassword(
   combined.set(saltBytes);
   combined.set(passwordBytes, saltBytes.length);
 
-  const hashBuffer = await crypto.subtle.digest('SHA-256', combined);
+  const hashBuffer = await crypto.subtle.digest("SHA-256", combined);
   const hashArray = Array.from(new Uint8Array(hashBuffer));
   const hashHex = hashArray
     .map((b) =>
       b
         .toString(CRYPTO_CONSTANTS.HEX_BASE)
-        .padStart(CRYPTO_CONSTANTS.HEX_PAD_LENGTH, '0'),
+        .padStart(CRYPTO_CONSTANTS.HEX_PAD_LENGTH, "0"),
     )
-    .join('');
+    .join("");
 
   const saltHex = Array.from(saltBytes)
     .map((b) =>
       b
         .toString(CRYPTO_CONSTANTS.HEX_BASE)
-        .padStart(CRYPTO_CONSTANTS.HEX_PAD_LENGTH, '0'),
+        .padStart(CRYPTO_CONSTANTS.HEX_PAD_LENGTH, "0"),
     )
-    .join('');
+    .join("");
 
   return `${saltHex}:${hashHex}`;
 }
@@ -68,7 +68,7 @@ export async function verifyPassword(
   hash: string,
 ): Promise<boolean> {
   try {
-    const [saltHex, expectedHash] = hash.split(':');
+    const [saltHex, expectedHash] = hash.split(":");
     if (!saltHex || !expectedHash) {
       return false;
     }
@@ -108,9 +108,9 @@ export function generateSalt(
     .map((b) =>
       b
         .toString(CRYPTO_CONSTANTS.HEX_BASE)
-        .padStart(CRYPTO_CONSTANTS.HEX_PAD_LENGTH, '0'),
+        .padStart(CRYPTO_CONSTANTS.HEX_PAD_LENGTH, "0"),
     )
-    .join('');
+    .join("");
 }
 
 /**
@@ -119,16 +119,16 @@ export function generateSalt(
 export async function sha256Hash(data: string): Promise<string> {
   const encoder = new TextEncoder();
   const dataBytes = encoder.encode(data);
-  const hashBuffer = await crypto.subtle.digest('SHA-256', dataBytes);
+  const hashBuffer = await crypto.subtle.digest("SHA-256", dataBytes);
   const hashArray = Array.from(new Uint8Array(hashBuffer));
 
   return hashArray
     .map((b) =>
       b
         .toString(CRYPTO_CONSTANTS.HEX_BASE)
-        .padStart(CRYPTO_CONSTANTS.HEX_PAD_LENGTH, '0'),
+        .padStart(CRYPTO_CONSTANTS.HEX_PAD_LENGTH, "0"),
     )
-    .join('');
+    .join("");
 }
 
 /**
@@ -137,16 +137,16 @@ export async function sha256Hash(data: string): Promise<string> {
 export async function sha512Hash(data: string): Promise<string> {
   const encoder = new TextEncoder();
   const dataBytes = encoder.encode(data);
-  const hashBuffer = await crypto.subtle.digest('SHA-512', dataBytes);
+  const hashBuffer = await crypto.subtle.digest("SHA-512", dataBytes);
   const hashArray = Array.from(new Uint8Array(hashBuffer));
 
   return hashArray
     .map((b) =>
       b
         .toString(CRYPTO_CONSTANTS.HEX_BASE)
-        .padStart(CRYPTO_CONSTANTS.HEX_PAD_LENGTH, '0'),
+        .padStart(CRYPTO_CONSTANTS.HEX_PAD_LENGTH, "0"),
     )
-    .join('');
+    .join("");
 }
 
 /**
@@ -155,30 +155,30 @@ export async function sha512Hash(data: string): Promise<string> {
 export async function generateHMAC(
   data: string,
   secret: string,
-  algorithm: 'SHA-256' | 'SHA-512' = 'SHA-256',
+  algorithm: "SHA-256" | "SHA-512" = "SHA-256",
 ): Promise<string> {
   const encoder = new TextEncoder();
   const keyData = encoder.encode(secret);
   const messageData = encoder.encode(data);
 
   const key = await crypto.subtle.importKey(
-    'raw',
+    "raw",
     keyData,
-    { name: 'HMAC', hash: algorithm },
+    { name: "HMAC", hash: algorithm },
     false,
-    ['sign'],
+    ["sign"],
   );
 
-  const signature = await crypto.subtle.sign('HMAC', key, messageData);
+  const signature = await crypto.subtle.sign("HMAC", key, messageData);
   const signatureArray = Array.from(new Uint8Array(signature));
 
   return signatureArray
     .map((b) =>
       b
         .toString(CRYPTO_CONSTANTS.HEX_BASE)
-        .padStart(CRYPTO_CONSTANTS.HEX_PAD_LENGTH, '0'),
+        .padStart(CRYPTO_CONSTANTS.HEX_PAD_LENGTH, "0"),
     )
-    .join('');
+    .join("");
 }
 
 /**
@@ -188,10 +188,10 @@ export async function verifyHMAC(params: {
   data: string;
   signature: string;
   secret: string;
-  algorithm?: 'SHA-256' | 'SHA-512';
+  algorithm?: "SHA-256" | "SHA-512";
 }): Promise<boolean> {
   try {
-    const { data, signature, secret, algorithm = 'SHA-256' } = params;
+    const { data, signature, secret, algorithm = "SHA-256" } = params;
     const expectedSignature = await generateHMAC(data, secret, algorithm);
     return expectedSignature === signature;
   } catch {
@@ -215,43 +215,43 @@ export async function encryptData(
 
   // Derive key from password
   const passwordKey = await crypto.subtle.importKey(
-    'raw',
+    "raw",
     encoder.encode(password),
-    'PBKDF2',
+    "PBKDF2",
     false,
-    ['deriveKey'],
+    ["deriveKey"],
   );
 
   const key = await crypto.subtle.deriveKey(
     {
-      name: 'PBKDF2',
+      name: "PBKDF2",
       salt,
       iterations: PBKDF2_ITERATIONS,
-      hash: 'SHA-256',
+      hash: "SHA-256",
     },
     passwordKey,
-    { name: 'AES-GCM', length: AES_KEY_LENGTH_BITS },
+    { name: "AES-GCM", length: AES_KEY_LENGTH_BITS },
     false,
-    ['encrypt'],
+    ["encrypt"],
   );
 
   // Encrypt data
   const encrypted = await crypto.subtle.encrypt(
-    { name: 'AES-GCM', iv },
+    { name: "AES-GCM", iv },
     key,
     dataBytes,
   );
 
   return {
     encrypted: Array.from(new Uint8Array(encrypted))
-      .map((b) => b.toString(MAGIC_16).padStart(COUNT_PAIR, '0'))
-      .join(''),
+      .map((b) => b.toString(MAGIC_16).padStart(COUNT_PAIR, "0"))
+      .join(""),
     iv: Array.from(iv)
-      .map((b) => b.toString(MAGIC_16).padStart(COUNT_PAIR, '0'))
-      .join(''),
+      .map((b) => b.toString(MAGIC_16).padStart(COUNT_PAIR, "0"))
+      .join(""),
     salt: Array.from(salt)
-      .map((b) => b.toString(MAGIC_16).padStart(COUNT_PAIR, '0'))
-      .join(''),
+      .map((b) => b.toString(MAGIC_16).padStart(COUNT_PAIR, "0"))
+      .join(""),
   };
 }
 
@@ -301,29 +301,29 @@ export async function decryptData(params: {
 
   // Derive key from password
   const passwordKey = await crypto.subtle.importKey(
-    'raw',
+    "raw",
     encoder.encode(password),
-    'PBKDF2',
+    "PBKDF2",
     false,
-    ['deriveKey'],
+    ["deriveKey"],
   );
 
   const key = await crypto.subtle.deriveKey(
     {
-      name: 'PBKDF2',
+      name: "PBKDF2",
       salt,
       iterations: PBKDF2_ITERATIONS,
-      hash: 'SHA-256',
+      hash: "SHA-256",
     },
     passwordKey,
-    { name: 'AES-GCM', length: AES_KEY_LENGTH_BITS },
+    { name: "AES-GCM", length: AES_KEY_LENGTH_BITS },
     false,
-    ['decrypt'],
+    ["decrypt"],
   );
 
   // Decrypt data
   const decrypted = await crypto.subtle.decrypt(
-    { name: 'AES-GCM', iv },
+    { name: "AES-GCM", iv },
     key,
     encrypted,
   );
@@ -336,9 +336,9 @@ export async function decryptData(params: {
  */
 export function generateEncryptionKey(): Promise<CryptoKey> {
   return crypto.subtle.generateKey(
-    { name: 'AES-GCM', length: AES_KEY_LENGTH_BITS },
+    { name: "AES-GCM", length: AES_KEY_LENGTH_BITS },
     true,
-    ['encrypt', 'decrypt'],
+    ["encrypt", "decrypt"],
   );
 }
 
@@ -346,10 +346,10 @@ export function generateEncryptionKey(): Promise<CryptoKey> {
  * Export encryption key to raw format
  */
 export async function exportKey(key: CryptoKey): Promise<string> {
-  const exported = await crypto.subtle.exportKey('raw', key);
+  const exported = await crypto.subtle.exportKey("raw", key);
   return Array.from(new Uint8Array(exported))
-    .map((b) => b.toString(MAGIC_16).padStart(COUNT_PAIR, '0'))
-    .join('');
+    .map((b) => b.toString(MAGIC_16).padStart(COUNT_PAIR, "0"))
+    .join("");
 }
 
 /**
@@ -367,9 +367,9 @@ export function importKey(keyHex: string): Promise<CryptoKey> {
     })(),
   );
 
-  return crypto.subtle.importKey('raw', keyBytes, { name: 'AES-GCM' }, true, [
-    'encrypt',
-    'decrypt',
+  return crypto.subtle.importKey("raw", keyBytes, { name: "AES-GCM" }, true, [
+    "encrypt",
+    "decrypt",
   ]);
 }
 
