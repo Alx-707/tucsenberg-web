@@ -7,7 +7,13 @@ import { AccessibilityUtils } from "@/lib/accessibility-utils";
 import { logger } from "@/lib/logger";
 import { cn } from "@/lib/utils";
 import { animationUtils } from "@/components/ui/animated-counter-helpers";
-import { COUNT_PAIR, COUNT_TRIPLE, ONE, ZERO } from "@/constants";
+import {
+  COUNT_PAIR,
+  COUNT_TRIPLE,
+  MAX_SET_TIMEOUT_DELAY_MS,
+  ONE,
+  ZERO,
+} from "@/constants";
 import { COUNT_4 } from "@/constants/count";
 import { MAGIC_0_3, MAGIC_0_5 } from "@/constants/decimal";
 import { ANIMATION_DURATIONS } from "@/constants/performance-constants";
@@ -208,7 +214,8 @@ function useAnimatedCounter({
 
     if (shouldAnimate && !isAnimating) {
       if (delay > ZERO) {
-        const timer = setTimeout(animate, delay);
+        const safeDelay = Math.min(delay, MAX_SET_TIMEOUT_DELAY_MS);
+        const timer = setTimeout(animate, safeDelay);
         return () => clearTimeout(timer);
       }
       queueMicrotask(() => animate());

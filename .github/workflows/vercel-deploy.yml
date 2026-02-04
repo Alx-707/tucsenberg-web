@@ -36,8 +36,22 @@ jobs:
 
           submodules: false
 
+      - name: 检查 Vercel 凭据是否配置
+        id: vercel_secrets
+        run: |
+          set -euo pipefail
+          if [ -z "${{ secrets.VERCEL_TOKEN }}" ] || [ -z "${{ secrets.VERCEL_ORG_ID }}" ] || [ -z "${{ secrets.VERCEL_PROJECT_ID }}" ]; then
+            echo "configured=false" >> "$GITHUB_OUTPUT"
+            echo "⏭️ Vercel secrets 未配置，跳过部署步骤（不阻断 PR）" >> "$GITHUB_STEP_SUMMARY"
+            echo "✅ Job 正常结束（secrets 未配置时不视为失败）" >> "$GITHUB_STEP_SUMMARY"
+          else
+            echo "configured=true" >> "$GITHUB_OUTPUT"
+          fi
+
       # 确保先安装 pnpm，再启用 setup-node 的 pnpm 缓存，避免缓存阶段找不到 pnpm
+      # 仅在 secrets 配置时运行，避免 cache 路径不存在导致 post-cleanup 报错
       - name: 设置 pnpm
+        if: steps.vercel_secrets.outputs.configured == 'true'
         uses: pnpm/action-setup@v4
         with:
           version: 10.13.1
@@ -45,12 +59,14 @@ jobs:
           standalone: true
 
       - name: 设置 Node.js
+        if: steps.vercel_secrets.outputs.configured == 'true'
         uses: actions/setup-node@v4
         with:
           node-version: "20"
           cache: "pnpm"
 
       - name: 安装 Vercel CLI
+        if: steps.vercel_secrets.outputs.configured == 'true'
         run: |
           set -euo pipefail
           # Pin 到最后一次成功部署版本（避免 vercel@latest 在发布窗口回归）
@@ -60,12 +76,14 @@ jobs:
           CI: true
 
       - name: 拉取 Vercel 环境配置 (preview)
+        if: steps.vercel_secrets.outputs.configured == 'true'
         run: vercel pull --yes --environment=preview --token=${{ secrets.VERCEL_TOKEN }}
         env:
           VERCEL_ORG_ID: ${{ secrets.VERCEL_ORG_ID }}
           VERCEL_PROJECT_ID: ${{ secrets.VERCEL_PROJECT_ID }}
 
       - name: 诊断 Vercel 关联与版本
+        if: steps.vercel_secrets.outputs.configured == 'true'
         run: |
           set -euo pipefail
           vercel --version
@@ -85,10 +103,12 @@ jobs:
           fi
 
       - name: 安装项目依赖（显式）
+        if: steps.vercel_secrets.outputs.configured == 'true'
         run: pnpm install --frozen-lockfile
 
       - name: 使用 Vercel CLI 构建（保存日志）
         id: vercel_build
+        if: steps.vercel_secrets.outputs.configured == 'true'
         run: |
           set -euo pipefail
           # 将 stdout + stderr 一并保存，供后续质量拦截步骤使用
@@ -100,6 +120,7 @@ jobs:
           CI: true
 
       - name: 阻断：检测 next-intl MISSING_MESSAGE
+        if: steps.vercel_secrets.outputs.configured == 'true'
         run: |
           set -euo pipefail
           if grep -E -i "MISSING_MESSAGE" vercel_build.log; then
@@ -110,7 +131,7 @@ jobs:
           fi
 
       - name: 上传 Vercel 构建日志
-        if: always()
+        if: always() && steps.vercel_secrets.outputs.configured == 'true'
         uses: actions/upload-artifact@v4
         with:
           name: vercel_build.log
@@ -119,6 +140,7 @@ jobs:
 
       - name: 通过 Token 部署预构建产物
         id: vercel_cli_deploy
+        if: steps.vercel_secrets.outputs.configured == 'true'
         run: |
           set -euo pipefail
           # GitHub Actions 环境偶发 IPv6 连接问题时，优先使用 IPv4
