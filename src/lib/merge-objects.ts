@@ -1,10 +1,17 @@
 import { hasOwn } from "@/lib/security/object-guards";
 
 /**
+ * Blocked keys to prevent prototype pollution attacks.
+ * These keys should never be merged from untrusted sources.
+ */
+const BLOCKED_KEYS = new Set(["__proto__", "constructor", "prototype"]);
+
+/**
  * Deep merge plain objects.
  *
  * - Prefers `source` values when they are defined.
  * - Recursively merges nested plain objects (not arrays).
+ * - Blocks prototype pollution keys (__proto__, constructor, prototype).
  */
 export function mergeObjects<T extends Record<string, unknown>>(
   target: T,
@@ -15,6 +22,8 @@ export function mergeObjects<T extends Record<string, unknown>>(
 
   for (const key in source) {
     if (!hasOwn(source, key)) continue;
+    // Block prototype pollution attempts
+    if (BLOCKED_KEYS.has(key)) continue;
     // eslint-disable-next-line security/detect-object-injection -- hasOwn 已校验 key 来自 source 自身属性
     const sourceValue = source[key];
     if (sourceValue === undefined) continue;
